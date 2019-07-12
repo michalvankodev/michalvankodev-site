@@ -1,0 +1,26 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "michalvankodev-dev-20190712095737-authRole",
+            "UnauthRoleArn": "arn:aws:iam::359485202421:role/michalvankodev-dev-20190712095737-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::359485202421:role/michalvankodev-dev-20190712095737-authRole",
+            "Region": "eu-central-1",
+            "DeploymentBucketName": "michalvankodev-dev-20190712095737-deployment",
+            "UnauthRoleName": "michalvankodev-dev-20190712095737-unauthRole",
+            "StackName": "michalvankodev-dev-20190712095737",
+            "StackId": "arn:aws:cloudformation:eu-central-1:359485202421:stack/michalvankodev-dev-20190712095737/b705b240-a47a-11e9-8ccd-02c3d40e0dd8"
+        }
+    },
+    "master": {
+        "awscloudformation": {
+            "AuthRoleName": "michalvankodev-master-20190712123826-authRole",
+            "UnauthRoleArn": "arn:aws:iam::359485202421:role/michalvankodev-master-20190712123826-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::359485202421:role/michalvankodev-master-20190712123826-authRole",
+            "Region": "eu-central-1",
+            "DeploymentBucketName": "michalvankodev-master-20190712123826-deployment",
+            "UnauthRoleName": "michalvankodev-master-20190712123826-unauthRole",
+            "StackName": "michalvankodev-master-20190712123826",
+            "StackId": "arn:aws:cloudformation:eu-central-1:359485202421:stack/michalvankodev-master-20190712123826/2e2fd290-a491-11e9-add7-0aee446e3232"
+        }
+    }
+}
