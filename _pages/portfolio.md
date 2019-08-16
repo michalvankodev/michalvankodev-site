@@ -1,5 +1,28 @@
 ---
 title: Portfolio - Michal Vanko
+projects:
+  - description: >-
+      _Signal Hub_ is an end-to-end **Big Data analytics platform** for large
+      enterprises. It accelerates the process of extracting insights and
+      intelligence from large volumes of data, including data of different types
+      and in different formats.
+
+
+      I worked on _Signal Hub_ as a front-end developer. Working on the part of
+      the platform called _Workbench_. _Workbench_ is an **IDE for data
+      analyst**. It allows to create and tweak various models and
+      transformations which are then deployed to other parts of the platform.
+      Users are able to create workflows and see the results of his work with
+      pleasant visuals.
+
+
+      This project is built with modern web technologies including:
+      **AngularJS**, **React**, **D3**, **Highcharts**, **Jest**, **Webpack**.
+
+
+      I was part of a large distributed team of ~20 developers & ~6 testers
+      which were working on the whole platform.
+    name: Signal Hub Manager
 ---
 ## Personal Information
 
