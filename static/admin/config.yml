@@ -27,11 +27,17 @@ collections:
         file: "_pages/portfolio.md"
         fields:
           - { label: Title, name: title, widget: string }
-          - { label: Content, name: content, widget: markdown }
+          - { label: Body, name: body, widget: markdown }
           - label: Projects
             name: projects
             widget: list
             fields:
               - { label: Name, name: name, widget: string }
               - { label: Description, name: description, widget: markdown }
-              - { label: Image, name: image, widget: image }
+              - label: Image
+                name: image
+                widget: object
+                fields: 
+                  - { label: Source, name: source, widget: image, required: false }
+                  - { label: Image description, name: image_description, widget: string, required: false }
+
