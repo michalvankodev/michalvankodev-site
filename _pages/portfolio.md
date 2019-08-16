@@ -56,4 +56,4 @@ I do _public speaking_ and I am not afraid to share my knowledge and passion abo
 
 I'm advanced user of source code management tools _git_ and _svn_.
 
-I've a driving licence for category B 🚗.
+I've a driving license for category B 🚗.
