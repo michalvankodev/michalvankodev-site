@@ -1,5 +1,48 @@
 ---
 title: Portfolio - Michal Vanko
+work_history:
+  - description: >-
+      localhost.company is a small company which has only around 40 developers
+      and most of them are students. I work in _localhost_ as a **Senior front
+      end developer**. I am focused on delivering a high quality product and to
+      teach and help other colleagues.
+
+
+      I've started to work there in October 2018.
+
+
+      <span class="location">_localhost.company s.r.o_ Boženy Nemcovej 30, 040
+      01 Košice, Slovakia</span>
+    name: localhost.company s.r.o
+  - description: >-
+      I worked in Ness as a **Senior front end developer**. In Ness, I've been
+      able to work for different clients on various projects.
+
+
+      I joined Ness as a Junior front end developer and I've been able to
+      quickly proceed to Senior level with my engagement
+
+
+      I started to work in March 2013 and left in October 2018.
+
+
+      <span class="location">_Ness KE s.r.o._Moldavská cesta 10/B, 040 11
+      Košice, Slovakia</span>
+    name: Ness KE s.r.o
+  - description: >-
+      I worked in eSOLUTIONS as a **extern web developer**
+
+
+      I was building front-end and back-end for websites and web applications.
+      Mostly using _PHP_, _MySQL_, _JavaScript_, _HTML_, _CSS_
+
+
+      I started to work in 2007 and stopped in 2012.
+
+
+      <span class="location">_eSOLUTIONS s.r.o._ Hroncová 2, Košice,
+      Slovakia</span>
+    name: eSOLUTIONS s.r.o.
 projects:
   - description: >-
       _Signal Hub_ is an end-to-end **Big Data analytics platform** for large
