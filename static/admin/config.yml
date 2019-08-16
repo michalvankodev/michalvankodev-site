@@ -28,11 +28,17 @@ collections:
         fields:
           - { label: Title, name: title, widget: string }
           - { label: Body, name: body, widget: markdown }
+          - label: Work history
+            name: work_history
+            widget: list
+            fields:
+              - { label: Company name, name: name, widget: string }
+              - { label: Description, name: description, widget: markdown }
           - label: Projects
             name: projects
             widget: list
             fields:
-              - { label: Name, name: name, widget: string }
+              - { label: Project name, name: name, widget: string }
               - { label: Description, name: description, widget: markdown }
               - label: Image
                 name: image
