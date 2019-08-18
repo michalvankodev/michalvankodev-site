@@ -77,6 +77,142 @@ projects:
       which were working on the whole platform.
     displayed: true
     name: Signal Hub Manager
+  - description: >-
+      _SHIP_ is a web application for **editors** who actively **track trades
+      offers and bids** on the commodity market.
+
+
+      It was built for a price reporting company _S&P Global Platts_. This
+      company is a provider of energy and commodities information and a source
+      of benchmark price assessments in the _physical energy markets_.
+
+
+      _SHIP_ was suited for a very easy and quick workflow for editors.
+
+
+      Team consisted of 3 front-end and 3 back-end developers. I was a **leader
+      of the front-end** part of the project.
+
+
+      The application was built with **AngularJS and Redux**. The challenging
+      part was working with **Cassandra database**.
+    displayed: true
+    name: SHIP (Structured heard input process)
+  - description: >-
+      [www.caplin.com/business/fx-sales.com](http://www.caplin.com/business/fx-sales)
+
+
+      The main function of _Caplin FX Sales_ is to allow sales users to
+      <string>trade on behalf of their clients</string>. This needs to be an
+      efficient workflow providing all the relevant information to the sales
+      user.
+
+
+      Main technologies used: **Websockets**, Custom Front-end JavaScript MVVM
+      Framework (based on Knockout, BRJS)
+
+
+      We worked on this project in a team of 6 developers and 3 testers
+    displayed: true
+    name: FX Salestrader
+  - description: >-
+      _Skosy_ is a web application which purpose is to **automate writing of
+      integration tests** for web sites.
+
+
+      I worked on a _proof of concept_ front-end portion of this application,
+      which was able to create a list of steps for testing.
+
+
+      I worked on this project in a team of 2 front-end developers.
+    displayed: true
+    name: Skosy
+  - description: >-
+      [(www.livesport.tv)](http://www.livesport.tv)
+
+
+      _Livesport.tv_ is a network of premium online sports channels, featuring
+      all the top sports competitions from around the world.
+
+
+      I worked on this project as a front-end developer. I maintained all
+      livesport channels and I worked on new features and enhancements of
+      websites.
+
+
+      Project was built on top of **Freemarker** templating language.
+
+
+      The team consisted of 2 developers and 1 tester.
+    displayed: true
+    name: Livesport.tv
+  - description: >-
+      _beIN Sports_ is a global network of sports channels jointly owned and
+      operated by _Qatari Sports Investments_, an affiliate of _Al Jazeera Media
+      Networks_
+
+
+      I worked on this project as a front-end developer. I maintained official
+      websites of beIN SPORTS France and USA
+      ([www.beinsports.fr](http://www.beinsports.fr),
+      [www.beinsports.tv](http://www.beinsports.tv)).
+
+
+      Project was built on top of **Freemarker** templating language.
+
+
+      I worked on this project in a team consisting of 7 members.
+    displayed: true
+    name: beIN SPORTS France & beIN SPORTS USA
+  - description: >-
+      I worked on this project as a front-end developer. I maintained official
+      websites of all Norweigian Football teams - NTF Network
+      ([www.toppfotball.no](http://www.toppfotball.no))  
+
+
+      Project was built on top of **Freemarker** templating language.
+
+
+      I worked on this project in a team consisting of 4 members.
+    displayed: false
+    name: Norsk Toppfotball
+  - description: >-
+      [www.kosicemarathon.com](http://www.kosicemarathon.com/)
+
+
+      _Košice Peace Marathon_ is the oldest marathon in Europe and the
+      third-oldest in the world.
+
+
+      I worked on this project as a front-end and an back-end developer. I've
+      built a **custom CMS**for website and for registration of participants.
+      Also created an application for actual event for signing participants.  
+
+      The application was able to create a start list of all participants and
+      provide various statistics about them.
+
+
+      I've built this project alone and then one maintainer joined me.
+    displayed: true
+    name: Košice Peace Marathon
+  - description: >-
+      [www.ckvive.sk](http://www.ckvive.sk)
+
+
+      _CK Vive_ is a travel agency.
+
+
+      I worked on this project as a front-end and an back-end developer. I've
+      created new **custom CMS** for adding destinations and apartmans into
+      offering.  
+
+
+      I've built this project on top of **PHP**, **MySQL** and **JavaScript**.
+
+
+      I worked on this project alone.
+    displayed: true
+    name: CK Vive
 education:
   - description: |-
       Faculty of Electrical Engineering and Informatics - Intelligent Systems
