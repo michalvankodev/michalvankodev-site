@@ -1,5 +1,15 @@
 ---
 title: Portfolio - Michal Vanko
+work_history_prelude: >-
+  I am doing web development for approximately 14 years. I've started at very
+  young age of 14. My very first web site was for promotion web of my own
+  Counter-Strike clan.
+
+  Then I had an opportunity to create a important registration system for
+  marathon runners for Europe's oldest marathon event. That basically started
+  off my career as a web developer. I had some projects while I was studying in
+  high school and university. After that I started to work full-time as a web
+  developer and gain more experience in developing real-time web applications.
 work_history:
   - description: >-
       localhost.company is a small company which has only around 40 developers
@@ -65,7 +75,33 @@ projects:
 
       I was part of a large distributed team of ~20 developers & ~6 testers
       which were working on the whole platform.
+    displayed: true
     name: Signal Hub Manager
+education:
+  - description: |-
+      Faculty of Electrical Engineering and Informatics - Intelligent Systems
+
+      _Artificial Intelligence, Neural Networks, Fuzzy Systems_
+
+      Dates: 1\. 9\. 2010 - 20\. 6\. 2013
+
+      Title of qualification awarded: Bachelor (Bc.)
+    displayed: true
+    name: Technická univerzita Košice
+  - description: >-
+      _SPŠ Elektrotechnická, Komenského 22, Košice_
+
+
+      Electrotechnics, Telecommunication
+
+
+      Dates: 1\. 9\. 200 - 1\. 7\. 2010
+
+
+      Title of qualification awarded: Full secondary school education with
+      leaving examination
+    displayed: true
+    name: Secondary school of Electrical Engineering in Košice
 ---
 ## Personal Information
 
