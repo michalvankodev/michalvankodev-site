@@ -9,7 +9,7 @@
 </script>
 
 <script>
-  import Workhistory from '../../components/portfolio/workhistory.svelte';
+  import Work from '../../components/portfolio/work.svelte';
   import Project from '../../components/portfolio/project.svelte';
 
   export let content
@@ -27,7 +27,19 @@
   {@html content.body}
 </section>
 
-<Workhistory />
+<section class="work-history">
+  <h2>Work experience</h2>
+  <section class="work-history-prelude">
+    {@html content.workHistoryPrelude}
+  </section>
+  <ul>
+    {#each content.workHistory as work}
+      <li>
+        <Work work={work} />
+      </li>
+    {/each}
+  </ul>
+</section>
 
 <section class="projects">
   <h2>Projects</h2>
@@ -35,6 +47,17 @@
     {#each content.projects as project}
       <li>
         <Project project={project} />
+      </li>
+    {/each}
+  </ul>
+</section>
+
+<section class="education">
+  <h2>Education</h2>
+  <ul>
+    {#each content.education as work}
+      <li>
+        <Work work={work} />
       </li>
     {/each}
   </ul>

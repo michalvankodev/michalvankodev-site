@@ -28,6 +28,7 @@ collections:
         fields:
           - { label: Title, name: title, widget: string }
           - { label: Body, name: body, widget: markdown }
+          - { label: Work history prelude, name: work_history_prelude, widget: markdown }
           - label: Work history
             name: work_history
             widget: list
@@ -39,6 +40,7 @@ collections:
             widget: list
             fields:
               - { label: Project name, name: name, widget: string }
+              - { label: Displayed, name: displayed, widget: boolean, default: true }
               - { label: Description, name: description, widget: markdown }
               - label: Image
                 name: image
@@ -46,4 +48,11 @@ collections:
                 fields: 
                   - { label: Source, name: source, widget: image, required: false }
                   - { label: Image description, name: image_description, widget: string, required: false }
+          - label: Education
+            name: education
+            widget: list
+            fields:
+              - { label: Institution, name: name, widget: string }
+              - { label: Displayed, name: displayed, widget: boolean, default: true }
+              - { label: Description, name: description, widget: markdown }
 

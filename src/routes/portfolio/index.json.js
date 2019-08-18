@@ -14,16 +14,30 @@ export async function get(req, res, next) {
   }
 
   const parsed = fm(pageSource)
-  const projects = (parsed.attributes.projects || []).map(project => ({
-    ...project,
-    description: marked(project.description)
-  }))
+  const workHistory = (parsed.attributes.work_history || []).map(parseField('description'))
+  const projects = (parsed.attributes.projects || [])
+    .filter(project => project.displayed)
+    .map(parseField('description'))
+  const education = (parsed.attributes.education || [])
+    .filter(education => education.displayed)
+    .map(parseField('description'))
+  
   const response = {
     title: parsed.attributes.title,
     body: marked(parsed.body),
+    workHistoryPrelude: marked(parsed.attributes.work_history_prelude),
+    workHistory,
     projects,
+    education,
   }
 
   res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify(response))
+}
+
+function parseField(field) {
+  return item => ({
+    ...item,
+    [field]: marked(item[field])
+  })
 }
