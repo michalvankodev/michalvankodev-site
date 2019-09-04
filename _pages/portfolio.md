@@ -12,6 +12,22 @@ work_history_prelude: >-
   developer and gain more experience in developing real-time web applications.
 work_history:
   - description: >-
+      _**Croptech**_ is a start-up company located in Košice focused on smart
+      automation of hydroponic systems. Founded in 2014 they've won
+      _StartupAwards.sk_ and have been able to find investors.
+
+      I've joined _Croptech_ after the previous team fall apart not being able
+      to bring product into the market.
+
+      I am main part of the _Croptech_ team. I figure as a **CTO** of the
+      company. I've developed architecture of the main product called
+      _responzIO_.
+
+
+      <span class="location">_CropTech. s.r.o._ Benkova 18 040 18 Košice , 040
+      01 Košice, Slovakia</span>
+    name: CropTech. s.r.o.
+  - description: >-
       localhost.company is a small company which has only around 40 developers
       and most of them are students. I work in _localhost_ as a **Senior front
       end developer**. I am focused on delivering a high quality product and to
