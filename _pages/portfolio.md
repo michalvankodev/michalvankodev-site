@@ -71,6 +71,26 @@ work_history:
     name: eSOLUTIONS s.r.o.
 projects:
   - description: >-
+      _**responzIO**_ is smart, easy to use monitoring and automation system.
+      The ultimate tool for various applications such as hydroponics, aquariums
+      and gardens.
+
+
+      I worked on _responzIO_ as architect and full-stack developer. I've
+      designed complete software solution for an already created platform and a
+      series of sensors, sockets and other hardware. Designed solution consist
+      of varios parts: Deployment, Microservices, Stateful core back-end
+      application, progressive web application, auto-update over web...
+
+
+      This project is built with modern web technologies including: **CycleJS**,
+      **Reactive Streams**, **D3**, **Jest**, **Webpack**.
+    displayed: true
+    image:
+      image_description: ' responzIO main controller'
+      source: /images/uploads/responzio.png
+    name: responzIO
+  - description: >-
       _Signal Hub_ is an end-to-end **Big Data analytics platform** for large
       enterprises. It accelerates the process of extracting insights and
       intelligence from large volumes of data, including data of different types
