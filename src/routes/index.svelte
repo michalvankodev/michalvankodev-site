@@ -1,3 +1,9 @@
+<script context="module">
+  export async function preload() {
+	  return this.redirect(302, 'portfolio')
+  }
+</script>
+
 <style>
 	h1, figure, p {
 		text-align: center;

@@ -15,6 +15,16 @@
   export let content
 </script>
 
+<style>
+  :global([id])::before {
+    content: '';
+    display: block;
+    height:      3em;
+    margin-top: -3em;
+    visibility: hidden;
+  }
+</style>
+
 <svelte:head>
 	<title>{content.title}</title>
 </svelte:head>
@@ -23,11 +33,11 @@
 
 <h2>Software Developer</h2>
 
-<section class="personal-information">
+<section id="personal-information">
   {@html content.body}
 </section>
 
-<section class="work-history">
+<section id="work-history">
   <h2>Work experience</h2>
   <section class="work-history-prelude">
     {@html content.workHistoryPrelude}
@@ -41,7 +51,7 @@
   </ul>
 </section>
 
-<section class="projects">
+<section id="projects">
   <h2>Projects</h2>
   <ul>
     {#each content.projects as project}
@@ -52,7 +62,7 @@
   </ul>
 </section>
 
-<section class="education">
+<section id="education">
   <h2>Education</h2>
   <ul>
     {#each content.education as work}
