@@ -164,7 +164,7 @@ projects:
     displayed: true
     name: Skosy
   - description: >-
-      [(www.livesport.tv)](http://www.livesport.tv)
+      [www.livesport.tv](http://www.livesport.tv)
 
 
       _Livesport.tv_ is a network of premium online sports channels, featuring
