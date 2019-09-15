@@ -50,20 +50,15 @@
   nav {
     position: sticky;
     top: 0;
-    background: rgb(31, 22, 94);
+    background: #f2f6f6;
     z-index: 1;
     padding: 0.5em;
-    box-shadow: 0px 2px 4px #090808;
+    box-shadow: 0px 1px 3px #959595;
   }
 
   nav a {
     padding: 0.4em 0.5em;
-    text-decoration: none;
-  }
-
-  nav a:hover {
-    text-decoration: underline
-  }
+	}
 </style>
 
 <nav>

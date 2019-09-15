@@ -1,0 +1,13 @@
+@font-face {
+  font-family: Cantarell;
+  src: local("Cantarell"), url(/fonts/cantarell/Cantarell-Regular.otf) format('opentype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Cantarell;
+  src: local("Cantarell"), url(/fonts/cantarell/Cantarell-Thin.otf) format('opentype');
+  font-weight: 200;
+  font-display: swap;
+}
+

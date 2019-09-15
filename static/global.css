@@ -4,25 +4,52 @@ html {
 
 body {
 	margin: 0;
-	font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-	font-size: 14px;
+	font-family: Cantarell, Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+	font-size: 16px;
 	line-height: 1.5;
-	color: #333;
+	color: #42436a;	
 }
 
 h1, h2, h3, h4, h5, h6 {
 	margin: 0 0 0.5em 0;
-	font-weight: 400;
+	font-weight: 200;
 	line-height: 1.2;
+	text-shadow: 1px 1px 1px #c6c4b7;
+	color: #212138;
+	letter-spacing: -0.01em;
 }
 
 h1 {
-	font-size: 2em;
+	font-size: 2.5em;
+}
+
+h2 {
+	font-size: 1.7em;
+}
+
+h3 {
+	font-size: 1.5em;
+}
+
+h4 {
+	font-size: 1.3em;
 }
 
 a {
-	color: inherit;
+	color: #2e2ed9;
+	text-decoration: none;
+	transition: 0.2s;
 }
+
+a:visited {
+	color: #9a2ed9;
+}
+
+a:hover {
+	color: #2e86d9;
+	text-decoration: underline;
+}
+
 
 code {
 	font-family: menlo, inconsolata, monospace;
@@ -33,8 +60,23 @@ code {
 	border-radius: 2px;
 }
 
-@media (min-width: 400px) {
+p {
+	margin: 0;
+}
+
+
+::selection {
+	background: #0dd0d0;
+}
+
+@media only screen and (min-width: 400px) {
 	body {
-		font-size: 16px;
+		font-size: 18px;
+	}
+}
+
+@media only screen and (min-width: 700px) {
+	body {
+		font-size: 24px;
 	}
 }
