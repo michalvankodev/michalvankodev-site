@@ -177,7 +177,7 @@ projects:
 
 
       I worked on this project in a team of 2 front-end developers.
-    displayed: true
+    displayed: false
     name: Skosy
   - description: >-
       [www.livesport.tv](http://www.livesport.tv)
@@ -237,7 +237,7 @@ projects:
 
 
       I worked on this project as a front-end and an back-end developer. I've
-      built a **custom CMS**for website and for registration of participants.
+      built a **custom CMS** for website and for registration of participants.
       Also created an application for actual event for signing participants.  
 
       The application was able to create a start list of all participants and
@@ -255,7 +255,7 @@ projects:
 
 
       I worked on this project as a front-end and an back-end developer. I've
-      created new **custom CMS** for adding destinations and apartmans into
+      created new **custom CMS** for adding destinations and apartments into
       offering.  
 
 
