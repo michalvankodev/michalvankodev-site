@@ -71,6 +71,22 @@ work_history:
     name: eSOLUTIONS s.r.o.
 projects:
   - description: >-
+      _Manualogic_ is a **single page application** for product manual creators.
+      It contains **custom web editor** and management system of **translatable
+      pages, books** and **products.** It's main goal is to enable customers to
+      get manuals of their products in digital form.
+
+
+      It's bulit on top of modern web technologies such as **Angular,**
+      **RxJS,** and the content is synchronized through **Websockets**. The
+      back-end part is built on top of **Spring framework**.
+
+
+      The team consisted of 3-4 front-end developers, 2-3 back-end developers
+      and 2 testers.
+    displayed: true
+    name: Manualogic
+  - description: >-
       _**responzIO**_ is smart, easy to use monitoring and automation system.
       The ultimate tool for various applications such as hydroponics, aquariums
       and gardens.
@@ -249,22 +265,6 @@ projects:
       I worked on this project alone.
     displayed: true
     name: CK Vive
-  - description: >-
-      _Manualogic_ is a **single page application** for product manual creators.
-      It contains **custom web editor** and management system of **translatable
-      pages, books** and **products.** It's main goal is to enable customers to
-      get manuals of their products in digital form.
-
-
-      It's bulit on top of modern web technologies such as **Angular,**
-      **RxJS,** and the content is synchronized through **Websockets**. The
-      back-end part is built on top of **Spring framework**.
-
-
-      The team consisted of 3-4 front-end developers, 2-3 back-end developers
-      and 2 testers.
-    displayed: true
-    name: Manualogic
 education:
   - description: |-
       Faculty of Electrical Engineering and Informatics - Intelligent Systems
