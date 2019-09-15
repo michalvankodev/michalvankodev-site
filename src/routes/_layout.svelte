@@ -6,22 +6,16 @@
 
 <style>
   .app-content {
-		background: linear-gradient(176deg, rgb(31, 22, 94) 0%,rgb(67, 117, 236) 100%);
-    background-attachment: fixed;
-		color:#f2f0f0;
+		background: #f2f6f6;
   }
 
 	main {
 		position: relative;
-		max-width: 56em;
+		max-width: 700px;
 		padding: 2em;
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-
-  :global(::selection) {
-    background: #0dd0d0;
-  }
 
 </style>
 

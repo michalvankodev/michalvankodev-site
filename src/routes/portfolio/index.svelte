@@ -23,6 +23,28 @@
     margin-top: -3em;
     visibility: hidden;
   }
+
+  section[id] {
+    margin-top: 2em;
+  }
+
+  h1 {
+    text-shadow: 2px 2px 1px #c8c4b7;
+  }
+
+  #personal-information :global(h3), #personal-information :global(h2) {
+    margin: 1em 0 0.5em;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin: 1.5em 0;
+  }
 </style>
 
 <svelte:head>
