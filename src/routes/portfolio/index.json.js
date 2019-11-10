@@ -2,6 +2,7 @@ import { readFile } from 'fs'
 import { promisify } from 'util'
 import fm from 'front-matter'
 import marked from 'marked'
+import { parseField } from '../../markdown/parse-markdown'
 
 export async function get(req, res, next) {
   let pageSource
@@ -14,14 +15,16 @@ export async function get(req, res, next) {
   }
 
   const parsed = fm(pageSource)
-  const workHistory = (parsed.attributes.work_history || []).map(parseField('description'))
+  const workHistory = (parsed.attributes.work_history || []).map(
+    parseField('description')
+  )
   const projects = (parsed.attributes.projects || [])
     .filter(project => project.displayed)
     .map(parseField('description'))
   const education = (parsed.attributes.education || [])
     .filter(education => education.displayed)
     .map(parseField('description'))
-  
+
   const response = {
     title: parsed.attributes.title,
     body: marked(parsed.body),
@@ -33,11 +36,4 @@ export async function get(req, res, next) {
 
   res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify(response))
-}
-
-function parseField(field) {
-  return item => ({
-    ...item,
-    [field]: marked(item[field])
-  })
 }

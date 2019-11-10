@@ -74,7 +74,7 @@ p {
 }
 
 ::selection {
-  background: #25b5c5;
+  background: #0dd0d0;
 }
 
 @media only screen and (min-width: 400px) {
