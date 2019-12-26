@@ -1,5 +1,6 @@
 import { readdir, readFile } from 'fs'
 import { promisify } from 'util'
+import { basename } from 'path'
 import fm from 'front-matter'
 import marked from 'marked'
 
@@ -24,6 +25,7 @@ export async function get(req, res) {
       return {
         ...parsedAttributes.attributes,
         preview,
+        slug: basename(file, '.md'),
       }
     })
   )

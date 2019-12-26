@@ -23,7 +23,11 @@ export async function get(req, res, next) {
   }
 
   const parsedPost = fm(postSource)
-  const response = parseField('body')(parsedPost)
+
+  const response = parseField('body')({
+    ...parsedPost.attributes,
+    body: parsedPost.body,
+  })
 
   res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify(response))
