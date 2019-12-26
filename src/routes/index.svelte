@@ -1,52 +1,60 @@
 <script context="module">
-  export async function preload() {
-	  return this.redirect(302, 'portfolio')
-  }
+  // export async function preload() {
+  //   return this.redirect(302, 'portfolio')
+  // }
 </script>
 
 <style>
-	h1, figure, p {
-		text-align: center;
-		margin: 0 auto;
-	}
+  figure,
+  p {
+    text-align: center;
+    margin: 0 auto;
+  }
 
-	h1 {
-		font-size: 2.8em;
-		text-transform: uppercase;
-		font-weight: 700;
-		margin: 0 0 0.5em 0;
-	}
+  h1 {
+    font-size: 2.8em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0 0 0.5em 0;
+  }
 
-	figure {
-		margin: 0 0 1em 0;
-	}
+  figure {
+    margin: 0 0 1em 0;
+  }
 
-	img {
-		width: 100%;
-		max-width: 400px;
-		margin: 0 0 1em 0;
-	}
+  img {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 0 1em 0;
+  }
 
-	p {
-		margin: 1em auto;
-	}
-
-	@media (min-width: 480px) {
-		h1 {
-			font-size: 4em;
-		}
-	}
+  p {
+    margin: 1em auto;
+  }
 </style>
 
 <svelte:head>
-	<title>Sapper project template</title>
+  <title>michalvanko.dev index page</title>
 </svelte:head>
 
-<h1>Great success!</h1>
+<header class="index-header">
+  <figure class="profile-pic">
+    <img alt="Borat" src="great-success.png" />
+  </figure>
 
-<figure>
-	<img alt='Borat' src='great-success.png'>
-	<figcaption>HIGH FIVE!</figcaption>
-</figure>
+  <p class="motto">
+    <cite>“Let your ambition carry you.”</cite>
+    <span>- La Flame</span>
+  </p>
+</header>
 
-<p><strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong></p>
+<p>
+  Hey, welcome to my personal website. My name is
+  <strong>Michal Vanko</strong>
+  and I'm a
+  <em>
+    <a href="https://en.wikipedia.org/wiki/Programmer">programmer</a>
+  </em>
+  . I'll try to share some stories and opinions about things that I'm interested
+  in.
+</p>
