@@ -31,13 +31,13 @@
     background-color: #f9f9f9;
     box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.05);
     padding: 0.5em;
-    border-radius: 2px;
+    border-radius: 4px;
     overflow-x: auto;
   }
 
   .content :global(pre) :global(code) {
     background-color: transparent;
-    padding: 0;
+    /* padding: 0; */
   }
 
   .content :global(ul) {
@@ -51,6 +51,10 @@
 
 <svelte:head>
   <title>{post.title}</title>
+  <link rel="stylesheet" href="prism.css" />
+  <script src="prism.js">
+
+  </script>
 </svelte:head>
 
 <h1>{post.title}</h1>
