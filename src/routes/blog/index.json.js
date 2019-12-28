@@ -4,11 +4,18 @@ import { basename } from 'path'
 import fm from 'front-matter'
 import marked from 'marked'
 
+const { NODE_ENV } = process.env
+
 export async function get(req, res) {
   const files = await promisify(readdir)(`_posts/blog/`, 'utf-8')
 
+  const filteredFiles =
+    NODE_ENV !== 'production'
+      ? files
+      : files.filter(file => !file.startsWith('dev-'))
+
   const contents = await Promise.all(
-    files.map(async file => {
+    filteredFiles.map(async file => {
       const fileContent = await promisify(readFile)(
         `_posts/blog/${file}`,
         'utf-8'
