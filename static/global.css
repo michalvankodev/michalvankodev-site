@@ -10,6 +10,7 @@ body {
   line-height: 1.5;
   color: #42436a;
   background: #f2f6f6;
+  min-height: 1vh;
 }
 
 h1,
