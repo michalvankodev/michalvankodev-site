@@ -1,9 +1,12 @@
 <script>
+  import { format } from 'date-fns'
   import twitterLogo from '../svg/iconfinder_Twitter_4070150.svg'
   import githubLogo from '../svg/iconfinder_github_2561442.svg'
   import twitchLogo from '../svg/iconfinder_twitch_306173.svg'
   import instagramLogo from '../svg/iconfinder_38-instagram_1161953.svg'
   import emailIcon from '../svg/iconfinder_mail_5474819.svg'
+
+  export let latestPosts
 </script>
 
 <style>
@@ -21,6 +24,18 @@
     color: #eae9be;
     font-size: 0.8em;
     padding: 0.4em;
+    box-shadow: 1px 3px #959595;
+  }
+
+  .lists {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .lists > section {
+    margin-bottom: 1em;
   }
 
   .no-wrap {
@@ -32,27 +47,23 @@
     color: #eae9be;
   }
 
-  .socials {
-    /* display: flex;
-    align-items: center; */
-  }
-
-  .social-links {
+  .lists ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    /* display: inline-flex; */
-    /* align-items: center; */
+  }
+
+  .lists li {
+    margin-left: 0.5em;
+  }
+
+  .lists li li {
+    font-size: 0.8em;
   }
 
   .social-links a span {
     /* display: none; */
     padding: 0 0.4em;
-  }
-
-  .social-links li {
-    /* display: inline-block; */
-    margin-left: 0.5em;
   }
 
   .email :global(svg path) {
@@ -89,6 +100,7 @@
   .social-links a {
     display: flex;
     align-items: center;
+    justify-content: center;
   }
 
   .bottom-line {
@@ -97,51 +109,112 @@
     margin-top: 1em;
   }
 
-  @media only screen and (min-width: 700px) {
-    .social-links a span {
-      display: inline;
+  .date {
+    font-size: 0.7em;
+  }
+
+  @media only screen and (min-width: 900px) {
+    .lists {
+      flex-direction: row;
+      text-align: start;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .social-links a {
+      justify-content: start;
+    }
+
+    .bottom-line {
+      max-width: 900px;
+      margin: auto;
     }
   }
 </style>
 
 <footer class="site-footer">
-  <div class="no-wrap socials">
-    <h3>Contact</h3>
-    <ul class="social-links">
-
-      <li class="email">
-        <a href="mailto: michalvankosk@gmail.com" title="E-mail address">
-          {@html emailIcon}
-          <span>michalvankosk@gmail.com</span>
-        </a>
-      </li>
-      <li class="twitter">
-        <a href="https://twitter.com/michalvankodev" title="Twitter profile">
-          {@html twitterLogo}
-          <span>Twitter</span>
-        </a>
-      </li>
-      <li class="github">
-        <a href="https://github.com/michalvankodev" title="Github profile">
-          {@html githubLogo}
-          <span>Github</span>
-        </a>
-      </li>
-      <li class="twitch">
-        <a href="https://twitch.tv/michalvankodev" title="Twitch profile">
-          {@html twitchLogo}
-          <span>Twitch</span>
-        </a>
-      </li>
-      <li class="instagram">
-        <a
-          href="https://www.instagram.com/michalvankodev/"
-          title="Instagram profile">
-          {@html instagramLogo}
-          <span>Instagram</span>
-        </a>
-      </li>
-    </ul>
+  <div class="lists">
+    <section class="site-map">
+      <ul>
+        <li>
+          <a href="/">Introduction</a>
+        </li>
+        <li>
+          <a href="/portfolio">Portfolio</a>
+          <ul>
+            <li>
+              <a href="/portfolio#personal-information">About</a>
+            </li>
+            <li>
+              <a href="/portfolio#skills">Skills</a>
+            </li>
+            <li>
+              <a href="/portfolio#work-history">Work History</a>
+            </li>
+            <li>
+              <a href="/portfolio#projects">Projects</a>
+            </li>
+            <li>
+              <a href="/portfolio#education">Education</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+    <section class="latest-posts">
+      <h3>
+        <a href="/blog">Latest posts</a>
+      </h3>
+      <ul>
+        {#each latestPosts as post}
+          <li>
+            <a rel="prefetch" href="/blog/{post.slug}">
+              <span>{post.title}</span>
+              <span class="date">
+                - {format(new Date(post.date), 'do MMM, yyyy')}
+              </span>
+            </a>
+          </li>
+        {/each}
+      </ul>
+    </section>
+    <section class="socials">
+      <h3>Contact</h3>
+      <ul class="social-links">
+        <li class="email">
+          <a href="mailto: michalvankosk@gmail.com" title="E-mail address">
+            {@html emailIcon}
+            <span>michalvankosk@gmail.com</span>
+          </a>
+        </li>
+        <li class="twitter">
+          <a href="https://twitter.com/michalvankodev" title="Twitter profile">
+            {@html twitterLogo}
+            <span>Twitter</span>
+          </a>
+        </li>
+        <li class="github">
+          <a href="https://github.com/michalvankodev" title="Github profile">
+            {@html githubLogo}
+            <span>Github</span>
+          </a>
+        </li>
+        <li class="twitch">
+          <a href="https://twitch.tv/michalvankodev" title="Twitch profile">
+            {@html twitchLogo}
+            <span>Twitch</span>
+          </a>
+        </li>
+        <li class="instagram">
+          <a
+            href="https://www.instagram.com/michalvankodev/"
+            title="Instagram profile">
+            {@html instagramLogo}
+            <span>Instagram</span>
+          </a>
+        </li>
+      </ul>
+    </section>
   </div>
   <footer class="bottom-line">
     <span class="no-wrap">Created by @michalvankodev</span>

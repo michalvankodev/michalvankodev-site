@@ -38,6 +38,7 @@ export default {
         dedupe,
       }),
       commonjs(),
+      svg(),
 
       legacy &&
         babel({
@@ -67,7 +68,6 @@ export default {
         terser({
           module: true,
         }),
-      svg(),
     ],
 
     onwarn,
@@ -89,6 +89,7 @@ export default {
         dedupe,
       }),
       commonjs(),
+      svg(),
     ],
     external: Object.keys(pkg.dependencies).concat(
       require('module').builtinModules ||

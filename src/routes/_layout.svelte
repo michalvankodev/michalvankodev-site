@@ -1,7 +1,20 @@
+<script context="module">
+  import { take } from 'ramda'
+
+  export function preload({ params, query }) {
+    return this.fetch(`blog.json`)
+      .then(r => r.json())
+      .then(posts => {
+        return { latestPosts: take(5, posts) }
+      })
+  }
+</script>
+
 <script>
   import Nav from '../components/Nav.svelte'
   import Footer from '../components/Footer.svelte'
   export let segment
+  export let latestPosts
 </script>
 
 <style>
@@ -24,5 +37,5 @@
   <main>
     <slot />
   </main>
-  <Footer />
+  <Footer {latestPosts} />
 </div>
