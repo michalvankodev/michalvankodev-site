@@ -5,7 +5,9 @@ published: true
 date: 2020-01-09T17:24:13.481Z
 thumbnail: /images/uploads/screenshot.gif
 tags:
-  - dev another-one another
+  - dev
+  - another-one
+  - another
 ---
 
 ![Photo presentation of a responzIO device ](/images/uploads/responzio.png 'responzIO device')
