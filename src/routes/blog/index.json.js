@@ -1,7 +1,7 @@
 import { readdir, readFile } from 'fs'
 import { promisify } from 'util'
 import { basename } from 'path'
-import { pipe, partial, prop, sortBy, reverse } from 'ramda'
+import { pipe, partial, prop, sortBy, reverse, filter } from 'ramda'
 import fm from 'front-matter'
 import marked from 'marked'
 
@@ -37,6 +37,7 @@ export async function get(req, res) {
   const filteredContents = pipe(
     sortBy(prop('date')),
     reverse,
+    filter(article => article.published),
     partial(filterByTag, [tag])
   )(contents)
 
@@ -54,4 +55,8 @@ function filterDevelopmentFiles(files) {
 
 function filterByTag(tag, contents) {
   return tag ? contents.filter(content => content.tags.includes(tag)) : contents
+}
+
+function filterPublished(article) {
+  return article.published
 }
