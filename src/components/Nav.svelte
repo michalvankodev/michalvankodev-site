@@ -44,6 +44,13 @@
   a.selected {
     text-shadow: 0px 0px 1px;
   }
+
+  .page-navigation {
+    font-size: 0.86em;
+    border-top: 1px solid #65624f;
+    margin-top: 0.3em;
+    padding-top: 0.4em;
+  }
 </style>
 
 <nav class="navigation-theme">
@@ -80,11 +87,13 @@
     </aside>
   </section>
 
-  <!-- <div class="page-navigation">
-    <a href="portfolio#personal-information">About</a>
-    <a href="portfolio#skills">Skills</a>
-    <a href="portfolio#work-history">Work History</a>
-    <a href="portfolio#projects">Projects</a>
-    <a href="portfolio#education">Education</a>
-  </div> -->
+  {#if segment === 'portfolio'}
+    <section class="page-navigation">
+      <a href="portfolio#personal-information">About</a>
+      <a href="portfolio#skills">Skills</a>
+      <a href="portfolio#work-history">Work History</a>
+      <a href="portfolio#projects">Projects</a>
+      <a href="portfolio#education">Education</a>
+    </section>
+  {/if}
 </nav>
