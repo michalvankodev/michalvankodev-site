@@ -94,6 +94,19 @@ p {
   background: #0dd0d0;
 }
 
+.navigation-theme {
+  background: #2d3935;
+  color: #eae9be;
+}
+
+.navigation-theme a {
+  color: #eae9be;
+}
+
+.navigation-theme a:hover {
+  color: #faf9d6;
+}
+
 @media only screen and (min-width: 400px) {
   body {
     font-size: 18px;
