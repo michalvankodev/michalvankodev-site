@@ -20,8 +20,6 @@
   }
 
   .site-footer {
-    background: #2d3935;
-    color: #eae9be;
     font-size: 0.8em;
     padding: 0.4em;
     box-shadow: 1px 3px #959595;
@@ -40,11 +38,6 @@
 
   .no-wrap {
     white-space: nowrap;
-  }
-
-  a {
-    /* color: #f2ee12; */
-    color: #eae9be;
   }
 
   .lists ul {
@@ -113,6 +106,10 @@
     font-size: 0.7em;
   }
 
+  .latest-posts li a:visited:not(:hover) {
+    color: #a7a574;
+  }
+
   @media only screen and (min-width: 900px) {
     .lists {
       flex-direction: row;
@@ -132,7 +129,7 @@
   }
 </style>
 
-<footer class="site-footer">
+<footer class="site-footer navigation-theme">
   <div class="lists">
     <section class="site-map">
       <ul>
