@@ -9,8 +9,8 @@
 </script>
 
 <script>
-  import Work from '../../components/portfolio/work.svelte';
-  import Project from '../../components/portfolio/project.svelte';
+  import Work from '../../components/portfolio/work.svelte'
+  import Project from '../../components/portfolio/project.svelte'
 
   export let content
 </script>
@@ -19,8 +19,8 @@
   :global([id])::before {
     content: '';
     display: block;
-    height:      3em;
-    margin-top: -3em;
+    height: 5em;
+    margin-top: -5em;
     visibility: hidden;
   }
 
@@ -32,7 +32,8 @@
     text-shadow: 2px 2px 1px #c8c4b7;
   }
 
-  #personal-information :global(h3), #personal-information :global(h2) {
+  #personal-information :global(h3),
+  #personal-information :global(h2) {
     margin: 1em 0 0.5em;
   }
 
@@ -48,7 +49,7 @@
 </style>
 
 <svelte:head>
-	<title>{content.title}</title>
+  <title>{content.title}</title>
 </svelte:head>
 
 <h1>Michal Vanko</h1>
@@ -67,7 +68,7 @@
   <ul>
     {#each content.workHistory as work}
       <li>
-        <Work work={work} />
+        <Work {work} />
       </li>
     {/each}
   </ul>
@@ -78,7 +79,7 @@
   <ul>
     {#each content.projects as project}
       <li>
-        <Project project={project} />
+        <Project {project} />
       </li>
     {/each}
   </ul>
@@ -89,7 +90,7 @@
   <ul>
     {#each content.education as work}
       <li>
-        <Work work={work} />
+        <Work {work} />
       </li>
     {/each}
   </ul>
