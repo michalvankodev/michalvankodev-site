@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Ide to ? copy
+title: dev - Ide to ? copy
 date: 2020-01-09T17:24:13.481Z
 thumbnail: /images/uploads/screenshot.gif
 rating: 4

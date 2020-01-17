@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: Anothert one
+title: dev - Anothert one
 date: 2019-11-03T11:01:32.621Z
 thumbnail: /images/uploads/responzio.png
 rating: 2
