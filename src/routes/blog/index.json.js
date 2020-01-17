@@ -1,18 +1,16 @@
 import { readdir, readFile } from 'fs'
 import { promisify } from 'util'
 import { basename } from 'path'
+import { pipe, partial, prop, sortBy, reverse } from 'ramda'
 import fm from 'front-matter'
 import marked from 'marked'
 
 const { NODE_ENV } = process.env
 
 export async function get(req, res) {
+  const { tag } = req.query
   const files = await promisify(readdir)(`_posts/blog/`, 'utf-8')
-
-  const filteredFiles =
-    NODE_ENV !== 'production'
-      ? files
-      : files.filter(file => !file.startsWith('dev-'))
+  const filteredFiles = filterDevelopmentFiles(files)
 
   const contents = await Promise.all(
     filteredFiles.map(async file => {
@@ -36,10 +34,24 @@ export async function get(req, res) {
       }
     })
   )
+  const filteredContents = pipe(
+    sortBy(prop('date')),
+    reverse,
+    partial(filterByTag, [tag])
+  )(contents)
 
   res.writeHead(200, {
     'Content-Type': 'application/json',
   })
+  res.end(JSON.stringify(filteredContents))
+}
 
-  res.end(JSON.stringify(contents))
+function filterDevelopmentFiles(files) {
+  return NODE_ENV !== 'production'
+    ? files
+    : files.filter(file => !file.startsWith('dev-'))
+}
+
+function filterByTag(tag, contents) {
+  return tag ? contents.filter(content => content.tags.includes(tag)) : contents
 }

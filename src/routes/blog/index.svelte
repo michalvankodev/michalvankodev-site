@@ -1,9 +1,15 @@
 <script context="module">
   export function preload({ params, query }) {
-    return this.fetch(`blog.json`)
+    const blogQuery = query
+      ? '?' +
+        Object.entries(query)
+          .map(q => q.join('='))
+          .join('&')
+      : ''
+    return this.fetch(`blog.json${blogQuery}`)
       .then(r => r.json())
       .then(posts => {
-        return { posts }
+        return { posts, query }
       })
   }
 </script>
@@ -12,6 +18,7 @@
   import { format } from 'date-fns'
 
   export let posts
+  export let query
 </script>
 
 <style>
@@ -54,14 +61,33 @@
   .lighten {
     color: #595a8f;
   }
+
+  .see-all {
+    text-align: end;
+    margin-top: -1.5em;
+  }
 </style>
 
 <svelte:head>
   <title>My blog @michalvankodev</title>
 </svelte:head>
 
-<h1>Recent posts</h1>
-
+{#if posts.length === 0}
+  <p class="no-posts">You've found void in the space.</p>
+{:else}
+  <h1>
+    Recent
+    {#if query.tag}
+      <em>{query.tag}</em>
+    {/if}
+    posts
+  </h1>
+  {#if query.tag}
+    <div class="see-all">
+      <a href="/blog" class="">See all posts</a>
+    </div>
+  {/if}
+{/if}
 <ul class="post-list">
   {#each posts as post}
     <!-- we're using the non-standard `rel=prefetch` attribute to
