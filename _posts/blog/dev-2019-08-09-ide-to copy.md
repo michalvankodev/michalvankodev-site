@@ -4,8 +4,10 @@ title: dev - Ide to ? copy
 published: true
 date: 2020-01-09T17:24:13.481Z
 thumbnail: /images/uploads/screenshot.gif
-rating: 4
-tags: ['dev']
+tags:
+  - dev
+  - another-one
+  - another
 ---
 
 ![Photo presentation of a responzIO device ](/images/uploads/responzio.png 'responzIO device')
