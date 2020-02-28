@@ -22,7 +22,12 @@ collections:
           default: true,
         }
       - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      - { label: 'Featured Image', name: 'thumbnail', widget: 'image' }
+      - {
+          label: 'Featured Image',
+          name: 'thumbnail',
+          widget: 'image',
+          required: false,
+        }
       - {
           label: 'Tags',
           name: 'tags',
@@ -31,6 +36,7 @@ collections:
           required: false,
         }
       - { label: 'Body', name: 'body', widget: 'markdown' }
+      - { label: 'Writers notes', name: 'notes', widget: 'markdown' }
   - name: 'pages'
     label: 'Pages'
     files:
