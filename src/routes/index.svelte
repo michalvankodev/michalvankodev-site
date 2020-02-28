@@ -17,12 +17,18 @@
 
   img {
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
     margin: 0 0 1em 0;
+    border-radius: 5px;
+    box-shadow: 0px 0px 8px 1px #2d3935;
   }
 
   p {
     margin: 1em auto;
+  }
+
+  .motto {
+    font-size: 1.4em;
   }
 </style>
 
@@ -32,7 +38,7 @@
 
 <header class="index-header">
   <figure class="profile-pic">
-    <img alt="Borat" src="great-success.png" />
+    <img alt="My eye" src="eye.png" />
   </figure>
 
   <p class="motto">
@@ -43,7 +49,7 @@
 
 <p>
   Hey, welcome to my personal website. My name is
-  <strong>Michal Vanko</strong>
+  <strong>Michal&nbsp;Vanko</strong>
   and I'm a
   <em>
     <a href="https://en.wikipedia.org/wiki/Programmer">programmer</a>

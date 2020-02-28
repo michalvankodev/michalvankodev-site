@@ -21,9 +21,10 @@ export async function get(req, res) {
       const parsedAttributes = fm(fileContent)
 
       const lineOfTextRegExp = /^(?:\w|\[).+/gm
+      const sentenceRegExp = /(?:\w|\[).[.?!]/
       const lines = parsedAttributes.body
         .match(lineOfTextRegExp)
-        .slice(0, 4)
+        .slice(0, 2)
         .join('\n')
 
       const preview = marked(lines)

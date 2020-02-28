@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: How I've built my web-site
+title: How I've built my website
 published: true
 date: 2020-02-28T16:00:55.791Z
 thumbnail: /images/uploads/DSC01202.jpg
@@ -10,26 +10,49 @@ tags:
   - Svelte
   - Programming
 ---
+
 ## Motivation
 
-Creating my own website with blog was something I had in my mind from start of my profesional career after I left school. I had a lot of new experience with development which I wanted to elaborate on and save into a small library so I can take a look back on my thoughts how they evolve over time. This was like 6 years ago. I had a successful first attempt at doing so. I created a wordpress with the simplest theme I've found and wrote [PUT NUMBER OF ARTICLES ] articles. I've published it under a domain of one of the first startups I've been part of. I still have a backup of the _Wordpress_ database somewhere so I can export those articles here when I will feel like doing so. The blog haven't lived for long as the domain once expired and I was not satisfied with it enough to deploy it somewhere else.
+Creating my own website with blog was something I had in my mind from start of my profesional career after I left school.
+I had a lot of new experience with development which I wanted to elaborate on and save into a small library so I can take a look back on my thoughts how they evolve over time.
+This was like 6 years ago. I had a successful first attempt at doing so. I created a wordpress with the simplest theme I've found and wrote some articles. I've published it under a domain of one of the first startups I've been part of. I still have a backup of the _Wordpress_ database somewhere so I can export those articles here when I will feel like doing so. The blog haven't lived for long as the domain once expired and I was not satisfied with it enough to deploy it somewhere else.
 
-For all those years I was trying to create it in my spare time (of which wasn't that much appereantly). There were several attempts. One with _Angular_ when it was "the cool kid on the block". Another one with _cycle.js_ which was not that far from being done. I regret it now as it would be really satisfying to finish that one. I had created neat SSR layer which was not really difficult to accomplish with _cycle.js_ as it is reactive and it requires skipping first client render of _virtual-dom_ after page load. I'm still in love with _cycle.js_ but after _sapper_ was released I've found out of its ability to create a nice **static site** I wanted to try it out. I think that the approach of **compiling the source code** as classic client applications have been doing for many years makes a lot of sense on the internet as well. This is the one thing I'd really like to be able to accomplish with reactive frameworks like _cycle.js_.
+For all those years I was trying to create it in my spare time (of which wasn't that much appereantly). There were several attempts. One with _Angular_ when it was "the cool kid on the block". Another one with _cycle.js_ which was not that far from being done. I regret it now as it would be really satisfying to finish that one. I had created neat <abbr title="Server side rendering">SSR</abbr> layer which was not really difficult to accomplish with _cycle.js_ as it is reactive and it only required skipping first client render of _virtual-dom_ after page load. I'm still in love with _cycle.js_ but after _sapper_ was released I've found out of its ability to create a nice **static site** I wanted to try it out. I think that the approach of **compiling the source code** as classic client applications have been doing for many years makes a lot of sense on the internet as well. This is the one thing I'd really like to be able to accomplish with reactive frameworks like _cycle.js_.
 
 ## How I got my domain
 
 There was the big boom of new available generic top-level domains released around 2013. More than 1000 new gTLDs have been made available. After that I didn't want a local _(.sk)_ or any common _(.com)_ domain for my personal site. I wanted **.dev** from the first time I saw it. It was very unfortunate decision for me, because the _.dev_ domain was bought entirely by _Google_ and was not available for public until 28th of February 2019. When I found out that this day will come, I was so excited that I'd set up an alarm for it. I was among the first who bought the domain right away after few minutes it was available.
 
+The **michalvanko.dev** domain celebrates 1 year with the release of this blog post.
+
 ## Build setup
 
-So I had a domain with no content published on it for few months. But I knew that I'd use it at least for my portfolio page. I was not rushing myself into building it right away. But the time came when had to do it as I wanted to change my employment as I was not satisfied with the one at that time.
+So I had a domain with no content published on it for few months. But I knew that I'd use it at least for my **portfolio** page. I was not rushing myself into building it right away. But the time came when had to do it as I wanted to change my employment as I was not satisfied with the one at that time.
 
-While I was choosing technology stack I was making a decision between static site generators as I wanted to make it as less resource dependant as possible. This lead me to the _sapper_ framework as it supports building (exporting) static assets with efficiency. At first I've wrote the portfolio just in _html_ without need of any <abbr title="Content management system">CMS</abbr>. I wanted to build it really fast and deploy it with some automated pipeline just like <abbr title="Javascript, APIs, Markup">JAM</abbr> apps should be.
+While I was choosing technology stack I was making a decision between static site generators as I wanted to make it as less resource dependant as possible. This lead me to the _sapper_ framework as it supports building (exporting) static assets with **efficiency**. At first I've wrote the portfolio just in _HTML_ without need of any <abbr title="Content management system">CMS</abbr>. I wanted to build it really fast and deploy it with some automated pipeline just like <abbr title="Javascript, APIs, Markup">JAM</abbr> apps should be.
 
 I've chosen to deploy it on _Amazon's S3_ as I have some experience with it and I knew that it won't cost me anything. I had a 1 year free tier still available for my account even that it was 6 years old as I haven't set up any payments yet. _Amazon_ made this neat tool called [_amplify_](https://aws.amazon.com/amplify/) which suits very well for my needs. It supports **git based deployment** so I can setup my site to build whenever I create or edit any article and it will be published right away with purged cache. I just had to setup configuration of build step with _sapper_ so the exported site is correctly uploaded to _S3_ and that was it.
 
-```
-TODO Add your build config
+Build configuration:
+
+```yaml
+version: 0.1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm install
+    build:
+      commands:
+        - npm run export
+  artifacts:
+    # IMPORTANT - Please verify your build output directory
+    baseDirectory: __sapper__/export
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
 ```
 
 Mapping _amplified_ app to my domain was easy as well. I didn't even needed to leave _amplify_ console. They've built the setup of the domain right into it so I just had to copy the settings for verification into my domain name registrator and in few minutes it was all synced and done.
@@ -56,29 +79,35 @@ For example this is the model of this blog post:
 
 ```yaml
 - name: 'blog' # Used in routes, e.g., /admin/collections/blog
-    label: 'Blog' # Used in the UI
-    folder: '_posts/blog' # The path to the folder where the documents are stored
-    create: true # Allow users to create new documents in this collection
-    slug: '{{year}}-{{month}}-{{day}}-{{slug}}' # Filename template, e.g., YYYY-MM-DD-title.md
-    fields: # The fields for each document, usually in front matter
-      - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'blog' }
-      - { label: 'Title', name: 'title', widget: 'string' }
-      - {
-          label: 'Published',
-          name: 'published',
-          widget: 'boolean',
-          default: true,
-        }
-      - { label: 'Publish Date', name: 'date', widget: 'datetime' }
-      - { label: 'Featured Image', name: 'thumbnail', widget: 'image' }
-      - {
-          label: 'Tags',
-          name: 'tags',
-          widget: 'list',
-          default: ['News'],
-          required: false,
-        }
-      - { label: 'Body', name: 'body', widget: 'markdown' }
+  label: 'Blog' # Used in the UI
+  folder: '_posts/blog' # The path to the folder where the documents are stored
+  create: true # Allow users to create new documents in this collection
+  slug: '{{year}}-{{month}}-{{day}}-{{slug}}' # Filename template, e.g., YYYY-MM-DD-title.md
+  fields: # The fields for each document, usually in front matter
+    - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'blog' }
+    - { label: 'Title', name: 'title', widget: 'string' }
+    - {
+        label: 'Published',
+        name: 'published',
+        widget: 'boolean',
+        default: true,
+      }
+    - { label: 'Publish Date', name: 'date', widget: 'datetime' }
+    - {
+        label: 'Featured Image',
+        name: 'thumbnail',
+        widget: 'image',
+        required: false,
+      }
+    - {
+        label: 'Tags',
+        name: 'tags',
+        widget: 'list',
+        default: ['News'],
+        required: false,
+      }
+    - { label: 'Body', name: 'body', widget: 'markdown' }
+    - { label: 'Writers notes', name: 'notes', widget: 'markdown' }
 ```
 
 Neat part of the _CMS_ are those widgets. In editor they will be presented by appropriate component as well as in the editor preview.
