@@ -7,6 +7,7 @@ import { terser } from 'rollup-plugin-terser'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
 import svg from 'rollup-plugin-svg'
+import image from 'svelte-image'
 
 const mode = process.env.NODE_ENV
 const dev = mode === 'development'
@@ -16,7 +17,7 @@ const onwarn = (warning, onwarn) =>
   (warning.code === 'CIRCULAR_DEPENDENCY' &&
     /[/\\]@sapper[/\\]/.test(warning.message)) ||
   onwarn(warning)
-const dedupe = importee =>
+const dedupe = (importee) =>
   importee === 'svelte' || importee.startsWith('svelte/')
 
 export default {
@@ -32,6 +33,9 @@ export default {
         dev,
         hydratable: true,
         emitCss: true,
+        // preprocess: {
+        //   ...image(),
+        // },
       }),
       resolve({
         browser: true,
@@ -84,6 +88,9 @@ export default {
       svelte({
         generate: 'ssr',
         dev,
+        // preprocess: {
+        //   ...image(),
+        // },
       }),
       resolve({
         dedupe,
