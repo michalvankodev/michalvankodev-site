@@ -47,6 +47,17 @@
   .content :global(li) {
     margin: 0 0 0.5em 0;
   }
+
+  .content :global(img) {
+    max-width: 100%;
+    border-radius: 5px;
+    box-shadow: 0px 0px 8px 1px #2d3935;
+  }
+
+  .content :global(img:only-child) {
+    display: block;
+    margin: 0 auto;
+  }
 </style>
 
 <svelte:head>
