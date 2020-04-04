@@ -153,7 +153,7 @@ But to sum up what I did it was pretty simple:
 2. Set the number of RGB diodes in `/keyboards/redox/keymaps/default/config.h`
 3. Made my own keyboard layout over: https://config.qmk.fm/#/redox/rev1/LAYOUT
 4. Burn it `make redox/rev1:default:avrdude`
-   - Of course I've strugled a little bit with this part. I've ended up with running this command as I wasn't able to set some stuff described here: https://docs.qmk.fm/#/faq_build?id=can39t-program-on-linux
+   - Of course I've strugled a little bit with this part. I've ended up with running this command with `sudo` as I wasn't able to set some stuff described here: https://docs.qmk.fm/#/faq_build?id=can39t-program-on-linux
 
 In case you want to check out my configuration you can download it here and upload it in the configurator. I've added some multimedia keys in a third layout and much more.
 
