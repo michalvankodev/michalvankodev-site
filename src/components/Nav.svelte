@@ -7,7 +7,7 @@
 <style>
   nav {
     position: sticky;
-    top: 0;
+    top: -2.75em;
     z-index: 1;
     padding: 0.5em;
     box-shadow: 0px 1px 3px #959595;
