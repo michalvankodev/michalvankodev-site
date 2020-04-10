@@ -7,7 +7,7 @@ thumbnail: /images/uploads/img_20200301_171735.jpg
 tags:
   - Keyboards
   - Tutorial
-notes: add some stuff about redoc keyboard itself
+notes: add some stuff about redox keyboard itself
 ---
 
 In this blog post I am going to take you out on a little journey of making my own keyboard. Perhaps help you if you've decided to make yourself your own.
@@ -20,7 +20,7 @@ But at first I want to tell you:
 
 I am feeling pain in a wrist of my right hand for 2 years now. I've started to feel it when I started to be more physically active. I've been working out and played a lot of squash. It got to the point that I had to visit an orthopedist. I was scared that I'd have the infamous **carpal tunnel syndrome**. At this stage he said it was just strained. The pain eased out after some therapy but it still comes back and it got to the point that I had to change my work habits.
 
-One night I was checking out the state of programming streams on _twitch_. I've found a great streamer [JMS WRN](https://www.twitch.tv/jmswrnr) and as I was chatting with him about my wirst problem he gave a recommendation for my new mouse: [Logitech MX Vertical](https://www.logitech.com/en-us/product/mx-vertical-ergonomic-mouse?crid=7) and then he showed me that he has a Discord channel just for keyboard stuff. And that was **the moment** for me. I've discovered a whole new world of possibilities around keyboards.
+One night I was checking out the state of programming streams on _twitch_. I've found a great streamer [JMS WRN](https://www.twitch.tv/jmswrnr) and as I was chatting with him about my wrist problem he gave a recommendation for my new mouse: [Logitech MX Vertical](https://www.logitech.com/en-us/product/mx-vertical-ergonomic-mouse?crid=7) and then he showed me that he has a _Discord channel_ just for keyboard stuff. And that was **the moment** for me. I've discovered a whole new world of possibilities around keyboards.
 
 I've started to do a research around custom keyboards, their parts, _QMK software_ and its possibilities. I was 100% sure that, if I am going to make my own keyboard it would be **split and ergonomic**. It just looks so cool to be able to have one part of the keyboard away from the other.
 
@@ -34,6 +34,8 @@ I got to the point that if I want to make a keyboard that I have to make a compl
 
 I took a look at his selection of custom keyboards and decided on the **Redox keyboard**. It is a split orthodox keyboard heavily inspired by **Ergodox**. There are two options for this keyboard: Classic wired and wireless. I've decided for wired one as I didn't want to complicate my first build.
 
+If you want to take a closer look into Redox keyboard and it's details, I recommend reading designers [Hackaday.io page](https://hackaday.io/project/160610-redox-keyboard)
+
 ## Let's make a shopping list
 
 You might think that making a custom mechanical keyboard can be cheap but the opposite is quite true. The electronics are the cheapest part and they are not that hard to get. You might find many of them in the nearest radio amateur shop. Parts that you have to reconsider and are most important are the PCB, case, switches, and keycaps.
@@ -44,7 +46,7 @@ I decided that I want my custom case so my friend was so kind that he asked his 
 
 - [3D printed case](https://www.thingiverse.com/thing:2886662) - 32€
 
-  - I've payed only for materials but the overal cost is higher
+  - I've paid only for materials but the overall cost is higher
 
 - [REDOX PCB Electrical Boards](https://falba.tech/product/redox-pcb-electrical-boards-set-of-2/) - 20€
 - [70pcs Pack 3Pin Gateron White Switch](https://www.banggood.com/70PCS-Pack-3Pin-Gateron-White-Switch-Keyboard-Switch-for-Mechanical-Gaming-Keyboard-p-1446975.html?rmmds=category&cur_warehouse=CN) - ~18€
@@ -66,7 +68,7 @@ So this makes a total of ~115 € for only components of the keyboard itself and
 I had to also buy some tools so I can put this project into reality. There is a nice sum up of tools you'll need at [keeb.io](https://docs.keeb.io/soldering-tools/).
 
 - [60W Soldering Station](https://www.banggood.com/MUSTOOL-SD1-SD2-LCD-60W-Soldering-Station-Professional-PID-Soldering-Iron-Station-4-in-1-Tool-Kit-Adjustable-Temperature-200-480C-with-Solder-Wire-Holder-p-1590175.html?rmmds=myorder&ID=471846280495&cur_warehouse=CN) - ~25€
-- [Anti-static Tweezer](https://www.banggood.com/ESD-10-15-Safe-Anti-static-Tweezer-Maintenance-Repair-Nippers-Forceps-p-1102662.html?rmmds=myorder&ID=514829&cur_warehouse=CN) - ~1€
+- [Anti-static Tweezers](https://www.banggood.com/ESD-10-15-Safe-Anti-static-Tweezer-Maintenance-Repair-Nippers-Forceps-p-1102662.html?rmmds=myorder&ID=514829&cur_warehouse=CN) - ~1€
 - [Keycap Puller](https://www.banggood.com/Universal-Keyboard-Key-Cap-Puller-for-Mechanical-Keyboard-p-1211430.html?rmmds=myorder&cur_warehouse=CN) - ~4€
 - [Solder sucker](https://www.banggood.com/Antistatic-Vacuum-Desoldering-Pump-Irons-Sucker-Removal-Remover-Tool-p-911889.html?rmmds=myorder&ID=6284394&cur_warehouse=CN) - ~3€
 - [Flush Cutters](https://www.banggood.com/Pliers-Nipper-H-Practical-Electrical-Wire-Cable-Cutter-Cutting-Side-Snips-Flush-Pliers-Mini-Pliers-p-1371806.html?rmmds=myorder&ID=3160&cur_warehouse=CN) - ~3€
@@ -105,7 +107,7 @@ Momentary switches are used to send a reset signal to the Pro Micro. They are go
 
 ### 4. Solder TRRS sockets
 
-They will provide a way for connecting two sides toghether so you would only use one USB connection with computer.
+They will provide a way for connecting two sides together so you would only use one USB connection with computer.
 
 Also if you decide to install RGB backlights the coordinating signal is going to be wired through the socket pin as well.
 
@@ -119,9 +121,9 @@ Don't solder the Pro Micro yet! You won't be able to put the switches onto the b
 
 At this time you would notice that on the left side the USB port is going to be very low and not very tight. Please be aware of this. If you want to you can also just wire some leftover pins from the diodes and make them shorter but I was doing OK with the head pins of the Pro Micro.
 
-### 6 Mount the switches
+### 6. Mount the switches
 
-Try to put at least few switches on the case and try them mounting them on the board. The PCB has holes in it to mount the switches so it should fit toghether. Mine didn't so I had to make a little hack on few switches so they wont bend my board by cutting their bottoms.
+Try to put at least few switches on the case and try them mounting them on the board. The PCB has holes in it to mount the switches so it should fit together. Mine didn't so I had to make a little hack on few switches so they wont bend my board by cutting their bottoms.
 
 ![Cutting switch bottoms to be able to put them in the case](/images/uploads/2020-03-23_20-24-15_387.jpg 'Cutting switch bottoms to be able to put them in the case')
 
@@ -133,7 +135,7 @@ All of the switches should have their feet on the other side of the board. Try t
 
 Almost done with the solder. Now is time to wire the brains of the keyboard. These joints are going to be the best. There is not that much room so you'll have to bring your A game here.
 
-To be honest I had to revisit and try to fix both of my Pro Micros. One full column of my keyboard was not working because of one bad contact. I was trying to unmount whole Pro Micro out but wasn't able to suck the solder out so I desperetely just tried it out again and it worked. So I needed just to apply more heat to it. Few days later when my Enter key was not working and it was the same problem but on the other side.
+To be honest, I had to revisit and try to fix both of my Pro Micros. One full column of my keyboard was not working because of one bad contact. I was trying to unmount whole Pro Micro out but wasn't able to suck the solder out so I desperately just tried it out again and it worked. So I needed just to apply more heat to it. Few days later when my Enter key was not working and it was the same problem but on the other side.
 
 Before you proceed to the next step:
 
@@ -155,7 +157,7 @@ But to sum up what I did it was pretty simple:
 2. Set the number of RGB diodes in `/keyboards/redox/keymaps/default/config.h`
 3. Made my own keyboard layout over: https://config.qmk.fm/#/redox/rev1/LAYOUT
 4. Burn it `make redox/rev1:default:avrdude`
-   - Of course I've strugled a little bit with this part. I've ended up with running this command with `sudo` as I wasn't able to set some stuff described here: https://docs.qmk.fm/#/faq_build?id=can39t-program-on-linux
+   - Of course I've struggled a little bit with this part. I've ended up with running this command with `sudo` as I wasn't able to set some stuff described here: https://docs.qmk.fm/#/faq_build?id=can39t-program-on-linux
 
 In case you want to check out my configuration you can [download it here](/files/redox_keyboard_layout.json 'Keyboard layout mappings for QMK configuration tool') and upload it into the configurator. I've added some multimedia keys in a third layout and much more.
 
@@ -165,6 +167,6 @@ And that's it. You have built yourself a keyboard.
 
 Well, I just made a big change in my experience with writing. I was learning to write with 10 fingers and if that wasn't the biggest change I've made. I've decided that if I am going to learn to write properly I'll do it even better. I've learned to use the **Colemak keyboard layout**. To enhance it to the best experience possible I've built myself an **orthodox split keyboard** and I must say **_WORTH IT!_**
 
-'So what are the little things that come with switching to orthodox keyboard', you may ask. Well it depends on your habits. Mine were certainly very bad as I didn't know how to write with 10 fingers. Only 8 in my case. Also I was used to type H and Y keys with my left hand. But that was not biggest problem. Most errors I've made was by trying to hit _C_ key. I was used to hit it with my pointer finger which I think is not only my issue. With the classic keyboard design the _C_ key to be hit with middle finger seems like a torture. After one month I am now able to properly hit any key with the correct finger. I just still do many mistakes because of the layout change.
+So what are the little things that come with switching to orthodox keyboard', you may ask. Well it depends on your habits. Mine were certainly very bad as I didn't know how to write with 10 fingers. Only 8 in my case. Also I was used to type H and Y keys with my left hand. But that was not biggest problem. Most errors I've made was by trying to hit `C` key. I was used to hit it with my pointer finger which I think is not only my issue. With the classic keyboard design the `C` key to be hit with middle finger seems like a torture. After one month I am now able to properly hit any key with the correct finger. I just still do many mistakes because of the layout change.
 
-I've chosen very light switches because I wanted them to be less noisy as I work in a shared office and also my ol' _Cherry browns_ seems little hard to me. I have to say this change was very hard to get used to. First 3 days I was accidently pushing `oooooooooooo` key while trying to concentrate on which key I should press while learning new shortcuts. Simply put, I cannot rest my fingers on keyboard like I've used to. But I think that they are not that bad after I got used to them. Sometimes I accedentally press `Backspace` just before hitting `Enter`. Therefore I'd definitely recommend getting heavier switches for function keys. If I was to make another keyboard, which I am definetely going to make, I will choose something in between. When I try to type on my old keyboard I feel like I have to do push ups with my fingers. But I know it is just because I got used to these light ones.
+I've chosen very light switches because I wanted them to be less noisy as I work in a shared office and also my ol' _Cherry browns_ seems little hard to me. I have to say this change was very hard to get used to. First 3 days I was accidentally pushing `oooooooooooo` key while trying to concentrate on which key I should press while learning new shortcuts. Simply put, I cannot rest my fingers on keyboard like I've used to. But I think that they are not that bad after I got used to them. Sometimes I accidentally press `Backspace` just before hitting `Enter`. Therefore I'd definitely recommend getting heavier switches for function keys. If I was to make another keyboard, which I am definitely going to make, I will choose something in between. When I try to type on my old keyboard I feel like I have to do push ups with my fingers. But I know it is just because I got used to these light ones.
