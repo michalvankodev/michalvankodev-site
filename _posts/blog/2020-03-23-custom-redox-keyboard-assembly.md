@@ -2,7 +2,7 @@
 layout: blog
 title: Custom Redox keyboard assembly
 published: true
-date: 2020-03-23T19:16:54.820Z
+date: 2020-04-10T15:16:54.820Z
 thumbnail: /images/uploads/img_20200301_171735.jpg
 tags:
   - Keyboards
