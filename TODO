@@ -1,14 +1,15 @@
 
 Todo:
   ☐ Redox article @created(20-04-06 12:14)
-    ☐ Publish to dev @created(20-04-06 12:16)
+    ✔ Publish to dev @created(20-04-06 12:16) @done(20-04-06 15:13)
     ☐ Proof read Redox article @created(20-04-06 12:09)
-      ☐ Marika @created(20-04-06 12:13)
-      ☐ Michal @created(20-04-06 12:13)
+      ☐ Marika @created(20-04-06 12:13) @started(20-04-06 15:14)
+      ✔ Michal @created(20-04-06 12:13) @done(20-04-06 15:14)
     ☐ Publish @created(20-04-06 12:14)
-
+      ☐ Change publish date @created(20-04-07 13:59)
+      
     ☐ Little enhancments @created(20-04-06 12:01)
-    ☐ Separate tags with commas @created(20-04-06 12:02)
+      ☐ Separate tags with commas @created(20-04-06 12:02)
   
   ☐ SVG Logo with dark mode @created(20-04-06 12:03)
   ☐ Latest post widget while reading blog @created(20-04-06 12:15)
