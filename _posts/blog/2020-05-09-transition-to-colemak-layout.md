@@ -33,6 +33,9 @@ For the first week I had a browser tab opened with the keyboard layout so I look
 
 You may ask how was I able to work when I was berely able to write? Well as a programmer I don't write that much code. Most of the time the programming constist of reading someone elses code and thinking how to implement certain feature. The writing part is the smallest one really. Most of the writing is done in between the programmers themselves. Yeah I had much struggles responding to messages as I was typing a single sentence for whole minute. This frustrated me but I was progressing very quickly.
 
+After few months I've discovered that I can also setup Colemak on the mobile phone as well. So I immediately did. Writing on mobile is completely different experience because I tend to missclick a lot more because of the size of the buttons. And mistakes are harder to autocorrect as it isn't build with the premise of using different layout. The `E` and `I` keys are now next to each other and which causes these mistakes to happen.
+
+
 ## Common struggles
 
 ### Shortcuts
@@ -47,4 +50,10 @@ Sounds simple but I often just hitted the same spot for single key over and over
 
 Another one that your brain don't even think of how it types out, it just does. Well all passwords automacally changed for me so I had to le-learn to write them differently.
 
-### Current state
+## Current state
+
+At this point I am comfortable using Colemak layout without any reocurring struggles. The typing speed is not even close to what it used to be but that doesn't matter that much. I do a lot of mistakes so the `backspace` button is used more often. That was the first thing that I got used to actually. The `CapsLock` button being transformed into backspace is great idea. I haven't used `CapsLock` ever.
+
+I've started to struggle to type on QWERTY layout instead. Every time I have to type with it I have to look at the keyboard and only type with 4 fingers which is pretty ugly. I'm also used to tap `CapsLock` whenever I do mistake which happens a lot.
+
+In overall I am very happy with the switch. It's not only that I learned typing with all 10 fingers but the layout is much more comfortable as well.
