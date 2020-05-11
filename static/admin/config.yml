@@ -36,7 +36,12 @@ collections:
           required: false,
         }
       - { label: 'Body', name: 'body', widget: 'markdown' }
-      - { label: 'Writers notes', name: 'notes', widget: 'markdown' }
+      - {
+          label: 'Writers notes',
+          name: 'notes',
+          widget: 'markdown',
+          required: false,
+        }
   - name: 'pages'
     label: 'Pages'
     files:
