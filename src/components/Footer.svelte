@@ -20,7 +20,7 @@
   }
 
   .site-footer {
-    font-size: 0.8em;
+    font-size: 0.9em;
     padding: 0.4em;
     box-shadow: 1px 3px #959595;
   }
@@ -51,7 +51,7 @@
   }
 
   .lists li li {
-    font-size: 0.8em;
+    font-size: 0.9em;
   }
 
   .social-links a span {
@@ -111,6 +111,14 @@
   }
 
   @media only screen and (min-width: 900px) {
+    .site-footer {
+      font-size: 0.8em;
+    }
+
+    .lists li li {
+      font-size: 0.8em;
+    }
+
     .lists {
       flex-direction: row;
       text-align: start;
