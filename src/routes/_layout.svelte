@@ -24,7 +24,7 @@
 
   main {
     position: relative;
-    max-width: 30em;
+    max-width: 34em;
     padding: 2em;
     margin: 0 auto;
     box-sizing: border-box;
