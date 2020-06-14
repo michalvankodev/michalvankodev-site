@@ -33,7 +33,11 @@
 </style>
 
 <svelte:head>
-  <title>michalvanko.dev index page</title>
+  <title>Introduction @michalvankodev</title>
+
+
+  <link rel="alternate" type="application/rss+xml" title="RSS feed for latest posts" href="https://michalvanko.dev/feed.xml" />
+  <link rel="alternate" title="JSON feed for latest posts" type="application/json" href="https://michalvanko.dev/feed.json" />
 </svelte:head>
 
 <header class="index-header">
