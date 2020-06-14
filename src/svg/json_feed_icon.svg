@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="json_feed_icon.svg"
+   id="svg17"
+   version="1.1"
+   viewBox="0 0 140 140"
+   height="140px"
+   width="140px">
+  <sodipodi:namedview
+     inkscape:current-layer="icon"
+     inkscape:window-maximized="1"
+     inkscape:window-y="0"
+     inkscape:window-x="0"
+     inkscape:cy="80.375472"
+     inkscape:cx="41.171285"
+     inkscape:zoom="5.6714286"
+     showgrid="false"
+     id="namedview19"
+     inkscape:window-height="1016"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <defs
+     id="defs6" />
+  <g
+     id="Page-1">
+    <g
+       transform="translate(-4,-14)"
+       id="icon">
+      <rect
+         style="fill:none;stroke-width:0"
+         height="0"
+         width="140"
+         y="1000014"
+         x="-74"
+         id="background" />
+      <g
+         transform="rotate(-45,91.330213,37.830213)"
+         id="elements">
+        <path
+           d="m 7,64.983598 v 0.206832 c 8.251953,0 10.917969,3.300781 10.917969,13.266601 v 15.742188 c 0,16.376951 8.061523,23.613281 26.342773,23.613281 h 5.585938 v -11.87012 h -2.856446 c -10.346679,0 -14.02832,-3.55469 -14.02832,-13.457028 v -18.47168 c 0,-9.521485 -4.25293,-14.726563 -12.568359,-15.488281 V 56.748047 C 28.962891,55.922852 32.961914,51.162109 32.961914,41.958008 V 25.390625 c 0,-10.092773 3.554688,-13.583984 14.02832,-13.583984 H 49.84668 V 0 H 44.260742 C 25.916016,0 17.917969,6.9824219 17.917969,22.978516 v 13.647461 c 0,9.96582 -2.729492,13.330078 -10.917969,13.330078 v 0.06035 C 3.0909841,50.273695 0,53.525879 0,57.5 c 0,3.974121 3.0909841,7.226305 7,7.483598 z" />
+        <g
+           transform="translate(42,50)"
+           id="dots-@-15pt">
+          <circle
+             r="7.5"
+             cy="7.5"
+             cx="7.5"
+             id="Oval-1" />
+          <circle
+             r="7.5"
+             cy="7.5"
+             cx="32.5"
+             id="Oval-2" />
+          <circle
+             r="7.5"
+             cy="7.5"
+             cx="57.5"
+             id="Oval-3" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

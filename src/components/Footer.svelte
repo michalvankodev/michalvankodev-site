@@ -5,6 +5,8 @@
   import twitchLogo from '../svg/iconfinder_twitch_306173.svg'
   import instagramLogo from '../svg/iconfinder_38-instagram_1161953.svg'
   import emailIcon from '../svg/iconfinder_mail_5474819.svg'
+  import rssIcon from '../svg/iconfinder_icon-social-rss_211914.svg'
+  import jsonFeedIcon from '../svg/json_feed_icon.svg'
 
   export let latestPosts
 </script>
@@ -65,7 +67,7 @@
 
   .twitter :global(svg path) {
     /* fill: rgb(29, 161, 242); */
-    stroke: #fff;
+    stroke: #eae9be;
     stroke-width: 2px;
     fill: #eae9be;
   }
@@ -82,6 +84,14 @@
   }
 
   .instagram :global(svg) {
+    fill: #eae9be;
+  }
+
+  .rss :global(svg) {
+    fill: #eae9be;
+  }
+
+  .json-feed :global(svg) {
     fill: #eae9be;
   }
 
@@ -108,6 +118,15 @@
 
   .latest-posts li a:visited:not(:hover) {
     color: #a7a574;
+  }
+
+  .subscribe {
+    font-weight: bold;
+  }
+
+  hr {
+    color: #86856f;
+    margin: 0.2em 0;
   }
 
   @media only screen and (min-width: 900px) {
@@ -182,6 +201,13 @@
           </li>
         {/each}
       </ul>
+      <hr />
+      <section class="subscribe">
+        <a href="/feed.xml" title="RSS feed" class="rss">
+          Subscribe {@html rssIcon}
+        </a>
+        <a href="/feed.json" title="JSON feed" class="json-feed">{@html jsonFeedIcon}</a>
+      </section>
     </section>
     <section class="socials">
       <h3>Contact</h3>

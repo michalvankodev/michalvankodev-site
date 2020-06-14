@@ -15,6 +15,7 @@
     "classnames": "^2.2.6",
     "compression": "^1.7.4",
     "date-fns": "^2.11.1",
+    "feed": "^4.2.0",
     "front-matter": "^3.1.0",
     "marked": "^0.8.2",
     "polka": "^0.5.2",
