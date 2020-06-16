@@ -14,6 +14,8 @@
 </script>
 
 <script>
+  import ArticleFooter from '../../components/blog/article-footer.svelte'
+
   export let post
 </script>
 
@@ -73,3 +75,5 @@
 <div class="content">
   {@html post.body}
 </div>
+<ArticleFooter post={post} />
+
