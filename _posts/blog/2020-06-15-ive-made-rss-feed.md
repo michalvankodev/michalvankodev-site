@@ -1,6 +1,6 @@
 ---
 layout: blog
-title: I've made a RSS feed
+title: I've made an RSS feed
 published: true
 date: 2020-06-15T15:48:18.797Z # TODO executable line for generating date
 tags:
