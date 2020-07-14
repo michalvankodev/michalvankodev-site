@@ -204,9 +204,16 @@
       <hr />
       <section class="subscribe">
         <a href="/feed.xml" title="RSS feed" class="rss">
-          Subscribe {@html rssIcon}
+          Subscribe
+          {@html rssIcon}
         </a>
-        <a href="/feed.json" title="JSON feed" class="json-feed">{@html jsonFeedIcon}</a>
+        <a
+          href="/feed.json"
+          title="JSON feed"
+          class="json-feed"
+          aria-label="Subscribe with JSON feed">
+          {@html jsonFeedIcon}
+        </a>
       </section>
     </section>
     <section class="socials">
