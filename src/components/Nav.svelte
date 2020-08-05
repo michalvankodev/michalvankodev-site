@@ -19,6 +19,8 @@
 
   .nav-main {
     display: flex;
+    max-width: 900px;
+    margin: 0 auto;
   }
 
   .logo-section,
@@ -48,8 +50,9 @@
   .page-navigation {
     font-size: 0.86em;
     border-top: 1px solid #65624f;
-    margin-top: 0.3em;
     padding-top: 0.4em;
+    max-width: 900px;
+    margin: 0.3em auto 0;
   }
 </style>
 

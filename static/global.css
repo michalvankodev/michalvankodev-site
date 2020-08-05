@@ -82,6 +82,15 @@ pre {
   hyphens: none;
 }
 
+blockquote {
+  margin: 0.2em;
+  border-left: 2px solid #2d3935;
+  padding: 0 0.4em 0 0.8em;
+  background: #eaefef;
+  border-radius: 3px;
+  box-shadow: 1px 1px 2px #d4dbdb;
+}
+
 p {
   margin: 0.8em 0;
 }
