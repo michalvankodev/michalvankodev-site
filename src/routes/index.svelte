@@ -17,7 +17,6 @@
 
   img {
     width: 100%;
-    max-width: 420px;
     margin: 0 0 1em 0;
     border-radius: 5px;
     box-shadow: 0px 0px 8px 1px #2d3935;
@@ -38,7 +37,10 @@
 
 <header class="index-header">
   <figure class="profile-pic">
-    <img alt="My eye" src="eye.png" />
+    <picture>
+      <source srcset="images/profile-picture.webp" type="image/webp" />
+      <img alt="My profile picture" src="image/profil-picture.jpg" />
+    </picture>
   </figure>
 
   <p class="motto">
