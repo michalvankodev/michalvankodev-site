@@ -25,14 +25,16 @@ export async function getFeed() {
   })
 
   const blogListing = await getBlogListing()
-  blogListing.forEach(post => {
+  blogListing.forEach((post) => {
     feed.addItem({
       title: post.title,
       id: `https://michalvanko.dev/blog/${post.slug}`,
       link: `https://michalvanko.dev/blog/${post.slug}`,
       description: post.preview,
-      date: post.date,
-      image: post.thumbnail ? `https://michalvanko.dev/${post.thumbnail}` : undefined,
+      date: new Date(post.date),
+      image: post.thumbnail
+        ? `https://michalvanko.dev/${post.thumbnail}`
+        : undefined,
     })
   })
   return feed

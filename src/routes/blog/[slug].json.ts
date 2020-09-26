@@ -2,13 +2,18 @@ import { readFile } from 'fs'
 import { promisify } from 'util'
 import fm from 'front-matter'
 import { parseField } from '../../markdown/parse-markdown'
+import type { PostAttributes } from './_content'
+
+export interface SinglePost {
+  body: string
+}
 
 export async function get(req, res, next) {
   // the `slug` parameter is available because
   // this file is called [slug].json.js
   const { slug } = req.params
 
-  let postSource
+  let postSource: string
   try {
     postSource = await promisify(readFile)(`_posts/blog/${slug}.md`, 'utf-8')
   } catch (e) {
@@ -22,9 +27,9 @@ export async function get(req, res, next) {
     return
   }
 
-  const parsedPost = fm(postSource)
+  const parsedPost = fm<PostAttributes>(postSource)
 
-  const response = parseField('body')({
+  const response = parseField<SinglePost>('body')({
     ...parsedPost.attributes,
     body: parsedPost.body,
   })

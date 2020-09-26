@@ -4,8 +4,26 @@ import fm from 'front-matter'
 import marked from 'marked'
 import { parseField } from '../../markdown/parse-markdown'
 
+export interface RecordAttributes {
+  name: string
+  description: string
+  displayed: boolean
+}
+
+export interface ProjectAttributes extends RecordAttributes {
+  image: string
+}
+
+export interface PortfolioAttributes {
+  title: string
+  work_history_prelude: string
+  work_history: string[]
+  projects: ProjectAttributes[]
+  education: RecordAttributes[]
+}
+
 export async function get(req, res, next) {
-  let pageSource
+  let pageSource: string
   try {
     pageSource = await promisify(readFile)('_pages/portfolio.md', 'utf-8')
   } catch (e) {
@@ -14,15 +32,15 @@ export async function get(req, res, next) {
     return
   }
 
-  const parsed = fm(pageSource)
+  const parsed = fm<PortfolioAttributes>(pageSource)
   const workHistory = (parsed.attributes.work_history || []).map(
     parseField('description')
   )
   const projects = (parsed.attributes.projects || [])
-    .filter(project => project.displayed)
+    .filter((project) => project.displayed)
     .map(parseField('description'))
   const education = (parsed.attributes.education || [])
-    .filter(education => education.displayed)
+    .filter((education) => education.displayed)
     .map(parseField('description'))
 
   const response = {

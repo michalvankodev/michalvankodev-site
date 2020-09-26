@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="typescript">
   export function preload({ params, query }) {
     const blogQuery = query
       ? '?' +
@@ -14,11 +14,12 @@
   }
 </script>
 
-<script>
+<script lang="typescript"> 
   import ArticleFooter from '../../components/blog/article-footer.svelte'
+  import type { PostContent } from './_content';
 
-  export let posts
-  export let query
+  export let posts: PostContent[]
+  export let query 
 </script>
 
 <style>

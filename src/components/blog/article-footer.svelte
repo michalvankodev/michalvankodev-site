@@ -1,7 +1,8 @@
-<script>
+<script lang="typescript">
   import { format } from 'date-fns'
+  import type { PostContent } from '../../routes/blog/_content';
 
-  export let post
+  export let post: PostContent
 </script>
 
 <style>

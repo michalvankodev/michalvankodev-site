@@ -1,5 +1,7 @@
-<script>
-  export let project
+<script lang="typescript">
+  import type { ProjectAttributes } from "../../routes/portfolio/index.json";
+
+  export let project: ProjectAttributes
 </script>
 
 <style>
