@@ -7,17 +7,32 @@ import marked from 'marked'
 
 const { NODE_ENV } = process.env
 
-export async function getBlogListing(tag) {
+export interface PostAttributes {
+  layout: string
+  title: string
+  published: boolean
+  date: string
+  thumbnail: string
+  tags: string[]
+}
+
+export interface PostContent extends PostAttributes {
+  preview: string
+  slug: string
+  published: boolean
+}
+
+export async function getBlogListing(tag?: string) {
   const files = await promisify(readdir)(`_posts/blog/`, 'utf-8')
   const filteredFiles = filterDevelopmentFiles(files)
 
   const contents = await Promise.all(
-    filteredFiles.map(async file => {
+    filteredFiles.map(async (file) => {
       const fileContent = await promisify(readFile)(
         `_posts/blog/${file}`,
         'utf-8'
       )
-      const parsedAttributes = fm(fileContent)
+      const parsedAttributes = fm<PostAttributes>(fileContent)
 
       const lineOfTextRegExp = /^(?:\w|\[).+/gm
       const lines = parsedAttributes.body
@@ -33,23 +48,30 @@ export async function getBlogListing(tag) {
       }
     })
   )
-  const filteredContents = pipe(
+  const filteredContents = pipe<
+    PostContent[],
+    PostContent[],
+    PostContent[],
+    PostContent[],
+    PostContent[]
+  >(
     sortBy(prop('date')),
     reverse,
-    filter(article => article.published),
+    filter<typeof contents[0]>((article) => article.published),
     partial(filterByTag, [tag])
   )(contents)
 
   return filteredContents
 }
 
-function filterDevelopmentFiles(files) {
+function filterDevelopmentFiles(files: string[]) {
   return NODE_ENV !== 'production'
     ? files
-    : files.filter(file => !file.startsWith('dev-'))
+    : files.filter((file) => !file.startsWith('dev-'))
 }
 
-function filterByTag(tag, contents) {
-  return tag ? contents.filter(content => content.tags.includes(tag)) : contents
+function filterByTag(tag: string | undefined, contents: PostContent[]) {
+  return tag
+    ? contents.filter((content) => content.tags.includes(tag))
+    : contents
 }
-

@@ -7,22 +7,24 @@ import { terser } from 'rollup-plugin-terser'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
 import svg from 'rollup-plugin-svg'
-import image from 'svelte-image'
+// import image from 'svelte-image'
+import sveltePreprocess from 'svelte-preprocess'
+import typescript from '@rollup/plugin-typescript'
 
 const mode = process.env.NODE_ENV
 const dev = mode === 'development'
 const legacy = !!process.env.SAPPER_LEGACY_BUILD
 
 const onwarn = (warning, onwarn) =>
-  (warning.code === 'CIRCULAR_DEPENDENCY' &&
-    /[/\\]@sapper[/\\]/.test(warning.message)) ||
+  (warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message)) ||
+  (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
   onwarn(warning)
 const dedupe = (importee) =>
   importee === 'svelte' || importee.startsWith('svelte/')
 
 export default {
   client: {
-    input: config.client.input(),
+    input: config.client.input().replace(/\.js$/, ".ts"),
     output: config.client.output(),
     plugins: [
       replace({
@@ -33,9 +35,16 @@ export default {
         dev,
         hydratable: true,
         emitCss: true,
+        // Disabled automatic image compression
         // preprocess: {
         //   ...image(),
         // },
+        preprocess: sveltePreprocess({
+          sourceMap: dev,
+          defaults: {
+            script: 'typescript',
+          },
+        }),
       }),
       resolve({
         browser: true,
@@ -78,7 +87,7 @@ export default {
   },
 
   server: {
-    input: config.server.input(),
+    input: config.server.input().server.replace(/\.js$/, ".ts"),
     output: config.server.output(),
     plugins: [
       replace({
@@ -88,6 +97,13 @@ export default {
       svelte({
         generate: 'ssr',
         dev,
+        hydratable: true,
+        preprocess: sveltePreprocess({
+          sourceMap: dev,
+          defaults: {
+            script: 'typescript',
+          }
+        }),
         // preprocess: {
         //   ...image(),
         // },
@@ -96,6 +112,7 @@ export default {
         dedupe,
       }),
       commonjs(),
+      typescript({ sourceMap: dev}),
       svg(),
     ],
     external: Object.keys(pkg.dependencies).concat(

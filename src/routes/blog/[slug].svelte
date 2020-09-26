@@ -64,8 +64,8 @@
 
 <svelte:head>
   <title>{post.title}</title>
-  <link rel="stylesheet" href="prism.css" />
-  <script src="prism.js">
+  <link rel="stylesheet" href="/prism.css" />
+  <script src="../../../static/prism.js" defer>
 
   </script>
 </svelte:head>
