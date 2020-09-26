@@ -1,7 +1,5 @@
 <script context="module">
   export async function preload({ params, query }) {
-    // the `slug` parameter is available because
-    // this file is called [slug].svelte
     const res = await this.fetch(`blog/${params.slug}.json`)
     const data = await res.json()
 
@@ -15,6 +13,7 @@
 
 <script>
   import ArticleFooter from '../../components/blog/article-footer.svelte'
+  import '../../../static/prism.js'
 
   export let post
 </script>
@@ -65,9 +64,6 @@
 <svelte:head>
   <title>{post.title}</title>
   <link rel="stylesheet" href="/prism.css" />
-  <script src="../../../static/prism.js" defer>
-
-  </script>
 </svelte:head>
 
 <h1>{post.title}</h1>
@@ -75,5 +71,4 @@
 <div class="content">
   {@html post.body}
 </div>
-<ArticleFooter post={post} />
-
+<ArticleFooter {post} />
