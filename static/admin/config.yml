@@ -2,6 +2,7 @@ backend:
   name: github
   repo: michalvankodev/michalvankodev
   branch: master # Branch to update (optional; defaults to master)
+  site_domain: michalvanko.dev
 
 media_folder: 'static/images/uploads' # Media files will be stored in the repo under images/uploads
 public_folder: '/images/uploads' # The src attribute for uploaded media will begin with /images/uploads
