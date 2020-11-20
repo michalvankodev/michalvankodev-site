@@ -1,3 +1,27 @@
 {
-  "hosting": {}
+  "hosting": {},
+  "function": {
+    "authFunction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    }
+  },
+  "api": {
+    "auth": {
+      "service": "API Gateway",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "authFunction",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        }
+      ]
+    }
+  }
 }
