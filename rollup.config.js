@@ -17,14 +17,15 @@ const legacy = !!process.env.SAPPER_LEGACY_BUILD
 
 const onwarn = (warning, onwarn) =>
   (warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message)) ||
-  (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
+  (warning.code === 'CIRCULAR_DEPENDENCY' &&
+    /[/\\]@sapper[/\\]/.test(warning.message)) ||
   onwarn(warning)
 const dedupe = (importee) =>
   importee === 'svelte' || importee.startsWith('svelte/')
 
 export default {
   client: {
-    input: config.client.input().replace(/\.js$/, ".ts"),
+    input: config.client.input().replace(/\.js$/, '.ts'),
     output: config.client.output(),
     plugins: [
       replace({
@@ -32,8 +33,10 @@ export default {
         'process.env.NODE_ENV': JSON.stringify(mode),
       }),
       svelte({
-        dev,
-        hydratable: true,
+        compilerOptions: {
+          dev,
+          hydratable: true,
+        },
         emitCss: true,
         // Disabled automatic image compression
         // preprocess: {
@@ -87,7 +90,7 @@ export default {
   },
 
   server: {
-    input: config.server.input().server.replace(/\.js$/, ".ts"),
+    input: config.server.input().server.replace(/\.js$/, '.ts'),
     output: config.server.output(),
     plugins: [
       replace({
@@ -95,14 +98,16 @@ export default {
         'process.env.NODE_ENV': JSON.stringify(mode),
       }),
       svelte({
-        generate: 'ssr',
-        dev,
-        hydratable: true,
+        compilerOptions: {
+          generate: 'ssr',
+          dev,
+          hydratable: true,
+        },
         preprocess: sveltePreprocess({
           sourceMap: dev,
           defaults: {
             script: 'typescript',
-          }
+          },
         }),
         // preprocess: {
         //   ...image(),
@@ -112,7 +117,7 @@ export default {
         dedupe,
       }),
       commonjs(),
-      typescript({ sourceMap: dev}),
+      typescript({ sourceMap: dev }),
       svg(),
     ],
     external: Object.keys(pkg.dependencies).concat(
