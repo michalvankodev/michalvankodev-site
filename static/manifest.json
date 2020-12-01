@@ -7,13 +7,13 @@
   "start_url": "/",
   "icons": [
     {
-      "src": "m-favicon-192.png",
+      "src": "m-svgfavicon-192x192.svg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/svg+xml"
     },
     {
-      "src": "images/m-logo.png",
-      "sizes": "226x226",
+      "src": "images/m-svgfavicion-192x192.png",
+      "sizes": "192x192",
       "type": "image/png"
     }
   ]

@@ -97,7 +97,11 @@ p {
 }
 
 .tearkiss {
-  color: #25b5c5;
+  color: #16d0e7;
+}
+
+.tearkiss-new {
+  color: #16d0e7;
 }
 
 ::selection {
