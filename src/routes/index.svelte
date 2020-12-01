@@ -39,7 +39,7 @@
   <figure class="profile-pic">
     <picture>
       <source srcset="images/profile-picture.webp" type="image/webp" />
-      <img alt="My profile picture" src="image/profil-picture.jpg" />
+      <img alt="My profile picture" src="images/profile-picture.jpg" />
     </picture>
   </figure>
 
@@ -53,9 +53,7 @@
   Hey, welcome to my personal website. My name is
   <strong>Michal&nbsp;Vanko</strong>
   and I'm a
-  <em>
-    <a href="https://en.wikipedia.org/wiki/Programmer">programmer</a>
-  </em>
+  <em> <a href="https://en.wikipedia.org/wiki/Programmer">programmer</a> </em>
   . I'll try to share some stories and opinions about things that I'm interested
   in.
 </p>
