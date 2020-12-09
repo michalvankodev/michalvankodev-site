@@ -12,10 +12,15 @@
 </script>
 
 <script>
+  import { onMount } from 'svelte'
   import ArticleFooter from '../../components/blog/article-footer.svelte'
-  import '../../../static/prism.js'
+  import Prism from '../../../static/prism.js'
 
   export let post
+
+  onMount(() => {
+    Prism.highlightAll()
+  })
 </script>
 
 <style>
