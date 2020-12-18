@@ -5,6 +5,7 @@ published: true
 date: 2020-12-09T14:44:11.948Z
 tags:
   - Development
+  - Guide
 ---
 Having a good _error handling_ practice is very important when building complex applications.
 Applications which consist of multiple applications such as web applications,
