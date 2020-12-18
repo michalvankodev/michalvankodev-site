@@ -5,8 +5,9 @@ published: true
 date: 2020-12-09T14:44:11.948Z
 tags:
   - Development
+  - Guide
 ---
-Having a good _error handling_ practice is very important when building complex applications.
+Having good _error handling_ practice is very important when building complex applications.
 Applications which consist of multiple applications such as web applications,
 where you have multiple parts like _client_, _server_ and _database_ create a system where
 errors can happen in any individual parts or in communication between them.
@@ -17,7 +18,7 @@ Let me show you some examples of what kind of errors there might happen and how 
 
 Don't pay attention to the coding style here.
 There might be a different kind of libraries and conventions used in applications.
-Code samples are written just for demonstration of the various scenarios and what should happen in those scenarios.
+Code samples are written just for the demonstration of the various scenarios and what should happen in those scenarios.
 Please read through the comments as they explain how errors should be treated.
 
 ### Back-end application - Single run script or a CRON job
@@ -39,7 +40,7 @@ It is necessary to pass the error context to the logger so the error can be trac
 
 ### Back-end application - Responding to client requests
 
-This is usually how web applications are built and most common scenario where errors should be properly handled as it might be a security threat.
+This is usually how web applications are built and the most common scenario where errors should be properly handled as it might be a security threat.
 
 ```javascript
   app.post('/message', (req, res) => {
@@ -52,7 +53,7 @@ This is usually how web applications are built and most common scenario where er
         // They are caused by a bad input from the user.
         // There is no need to log these errors as they don't cause a system crash.
 
-        // Client should be informed on the matter what went wrong with the request.
+        // Client should be informed on the matter of what went wrong with the request.
         res.status(400).json({
           message: `Invalid input. ${err.message}`
         })
@@ -67,16 +68,16 @@ This is usually how web applications are built and most common scenario where er
         res.status(200).json(data)
       } else {
         // This is an example of an **unexpected** error.
-        // It doesn't only apply to an `Database`. You can replace the `Database` with any other 3rd party system.
-        // These type of errors can be programmers fault of not handling certain scenarios correctly,
-        // but also be caused by an unexpected events happening in the system
-        // (ex. Database server is down, usage of wrong ID's of relations in SQL queries)
+        // It doesn't only apply to a `Database`. You can replace the `Database` with any other 3rd party system.
+        // These type of errors can be programmers fault for not handling certain scenarios correctly,
+        // but also be caused by unexpected events happening in the system
+        // (ex. Database server is down, usage of the wrong ID of relations in SQL queries)
 
         // In this case we want to `log` this error with full context,
-        // so it can be found and fixed if it is an programmers fault.
+        // so it can be found and fixed if it is a programmer's fault.
         logger.error('Unexpected error happened', err)
 
-        // Client should be informed of such an error but without the context as it might reveal proprietary information about the system
+        // Client should be informed of such an error but without the context, as it might reveal proprietary information about the system
         res.status(500).json({
           message: 'Unexpected error happened'
         })
@@ -89,12 +90,12 @@ It is very important to **keep all proprietary information** about the system **
 It is a **security threat** and it might be abused by malicious hackers when any of the information gets leaked.
 It doesn't matter if the information is shown to the users or not, while it's being sent to the client it can be discovered. I
 
-However if there is an additional error handling functionality in place which
+However, if there is an additional error handling functionality in place which
 is able to filter out the error context in the `production` environment,
 it might be a good practice to include the error context in the `development` environment,
 as it will speed up the error discoverability.
 
-To implement such feature I'd recommend to split `message` types sent to the client,
+To implement such a feature I'd recommend splitting `message` types sent to the client,
 so there isn't a chance that someone would accidentally send proprietary information to the client.
 
 ```javascript
@@ -113,24 +114,24 @@ so there isn't a chance that someone would accidentally send proprietary informa
 
 ### Front-end application - Handle an error from back-end
 
-When an error happens on the back-end we should show this error on the client so the user knows that his action was not successfully fulfilled.
+When an error happens on the back-end we should show this error to the client so the user knows that his action was not successfully fulfilled.
 
-If back-end handles errors correctly and sends client an appropriate message, client should be able to just show the informative description of the error that occurred.
+If the back-end handles errors correctly and sends the client an appropriate message, the client should be able to just show the informative description of the error that occurred.
 
 #### Translating errors
 
 If your application is built with any **internationalization** framework or with a translation system in general,
-there has to be some kind of mapping from error sent from back-end to the translated message.
+there has to be some kind of mapping from error sent from the back-end to the translated message.
 
-Simple mapping could be done with having a table of error codes for any application error that might happen.
+Simple mapping could be done by having a table of error codes for any application error that might happen.
 These codes don't have to be strictly numeric. They can consist of some rules like having separators to distinguish
-services or parts which fail and which way. Examples `RESOURCE-404`, `POST-404`.
+services or parts that fail and which way. Examples `RESOURCE-404`, `POST-404`.
 It's a good practice to have always a default message for unexpected errors which often do happen.
 
 ### Front-end application - Network Error
 
-These type of errors are least expected by developers but they happen regularly.
-Users usually lose connection when they browse while traveling or are connected to unreliable mobile connection.
+These types of errors are least expected by developers but they happen regularly.
+Users usually lose connection when they browse while traveling or are connected to an unreliable mobile connection.
 It should always be anticipated that these errors can happen and the application should recover
 from the failure and allowed to retry their action.
 
@@ -138,20 +139,20 @@ from the failure and allowed to retry their action.
 
 Errors which happen only on front-end are often a coding error.
 Most common examples would be not covering all possible cases of application logic or accessing properties
-that are undefined because of unexpected shape of response data.
+that are undefined because of the unexpected shape of response data.
 While back-end applications can recover from their errors by restarting the process,
-it doesn't apply to client applications where these type of **errors might cause a crash**, or a **freeze** of an application.
+it doesn't apply to client applications where these types of **errors might cause a crash** or a **freeze** of an application.
 Some frameworks allow to **recover from these crashes** by implementing an **error boundaries**.
 See [_React_ Error Boundaries for example](https://reactjs.org/docs/error-boundaries.html).
-I can only highly recommend of using such type of recovery.
+I can only highly recommend using such a type of recovery.
 
 If you use an external error monitoring tool like [Sentry](https://sentry.io/welcome/) or [bugsnag](https://www.bugsnag.com/), don't forget to log these errors from the error boundary.
 
 ## Rules
 
-To summarize this we can create an a list of rules:
+To summarize this we can create a list of rules:
 
-- Error messages have to be informative for client, but they **can't reveal private and proprietery information** about the system architecture
+- Error messages have to be informative for the client, but they **can't reveal private and proprietary information** about the system architecture
 - Errors should be logged only when they require additional action
 - Errors that are recoverable should not crash the system
 - Unexpected errors should turn into expected errors and be handled properly
