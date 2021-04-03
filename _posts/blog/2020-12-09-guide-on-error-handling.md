@@ -28,7 +28,7 @@ Please read through the comments as they explain how errors should be treated.
     // This can be any type of action that might fail
     Database.connect().insert({ value: 'Some information' })
   } catch (err) {
-    // Is important to **log these** errors with highest priority (error)
+    // It's important to **log these** errors with highest priority (error)
     logger.error('Error happened while trying to insert some information', err) // Error context is passed here
 
     // Should the script continue?
@@ -36,7 +36,7 @@ Please read through the comments as they explain how errors should be treated.
   }
 ```
 
-It is necessary to pass the error context to the logger so the error can be traced later.
+It is necessary to pass the error along with context information, that will help to trace and resolve the issue.
 
 ### Back-end application - Responding to client requests
 
@@ -57,11 +57,11 @@ This is usually how web applications are built and the most common scenario wher
         res.status(400).json({
           message: `Invalid input. ${err.message}`
         })
-      else if (err instanceof RecoverableError) {
+      } else if (err instanceof RecoverableError) {
         // As a `RecovarableError` we can think of an error that most usually doesn't happen
         // but can and we have a way to continue the rest of the process and handle the error recovery later.
         // As an example we can imagine a case of sending an email to users with some information.
-        logger.error('Error while sending mail', err)
+        logger.error('Error while sending mail', err, { message, author })
 
         // Sending an email is not a crucial part of the functionality and can be done later.
         // So we continue the functionality but we log the error so we know that we have to handle it. 
@@ -75,7 +75,7 @@ This is usually how web applications are built and the most common scenario wher
 
         // In this case we want to `log` this error with full context,
         // so it can be found and fixed if it is a programmer's fault.
-        logger.error('Unexpected error happened', err)
+        logger.error('Unexpected error happened', err, { message, author })
 
         // Client should be informed of such an error but without the context, as it might reveal proprietary information about the system
         res.status(500).json({
@@ -150,7 +150,7 @@ If you use an external error monitoring tool like [Sentry](https://sentry.io/wel
 
 ## Rules
 
-To summarize this we can create a list of rules:
+To summarize this, we can create a list of rules:
 
 - Error messages have to be informative for the client, but they **can't reveal private and proprietary information** about the system architecture
 - Errors should be logged only when they require additional action

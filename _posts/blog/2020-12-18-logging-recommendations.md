@@ -48,7 +48,7 @@ _Verbose logs might be useful for staging environments where you want to see mor
 It is very important to log all the information required for developers and DevOps to retrieve as much valuable information from the logs as possible.
 
 Messages are usually generated in a way where developers don't have to add things like timestamps, log levels, etc., and repeat themselves.
-Timestamps and log levels are attached to the messages that are logged automatically.
+Timestamps and log levels are attached to the messages automatically.
 
 #### Errors
 
@@ -88,7 +88,7 @@ Developers should **not** expose the functionality to users.
 
 There is an _npm package_ [debug](https://www.npmjs.com/package/debug) that
 enables developers to write debug logs that persist in the codebase.
-To reveal the logs in the console they have to be enabled.
+To reveal the logs in the console, they have to be enabled.
 
 There are 3rd party **error monitoring** services, that can help us collect information from errors that occur in different parts of the application.
 
