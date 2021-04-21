@@ -23,6 +23,18 @@
   })
 </script>
 
+<svelte:head>
+  <title>{post.title}</title>
+  <link rel="stylesheet" href="/prism.css" />
+</svelte:head>
+
+<h1>{post.title}</h1>
+
+<div class="content">
+  {@html post.body}
+</div>
+<ArticleFooter {post} />
+
 <style>
   /*
 		By default, CSS is locally scoped to the component,
@@ -56,6 +68,7 @@
 
   .content :global(img) {
     max-width: 100%;
+    max-height: 640px;
     border-radius: 5px;
     box-shadow: 0px 0px 8px 1px #2d3935;
   }
@@ -65,15 +78,3 @@
     margin: 0 auto;
   }
 </style>
-
-<svelte:head>
-  <title>{post.title}</title>
-  <link rel="stylesheet" href="/prism.css" />
-</svelte:head>
-
-<h1>{post.title}</h1>
-
-<div class="content">
-  {@html post.body}
-</div>
-<ArticleFooter {post} />

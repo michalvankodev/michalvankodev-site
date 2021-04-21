@@ -85,11 +85,11 @@ pre {
 
 figure {
   margin: 1em 0.5em;
+  text-align: center;
 }
 
 figcaption {
   font-size: 0.7em;
-  padding: 0 1em;
   font-style: italic;
 }
 
