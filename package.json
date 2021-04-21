@@ -23,8 +23,7 @@
     "marked": "^1.2.5",
     "polka": "^0.5.2",
     "ramda": "^0.27.1",
-    "sirv": "^1.0.7",
-    "svelte-image": "^0.2.7"
+    "sirv": "^1.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

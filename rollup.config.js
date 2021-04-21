@@ -7,7 +7,6 @@ import { terser } from 'rollup-plugin-terser'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
 import svg from 'rollup-plugin-svg'
-// import image from 'svelte-image'
 import sveltePreprocess from 'svelte-preprocess'
 import typescript from '@rollup/plugin-typescript'
 
@@ -38,10 +37,6 @@ export default {
           hydratable: true,
         },
         emitCss: true,
-        // Disabled automatic image compression
-        // preprocess: {
-        //   ...image(),
-        // },
         preprocess: sveltePreprocess({
           sourceMap: dev,
           defaults: {
@@ -109,9 +104,6 @@ export default {
             script: 'typescript',
           },
         }),
-        // preprocess: {
-        //   ...image(),
-        // },
       }),
       resolve({
         dedupe,
