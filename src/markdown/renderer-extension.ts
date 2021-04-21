@@ -1,5 +1,3 @@
-import path from 'path'
-
 export const renderer = {
   heading(text: string, level: string) {
     const escapedText = text.toLowerCase().replace(/[^\w]+/g, '-')
@@ -14,15 +12,16 @@ export const renderer = {
     `
   },
   image(href: string, title: string, text: string) {
-    const file = path.parse(href)
     const figcaption = title ? `<figcaption>${title}</figcaption>` : ''
+    const isLocal = !href.startsWith('http')
+    const src = isLocal ? `${href}?nf_resize=fit&h=640&w=640` : href
 
     return `
       <figure>
-        <picture>
-          <source srcset="${file.dir}/optimized/${file.name}.webp" type="image/webp" />
-          <img alt="${text}" src="${href}" />
-        </picture>
+        <img
+          alt="${text}"
+          src="${src}"
+        />
         ${figcaption}
       </figure>
     `
