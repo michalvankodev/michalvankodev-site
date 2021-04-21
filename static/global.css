@@ -68,7 +68,7 @@ pre {
   color: #464646;
   text-shadow: 0 1px white;
   text-align: left;
-  white-space: pre;
+  white-space: pre-line;
   word-spacing: normal;
   word-break: normal;
   word-wrap: normal;
@@ -81,6 +81,16 @@ pre {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
+}
+
+figure {
+  margin: 1em 0.5em;
+}
+
+figcaption {
+  font-size: 0.7em;
+  padding: 0 1em;
+  font-style: italic;
 }
 
 blockquote {
