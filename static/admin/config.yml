@@ -1,5 +1,5 @@
 backend:
-  name: github
+  name: git-gateway
   repo: michalvankodev/michalvankodev
   branch: master # Branch to update (optional; defaults to master)
   site_domain: michalvanko.dev
