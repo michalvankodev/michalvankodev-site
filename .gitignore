@@ -17,3 +17,5 @@ aws-exports.js
 awsconfiguration.json
 
 /static/**/optimized/
+# Local Netlify folder
+.netlify
