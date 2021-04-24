@@ -1,25 +1,37 @@
-<script context="module">
-  export async function preload({ params, query }) {
-    const res = await this.fetch(`blog/${params.slug}.json`)
-    const data = await res.json()
-
-    if (res.status === 200) {
-      return { post: data }
-    } else {
-      this.error(res.status, data.message)
+<script context="module" lang="typescript">
+  /**
+	 * @type {import('@sveltejs/kit').Load}
+	 */
+  export async function load({ fetch, page: { params }}) {
+    try {
+      const res = await fetch(`${params.slug}.json`)
+      const data = await res.json()
+  
+      if (res.ok) {
+        return { props: { post: data }}
+      } 
+      return {
+        status: res.status,
+        error: new Error(`Could not load ${params.slug} post`)
+      }
+    } catch(e) {
+      return {
+        status: 500,
+        error: e
+      }
     }
   }
 </script>
 
-<script>
+<script lang="typescript">
   import { onMount } from 'svelte'
   import ArticleFooter from '../../components/blog/article-footer.svelte'
-  import Prism from '../../../static/prism.js'
+  // import Prism from '../../../static/prism.js'
 
   export let post
 
   onMount(() => {
-    Prism.highlightAll()
+    // Prism.highlightAll()
   })
 </script>
 
@@ -44,7 +56,6 @@
 		so we have to use the :global(...) modifier to target
 		all elements inside .content
 	*/
-
   .content :global(pre) {
     background-color: #f9f9f9;
     box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.05);

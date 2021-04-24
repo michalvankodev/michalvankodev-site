@@ -1,9 +1,14 @@
 <script context="module">
-  export async function preload() {
-    const res = await this.fetch('portfolio.json')
+  /**
+	 * @type {import('@sveltejs/kit').Load}
+	 */
+  export async function load({ fetch }) {
+    const res = await fetch('portfolio.json')
     const content = await res.json()
     return {
-      content,
+      props: {
+        content,
+      }
     }
   }
 </script>

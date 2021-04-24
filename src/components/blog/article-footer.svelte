@@ -43,7 +43,7 @@
       <ul class="tags-list">
         {#each post.tags as tag}
           <li>
-            <a href="blog?tag={tag}">{tag}</a>
+            <a href="/blog?tag={tag}">{tag}</a>
           </li>
         {/each}
       </ul>

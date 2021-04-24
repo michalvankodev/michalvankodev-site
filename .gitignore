@@ -5,6 +5,10 @@ yarn-error.log
 /cypress/screenshots/
 /__sapper__/
 
+/.svelte
+/build
+/functions
+
 #amplify
 amplify/\#current-cloud-backend
 amplify/.config/local-*

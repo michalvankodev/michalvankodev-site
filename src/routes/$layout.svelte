@@ -1,11 +1,11 @@
 <script context="module" lang="typescript">
   import { take } from 'ramda'
 
-  export function preload({ params, query }) {
-    return this.fetch(`blog.json`)
+  export function load({ fetch }) {
+    return fetch(`/blog.json`)
       .then((r) => r.json())
       .then((posts) => {
-        return { latestPosts: take(5, posts) }
+        return { props: { latestPosts: take(5, posts) }}
       })
   }
 </script>

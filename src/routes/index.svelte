@@ -1,9 +1,3 @@
-<script context="module">
-  // export async function preload() {
-  //   return this.redirect(302, 'portfolio')
-  // }
-</script>
-
 <svelte:head>
   <title>Introduction @michalvankodev</title>
 </svelte:head>

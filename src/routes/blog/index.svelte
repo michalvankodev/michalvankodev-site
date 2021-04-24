@@ -1,15 +1,18 @@
 <script context="module" lang="typescript">
-  export function preload({ params, query }) {
+  /**
+	 * @type {import('@sveltejs/kit').Load}
+	 */
+  export function load({ fetch, page: { params, query }}) {
     const blogQuery = query
       ? '?' +
         Object.entries(query)
           .map(q => q.join('='))
           .join('&')
       : ''
-    return this.fetch(`blog.json${blogQuery}`)
+    return fetch(`blog.json${blogQuery}`)
       .then(r => r.json())
       .then(posts => {
-        return { posts, query }
+        return {props: { posts, query }}
       })
   }
 </script>

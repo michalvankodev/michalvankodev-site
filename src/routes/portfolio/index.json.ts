@@ -22,14 +22,15 @@ export interface PortfolioAttributes {
   education: RecordAttributes[]
 }
 
-export async function get(req, res, next) {
+export async function get() {
   let pageSource: string
   try {
     pageSource = await promisify(readFile)('_pages/portfolio.md', 'utf-8')
   } catch (e) {
-    res.statusCode = 500
-    res.end('Error loading portfolio source file. \n' + e.toString())
-    return
+    return {
+      status: 500,
+      body: 'Error loading portfolio source file. \n' + e.toString(),
+    }
   }
 
   const parsed = fm<PortfolioAttributes>(pageSource)
@@ -52,6 +53,8 @@ export async function get(req, res, next) {
     education,
   }
 
-  res.setHeader('Content-Type', 'application/json')
-  res.end(JSON.stringify(response))
+  return {
+    status: 200,
+    body: response,
+  }
 }

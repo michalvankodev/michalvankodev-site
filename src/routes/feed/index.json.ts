@@ -1,10 +1,10 @@
 import { getFeed } from './_feed'
 
-export async function get(req, res) {
+export async function get() {
   const feed = await getFeed()
 
-  res.writeHead(200, {
-    'Content-Type': 'application/json',
-  })
-  res.end(feed.json1())
+  return {
+    status: 200,
+    body: feed.json1(),
+  }
 }

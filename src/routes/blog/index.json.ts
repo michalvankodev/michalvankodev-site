@@ -1,10 +1,10 @@
 import { getBlogListing } from './_content'
 
-export async function get(req, res) {
-  const { tag } = req.query
+export async function get({ query }) {
+  const { tag } = query
   const filteredContents = await getBlogListing(tag)
-  res.writeHead(200, {
-    'Content-Type': 'application/json',
-  })
-  res.end(JSON.stringify(filteredContents))
+  return {
+    status: 200,
+    body: filteredContents,
+  }
 }

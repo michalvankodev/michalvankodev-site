@@ -8,23 +8,25 @@ export interface SinglePost {
   body: string
 }
 
-export async function get(req, res, next) {
+export async function get({ params }) {
   // the `slug` parameter is available because
   // this file is called [slug].json.js
-  const { slug } = req.params
+  const { slug } = params
 
   let postSource: string
   try {
     postSource = await promisify(readFile)(`_posts/blog/${slug}.md`, 'utf-8')
   } catch (e) {
     if (e.code === 'ENOENT') {
-      res.statusCode = 404
-      res.end('Post not found \n' + e.toString())
-      return
+      return {
+        status: 404,
+        body: 'Post not found \n' + e.toString(),
+      }
     }
-    res.statusCode = 500
-    res.end('Error loading post source file. \n' + e.toString())
-    return
+    return {
+      status: 500,
+      body: 'Error loading post source file. \n' + e.toString(),
+    }
   }
 
   const parsedPost = fm<PostAttributes>(postSource)
@@ -34,6 +36,7 @@ export async function get(req, res, next) {
     body: parsedPost.body,
   })
 
-  res.setHeader('Content-Type', 'application/json')
-  res.end(JSON.stringify(response))
+  return {
+    body: response,
+  }
 }

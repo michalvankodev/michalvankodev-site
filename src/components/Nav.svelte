@@ -60,7 +60,7 @@
   <section class="nav-main">
     <ul>
       <li>
-        <a class={classNames({ selected: segment === undefined })} href=".">
+        <a class={classNames({ selected: segment === undefined })} href="/">
           Introduction
         </a>
       </li>
