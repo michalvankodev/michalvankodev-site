@@ -1,3 +1,8 @@
+import Prism from 'prismjs'
+import loadLanguages from 'prismjs/components/index'
+
+loadLanguages(['shell', 'markdown', 'json', 'yaml', 'typescript'])
+
 function getNFResize(href: string, height: number, width: number) {
   return `${href}?nf_resize=fit&h=${height}&w=${width}`
 }
@@ -37,5 +42,13 @@ export const renderer = {
         ${figcaption}
       </figure>
     `
+  },
+  code(source: string, lang: string) {
+    const highlightedSource = Prism.highlight(
+      source,
+      Prism.languages[lang],
+      lang
+    )
+    return `<pre class='language-${lang}'><code class='language-${lang}'>${highlightedSource}</code></pre>`
   },
 }

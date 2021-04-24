@@ -1,13 +1,17 @@
 <script context="module" lang="typescript">
   import { take } from 'ramda'
-  import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/page';
+  import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/page'
 
   export function load({ fetch, page }: LoadInput): Promise<LoadOutput> {
     return fetch(`/blog.json`)
       .then((r) => r.json())
       .then((posts) => {
-        console.log(page)
-        return { props: { latestPosts: take(5, posts), segment: page.path }}
+        return {
+          props: {
+            latestPosts: take(5, posts),
+            segment: page.path,
+          },
+        }
       })
   }
 </script>
@@ -18,6 +22,15 @@
   export let segment
   export let latestPosts
 </script>
+
+<div class="app-content">
+  <Nav {segment} />
+
+  <main>
+    <slot />
+  </main>
+  <Footer {latestPosts} />
+</div>
 
 <style>
   .app-content {
@@ -35,12 +48,3 @@
     box-sizing: border-box;
   }
 </style>
-
-<div class="app-content">
-  <Nav {segment} />
-
-  <main>
-    <slot />
-  </main>
-  <Footer {latestPosts} />
-</div>

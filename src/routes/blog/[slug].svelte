@@ -1,38 +1,34 @@
 <script context="module" lang="typescript">
-  /**
-	 * @type {import('@sveltejs/kit').Load}
-	 */
-  export async function load({ fetch, page: { params }}) {
+  import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/page'
+
+  export async function load({
+    fetch,
+    page: { params },
+  }: LoadInput): Promise<LoadOutput> {
     try {
       const res = await fetch(`${params.slug}.json`)
       const data = await res.json()
-  
+
       if (res.ok) {
-        return { props: { post: data }}
-      } 
+        return { props: { post: data } }
+      }
       return {
         status: res.status,
-        error: new Error(`Could not load ${params.slug} post`)
+        error: new Error(`Could not load ${params.slug} post`),
       }
-    } catch(e) {
+    } catch (e) {
       return {
         status: 500,
-        error: e
+        error: e,
       }
     }
   }
 </script>
 
 <script lang="typescript">
-  import { onMount } from 'svelte'
   import ArticleFooter from '../../components/blog/article-footer.svelte'
-  // import Prism from '../../../static/prism.js'
 
   export let post
-
-  onMount(() => {
-    // Prism.highlightAll()
-  })
 </script>
 
 <svelte:head>

@@ -3,12 +3,13 @@ import { promisify } from 'util'
 import fm from 'front-matter'
 import { parseField } from '../../markdown/parse-markdown'
 import type { PostAttributes } from './_content'
+import type { Request, Response } from '@sveltejs/kit'
 
 export interface SinglePost {
   body: string
 }
 
-export async function get({ params }) {
+export async function get({ params }: Request): Promise<Response> {
   // the `slug` parameter is available because
   // this file is called [slug].json.js
   const { slug } = params
