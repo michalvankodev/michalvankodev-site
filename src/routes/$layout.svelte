@@ -1,11 +1,13 @@
 <script context="module" lang="typescript">
   import { take } from 'ramda'
+  import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/page';
 
-  export function load({ fetch }) {
+  export function load({ fetch, page }: LoadInput): Promise<LoadOutput> {
     return fetch(`/blog.json`)
       .then((r) => r.json())
       .then((posts) => {
-        return { props: { latestPosts: take(5, posts) }}
+        console.log(page)
+        return { props: { latestPosts: take(5, posts), segment: page.path }}
       })
   }
 </script>

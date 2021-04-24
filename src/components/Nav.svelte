@@ -60,7 +60,7 @@
   <section class="nav-main">
     <ul>
       <li>
-        <a class={classNames({ selected: segment === undefined })} href="/">
+        <a class={classNames({ selected: segment === '/' })} href="/">
           Introduction
         </a>
       </li>
@@ -69,14 +69,14 @@
       <li>
         <a
           rel="prefetch"
-          class={classNames({ selected: segment === 'blog' })}
+          class={classNames({ selected: segment.startsWith('/blog') })}
           href="/blog">
           Blog
         </a>
       </li>
       <li>
         <a
-          class={classNames({ selected: segment === 'portfolio' })}
+          class={classNames({ selected: segment.startsWith('/portfolio') })}
           href="/portfolio">
           Portfolio
         </a>
@@ -91,6 +91,7 @@
   </section>
 
   {#if segment === 'portfolio'}
+  <!-- Move to portfolio layout -->
     <section class="page-navigation">
       <a href="portfolio#personal-information">About</a>
       <a href="portfolio#skills">Skills</a>
