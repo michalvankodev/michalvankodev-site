@@ -5,15 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "svelte-kit dev",
+    "prebuild": "npm run svgstore",
     "build": "svelte-kit build --verbose",
     "export": "svelte-kit build",
     "preview": "svelte-kit preview",
     "start": "svelte-kit start",
-    "cy:run": "cypress run",
-    "cy:open": "cypress open",
     "test": "run-p --race dev cy:run",
     "lint": "prettier --check . && eslint --ignore-path .gitignore .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "svgstore": "svgstore -o src/svg/build/icons-sprite.svg src/svg/**.svg"
   },
   "dependencies": {
     "classnames": "^2.3.1",
@@ -40,8 +40,9 @@
     "prettier-plugin-svelte": "^2.2.0",
     "svelte": "^3.37.0",
     "svelte-preprocess": "^4.7.2",
+    "svgstore-cli": "^2.0.0",
     "tslib": "^2.2.0",
     "typescript": "^4.2.4",
-    "vite": "^2.2.1"
+    "vite": "^2.2.3"
   }
 }

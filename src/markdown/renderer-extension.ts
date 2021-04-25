@@ -1,5 +1,5 @@
 import Prism from 'prismjs'
-import loadLanguages from 'prismjs/components/index'
+import loadLanguages from 'prismjs/components/index.js'
 
 loadLanguages(['shell', 'markdown', 'json', 'yaml', 'typescript'])
 
@@ -43,10 +43,10 @@ export const renderer = {
       </figure>
     `
   },
-  code(source: string, lang: string) {
+  code(source: string, lang?: string) {
     const highlightedSource = Prism.highlight(
       source,
-      Prism.languages[lang],
+      Prism.languages[lang ?? 'shell'],
       lang
     )
     return `<pre class='language-${lang}'><code class='language-${lang}'>${highlightedSource}</code></pre>`

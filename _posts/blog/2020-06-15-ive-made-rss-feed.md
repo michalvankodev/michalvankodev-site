@@ -37,7 +37,7 @@ I am sure you can find much more information about [_Atom_](https://en.wikipedia
 
 This blog is created with [**sapper**](https://sapper.svelte.dev/) so to generate a feed I needed to create following file structure:
 
-```
+```bash
   - src
     + components
     - routes
