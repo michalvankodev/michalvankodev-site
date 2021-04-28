@@ -113,6 +113,8 @@
 </footer>
 
 <style>
+  @import '../styles/variables.module.less';
+
   h3 {
     font: inherit;
     font-weight: bold;
@@ -125,7 +127,20 @@
   .site-footer {
     font-size: 0.9em;
     padding: 0.4em;
-    box-shadow: 1px 3px #959595;
+
+    background: radial-gradient(
+      160% 100% at 100% 100%,
+      @menu-bg-color 56%,
+      fade(@menu-bg-color, 0) 100%
+    );
+
+    @media (min-width: 700px) {
+      background: radial-gradient(
+        140% 100% at 100% 100%,
+        @menu-bg-color 48%,
+        fade(@menu-bg-color, 0) 100%
+      );
+    }
   }
 
   .lists {

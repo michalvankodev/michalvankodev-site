@@ -56,15 +56,14 @@
   @import '../styles/variables.module.less';
 
   nav {
-    position: sticky;
-    top: -2.75em;
-    z-index: 1;
     padding: 0.5em 0.5em 2em;
-    background: linear-gradient(
-      177.43deg,
-      @pinky -6.98%,
-      rgba(@pinky, 0) 54.88%
+
+    background: radial-gradient(
+      120% 100% at 0% 0%,
+      @menu-bg-color,
+      rgba(@pinky, 0) 100%
     );
+
     color: @menu-color;
   }
 
