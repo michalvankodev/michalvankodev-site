@@ -32,11 +32,12 @@
   <Footer {latestPosts} />
 </div>
 
-<style>
+<style global>
+  @import '../styles/global.module.less';
+
   .app-content {
     display: grid;
     grid-template-rows: auto 1fr auto;
-    background: #f2f6f6;
     min-height: 100vh;
   }
 

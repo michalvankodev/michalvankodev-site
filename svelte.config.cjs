@@ -13,6 +13,7 @@ module.exports = {
     sourceMap: dev,
     defaults: {
       script: 'typescript',
+      style: 'less',
     },
   }),
 }

@@ -1,3 +1,5 @@
+@import './variables.module.less';
+
 html {
   scroll-behavior: smooth;
 }
@@ -8,8 +10,8 @@ body {
     Oxygen, Ubuntu, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-size: 16px;
   line-height: 1.65;
-  color: #42436a;
-  background: #f2f6f6;
+  color: @article-text-color;
+  background: @bg-color;
   min-height: 1vh;
 }
 
@@ -116,19 +118,6 @@ p {
 
 ::selection {
   background: #0dd0d0;
-}
-
-.navigation-theme {
-  background: #2d3935;
-  color: #eae9be;
-}
-
-.navigation-theme a {
-  color: #eae9be;
-}
-
-.navigation-theme a:hover {
-  color: #faf9d6;
 }
 
 @media only screen and (min-width: 400px) {
