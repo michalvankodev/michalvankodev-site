@@ -35,10 +35,6 @@
     margin: 0 auto;
   }
 
-  figure {
-    margin: 0 0 1em 0;
-  }
-
   img {
     width: 100%;
     margin: 0 0 1em 0;

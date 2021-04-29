@@ -35,7 +35,7 @@
 
     <aside class="logo-section">
       <a class="logo" href=".">
-        <img src="/images/m-logo.png" alt="m logo" />
+        <img src="/m-logo.svg" alt="m logo" />
       </a>
     </aside>
   </section>
@@ -81,17 +81,22 @@
 
   .nav-main {
     display: flex;
-    max-width: 900px;
+    max-width: @media-max;
     margin: 0 auto;
   }
 
-  .logo-section,
-  .logo-section img {
-    height: 1em;
+  .logo-section {
+    line-height: 0px;
   }
 
-  .logo-section img {
-    filter: invert(1);
+  .logo {
+    padding: 0;
+    display: block;
+    max-height: 1em;
+  }
+
+  .logo img {
+    height: 1.8em;
   }
 
   ul {

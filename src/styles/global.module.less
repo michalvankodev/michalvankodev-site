@@ -1,3 +1,4 @@
+@import '../../node_modules/modern-normalize/modern-normalize.css';
 @import './variables.module.less';
 
 html {
@@ -22,19 +23,21 @@ h4,
 h5,
 h6 {
   margin: 1em 0 0.5em 0;
-  font-weight: 200;
   line-height: 1.2;
   text-shadow: 1px 1px 1px #c6c4b7;
   color: #212138;
   letter-spacing: -0.01em;
+  font-weight: 500;
 }
 
 h1 {
   font-size: 2.5em;
+  font-weight: 800;
 }
 
 h2 {
   font-size: 1.7em;
+  font-weight: 700;
 }
 
 h3 {
@@ -70,7 +73,7 @@ pre {
   color: #464646;
   text-shadow: 0 1px white;
   text-align: left;
-  white-space: pre-wrap;
+  white-space: pre;
   word-spacing: normal;
   word-break: normal;
   word-wrap: normal;
@@ -85,6 +88,14 @@ pre {
   hyphens: none;
 }
 
+code {
+  white-space: pre-line;
+
+  pre & {
+    white-space: pre;
+  }
+}
+
 figure {
   margin: 1em 0.5em;
   text-align: center;
@@ -97,15 +108,26 @@ figcaption {
 
 blockquote {
   margin: 0.2em;
-  border-left: 2px solid #2d3935;
-  padding: 0 0.4em 0 0.8em;
-  background: #eaefef;
+  border-left: 2px solid #2d3935; //TODO
+  padding: 0.2em 0.4em 0.2em 0.8em;
+  background: darken(@bg-color, 5%);
   border-radius: 3px;
   box-shadow: 1px 1px 2px #d4dbdb;
+  font-size: 0.9em;
+  overflow: auto;
+
+  p {
+    margin: 0.2em 0;
+  }
 }
 
 p {
   margin: 0.8em 0;
+}
+
+b,
+strong {
+  font-weight: 600;
 }
 
 .tearkiss {
@@ -120,13 +142,13 @@ p {
   background: #0dd0d0;
 }
 
-@media only screen and (min-width: 400px) {
+@media only screen and (min-width: @media-s) {
   body {
     font-size: 18px;
   }
 }
 
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width: @media-m) {
   body {
     font-size: 24px;
   }

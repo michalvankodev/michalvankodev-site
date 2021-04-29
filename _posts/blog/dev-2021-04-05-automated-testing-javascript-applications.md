@@ -47,7 +47,7 @@ A test consists of a description of the requirement that **should** be satisfied
 ```javascript
 describe('Location formatter', () => {
 
-  it('should return formatted location based on a passed primaryLocation', () => {
+  it('should format location based on a passed primaryLocation', () => {
     const formattedLocation = formatLocation({
       primaryLocation: 'Pennsylvania',
       city: null,
@@ -56,7 +56,7 @@ describe('Location formatter', () => {
     expect(formattedLocation).toBe('Pennsylvania, US')
   })
   
-  it('should return formatted location based on a passed city', () => {
+  it('should format location based on a passed city', () => {
     const formattedLocation = formatLocation({
       primaryLocation: null,
       city: 'Svidník',
@@ -65,7 +65,7 @@ describe('Location formatter', () => {
     expect(formattedLocation).toBe('Svidník, SK')
   })
 
-  it('should return formatted location based on a passed primaryLocation with city being ignored', () => {
+  it('should format location based on a passed primaryLocation with city being ignored', () => {
     const formattedLocation = formatLocation({
       primaryLocation: 'Pennsylvania',
       city: 'Košice',
@@ -241,7 +241,8 @@ It's also good user experience testing when tests require validation errors to b
 
 ```javascript
 it('should display validation errors', () => {
-  cy.get('[data-test-id="first-name-input"]').type('{enter}') // Form is submitted with `enter`
+  // Form is submitted with `enter`
+  cy.get('[data-test-id="first-name-input"]').type('{enter}')
 
   // All validation errors should be visible
   cy.get('[data-test-id="first-name-hint"]'.FIRST_NAME_HINT)

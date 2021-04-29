@@ -1,47 +1,29 @@
 <script context="module" lang="typescript">
   /**
-	 * @type {import('@sveltejs/kit').Load}
-	 */
-  export function load({ fetch, page: { params, query }}) {
+   * @type {import('@sveltejs/kit').Load}
+   */
+  export function load({ fetch, page: { params, query } }) {
     const blogQuery = query
       ? '?' +
         Object.entries(query)
-          .map(q => q.join('='))
+          .map((q) => q.join('='))
           .join('&')
       : ''
     return fetch(`blog.json${blogQuery}`)
-      .then(r => r.json())
-      .then(posts => {
-        return {props: { posts, query }}
+      .then((r) => r.json())
+      .then((posts) => {
+        return { props: { posts, query } }
       })
   }
 </script>
 
-<script lang="typescript"> 
+<script lang="typescript">
   import ArticleFooter from '../../components/blog/article-footer.svelte'
-  import type { PostContent } from './_content';
+  import type { PostContent } from './_content'
 
   export let posts: PostContent[]
-  export let query 
+  export let query
 </script>
-
-<style>
-  .post-list {
-    margin: 0;
-    padding: 0;
-    line-height: 1.5;
-    list-style: none;
-  }
-
-  .post-list > li:not(:last-child) {
-    margin-bottom: 2em;
-  }
-
-  .see-all {
-    text-align: end;
-    margin-top: -1.5em;
-  }
-</style>
 
 <svelte:head>
   <title>My blog @michalvankodev</title>
@@ -78,7 +60,24 @@
         </header>
         {@html post.preview}
       </article>
-      <ArticleFooter post={post} />
+      <ArticleFooter {post} />
     </li>
   {/each}
 </ul>
+
+<style>
+  .post-list {
+    padding: 0;
+    line-height: 1.5;
+    list-style: none;
+  }
+
+  .post-list > li:not(:last-child) {
+    margin-bottom: 2em;
+  }
+
+  .see-all {
+    text-align: end;
+    margin-top: -1.5em;
+  }
+</style>

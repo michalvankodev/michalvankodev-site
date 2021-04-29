@@ -115,18 +115,10 @@
 <style>
   @import '../styles/variables.module.less';
 
-  h3 {
-    font: inherit;
-    font-weight: bold;
-    font-size: 1.15em;
-    text-shadow: inherit;
-    color: #eae9be;
-    margin: 0;
-  }
-
   .site-footer {
     font-size: 0.9em;
-    padding: 0.4em;
+    padding: 2em 0.8em 0em;
+    color: @menu-color;
 
     background: radial-gradient(
       160% 100% at 100% 100%,
@@ -134,24 +126,45 @@
       fade(@menu-bg-color, 0) 100%
     );
 
-    @media (min-width: 700px) {
+    @media (min-width: @media-m) {
       background: radial-gradient(
         140% 100% at 100% 100%,
         @menu-bg-color 48%,
         fade(@menu-bg-color, 0) 100%
       );
     }
+
+    @media (min-width: @media-l) {
+      font-size: 0.8em;
+    }
+  }
+
+  h3 {
+    font: inherit;
+    font-weight: bold;
+    font-size: 1.15em;
+    text-shadow: inherit;
+    color: @menu-color;
+    margin: 0;
   }
 
   .lists {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
+    display: grid;
+    justify-items: center;
     text-align: center;
+    max-width: @media-max;
+    column-gap: 1em;
+    margin: auto;
+
+    @media only screen and (min-width: @media-l) {
+      grid-template-columns: auto auto auto;
+      justify-items: start;
+      text-align: start;
+    }
   }
 
   .lists > section {
-    margin-bottom: 2em;
+    margin: 1em 0;
   }
 
   .no-wrap {
@@ -170,6 +183,10 @@
 
   .lists li li {
     font-size: 0.9em;
+
+    @media only screen and (min-width: @media-l) {
+      font-size: 0.8em;
+    }
   }
 
   .social-links a span {
@@ -219,16 +236,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @media only screen and (min-width: @media-l) {
+      justify-content: start;
+    }
   }
 
   .bottom-line {
     display: flex;
     justify-content: space-between;
-    margin-top: 1em;
+    margin: 1em auto 0.4em;
+    max-width: @media-max;
   }
 
   .date {
     font-size: 0.7em;
+    white-space: nowrap;
   }
 
   .latest-posts li a:visited:not(:hover) {
@@ -240,33 +263,8 @@
   }
 
   hr {
-    color: #86856f;
-    margin: 0.2em 0;
-  }
-
-  @media only screen and (min-width: 900px) {
-    .site-footer {
-      font-size: 0.8em;
-    }
-
-    .lists li li {
-      font-size: 0.8em;
-    }
-
-    .lists {
-      flex-direction: row;
-      text-align: start;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    .social-links a {
-      justify-content: start;
-    }
-
-    .bottom-line {
-      max-width: 900px;
-      margin: auto;
-    }
+    color: fade(@menu-color, 14%);
+    margin: 0.75em 0.2em;
+    border-width: 1px 0 0;
   }
 </style>

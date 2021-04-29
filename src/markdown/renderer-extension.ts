@@ -23,13 +23,13 @@ export const renderer = {
   image(href: string, title: string, text: string) {
     const figcaption = title ? `<figcaption>${title}</figcaption>` : ''
     const isLocal = !href.startsWith('http')
-    const src = isLocal ? getNFResize(href, 640, 640) : href
+    const src = isLocal ? getNFResize(href, 800, 800) : href
     const srcset = isLocal
-      ? `srcset="${getNFResize(href, 640, 640)}, ${getNFResize(
+      ? `srcset="${getNFResize(href, 800, 800)}, ${getNFResize(
           href,
-          960,
-          960
-        )} 1.5x, ${getNFResize(href, 1280, 1280)} 2x"`
+          1200,
+          1200
+        )} 1.5x, ${getNFResize(href, 1600, 1600)} 2x"`
       : ''
 
     return `
