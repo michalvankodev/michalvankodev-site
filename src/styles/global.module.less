@@ -24,8 +24,8 @@ h5,
 h6 {
   margin: 1em 0 0.5em 0;
   line-height: 1.2;
-  text-shadow: 1px 1px 1px #c6c4b7;
-  color: #212138;
+  // text-shadow: 1px 1px 1px #c6c4b7;
+  color: @header-color;
   letter-spacing: -0.01em;
   font-weight: 500;
 }
@@ -49,18 +49,25 @@ h4 {
 }
 
 a {
-  color: #2e2ed9;
   text-decoration: none;
-  transition: 0.2s;
-}
+  transition: color 2.2s;
 
-a:visited {
-  color: #9a2ed9;
-}
+  &:link {
+    color: @link-color;
+  }
 
-a:hover {
-  color: #2e86d9;
-  text-decoration: underline;
+  &:visited {
+    color: @link-visited-color;
+  }
+
+  &:hover {
+    text-decoration: underline;
+    color: @link-hover-color;
+  }
+
+  &:visited:hover {
+    color: @link-visited-hover-color;
+  }
 }
 
 code,
@@ -110,7 +117,7 @@ blockquote {
   margin: 0.2em;
   border-left: 2px solid #2d3935; //TODO
   padding: 0.2em 0.4em 0.2em 0.8em;
-  background: darken(@bg-color, 5%);
+  background: darken(@bg-color, 3%, relative);
   border-radius: 3px;
   box-shadow: 1px 1px 2px #d4dbdb;
   font-size: 0.9em;

@@ -118,7 +118,7 @@
   .site-footer {
     font-size: 0.9em;
     padding: 2em 0.8em 0em;
-    color: @menu-color;
+    color: @menu-link-color;
 
     background: radial-gradient(
       160% 100% at 100% 100%,
@@ -144,7 +144,7 @@
     font-weight: bold;
     font-size: 1.15em;
     text-shadow: inherit;
-    color: @menu-color;
+    color: @menu-link-color;
     margin: 0;
   }
 
@@ -195,36 +195,36 @@
   }
 
   .email :global(svg) {
-    fill: #eae9be;
+    fill: @menu-link-color;
   }
 
   .twitter :global(svg) {
-    stroke: #eae9be;
+    stroke: @menu-link-color;
     stroke-width: 2px;
-    fill: #eae9be;
+    fill: @menu-link-color;
   }
 
   .github :global(svg) {
-    stroke: #eae9be;
+    stroke: @menu-link-color;
     stroke-width: 2px;
   }
 
   .twitch :global(svg),
   .twitch :global(svg rect) {
     /* fill: rgb(169, 112, 255); */
-    fill: #eae9be;
+    fill: @menu-link-color;
   }
 
   .instagram :global(svg) {
-    fill: #eae9be;
+    fill: @menu-link-color;
   }
 
   .rss :global(svg) {
-    fill: #eae9be;
+    fill: @menu-link-color;
   }
 
   .json-feed :global(svg) {
-    fill: #eae9be;
+    fill: @menu-link-color;
   }
 
   :global(.svg-icon) {
@@ -254,17 +254,25 @@
     white-space: nowrap;
   }
 
-  .latest-posts li a:visited:not(:hover) {
-    color: #a7a574;
-  }
-
   .subscribe {
     font-weight: bold;
   }
 
   hr {
-    color: fade(@menu-color, 14%);
+    color: fade(@menu-link-color, 14%);
     margin: 0.75em 0.2em;
     border-width: 1px 0 0;
+  }
+
+  a {
+    color: @menu-link-color;
+
+    &:hover {
+      color: @menu-link-hover-color;
+    }
+  }
+
+  .latest-posts li a:visited:not(:hover) {
+    color: @link-visited-color;
   }
 </style>

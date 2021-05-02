@@ -4,17 +4,26 @@
 @midnight-blue: #171664;
 @french-violet: #7332c3;
 @sacramento-green: #003d2d;
+@rose-bonbon: #ff499e;
 
 @article-text-color: @midnight-blue;
+@link-color: #127aff;
+@link-hover-color: @tearkiss;
+@link-visited-color: saturate(@french-violet, 30%, relative);
+@link-visited-hover-color: lighten(@link-visited-color, 10%);
+@nice-pink-color: spin(@link-visited-color, 50);
+
 @menu-color: @sacramento-green;
 
-@menu-link-color: @sacramento-green;
-@menu-link-hover-color: lighten(@menu-link-color, 30%);
+@menu-link-color: #660066;
+@menu-link-hover-color: lighten(@menu-link-color, 10%);
 
-@footer-visited-link-color: darken(@pinky, 70%);
+@header-color: darken(@french-violet, 35%, relative);
 
-@bg-color: lighten(@light-cyan, 5%, relative);
-@menu-bg-color: fade(@pinky, 67%);
+@footer-visited-link-color: darken(@pinky, 70%, relative);
+
+@bg-color: tint(@light-cyan, 70%);
+@menu-bg-color: fade(@pinky, 45%);
 
 @media-l: 1000px;
 @media-m: 700px;

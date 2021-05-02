@@ -35,7 +35,7 @@
 
     <aside class="logo-section">
       <a class="logo" href=".">
-        <img src="/m-logo.svg" alt="m logo" />
+        <img src="/m-logo.svg" alt="m logo" width="44px" height="44px" />
       </a>
     </aside>
   </section>
@@ -56,7 +56,7 @@
   @import '../styles/variables.module.less';
 
   nav {
-    padding: 0.5em 0.5em 2em;
+    padding: 0.5em 0.5em 1em;
 
     background: radial-gradient(
       120% 100% at 0% 0%,
