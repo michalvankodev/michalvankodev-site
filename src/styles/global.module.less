@@ -24,7 +24,7 @@ h5,
 h6 {
   margin: 1em 0 0.5em 0;
   line-height: 1.2;
-  // text-shadow: 1px 1px 1px #c6c4b7;
+  text-shadow: @header-text-shadow;
   color: @header-color;
   letter-spacing: -0.01em;
   font-weight: 500;
@@ -50,7 +50,7 @@ h4 {
 
 a {
   text-decoration: none;
-  transition: color 2.2s;
+  transition: color 0.2s;
 
   &:link {
     color: @link-color;
@@ -70,29 +70,24 @@ a {
   }
 }
 
-code,
-pre {
-  font-family: menlo, inconsolata, monospace;
-  font-size: 0.92em;
-  line-height: 1.24em;
-  background-color: #f0f0f0;
-  padding: 0.2em 0.4em;
-  color: #464646;
-  text-shadow: 0 1px white;
-  text-align: left;
-  white-space: pre;
-  word-spacing: normal;
-  word-break: normal;
-  word-wrap: normal;
+main {
+  code,
+  pre,
+  code[class*='language-'],
+  pre[class*='language-'],
+  :not(pre) > code[class*='language-'] {
+    font-family: menlo, inconsolata, monospace;
+    background-color: tint(@bg-color, 20%);
+    padding: 0.2em 0.4em;
+    color: lighten(@article-text-color, 15%);
+    text-shadow: 0 1px white;
+    line-height: 1.4em;
+  }
 
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-
-  -webkit-hyphens: none;
-  -moz-hyphens: none;
-  -ms-hyphens: none;
-  hyphens: none;
+  code,
+  code[class*='language-'] {
+    font-size: 0.84em;
+  }
 }
 
 code {
@@ -114,12 +109,13 @@ figcaption {
 }
 
 blockquote {
+  line-height: 1.5em;
   margin: 0.2em;
-  border-left: 2px solid #2d3935; //TODO
+  border-left: 2px solid @tearkiss;
   padding: 0.2em 0.4em 0.2em 0.8em;
-  background: darken(@bg-color, 3%, relative);
+  background: darken(@bg-color, 2%, relative);
   border-radius: 3px;
-  box-shadow: 1px 1px 2px #d4dbdb;
+  box-shadow: @content-box-shadow;
   font-size: 0.9em;
   overflow: auto;
 
@@ -130,19 +126,12 @@ blockquote {
 
 p {
   margin: 0.8em 0;
+  // text-shadow: @text-shadow;
 }
 
 b,
 strong {
   font-weight: 600;
-}
-
-.tearkiss {
-  color: #16d0e7;
-}
-
-.tearkiss-new {
-  color: #16d0e7;
 }
 
 ::selection {

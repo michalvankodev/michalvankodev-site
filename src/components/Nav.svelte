@@ -4,7 +4,7 @@
   export let segment
 </script>
 
-<nav class="navigation-theme">
+<nav>
   <section class="nav-main">
     <ul>
       <li>
@@ -39,21 +39,31 @@
       </a>
     </aside>
   </section>
-
-  {#if segment === 'portfolio'}
-    <!-- Move to portfolio layout -->
-    <section class="page-navigation">
-      <a href="portfolio#personal-information">About</a>
-      <a href="portfolio#skills">Skills</a>
-      <a href="portfolio#work-history">Work History</a>
-      <a href="portfolio#projects">Projects</a>
-      <a href="portfolio#education">Education</a>
-    </section>
-  {/if}
 </nav>
+
+{#if segment === '/portfolio'}
+  <section class="page-navigation">
+    <div class="page-navigation-links">
+      <a href="/portfolio#personal-information">About</a>
+      <a href="/portfolio#skills">Skills</a>
+      <a href="/portfolio#work-history">Work History</a>
+      <a href="/portfolio#projects">Projects</a>
+      <a href="/portfolio#education">Education</a>
+    </div>
+  </section>
+{/if}
 
 <style>
   @import '../styles/variables.module.less';
+
+  a {
+    color: @menu-link-color;
+    padding: 0.4em 0.5em;
+
+    &:hover {
+      color: @menu-link-hover-color;
+    }
+  }
 
   nav {
     padding: 0.5em 0.5em 1em;
@@ -65,18 +75,7 @@
     );
 
     color: @menu-color;
-  }
-
-  a {
-    color: @menu-link-color;
-
-    &:hover {
-      color: @menu-link-hover-color;
-    }
-  }
-
-  nav a {
-    padding: 0.4em 0.5em;
+    text-shadow: @menu-link-text-shadow;
   }
 
   .nav-main {
@@ -111,14 +110,22 @@
   }
 
   a.selected {
-    text-shadow: 0px 0px 1px;
+    text-shadow: @menu-active-link-text-shadow;
   }
 
   .page-navigation {
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+    width: 100%;
     font-size: 0.86em;
-    border-top: 1px solid #65624f;
-    padding-top: 0.4em;
-    max-width: 900px;
-    margin: 0.3em auto 0;
+    padding: 0.3em;
+    background: @bg-color;
+    box-shadow: 0px 0.5em 0.5em @bg-color;
+  }
+
+  .page-navigation-links {
+    max-width: @media-l;
+    margin: 0 auto;
   }
 </style>

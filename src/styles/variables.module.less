@@ -5,8 +5,10 @@
 @french-violet: #7332c3;
 @sacramento-green: #003d2d;
 @rose-bonbon: #ff499e;
+@midnight: #660066;
 
-@article-text-color: @midnight-blue;
+@article-text-color: desaturate(@midnight-blue, 30%);
+@text-shadow: 0.02em 0.02em 0.03em fade(@tearkiss, 20%);
 @link-color: #127aff;
 @link-hover-color: @tearkiss;
 @link-visited-color: saturate(@french-violet, 30%, relative);
@@ -15,15 +17,19 @@
 
 @menu-color: @sacramento-green;
 
-@menu-link-color: #660066;
+@menu-link-color: @midnight;
 @menu-link-hover-color: lighten(@menu-link-color, 10%);
+@menu-link-text-shadow: 0.02em 0.02em 0.03em fade(@french-violet, 30%);
+@menu-active-link-text-shadow: 0.01em 0.01em 0.05em fade(@french-violet, 90%);
 
 @header-color: darken(@french-violet, 35%, relative);
-
+@header-text-shadow: 0.015em 0.015em 0.02em fade(@midnight, 40%);
 @footer-visited-link-color: darken(@pinky, 70%, relative);
 
 @bg-color: tint(@light-cyan, 70%);
-@menu-bg-color: fade(@pinky, 45%);
+@menu-bg-color: fade(@tearkiss, 40%);
+
+@content-box-shadow: 0px 0px 2px 1px desaturate(@tearkiss, 50%);
 
 @media-l: 1000px;
 @media-m: 700px;

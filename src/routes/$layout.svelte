@@ -43,12 +43,8 @@
 
   main {
     position: relative;
-    max-width: calc(100vw - 1em);
-    padding: 1.4em;
-
-    @media (min-width: @media-l) {
-      /* max-width: 34em; */
-    }
+    max-width: 100vw;
+    padding: 1.2em;
 
     h1,
     h2,
@@ -61,7 +57,9 @@
     ol,
     figure,
     img,
-    blockquote {
+    blockquote,
+    iframe,
+    footer {
       max-width: 42rem;
       margin-left: auto;
       margin-right: auto;
@@ -81,6 +79,20 @@
     }
     figure {
       max-width: @max-image-size;
+    }
+    iframe {
+      max-width: 46rem;
+      display: block;
+    }
+    footer {
+      max-width: 52rem;
+    }
+
+    img {
+      width: 100%;
+      margin: 0 0 1em 0;
+      border-radius: 5px;
+      box-shadow: @content-box-shadow;
     }
   }
 </style>

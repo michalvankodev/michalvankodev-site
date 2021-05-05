@@ -81,10 +81,6 @@
     margin-top: 2em;
   }
 
-  h1 {
-    text-shadow: 2px 2px 1px #c8c4b7; // TODO
-  }
-
   .name-tag {
     text-align: center;
   }

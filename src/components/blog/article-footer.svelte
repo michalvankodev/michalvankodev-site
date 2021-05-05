@@ -1,40 +1,9 @@
 <script lang="typescript">
   import { format } from 'date-fns'
-  import type { PostContent } from '../../routes/blog/_content';
+  import type { PostContent } from '../../routes/blog/_content'
 
   export let post: PostContent
 </script>
-
-<style>
-  .tags-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: inline;
-  }
-
-  .tags-list li {
-    display: inline;
-    font-style: italic;
-  }
-
-  .lighten {
-    color: #595a8f;
-  }
-
-  time {
-    font-style: italic;
-  }
-
-  footer {
-    display: flex;
-    font-size: 0.85em;
-    justify-content: space-between;
-    padding-top: 0.2em;
-    margin-top: 0.4em;
-    border-top: 1px solid #c0c1e1;
-  }
-</style>
 
 <footer>
   <div class="article-tags">
@@ -56,3 +25,37 @@
     </time>
   </div>
 </footer>
+
+<style>
+  @import '../../styles/variables.module.less';
+
+  .tags-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: inline;
+  }
+
+  .tags-list li {
+    display: inline;
+    font-style: italic;
+  }
+
+  .lighten {
+    color: tint(@article-text-color, 25%);
+  }
+
+  time {
+    white-space: nowrap;
+    font-style: italic;
+  }
+
+  footer {
+    display: flex;
+    font-size: 0.8em;
+    justify-content: space-between;
+    padding-top: 0.6em;
+    margin-top: 1em;
+    border-top: 1px solid fade(desaturate(@tearkiss, 50%), 40%);
+  }
+</style>

@@ -73,7 +73,7 @@
   }
 
   .post-list > li:not(:last-child) {
-    margin-bottom: 2em;
+    margin-bottom: 3em;
   }
 
   .see-all {
