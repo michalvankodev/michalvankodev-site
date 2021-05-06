@@ -6,8 +6,15 @@
 
 @font-face {
   font-family: Cantarell;
-  src: local("Cantarell"), url(/fonts/cantarell/Cantarell-Thin.otf) format('opentype');
-  font-weight: 200;
+  src: local("Cantarell"), url(/fonts/cantarell/Cantarell-Bold.otf) format('opentype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: Cantarell;
+  src: local("Cantarell"), url(/fonts/cantarell/Cantarell-ExtraBold.otf) format('opentype');
+  font-weight: 800;
   font-display: swap;
 }
 

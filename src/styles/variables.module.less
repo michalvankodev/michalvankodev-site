@@ -3,28 +3,23 @@
 @light-cyan: #d8f6ff;
 @midnight-blue: #171664;
 @french-violet: #7332c3;
-@sacramento-green: #003d2d;
-@rose-bonbon: #ff499e;
-@midnight: #660066;
 
-@article-text-color: desaturate(@midnight-blue, 30%);
+@article-text-color: desaturate(@midnight-blue, 16%);
 @text-shadow: 0.02em 0.02em 0.03em fade(@tearkiss, 20%);
-@link-color: #127aff;
+@link-color: saturate(mix(@tearkiss, @midnight-blue, 66%), 20%);
 @link-hover-color: @tearkiss;
 @link-visited-color: saturate(@french-violet, 30%, relative);
 @link-visited-hover-color: lighten(@link-visited-color, 10%);
 @nice-pink-color: spin(@link-visited-color, 50);
 
-@menu-color: @sacramento-green;
+@menu-color: @midnight-blue;
+@menu-link-color: @menu-color;
+@menu-link-hover-color: lighten(@menu-link-color, 15%);
+@menu-link-text-shadow: 0.02em 0.02em 0.03em fade(@menu-link-color, 30%);
+@menu-active-link-text-shadow: 0.01em 0.01em 0.05em fade(@menu-link-color, 90%);
 
-@menu-link-color: @midnight;
-@menu-link-hover-color: lighten(@menu-link-color, 10%);
-@menu-link-text-shadow: 0.02em 0.02em 0.03em fade(@french-violet, 30%);
-@menu-active-link-text-shadow: 0.01em 0.01em 0.05em fade(@french-violet, 90%);
-
-@header-color: darken(@french-violet, 35%, relative);
-@header-text-shadow: 0.015em 0.015em 0.02em fade(@midnight, 40%);
-@footer-visited-link-color: darken(@pinky, 70%, relative);
+@header-color: lighten(@midnight-blue, 10%);
+@header-text-shadow: 0.015em 0.015em 0.02em fade(@header-color, 40%);
 
 @bg-color: tint(@light-cyan, 70%);
 @menu-bg-color: fade(@tearkiss, 40%);
