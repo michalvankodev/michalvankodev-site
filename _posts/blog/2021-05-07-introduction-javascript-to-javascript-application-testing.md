@@ -206,7 +206,7 @@ This code is usually tested by the authors of those libraries.
 
 ### Additional resources for integration tests
 
-- [What is API testing](https://www.edureka.co/blog/what-is-api-testing) by [Archana Choudary @ edureka.com](https://www.edureka.co/blog/author/archana-cedureka-co/]
+- [What is API testing](https://www.edureka.co/blog/what-is-api-testing) by [Archana Choudary @ edureka.com](https://www.edureka.co/blog/author/archana-cedureka-co/)
 - [GraphQL integration tests with apollo-server-testing, jest-mongodb and nock](https://medium.com/@jdeflaux/graphql-integration-tests-with-apollo-server-testing-jest-mongodb-and-nock-af5a82e95954) by [Julien Deflaux @ medium.com](https://medium.com/@jdeflaux)
 
 ## End to End (e2e) testing

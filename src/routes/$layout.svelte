@@ -38,12 +38,12 @@
   .app-content {
     display: grid;
     grid-template-rows: auto 1fr auto;
+    grid-template-columns: 100%;
     min-height: 100vh;
   }
 
   main {
     position: relative;
-    max-width: 100vw;
     padding: 1.2em;
 
     h1,
@@ -76,7 +76,6 @@
       max-width: 48rem;
       margin-left: auto;
       margin-right: auto;
-      box-shadow: @content-box-shadow;
     }
     figure {
       max-width: @max-image-size;
@@ -91,7 +90,6 @@
 
     img {
       width: 100%;
-      margin: 0 0 1em 0;
       border-radius: 5px;
       box-shadow: @content-box-shadow;
     }

@@ -71,22 +71,23 @@ a {
 }
 
 main {
-  code,
+  // code,
   pre,
-  code[class*='language-'],
+  // code[class*='language-'],
   pre[class*='language-'],
-  :not(pre) > code[class*='language-'] {
+  :not(pre) > code {
     font-family: menlo, inconsolata, monospace;
     background-color: tint(@bg-color, 20%);
     padding: 0.2em 0.4em;
     color: lighten(@article-text-color, 15%);
-    text-shadow: 0 1px white;
-    line-height: 1.4em;
+    line-height: 1em;
+    box-shadow: @code-box-shadow;
+    border-radius: 3px;
   }
 
   code,
   code[class*='language-'] {
-    font-size: 0.84em;
+    font-size: 0.76em;
   }
 }
 
