@@ -76,6 +76,7 @@
       max-width: 48rem;
       margin-left: auto;
       margin-right: auto;
+      box-shadow: @content-box-shadow;
     }
     figure {
       max-width: @max-image-size;

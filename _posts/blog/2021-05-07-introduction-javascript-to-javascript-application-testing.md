@@ -1,8 +1,8 @@
 ---
 layout: blog
-title: Automated Testing of JavaScript Applications
+title: Introduction to JavaScript Application testing 
 published: true
-date: 2021-04-05T14:44:57.102Z # update date accordingly
+date: 2021-05-07T14:44:57.102Z # update date accordingly
 tags:
   - Development
   - Testing
@@ -127,12 +127,13 @@ it('should create a JSON response', () => {
 
 These snapshots help to detect changes in the output of some functionality.
 They can also be used with a component renderer to detect changes in the output of component's _HTML_, _DOM_ or virtual _DOM_.
+Snapshots are created and updated by the test runner automatically so they lower the churn of updating tests over time.
 
 Snapshot artifacts should be committed into the code repository alongside the tests, so they can be used as an input for the next test runs.
 Snapshots can be utilized for many types of tests.
-They lower the churn of updating tests over time.
 
-If the test uses some data are varying from the test run, [property matchers](https://jestjs.io/docs/snapshot-testing#property-matchers) can be utilized to verify the type of the data instead.
+If the expected result includes some varying data,
+[property matchers](https://jestjs.io/docs/snapshot-testing#property-matchers) can be utilized to verify the type of the data instead.
 
 ### Additional resources on snapshots
 
@@ -334,6 +335,7 @@ Be sure to not include any variable data (Dates, IDs, etc.) in the screenshots a
 - [Playwright](https://playwright.dev/) - Playwright is a library to automate Chromium, Firefox and WebKit with a single API
 - [Puppeteer](https://pptr.dev/) - High level API to control Chromium
 - [Jest-image-snapshot](https://github.com/americanexpress/jest-image-snapshot) Matching image comparisons
+- [Percy](https://percy.io/) - Visual review platform for visual regression tests
 
 ### Additional resources for e2e tests
 
