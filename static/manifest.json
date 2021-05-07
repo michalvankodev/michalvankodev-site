@@ -1,6 +1,6 @@
 {
-  "background_color": "#ffffff",
-  "theme_color": "#212138",
+  "background_color": "#f3fcff",
+  "theme_color": "#42a6f0",
   "name": "michalvanko.dev",
   "short_name": "m-dev",
   "display": "minimal-ui",
