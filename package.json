@@ -7,7 +7,6 @@
     "dev": "svelte-kit dev",
     "prebuild": "npm run svgstore",
     "build": "svelte-kit build --verbose",
-    "export": "svelte-kit build",
     "preview": "svelte-kit preview",
     "start": "svelte-kit start",
     "test": "run-p --race dev cy:run",
