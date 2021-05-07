@@ -12,7 +12,7 @@
     "test": "run-p --race dev cy:run",
     "lint": "prettier --check . && eslint --ignore-path .gitignore .",
     "format": "prettier --write .",
-    "svgstore": "svgstore -o src/svg/build/icons-sprite.svg src/svg/**.svg"
+    "svgstore": "svgstore -o static/build/icons-sprite.svg src/svg/**.svg"
   },
   "dependencies": {
     "classnames": "^2.3.1",

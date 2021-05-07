@@ -1,5 +1,5 @@
 <script>
-  import svgSprite from '../svg/build/icons-sprite.svg'
+  import svgSprite from '../../static/build/icons-sprite.svg'
   export let className
   export let name
 </script>
