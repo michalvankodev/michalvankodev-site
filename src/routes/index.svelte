@@ -15,7 +15,7 @@
 
   <p class="motto">
     <cite>“Let your ambition carry you.”</cite>
-    <span>- La Flame</span>
+    <span class="cite-owner">- La Flame</span>
   </p>
 </header>
 
@@ -41,5 +41,9 @@
 
   .motto {
     font-size: 1.4em;
+  }
+
+  .cite-owner {
+    white-space: nowrap;
   }
 </style>
