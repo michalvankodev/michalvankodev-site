@@ -220,8 +220,8 @@ The goal is to test the application from the user's perspective.
 
 There are different frameworks and approaches for creating _DOM_ elements.
 These elements can have different representations of their state in the _HTML_.
-Developers should agree on the practice of selecting these elements tests that suits them best.
-You should try to target elements in a way that you can be sure that the **results will be consistent** even after different layout changes that might happen through the lifetime of the project.
+Developers should agree on the practice of selecting these elements in tests that suits them best.
+You should try to target elements in a way that you can be sure that the **results will be consistent** even after different layout changes that might happen throughout the lifetime of the project.
 Therefore I'd say that [XPath](https://developer.mozilla.org/en-US/docs/Web/XPath) is not the recommended way.
 To have selectors that are reliable and not changing with different layout changes we can use `id` attributes or even more sophisticated `data-*` attributes.
 With `data-*` attributes we can target multiple nodes with the same identifier and establish a convention that will make sure that the elements with these attributes are being used in the tests so if they are changed/deleted, there will have to be a change in the tests as well.
@@ -235,7 +235,6 @@ Ensure, that you will not have to change stable test cases because of new additi
 
 ### Form validation
 
-It should be tested if the forms are correctly evaluating validation and if the errors appear when they should. It's also good UX testing to require validation errors to be displayed only if the elements were previously touched or the form was submitted.
 Forms should be tested for correctly evaluating validation.
 The errors should appear when the validation fails.
 It's also good user experience testing when tests require validation errors to be displayed only if the elements were previously touched or the form was submitted.
@@ -290,7 +289,7 @@ it('should toast wrong password', () => {
 
 While submission is in progress, the loading state of the form can be expected for having disabled input fields.
 There should be a way to wait for asynchronous operations to be completed, so we can reliably test the loading behavior.
-_Cypress_ has an [intercept method](https://docs.cypress.io/api/commands/intercept.html), that allows us to **hold the response** and let us do as many expectations **until it is desired** for the response to be let go with the [wait method](https://docs.cypress.io/api/commands/wait.html).
+_Cypress_ has an [intercept method](https://docs.cypress.io/api/commands/intercept.html), that allows us to **hold the response** and do as many expectations **until it is desired** for the response to be let go with the [wait method](https://docs.cypress.io/api/commands/wait.html).
 
 ```javascript
 cy.intercept('**/submit').as('submission')
@@ -307,12 +306,12 @@ cy.wait('@submission')
 
 **Don't try to log in to the application for every test** that needs authenticated user.
 Test the login flow as a proper test case, but just for that sake only.
-For tests that require a user to be logged in create a log-in functionality that will authenticate the user in the background without any browser interaction. This will speed up the testing process tremendously.
+For tests that require a user to be logged in, create a separate log-in functionality that will authenticate the user in the background without any browser interaction. This will speed up the testing process tremendously.
 Read [cypress documentation on login](https://docs.cypress.io/guides/getting-started/testing-your-app#Logging-in) for more examples.
 
 ### Dedicated API routes
 
-Sometimes it's beneficial to implement a dedicated testing API route/resolver which will help to seed for individual tests or clean up after some tests.
+Sometimes it's beneficial to implement a dedicated testing API route/resolver which will help seed individual tests or perform a clean up after some tests.
 Also, can be used for simulating a result of integration with 3rd party API without accessing 3rd party resources.
 Make sure that, these routes can only be run in a non-production environment.
 
@@ -347,7 +346,7 @@ Be sure to not include any variable data (Dates, IDs, etc.) in the screenshots a
 Component tests take individual components and test them as a unit.
 These can run in the browser or just _DOM_ simulator.
 
-These tests, just like unit tests, should ensure the expected output of the component is rendered based on the component input.
+These tests, just like unit tests, should ensure that the expected output of the component is rendered based on the component input.
 They should also test the behavior of the component when any internal state change happens.
 For example, when you open an accordion, you should expect the children to be shown in the output.
 You can also expect, that the passed callbacks are being called according to event triggers.
