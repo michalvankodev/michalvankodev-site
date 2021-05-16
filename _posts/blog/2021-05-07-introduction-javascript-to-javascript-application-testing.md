@@ -10,7 +10,7 @@ tags:
 
 An automated testing suite for your application is like a feature requirements document.
 When this suite is passing, it means that the features are delivered correctly as described in the requirements.
-Automated tests help reduce manual testing time and as long they are passing it means that the feature is working as described.
+Automated tests help reduce manual testing time and as long as they are passing, it means that the feature is working as described.
 Not only do they reduce costs and time of manual testing but they also can help while development.
 
 Different language ecosystems offer a different set of tools to develop automated tests.
@@ -245,10 +245,10 @@ it('should display validation errors', () => {
   cy.get('[data-test-id="first-name-input"]').type('{enter}')
 
   // All validation errors should be visible
-  cy.get('[data-test-id="first-name-hint"]'.FIRST_NAME_HINT)
+  cy.get('[data-test-id="first-name-hint"]')
     .should('exist')
     .and('contain', 'First Name is a required field')
-  cy.get('[data-test-id="last-name-hint"]'.LAST_NAME_HINT)
+  cy.get('[data-test-id="last-name-hint"]')
     .should('exist')
     .and('contain', 'Last Name is a required field')
   cy.get('[data-test-id="email-hint"]')
