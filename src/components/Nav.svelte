@@ -53,7 +53,7 @@
   </section>
 {/if}
 
-<style>
+<style lang="less">
   @import '../styles/variables.module.less';
 
   a {

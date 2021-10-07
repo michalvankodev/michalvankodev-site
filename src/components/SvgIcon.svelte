@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import svgSprite from '../../static/build/icons-sprite.svg'
   export let className
   export let name

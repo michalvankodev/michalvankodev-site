@@ -1,4 +1,4 @@
-<script context="module" lang="typescript">
+<script context="module" lang="ts">
   import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/page'
 
   export async function load({
@@ -25,7 +25,7 @@
   }
 </script>
 
-<script lang="typescript">
+<script lang="ts">
   import ArticleFooter from '../../components/blog/article-footer.svelte'
 
   export let post
@@ -42,7 +42,7 @@
 </div>
 <ArticleFooter {post} />
 
-<style>
+<style lang="less">
   @import '../../styles/variables.module.less';
 
   /*

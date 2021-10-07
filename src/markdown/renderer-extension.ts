@@ -1,7 +1,7 @@
 import Prism from 'prismjs'
-import loadLanguages from 'prismjs/components/index.js'
+import loadLanguages from 'prismjs/components/index'
 
-loadLanguages(['shell', 'markdown', 'json', 'yaml', 'typescript'])
+loadLanguages(['bash', 'markdown', 'json', 'yaml', 'typescript'])
 
 function getNFResize(href: string, height: number, width: number) {
   return `${href}?nf_resize=fit&h=${height}&w=${width}`
@@ -44,11 +44,13 @@ export const renderer = {
     `
   },
   code(source: string, lang?: string) {
+    // When lang is not specified it is usually an empty string which has to be handled
+    const usedLang = !lang ? 'shell' : lang
     const highlightedSource = Prism.highlight(
       source,
-      Prism.languages[lang ?? 'shell'],
-      lang
+      Prism.languages[usedLang],
+      usedLang
     )
-    return `<pre class='language-${lang}'><code class='language-${lang}'>${highlightedSource}</code></pre>`
+    return `<pre class='language-${usedLang}'><code class='language-${usedLang}'>${highlightedSource}</code></pre>`
   },
 }

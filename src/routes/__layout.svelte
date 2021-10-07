@@ -1,4 +1,4 @@
-<script context="module" lang="typescript">
+<script context="module" lang="ts">
   import { take } from 'ramda'
   import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/page'
 
@@ -16,9 +16,11 @@
   }
 </script>
 
-<script lang="typescript">
+<script lang="ts">
   import Nav from '../components/Nav.svelte'
   import Footer from '../components/Footer.svelte'
+  import { mainStyle } from '../styles/vanilla.css'
+
   export let segment
   export let latestPosts
 </script>
@@ -26,13 +28,13 @@
 <div class="app-content">
   <Nav {segment} />
 
-  <main>
+  <main class={mainStyle}>
     <slot />
   </main>
   <Footer {latestPosts} />
 </div>
 
-<style global>
+<style global lang="less">
   @import '../styles/global.module.less';
 
   .app-content {

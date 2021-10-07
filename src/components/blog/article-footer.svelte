@@ -1,4 +1,4 @@
-<script lang="typescript">
+<script lang="ts">
   import { format } from 'date-fns'
   import type { PostContent } from '../../routes/blog/_content'
 
@@ -26,7 +26,7 @@
   </div>
 </footer>
 
-<style>
+<style lang="less">
   @import '../../styles/variables.module.less';
 
   .tags-list {

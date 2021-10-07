@@ -1,4 +1,4 @@
-<script context="module" lang="typescript">
+<script context="module" lang="ts">
   /**
    * @type {import('@sveltejs/kit').Load}
    */
@@ -17,7 +17,7 @@
   }
 </script>
 
-<script lang="typescript">
+<script lang="ts">
   import ArticleFooter from '../../components/blog/article-footer.svelte'
   import type { PostContent } from './_content'
 

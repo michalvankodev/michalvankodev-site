@@ -22,11 +22,13 @@ export async function get({ params }: Request): Promise<Response> {
       return {
         status: 404,
         body: 'Post not found \n' + e.toString(),
+        headers: {},
       }
     }
     return {
       status: 500,
       body: 'Error loading post source file. \n' + e.toString(),
+      headers: {},
     }
   }
 

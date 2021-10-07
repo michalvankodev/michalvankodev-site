@@ -11,7 +11,10 @@ export interface RecordAttributes {
 }
 
 export interface ProjectAttributes extends RecordAttributes {
-  image: string
+  image: {
+    source: string
+    image_description: string
+  }
 }
 
 export interface PortfolioAttributes {
