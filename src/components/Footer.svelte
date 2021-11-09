@@ -1,12 +1,13 @@
-<script>
+<script lang="ts">
   import { format } from 'date-fns'
   import type { PostContent } from 'src/routes/blog/_content'
   import SvgIcon from './SvgIcon.svelte'
+  import { siteFooterStyle } from './Footer.css'
 
   export let latestPosts: PostContent[]
 </script>
 
-<footer class="site-footer navigation-theme">
+<footer class="site-footer navigation-theme {siteFooterStyle}">
   <div class="lists">
     <section class="site-map">
       <ul>
@@ -112,10 +113,10 @@
   </footer>
 </footer>
 
-<style>
+<style lang="less">
   @import '../styles/variables.module.less';
 
-  .site-footer {
+  /* .site-footer {
     font-size: 0.9em;
     padding: 2em 0.8em 0em;
     color: @menu-link-color;
@@ -137,7 +138,7 @@
     @media (min-width: @media-l) {
       font-size: 0.8em;
     }
-  }
+  } */
 
   h3 {
     font: inherit;
@@ -211,7 +212,6 @@
 
   .twitch :global(svg),
   .twitch :global(svg rect) {
-    /* fill: rgb(169, 112, 255); */
     fill: @menu-link-color;
   }
 
