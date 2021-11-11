@@ -1,14 +1,25 @@
 <script>
   import classNames from 'classnames'
+  import {
+    logoImgClass,
+    logoLinkClass,
+    logoSectionClass,
+    navigationClass,
+    navigationContentClass,
+    navigationLinksClass,
+    portfolioPageNavigation,
+    portfolioPageNavigationLinksClass,
+    selectedClass,
+  } from './Nav.css'
 
   export let segment
 </script>
 
-<nav>
-  <section class="nav-main">
-    <ul>
+<nav class={navigationClass}>
+  <section class={navigationContentClass}>
+    <ul class={navigationLinksClass}>
       <li>
-        <a class={classNames({ selected: segment === '/' })} href="/">
+        <a class={classNames({ [selectedClass]: segment === '/' })} href="/">
           Introduction
         </a>
       </li>
@@ -17,7 +28,7 @@
       <li>
         <a
           rel="prefetch"
-          class={classNames({ selected: segment.startsWith('/blog') })}
+          class={classNames({ [selectedClass]: segment.startsWith('/blog') })}
           href="/blog"
         >
           Blog
@@ -25,7 +36,9 @@
       </li>
       <li>
         <a
-          class={classNames({ selected: segment.startsWith('/portfolio') })}
+          class={classNames({
+            [selectedClass]: segment.startsWith('/portfolio'),
+          })}
           href="/portfolio"
         >
           Portfolio
@@ -33,17 +46,23 @@
       </li>
     </ul>
 
-    <aside class="logo-section">
-      <a class="logo" href=".">
-        <img src="/m-logo.svg" alt="m logo" width="44px" height="44px" />
+    <aside class="logo-section {logoSectionClass}">
+      <a class="logo {logoLinkClass}" href=".">
+        <img
+          class={logoImgClass}
+          src="/m-logo.svg"
+          alt="m logo"
+          width="44px"
+          height="44px"
+        />
       </a>
     </aside>
   </section>
 </nav>
 
 {#if segment === '/portfolio'}
-  <section class="page-navigation">
-    <div class="page-navigation-links">
+  <section class="page-navigation {portfolioPageNavigation}">
+    <div class={portfolioPageNavigationLinksClass}>
       <a href="/portfolio#personal-information">About</a>
       <a href="/portfolio#skills">Skills</a>
       <a href="/portfolio#work-history">Work History</a>
@@ -52,80 +71,3 @@
     </div>
   </section>
 {/if}
-
-<style lang="less">
-  @import '../styles/variables.module.less';
-
-  a {
-    color: @menu-link-color;
-    padding: 0.4em 0.5em;
-
-    &:hover {
-      color: @menu-link-hover-color;
-    }
-  }
-
-  nav {
-    padding: 0.5em 0.5em 1em;
-
-    background: radial-gradient(
-      120% 100% at 0% 0%,
-      @menu-bg-color,
-      rgba(@pinky, 0) 100%
-    );
-
-    color: @menu-color;
-    text-shadow: @menu-link-text-shadow;
-  }
-
-  .nav-main {
-    display: flex;
-    max-width: @media-max;
-    margin: 0 auto;
-  }
-
-  .logo-section {
-    line-height: 0px;
-  }
-
-  .logo {
-    padding: 0;
-    display: block;
-    max-height: 1em;
-  }
-
-  .logo img {
-    height: 1.8em;
-  }
-
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-
-  .nav-main > ul {
-    flex: 1;
-  }
-
-  a.selected {
-    text-shadow: @menu-active-link-text-shadow;
-  }
-
-  .page-navigation {
-    position: sticky;
-    top: 0px;
-    z-index: 1;
-    width: 100%;
-    font-size: 0.86em;
-    padding: 0.3em;
-    background: @bg-color;
-    box-shadow: 0px 0.5em 0.5em @bg-color;
-  }
-
-  .page-navigation-links {
-    max-width: @media-l;
-    margin: 0 auto;
-  }
-</style>

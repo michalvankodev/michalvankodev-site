@@ -87,6 +87,7 @@ export const vars = createGlobalTheme(':root', {
     '6x': fontSizeScale(6),
   },
   lineHeight: {
+    none: '0',
     '0x': lineHeightScale(0),
     '1x': lineHeightScale(1),
     '2x': lineHeightScale(2),
@@ -98,6 +99,16 @@ export const vars = createGlobalTheme(':root', {
     thin: 'thin',
     normal: 'normal',
     bold: 'bold',
+  },
+  textShadow: {
+    menuLinkShadow: `0.02em 0.02em 0.03em ${transparentize(
+      0.7,
+      colors.midnightBlue
+    )}`,
+    menuActiveLinkShadow: `0.01em 0.01em 0.05em ${transparentize(
+      0.1,
+      colors.midnightBlue
+    )}`,
   },
   width: {
     s: '400px',
