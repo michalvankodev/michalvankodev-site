@@ -1,14 +1,10 @@
 <script context="module" lang="ts">
+  // TODO Fix query & seeAll functionality
   /**
    * @type {import('@sveltejs/kit').Load}
    */
   export function load({ fetch, page: { params, query } }) {
-    const blogQuery = query
-      ? '?' +
-        Object.entries(query)
-          .map((q) => q.join('='))
-          .join('&')
-      : ''
+    const blogQuery = query ? '?' + query.toString() : ''
     return fetch(`blog.json${blogQuery}`)
       .then((r) => r.json())
       .then((posts) => {
@@ -18,11 +14,15 @@
 </script>
 
 <script lang="ts">
-  import ArticleFooter from '../../components/blog/article-footer.svelte'
+  import ArticleFooter from '../../components/blog/ArticleFooter.svelte'
+  import { postListClass, seeAllClass } from './index.css'
   import type { PostContent } from './_content'
 
   export let posts: PostContent[]
   export let query
+  export let tagQuery
+
+  $: tagQuery = query.get('tag')
 </script>
 
 <svelte:head>
@@ -34,18 +34,18 @@
 {:else}
   <h1>
     Recent
-    {#if query.tag}
-      <em>{query.tag}</em>
+    {#if tagQuery}
+      <em>{tagQuery}</em>
     {/if}
     posts
   </h1>
-  {#if query.tag}
-    <div class="see-all">
-      <a href="/blog" class="">See all posts</a>
+  {#if tagQuery}
+    <div class={seeAllClass}>
+      <a href="/blog">See all posts</a>
     </div>
   {/if}
 {/if}
-<ul class="post-list">
+<ul class="post-list {postListClass}">
   {#each posts as post}
     <!-- we're using the non-standard `rel=prefetch` attribute to
 				tell Sapper to load the data for the page as soon as
@@ -64,20 +64,3 @@
     </li>
   {/each}
 </ul>
-
-<style>
-  .post-list {
-    padding: 0;
-    line-height: 1.5;
-    list-style: none;
-  }
-
-  .post-list > li:not(:last-child) {
-    margin-bottom: 3em;
-  }
-
-  .see-all {
-    text-align: end;
-    margin-top: -1.5em;
-  }
-</style>

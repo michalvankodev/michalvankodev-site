@@ -26,7 +26,8 @@
 </script>
 
 <script lang="ts">
-  import ArticleFooter from '../../components/blog/article-footer.svelte'
+  import ArticleFooter from '../../components/blog/ArticleFooter.svelte'
+  import { contentClass } from './blog.css'
 
   export let post
 </script>
@@ -37,37 +38,7 @@
 
 <h1>{post.title}</h1>
 
-<div class="content">
+<div class="content {contentClass}">
   {@html post.body}
 </div>
 <ArticleFooter {post} />
-
-<style lang="less">
-  @import '../../styles/variables.module.less';
-
-  /*
-		By default, CSS is locally scoped to the component,
-		and any unused styles are dead-code-eliminated.
-		In this page, Svelte can't know which elements are
-		going to appear inside the {{{post.html}}} block,
-		so we have to use the :global(...) modifier to target
-		all elements inside .content
-	*/
-
-  .content :global(ul) {
-    line-height: 1.5;
-  }
-
-  .content :global(li) {
-    margin: 0 0 0.5em 0;
-  }
-
-  .content :global(img) {
-    max-height: 640px;
-  }
-
-  .content :global(img:only-child) {
-    display: block;
-    margin: 0 auto;
-  }
-</style>

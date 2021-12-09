@@ -19,6 +19,7 @@ export const colors = {
 
 export const menuBackground = transparentize(0.6, colors.tearkiss)
 export const transparent = transparentize(1, '#ffffff')
+const articleText = desaturate(0.16, colors.midnightBlue)
 
 export enum breakpoints {
   s = 400,
@@ -57,7 +58,8 @@ export const vars = createGlobalTheme(':root', {
     '8x': spaceScale(8),
   },
   color: {
-    articleText: desaturate(0.16, colors.midnightBlue),
+    articleText,
+    tintedText: tint(0.25, articleText),
     selection: tint(0.4, colors.pinky),
     link: saturate(0.2, mix(0.66, colors.tearkiss, colors.midnightBlue)),
     linkHover: colors.tearkiss,
@@ -118,5 +120,10 @@ export const vars = createGlobalTheme(':root', {
     max: '1140px',
     full: '100vw',
     parent: '100%',
+  },
+  height: {
+    full: '100hw',
+    parent: '100%',
+    image: '640px',
   },
 })
