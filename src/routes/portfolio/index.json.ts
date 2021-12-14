@@ -19,10 +19,19 @@ export interface ProjectAttributes extends RecordAttributes {
 
 export interface PortfolioAttributes {
   title: string
+  work_history: RecordAttributes[]
   work_history_prelude: string
-  work_history: string[]
   projects: ProjectAttributes[]
   education: RecordAttributes[]
+}
+
+export type PortfolioContent = {
+  title: string
+  workHistory: RecordAttributes[]
+  workHistoryPrelude: string
+  projects: ProjectAttributes[]
+  education: RecordAttributes[]
+  body: string
 }
 
 export async function get() {
@@ -47,7 +56,7 @@ export async function get() {
     .filter((education) => education.displayed)
     .map(parseField('description'))
 
-  const response = {
+  const response: PortfolioContent = {
     title: parsed.attributes.title,
     body: marked(parsed.body),
     workHistoryPrelude: marked(parsed.attributes.work_history_prelude),

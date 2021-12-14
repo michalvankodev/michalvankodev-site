@@ -19,7 +19,7 @@
 <script lang="ts">
   import Nav from '../components/Nav.svelte'
   import Footer from '../components/Footer.svelte'
-  import { mainStyle } from '../styles/vanilla.css'
+  import { mainContentClass } from './layout.css'
 
   export let segment
   export let latestPosts
@@ -28,7 +28,7 @@
 <div class="app-content">
   <Nav {segment} />
 
-  <main class={mainStyle}>
+  <main class={mainContentClass}>
     <slot />
   </main>
   <Footer {latestPosts} />
@@ -37,17 +37,7 @@
 <style global lang="less">
   @import '../styles/global.module.less';
 
-  .app-content {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    grid-template-columns: 100%;
-    min-height: 100vh;
-  }
-
   main {
-    position: relative;
-    padding: 1.2em;
-
     h1,
     h2,
     h3,

@@ -1,5 +1,4 @@
 <script context="module" lang="ts">
-  // TODO Fix query & seeAll functionality
   /**
    * @type {import('@sveltejs/kit').Load}
    */

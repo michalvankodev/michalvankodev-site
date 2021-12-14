@@ -1,5 +1,6 @@
-<script>
-  export let work
+<script lang="ts">
+  import type { RecordAttributes } from '../../routes/portfolio/index.json'
+  export let work: RecordAttributes
 </script>
 
 <article>

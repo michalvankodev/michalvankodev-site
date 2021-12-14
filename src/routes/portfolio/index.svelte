@@ -1,4 +1,4 @@
-<script context="module">
+<script lang="ts" context="module">
   /**
    * @type {import('@sveltejs/kit').Load}
    */
@@ -13,20 +13,22 @@
   }
 </script>
 
-<script>
+<script lang="ts">
   import Work from '../../components/portfolio/work.svelte'
   import Project from '../../components/portfolio/project.svelte'
+  import type { PortfolioContent } from './index.json'
+  import { listClass, listItemClass, nameTagClass } from './index.css'
 
-  export let content
+  export let content: PortfolioContent
 </script>
 
 <svelte:head>
   <title>{content.title}</title>
 </svelte:head>
 
-<h1 class="name-tag">Michal Vanko</h1>
+<h1 class="name-tag {nameTagClass}">Michal Vanko</h1>
 
-<h2 class="name-tag">Software Architect and Consultant</h2>
+<h2 class="name-tag {nameTagClass}">Software Architect and Consultant</h2>
 
 <section id="personal-information">
   {@html content.body}
@@ -37,9 +39,9 @@
   <section class="work-history-prelude">
     {@html content.workHistoryPrelude}
   </section>
-  <ul>
+  <ul class={listClass}>
     {#each content.workHistory as work}
-      <li>
+      <li class={listItemClass}>
         <Work {work} />
       </li>
     {/each}
@@ -48,9 +50,9 @@
 
 <section id="projects">
   <h2>Projects</h2>
-  <ul>
+  <ul class={listClass}>
     {#each content.projects as project}
-      <li>
+      <li class={listItemClass}>
         <Project {project} />
       </li>
     {/each}
@@ -59,9 +61,9 @@
 
 <section id="education">
   <h2>Education</h2>
-  <ul>
+  <ul class={listClass}>
     {#each content.education as work}
-      <li>
+      <li class={listItemClass}>
         <Work {work} />
       </li>
     {/each}
@@ -75,22 +77,5 @@
     height: 5em;
     margin-top: -5em;
     visibility: hidden;
-  }
-
-  section[id] {
-    margin-top: 2em;
-  }
-
-  .name-tag {
-    text-align: center;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  li {
-    margin: 1.5em 0;
   }
 </style>
