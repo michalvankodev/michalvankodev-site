@@ -54,6 +54,7 @@ const responsiveProperties = defineProperties({
     maxWidth: vars.width,
     height: ['100vh', '100&'],
     listStyle: ['none'],
+    overflow: ['auto'],
   },
   shorthands: {
     padding: ['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight'],

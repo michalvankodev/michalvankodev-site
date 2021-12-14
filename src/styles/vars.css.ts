@@ -1,5 +1,6 @@
 import { createGlobalTheme } from '@vanilla-extract/css'
 import {
+  darken,
   desaturate,
   lighten,
   mix,
@@ -18,6 +19,9 @@ export const colors = {
 }
 
 export const menuBackground = transparentize(0.6, colors.tearkiss)
+export const background = tint(0.7, colors.lightCyan)
+export const codeBackground = tint(0.2, background)
+export const quoteBackground = darken(0.02, background)
 export const transparent = transparentize(1, '#ffffff')
 const articleText = desaturate(0.16, colors.midnightBlue)
 
@@ -65,13 +69,16 @@ export const vars = createGlobalTheme(':root', {
     linkHover: colors.tearkiss,
     linkVisited: colors.frenchViolet,
     linkVisitedHover: lighten(0.1, colors.frenchViolet),
+    code: lighten(0.15, articleText),
 
     menu: colors.midnightBlue,
     menuLink: colors.midnightBlue,
     menuLinkHover: lighten(0.15, colors.midnightBlue),
 
     header: lighten(0.1, colors.midnightBlue),
-    background: tint(0.7, colors.lightCyan),
+    background,
+    codeBackground,
+    quoteBackground,
     menuBackground,
   },
   fontFamily: {
@@ -84,9 +91,9 @@ export const vars = createGlobalTheme(':root', {
     xl: fontSizeScale(1),
     '2x': fontSizeScale(2),
     '3x': fontSizeScale(3),
-    '4x': fontSizeScale(4),
-    '5x': fontSizeScale(5),
-    '6x': fontSizeScale(6),
+    '4x': fontSizeScale(5),
+    '5x': fontSizeScale(7),
+    '6x': fontSizeScale(9),
   },
   lineHeight: {
     none: '0',
@@ -112,6 +119,16 @@ export const vars = createGlobalTheme(':root', {
       colors.midnightBlue
     )}`,
   },
+  boxShadow: {
+    contentBoxShadow: `0px 0px 2px 1px ${transparentize(
+      0.5,
+      desaturate(0.5, colors.tearkiss)
+    )}`,
+    codeBoxShadow: `inset 0px 0px 2px 1px ${transparentize(
+      0.8,
+      desaturate(0.5, colors.tearkiss)
+    )}`,
+  },
   width: {
     s: '400px',
     m: '700px',
@@ -120,6 +137,9 @@ export const vars = createGlobalTheme(':root', {
     max: '1140px',
     full: '100vw',
     parent: '100%',
+    layoutMax: '42rem',
+    headerFooterMax: '52rem',
+    additionalBlockMax: '46rem',
   },
   height: {
     full: '100hw',

@@ -123,7 +123,7 @@ export const bottomLineClass = sprinkles({
   display: 'flex',
   justifyContent: 'space-between',
   marginX: 'auto',
-  marginBottom: '1x',
+  paddingBottom: '1x',
   marginTop: '2x',
   maxWidth: 'max',
 })
