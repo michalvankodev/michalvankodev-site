@@ -18,6 +18,10 @@ export const mainContentClass = sprinkles({
 })
 
 // Layout global styles
+// atomic design needs to get rid off these global selectors LOL
+// There should be written markdown renderer for each type of output
+// where every component gets the layout atomic class
+// TODO Create atomic classes for maxWidhts and use them everywhere in the content
 
 globalStyle(
   `${mainContentClass} h1, ${mainContentClass} h2, ${mainContentClass} h3, ${mainContentClass} h4, ${mainContentClass} h5, ${mainContentClass} h6, ${mainContentClass} p, ${mainContentClass} ul, ${mainContentClass} ol, ${mainContentClass} figure, ${mainContentClass} img, ${mainContentClass} blockquote, ${mainContentClass} iframe, ${mainContentClass} footer`,

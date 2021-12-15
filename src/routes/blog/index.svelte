@@ -2,12 +2,11 @@
   /**
    * @type {import('@sveltejs/kit').Load}
    */
-  export function load({ fetch, page: { params, query } }) {
-    const blogQuery = query ? '?' + query.toString() : ''
-    return fetch(`blog.json${blogQuery}`)
+  export function load({ fetch }) {
+    return fetch(`blog.json`)
       .then((r) => r.json())
       .then((posts) => {
-        return { props: { posts, query } }
+        return { props: { posts } }
       })
   }
 </script>
@@ -18,10 +17,18 @@
   import type { PostContent } from './_content'
 
   export let posts: PostContent[]
-  export let query
-  export let tagQuery
+  export let displayedPosts: PostContent[]
+  export let tagQuery: string
 
-  $: tagQuery = query.get('tag')
+  $: {
+    if (typeof window !== 'undefined') {
+      let params = new URLSearchParams(window.location.search)
+      tagQuery = params.get('tag')
+      displayedPosts = posts.filter((post) => post.tags.includes(tagQuery))
+    } else {
+      displayedPosts = posts
+    }
+  }
 </script>
 
 <svelte:head>

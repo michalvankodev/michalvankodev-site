@@ -78,3 +78,7 @@ export const portfolioPageNavigationLinksClass = sprinkles({
   marginX: 'auto',
   marginY: 'none',
 })
+
+export const portfolioPageNavigationLinkClass = sprinkles({
+  padding: '1x',
+})

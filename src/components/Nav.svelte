@@ -8,6 +8,7 @@
     navigationContentClass,
     navigationLinksClass,
     portfolioPageNavigation,
+    portfolioPageNavigationLinkClass,
     portfolioPageNavigationLinksClass,
     selectedClass,
   } from './Nav.css'
@@ -63,11 +64,22 @@
 {#if segment === '/portfolio'}
   <section class="page-navigation {portfolioPageNavigation}">
     <div class={portfolioPageNavigationLinksClass}>
-      <a href="/portfolio#personal-information">About</a>
-      <a href="/portfolio#skills">Skills</a>
-      <a href="/portfolio#work-history">Work History</a>
-      <a href="/portfolio#projects">Projects</a>
-      <a href="/portfolio#education">Education</a>
+      <a
+        class={portfolioPageNavigationLinkClass}
+        href="/portfolio#personal-information">About</a
+      >
+      <a class={portfolioPageNavigationLinkClass} href="/portfolio#skills"
+        >Skills</a
+      >
+      <a class={portfolioPageNavigationLinkClass} href="/portfolio#work-history"
+        >Work History</a
+      >
+      <a class={portfolioPageNavigationLinkClass} href="/portfolio#projects"
+        >Projects</a
+      >
+      <a class={portfolioPageNavigationLinkClass} href="/portfolio#education"
+        >Education</a
+      >
     </div>
   </section>
 {/if}

@@ -1,5 +1,5 @@
 import Prism from 'prismjs'
-import loadLanguages from 'prismjs/components/index'
+import loadLanguages from 'prismjs/components/index.js'
 
 loadLanguages(['bash', 'markdown', 'json', 'yaml', 'typescript'])
 
