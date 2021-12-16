@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { generateSrcSet, getNFResize } from '$lib/large-media'
   import {
     citeOwnerClass,
     mottoClass,
@@ -16,9 +17,19 @@
     <picture>
       <source
         media="(max-width: 550px)"
-        srcset="images/profile-picture-portrait.jpg"
+        srcset={generateSrcSet('images/profile-portugal-portrait.jpg', {
+          width: 500,
+        })}
       />
-      <img alt="My profile" src="images/profile-picture2.jpg" />
+      <img
+        alt="Portrait"
+        srcset={generateSrcSet('images/profile-portugal-landscape.jpg', {
+          width: 800,
+        })}
+        src={getNFResize('images/profile-portugal-landscape.jpg', {
+          width: 800,
+        })}
+      />
     </picture>
   </figure>
 

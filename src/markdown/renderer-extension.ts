@@ -1,11 +1,8 @@
+import { generateSrcSet, getNFResize } from '$lib/large-media'
 import Prism from 'prismjs'
 import loadLanguages from 'prismjs/components/index.js'
 
 loadLanguages(['bash', 'markdown', 'json', 'yaml', 'typescript'])
-
-function getNFResize(href: string, height: number, width: number) {
-  return `${href}?nf_resize=fit&h=${height}&w=${width}`
-}
 
 export const renderer = {
   heading(text: string, level: string) {
@@ -23,13 +20,9 @@ export const renderer = {
   image(href: string, title: string, text: string) {
     const figcaption = title ? `<figcaption>${title}</figcaption>` : ''
     const isLocal = !href.startsWith('http')
-    const src = isLocal ? getNFResize(href, 800, 800) : href
+    const src = isLocal ? getNFResize(href, { height: 800, width: 800 }) : href
     const srcset = isLocal
-      ? `srcset="${getNFResize(href, 800, 800)}, ${getNFResize(
-          href,
-          1200,
-          1200
-        )} 1.5x, ${getNFResize(href, 1600, 1600)} 2x"`
+      ? `srcset="${generateSrcSet(href, { width: 800, height: 800 })}"`
       : ''
 
     return `
