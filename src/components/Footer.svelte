@@ -72,12 +72,13 @@
       </ul>
       <hr class={hrClass} />
       <section class="subscribe {boldClass}">
-        <a href="/feed.xml" title="RSS feed" class="rss">
+        <a href="/feed.xml" rel="external" title="RSS feed" class="rss">
           Subscribe
           <SvgIcon name="rss" className={svgClass} />
         </a>
         <a
           href="/feed.json"
+          rel="external"
           title="JSON feed"
           class="json-feed"
           aria-label="Subscribe with JSON feed"
