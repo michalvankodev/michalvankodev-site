@@ -1,7 +1,7 @@
 ---
 layout: blog
 title: How we handle the rapid growth of the project team
-published: false
+published: true
 date: 2021-12-16T11:02:10.123Z
 tags:
   - News
