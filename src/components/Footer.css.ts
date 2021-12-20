@@ -154,6 +154,10 @@ globalStyle(`${siteFooterClass} a`, {
   color: vars.color.menuLink,
 })
 
+globalStyle(`${headerClass} a:link, ${headerClass} a:visited`, {
+  color: vars.color.menuLink,
+})
+
 globalStyle(`${siteFooterClass} a:hover`, {
   color: vars.color.menuLinkHover,
 })
