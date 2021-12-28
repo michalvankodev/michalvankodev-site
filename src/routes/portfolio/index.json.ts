@@ -17,9 +17,19 @@ export interface ProjectAttributes extends RecordAttributes {
   }
 }
 
+export interface WorkAttributes extends RecordAttributes {
+  address: {
+    name: string
+    location: string
+    zipcode: string
+    city: string
+    country: string
+  }
+}
+
 export interface PortfolioAttributes {
   title: string
-  work_history: RecordAttributes[]
+  work_history: WorkAttributes[]
   work_history_prelude: string
   projects: ProjectAttributes[]
   education: RecordAttributes[]
@@ -27,7 +37,7 @@ export interface PortfolioAttributes {
 
 export type PortfolioContent = {
   title: string
-  workHistory: RecordAttributes[]
+  workHistory: WorkAttributes[]
   workHistoryPrelude: string
   projects: ProjectAttributes[]
   education: RecordAttributes[]
@@ -46,9 +56,9 @@ export async function get() {
   }
 
   const parsed = fm<PortfolioAttributes>(pageSource)
-  const workHistory = (parsed.attributes.work_history || []).map(
-    parseField('description')
-  )
+  const workHistory = (parsed.attributes.work_history || [])
+    .filter((workHistory) => workHistory.displayed)
+    .map(parseField('description'))
   const projects = (parsed.attributes.projects || [])
     .filter((project) => project.displayed)
     .map(parseField('description'))

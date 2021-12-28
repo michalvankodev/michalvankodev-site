@@ -1,6 +1,8 @@
 <script lang="ts">
-  import type { RecordAttributes } from '../../routes/portfolio/index.json'
-  export let work: RecordAttributes
+  import type { WorkAttributes } from '../../routes/portfolio/index.json'
+  import { workAddressNameClass, workFooterClass } from './work.css'
+  import { horizontalBorderTopClass } from '$lib/styles/scoops.css'
+  export let work: WorkAttributes
 </script>
 
 <article>
@@ -8,4 +10,18 @@
   <section class="description">
     {@html work.description}
   </section>
+
+  {#if work.address}
+    <footer class="{workFooterClass} {horizontalBorderTopClass}">
+      <h4 class={workAddressNameClass}>{work.address.name}</h4>
+      <address>
+        <div>
+          {work.address.location},
+          {work.address.zipcode}
+          {work.address.city},
+          {work.address.country}
+        </div>
+      </address>
+    </footer>
+  {/if}
 </article>
