@@ -1,6 +1,6 @@
 import { globalStyle, style } from '@vanilla-extract/css'
-import { vars } from '../../src/styles/vars.css'
-import { sprinkles } from '../../src/styles/sprinkles.css'
+import { vars } from '$lib/styles/vars.css'
+import { sprinkles } from '$lib/styles/sprinkles.css'
 
 export const appContentClass = style([
   sprinkles({

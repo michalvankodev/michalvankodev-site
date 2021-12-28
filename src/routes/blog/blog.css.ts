@@ -1,5 +1,5 @@
 import { globalStyle, style } from '@vanilla-extract/css'
-import { vars } from '../../../src/styles/vars.css'
+import { vars } from '$lib/styles/vars.css'
 
 export const contentClass = style({})
 
