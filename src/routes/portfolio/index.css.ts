@@ -1,4 +1,4 @@
-import { sprinkles } from '../../../src/styles/sprinkles.css'
+import { sprinkles } from '$lib/styles/sprinkles.css'
 
 export const linkableSectionClass = sprinkles({
   marginTop: '4x',
@@ -15,5 +15,5 @@ export const listClass = sprinkles({
 
 export const listItemClass = sprinkles({
   marginX: 'none',
-  marginY: '3x',
+  marginY: '4x',
 })

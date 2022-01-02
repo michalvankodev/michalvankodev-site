@@ -1,6 +1,6 @@
 import { globalStyle, style } from '@vanilla-extract/css'
 import { radialGradient, rgba, transparentize } from 'polished'
-import { sprinkles } from '../styles/sprinkles.css'
+import { sprinkles } from '$lib/styles/sprinkles.css'
 import {
   breakpoints,
   colors,
@@ -8,7 +8,7 @@ import {
   menuBackground,
   transparent,
   vars,
-} from '../styles/vars.css'
+} from '$lib/styles/vars.css'
 
 export const siteFooterClass = style([
   sprinkles({
@@ -151,6 +151,10 @@ export const hrClass = style([
 export const latestPostsClass = style({})
 
 globalStyle(`${siteFooterClass} a`, {
+  color: vars.color.menuLink,
+})
+
+globalStyle(`${headerClass} a:link, ${headerClass} a:visited`, {
   color: vars.color.menuLink,
 })
 

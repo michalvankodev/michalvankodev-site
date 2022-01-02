@@ -52,7 +52,7 @@ const responsiveProperties = defineProperties({
     whiteSpace: ['normal', 'nowrap'],
     width: vars.width,
     maxWidth: vars.width,
-    height: ['100vh', '100&'],
+    height: vars.height,
     listStyle: ['none'],
     overflow: ['auto'],
   },

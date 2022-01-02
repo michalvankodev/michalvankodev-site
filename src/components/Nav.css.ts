@@ -1,7 +1,7 @@
 import { globalStyle, style } from '@vanilla-extract/css'
 import { radialGradient, transparentize } from 'polished'
-import { menuBackground, transparent, vars } from '../styles/vars.css'
-import { sprinkles } from '../styles/sprinkles.css'
+import { menuBackground, transparent, vars } from '$lib/styles/vars.css'
+import { sprinkles } from '$lib/styles/sprinkles.css'
 
 export const navigationClass = style([
   sprinkles({

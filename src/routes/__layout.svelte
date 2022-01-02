@@ -20,7 +20,7 @@
   import Nav from '../components/Nav.svelte'
   import Footer from '../components/Footer.svelte'
   import 'modern-normalize/modern-normalize.css'
-  import '../styles/global.css'
+  import '$lib/styles/global.css'
   import { mainContentClass } from './layout.css'
 
   export let segment

@@ -1,6 +1,6 @@
 import { globalStyle } from '@vanilla-extract/css'
-import { vars } from '../../styles/vars.css'
-import { sprinkles } from '../../styles/sprinkles.css'
+import { vars } from '$lib/styles/vars.css'
+import { sprinkles } from '$lib/styles/sprinkles.css'
 
 export const postListClass = sprinkles({
   padding: 'none',

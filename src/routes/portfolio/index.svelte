@@ -16,6 +16,7 @@
 <script lang="ts">
   import Work from '../../components/portfolio/work.svelte'
   import Project from '../../components/portfolio/project.svelte'
+  import Presentation from '../../components/portfolio/presentation.svelte'
   import type { PortfolioContent } from './index.json'
   import { listClass, listItemClass, nameTagClass } from './index.css'
 
@@ -28,7 +29,9 @@
 
 <h1 class="name-tag {nameTagClass}">Michal Vanko</h1>
 
-<h2 class="name-tag {nameTagClass}">Software Architect and Consultant</h2>
+<h2 class="name-tag {nameTagClass}">
+  Software Architect and Engineering Manager
+</h2>
 
 <section id="personal-information">
   {@html content.body}
@@ -54,6 +57,17 @@
     {#each content.projects as project}
       <li class={listItemClass}>
         <Project {project} />
+      </li>
+    {/each}
+  </ul>
+</section>
+
+<section id="presentations">
+  <h2>Presentations</h2>
+  <ul class="">
+    {#each content.presentations as presentation}
+      <li class="">
+        <Presentation {presentation} />
       </li>
     {/each}
   </ul>

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { horizontalBorderTopClass } from '$lib/styles/scoops.css'
+
   import { format } from 'date-fns'
   import type { PostContent } from '../../routes/blog/_content'
   import {
@@ -12,7 +14,7 @@
   export let post: PostContent
 </script>
 
-<footer class={footerClass}>
+<footer class="{footerClass} {horizontalBorderTopClass}">
   <div class="article-tags">
     {#if post.tags.length > 0}
       <span class="lighten">Tags:</span>
