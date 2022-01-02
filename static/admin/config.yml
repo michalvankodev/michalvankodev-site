@@ -102,6 +102,19 @@ collections:
                       widget: string,
                       required: false,
                     }
+          - label: Presentations
+            name: presentations
+            widget: list
+            fields:
+              - { label: Name, name: name, widget: string }
+              - {
+                  label: Displayed,
+                  name: displayed,
+                  widget: boolean,
+                  default: true,
+                }
+              - { label: Description, name: description, widget: markdown }
+              - { label: Link, name: link, widget: string }
           - label: Education
             name: education
             widget: list

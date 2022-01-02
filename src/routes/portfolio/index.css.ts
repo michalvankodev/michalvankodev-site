@@ -15,5 +15,5 @@ export const listClass = sprinkles({
 
 export const listItemClass = sprinkles({
   marginX: 'none',
-  marginY: '3x',
+  marginY: '4x',
 })

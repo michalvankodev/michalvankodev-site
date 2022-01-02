@@ -2,9 +2,9 @@
 title: Portfolio - Michal Vanko
 work_history_prelude: >-
   I've started learning web development when I was 14 years old. My very first
-  web site was for promotion web of my own Counter-Strike clan.
+  website was a presentation site for my own _Counter-Strike_ clan.
 
-  Then I had an opportunity to create an important registration system for marathon runners for the Europe's oldest marathon event. That basically started off my career as a web developer. I've worked on some projects while I was studying in high school and university. After that I started to work full-time as a web developer and gained more experience in developing real-time web applications.
+  Then I had an opportunity to create a registration system for marathon runners for Europe's oldest marathon event. That basically started off my career as a web developer. I've worked on some projects while I was studying in high school and university. After that, I've started to work full-time as a web developer and gained more experience in developing real-time web applications.
 work_history:
   - description: >-
       _sudolabs_ is a company focused on building products and software
@@ -78,8 +78,8 @@ work_history:
       city: Košice
       country: Slovakia
   - description: >-
-      I worked in _eSOLUTIONS_ as an **extern web developer** for part-time
-      while I was studying in high school and at University.
+      I worked in _eSOLUTIONS_ as a **web developer** part-time while I was
+      studying in high school and at University.
 
 
       I was building front-end and back-end services for websites and web applications. Mostly using _PHP_, _MySQL_, _JavaScript_, _HTML_, _CSS_.
@@ -117,29 +117,26 @@ projects:
       source: /images/uploads/the-expert-logo.svg
       image_description: The Expert logo
   - description: >-
-      _Manualogic_ is a **single page application** for product manual creators.
-      It contains **custom web editor** and management system of **translatable
-      pages, books** and **products.** It's main goal is to enable customers to
-      get manuals of their products in digital form.
+      *Panoramic* is a company focused on building a web application for data
+      scientists to be able to create and share models and graphs in between
+      each other.
 
+      I've been working as a **team lead** of a small team that was focused on building a **rich-text collaboration** feature into the web application.
 
-      It's bulit on top of modern web technologies such as **Angular,** **RxJS,** and the content is synchronized through **Websockets**. The back-end part is built on top of **Spring framework**.
-
-
-      The team consisted of 3-4 front-end developers, 2-3 back-end developers and 2 testers.
+      The application was built on top of modern web technologies such as **React, node.js with GraphQL, and TypeScript**. We have successfully built this feature by integrating *[Mattermost](https://mattermost.com/)* into the existing back-end. After that, we have been helping another team by enhancing existing features for importing data sources.
     displayed: true
     name: Panoramic
   - description: >-
-      _Manualogic_ is a **single page application** for product manual creators.
+      _Manualogic_ is a **single-page application** for product manual creators.
       It contains **custom web editor** and management system of **translatable
-      pages, books** and **products.** It's main goal is to enable customers to
+      pages, books** and **products.** Its main goal is to enable customers to
       get manuals of their products in digital form.
 
 
-      It's bulit on top of modern web technologies such as **Angular,** **RxJS,** and the content is synchronized through **Websockets**. The back-end part is built on top of **Spring framework**.
+      It's built on top of modern web technologies such as **Angular**, **RxJS**, and the content is synchronized through **Websockets**. The back-end part is built on top of **Spring framework**.
 
 
-      The team consisted of 3-4 front-end developers, 2-3 back-end developers and 2 testers.
+      The team consisted of 3-4 front-end developers, 2-3 back-end developers, and 2 testers.
     displayed: true
     name: Manualogic
   - description: >-
@@ -288,6 +285,30 @@ projects:
       I worked on this project alone.
     displayed: false
     name: CK Vive
+presentations:
+  - displayed: true
+    link: https://michalvankodev.github.io/unstoppable-growth-of-frontend-frameworks/
+    name: Unstoppable growth of front-end frameworks
+    description: >
+      A simple summary of the web front-end evolution, which will try to
+      describe how and why tools improve & why there is still something to
+      explore.
+  - displayed: true
+    name: WebAssembly
+    link: https://michalvankodev.github.io/presentation-webassembly/#/
+    description: A presentation about what WebAssembly is about and how it might
+      affect the future of the world.
+  - displayed: true
+    name: Spreading the web
+    description: A presentation about the rising number of use cases for utilizing
+      web technologies outside of the web platform such as native mobile
+      applications and robotics.
+    link: https://michalvankodev.github.io/spreading-the-web/#/
+  - displayed: true
+    name: Docker
+    link: http://michalvankodev.github.io/dockerpresentation/#/
+    description: An introduction to Docker containerization technology and how it
+      differs from virtualization.
 education:
   - description: |-
       Faculty of Electrical Engineering and Informatics - Intelligent Systems
@@ -315,34 +336,40 @@ education:
 ---
 ## Personal Information
 
-I was born on the 26th of May in Košice, Slovakia and I still live here.
+I was born in Košice, Slovakia and I still live here. I like to drink tea and cook my own recipes.
 
 ### Hobbies
 
-I enjoy playing basketball with my friends. I also like to play other team sports like football and hockey. I also play squash and table tennis. Once I've won a competition in squash at my university. During summer I love water skiing and swimming in a nearby lake.  
-I am very passionate about music. I've also tried some software for composing music but I am not really hooked into that yet. From time to time I enjoy playing board games with my friends.
+I enjoy playing basketball with my friends. I also like to play other team sports like football and hockey. I also play squash and table tennis. Once I've won a competition in squash at my university. During summer, I love to go water skiing or swimming in a nearby lake.
+
+I am very passionate about music. I've also tried to use some digital workstations to compose my own music.
+
+I enjoy playing board games with my friends and family.
 
 ### Interests
 
-I like to explore new technologies and I'm passionate about _Open Source movement_, _Internet of Things_ applications and _Linux desktop evolution_.  
-I am interested in modern software architecture and _reactive programming_.  
-I've attended various **tech conferences and hackathons**. I like them for all of the fascinating ideas that might be invented.  
-I've given presentations on various topics related to _web development_. You can [take a look at some of them here](#presentations).  
-I enjoy **teaching and explaining** how various technologies and techniques work to my colleagues for their better understanding.  
-I take advantage of **test driven development**.
+I like to explore new technologies and _Open-source_ software.
+I am interested in modern software architecture and _reactive programming_.
+I've attended several **tech conferences and hackathons**, where I can meet interesting people and explore fascinating ideas.
+
+I've given presentations on various topics related to _web development_. You can [take a look at some of them here](#presentations).
+
+I enjoy **teaching and explaining** how technologies and techniques work to my colleagues or students for their better understanding.  
+I take advantage of **test-driven development**.
 
 ## Skills
 
-Slovak is my mother tongue and I've learned English as my second language. I speak English on advanced level.
+Slovak is my mother tongue and I've learned English as my second language. I speak English on an advanced level.
 
-I'm an experienced _Linux Desktop_ user. I prefer to use open source libraries and technologies while I develop solutions.  
-I'm in good command of Office Tools and I've experience with image manipulation programs like _GIMP_ and _Inkscape_.  
-I can also compose music and sounds in _digital audio workstation_.
+I'm an experienced _Linux Desktop_ user. I prefer to use open-source libraries and technologies while I develop solutions.
 
-I'm passionate about _software architecture_. My goal is to be able to design suitable solution for any kind of product. From small _presentation sites_, _IOT devices_, to large _enterprise applications running on cloud_.
+I'm in good command of Office Tools and I have experience with image manipulation programs like _GIMP_ and _Inkscape_.  
+I can also compose music and sounds on _digital audio workstation_.
 
-I do _public speaking_ and I am not afraid to share my knowledge and passion about technology.
+I'm passionate about _software architecture_. My goal is not only to be able to design a suitable solution for any kind of product but also to be able to architect the processes behind building a team. From small _presentation sites_, _IOT devices_, to large _enterprise applications running on cloud_.
 
-I'm advanced user of source code management tools _git_ and _svn_.
+I practice **public speaking** and I am not afraid to share my knowledge and passion about technology.
 
-I've a driving license for category B 🚗.
+I'm an advanced user of source code management tools _git_ and _svn_.
+
+I've got a driving license for category B 🚗.
