@@ -327,13 +327,14 @@ education:
       Electrotechnics, Telecommunication
 
 
-      Dates: 1\. 9\. 200 - 1\. 7\. 2010
+      Dates: 1\. 9\. 2005 - 1\. 7\. 2010
 
 
       Title of qualification awarded: Full secondary school education with leaving examination
     displayed: true
     name: Secondary school of Electrical Engineering in Košice
 ---
+
 ## Personal Information
 
 I was born in Košice, Slovakia and I still live here. I like to drink tea and cook my own recipes.
