@@ -165,3 +165,4 @@ globalStyle(`${siteFooterClass} a:hover`, {
 globalStyle(`${latestPostsClass} li a:visited:not(:hover)`, {
   color: vars.color.linkVisited,
 })
+

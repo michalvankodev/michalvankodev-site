@@ -120,6 +120,16 @@
             <span class={socialLinkLabelClass}>Github</span>
           </a>
         </li>
+        <li class="linkedin {listLiClass}">
+          <a
+            class={socialLinkClass}
+            href="https://www.linkedin.com/in/michal-vanko-dev/"
+            title="LinkedIn profile"
+          >
+            <SvgIcon name="linkedin" className={svgClass} />
+            <span class={socialLinkLabelClass}>LinkedIn</span>
+          </a>
+        </li>
         <li class="twitch {listLiClass}">
           <a
             class={socialLinkClass}
