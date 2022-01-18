@@ -21,6 +21,9 @@ globalStyle('body', {
     [`screen and (min-width: ${breakpoints.m}px)`]: {
       fontSize: '24px',
     },
+    print: {
+      fontSize: '12px',
+    }
   },
 })
 

@@ -5,3 +5,12 @@ body {
 .app-content nav {
   display: none;
 }
+
+.page-navigation {
+  display: none;
+}
+
+.site-footer {
+  display: none;
+}
+
