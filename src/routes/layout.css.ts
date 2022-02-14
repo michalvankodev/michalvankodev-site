@@ -46,7 +46,7 @@ globalStyle(`${mainContentClass} iframe`, {
 })
 
 globalStyle(`${mainContentClass} img`, {
-  // width: vars.width.parent,
+  maxWidth: vars.width.parent,
   borderRadius: 5,
   boxShadow: vars.boxShadow.contentBoxShadow,
 })
