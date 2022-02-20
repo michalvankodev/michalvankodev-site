@@ -61,7 +61,7 @@
       <article>
         <header>
           <h2>
-            <a rel="prefetch" href="blog/{post.slug}">{post.title}</a>
+            <a rel="prefetch" href="/blog/{post.slug}">{post.title}</a>
           </h2>
         </header>
         {@html post.preview}
