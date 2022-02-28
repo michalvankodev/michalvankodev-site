@@ -18,13 +18,13 @@ It will run on a server with a possibility of migrating into serverless when we 
 ## API design
 
 As it is not a classic web server application I had to come up with slightly different error handling as we are used to. I've been trying to find a semi-functional API with all the good practices described in my [guide on error handling](https://michalvanko.dev/blog/2020-12-09-guide-on-error-handling). The main goal is to not let users be presented with internal information about errors. We want to show user-friendly messages instead.
-I call the API semi-functional as **I didn't want to use monads** and go 100% functional. We use simple asynchronous functions to handle interactions.
+I call this API semi-functional as **I didn't want to use monads** and go 100% functional. We use simple asynchronous functions to handle interactions.
 The goal is to handle errors that are expected. Unexpected errors should still be thrown and caught by an _"Error boundary"_ around the whole app that will handle and log the error.
 
 ## Error types
 
 Let's create 2 types of `Error`s that all the other `Error`s can be extended from.
-These will allow us to distinguish if the thrown `Error` might be presented to the user. We want to handle `InternalError`s in a differently. We might log them to the different logs or trigger alarms before we convert them to a different `PublishableError`. 
+These will allow us to distinguish if the thrown `Error` should be presented to the user. We want to handle `InternalError`s differently. We might log them to different logs or trigger alarms before we convert them to a different `PublishableError`. 
 
 ```typescript
 export class PublishableError extends Error {
@@ -45,7 +45,7 @@ export class InternalError extends Error {
 ```
 Then, we can create multiple app-specific errors by extending from these two.
 
-> We need to set `Object.setPrototypeOf(...)` as TypeScript [introduced a breaking change](https://github.com/Microsoft/TypeScript-wiki/blob/main/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work) that might cause the inheritance to now work properly. 
+> We need to set `Object.setPrototypeOf(...)` as TypeScript [introduced a breaking change](https://github.com/Microsoft/TypeScript-wiki/blob/main/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work) that may cause the inheritance to now work properly. 
 
 
 ## Handling errors
