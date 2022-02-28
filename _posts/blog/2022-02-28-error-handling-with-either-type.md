@@ -2,7 +2,7 @@
 layout: blog
 title: Error handling with Either<Type>
 published: true
-date: 2022-02-27T16:03:10.093Z
+date: 2022-02-28T11:30:54.195Z
 tags:
   - Development
   - Guide
@@ -17,7 +17,7 @@ It will run on a server with a possibility of migrating into serverless when we 
 
 ## API design
 
-As it is not a classic web server application I had to come up with slightly different error handling as we are used to. I've been trying to find a semi-functional API with all the good practices described in my [guide on error handling](https://michalvanko.dev/blog/2020-12-09-guide-on-error-handling). The main goal is to not let users be presented with internal information about errors. We want to show user-friendly messages instead.
+As it is not a classic web server application I had to come up with slightly different error handling as we are used to. I've been trying to find a semi-functional API with all the good practices described in my [guide on error handling](/blog/2020-12-09-guide-on-error-handling). The main goal is to not let users be presented with internal information about errors. We want to show user-friendly messages instead.
 I call this API semi-functional as **I didn't want to use monads** and go 100% functional. We use simple asynchronous functions to handle interactions.
 The goal is to handle errors that are expected. Unexpected errors should still be thrown and caught by an _"Error boundary"_ around the whole app that will handle and log the error.
 
@@ -66,7 +66,7 @@ export type Either<ResultType, ErrorType extends Error> = Promise<
  * Try to execute an async function and return a tuple of `[Error, ResultType]`
  * If the operation is successful error will be `null`
  * If the operation fails, the `errorHandler` runs with the exception that was thrown, Result is `undefined`
- * It catches all errors that might happen in the passed async task.
+ * It catches all errors that might happen in the passed async task
  * It will not catch any errors that are thrown from the `errorHander`
  */
 export function wrapWithErrorHandler<
