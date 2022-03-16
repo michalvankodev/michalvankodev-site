@@ -7,6 +7,7 @@ tags:
   - Development
   - Guide
 ---
+
 We have started a new small internal project for automating a few workflows around counting worked hours and time offs.
 
 ## Application architecture
@@ -24,7 +25,7 @@ The goal is to handle errors that are expected. Unexpected errors should still b
 ## Error types
 
 Let's create 2 types of `Error`s that all the other `Error`s can be extended from.
-These will allow us to distinguish if the thrown `Error` should be presented to the user. We want to handle `InternalError`s differently. We might log them to different logs or trigger alarms before we convert them to a different `PublishableError`. 
+These will allow us to distinguish if the thrown `Error` should be presented to the user. We want to handle `InternalError`s differently. We might log them to different logs or trigger alarms before we convert them to a different `PublishableError`.
 
 ```typescript
 export class PublishableError extends Error {
@@ -43,10 +44,10 @@ export class InternalError extends Error {
   }
 }
 ```
+
 Then, we can create multiple app-specific errors by extending from these two.
 
-> We need to set `Object.setPrototypeOf(...)` as TypeScript [introduced a breaking change](https://github.com/Microsoft/TypeScript-wiki/blob/main/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work) that may cause the inheritance to now work properly. 
-
+> We need to set `Object.setPrototypeOf(...)` as TypeScript [introduced a breaking change](https://github.com/Microsoft/TypeScript-wiki/blob/main/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work) that may cause the inheritance to now work properly.
 
 ## Handling errors
 
@@ -59,7 +60,7 @@ I've come up with the following solution:
  * Tuple of error and a result of an asynchronous task that might throw an error
  */
 export type Either<ResultType, ErrorType extends Error> = Promise<
-  [error: ErrorType | null, result?: ResultType]
+  [error: null, result: ResultType] | [error: ErrorType, result: undefined]
 >
 
 /**
@@ -102,7 +103,9 @@ As most of the errors will be possibly handled by the same `errorHandle` we can 
  * It will throw an error if any unexpected error is thrown
  * When used with `wrapWithErrorHandler` it is able to catch most of the expected errors
  */
-export function genericErrorHandler<ErrorType extends Error>(exception: ErrorType | unknown) {
+export function genericErrorHandler<ErrorType extends Error>(
+  exception: ErrorType | unknown
+) {
   if (exception instanceof PublishableError) {
     // These errors are usually handled no need to log them
     return exception
@@ -129,9 +132,10 @@ To spare some characters of redundant code I've applied a partial application pr
 /**
  * Helper function with applied `genericErrorHandler` to `wrapWithErrorHandler`
  */
-export function wrapWithGenericErrorHandlerFunction<FunctionArgs extends Array<any>, ResultType>(
-  fn: (...args: FunctionArgs) => Promise<ResultType>
-) {
+export function wrapWithGenericErrorHandlerFunction<
+  FunctionArgs extends Array<any>,
+  ResultType
+>(fn: (...args: FunctionArgs) => Promise<ResultType>) {
   return wrapWithErrorHandler(genericErrorHandler, fn)
 }
 ```
@@ -141,11 +145,13 @@ export function wrapWithGenericErrorHandlerFunction<FunctionArgs extends Array<a
 To sum it up, I'd like to present you the way how this API is used:
 
 ```typescript
-const [error, memberId] = await wrapWithGenericErrorHandlerFunction(getUserId)(user.token)
-    if (error) {
-      await respond(error.message)
-      return
-    }
+const [error, memberId] = await wrapWithGenericErrorHandlerFunction(getUserId)(
+  user.token
+)
+if (error) {
+  await respond(error.message)
+  return
+}
 ```
 
 This API allows me to keep the separation of concerns between the tasks and error handling into two separate functions. It also allows us to use the `wrapWithErrorHandler` with different `errorHandler` when we need to take special care. Also, I am still able to throw errors from the `errorHandler` that might be caught by a different `errorHandler` from an upper scope.
