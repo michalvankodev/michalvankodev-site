@@ -62,6 +62,17 @@ globalStyle(`${mainContentClass} figure`, {
   maxWidth: vars.width.image,
 })
 
+globalStyle(`${mainContentClass} .mermaid`, {
+  display: 'none',
+  maxWidth: vars.width.image,
+  textAlign: 'center',
+  margin: 'auto',
+})
+
+globalStyle(`${mainContentClass} .mermaid[data-processed=true]`, {
+  display: 'block',
+})
+
 globalStyle(
   `${mainContentClass} pre, ${mainContentClass} pre[class*="language-"]`,
   {
