@@ -2,11 +2,11 @@ import { readFile } from 'fs'
 import { promisify } from 'util'
 import fm from 'front-matter'
 import marked from 'marked'
-import { parseField } from '../../markdown/parse-markdown'
+import { ParsedMarkdown, parseField } from '../../markdown/parse-markdown'
 
 export interface RecordAttributes {
   name: string
-  description: string
+  description: ParsedMarkdown
   displayed: boolean
 }
 
@@ -18,7 +18,7 @@ export interface ProjectAttributes extends RecordAttributes {
 }
 
 export interface WorkAttributes extends RecordAttributes {
-  address: {
+  address?: {
     name: string
     location: string
     zipcode: string

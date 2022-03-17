@@ -5,10 +5,6 @@ import { parseField } from '../../markdown/parse-markdown'
 import type { PostAttributes } from './_content'
 import type { Request, Response } from '@sveltejs/kit'
 
-export interface SinglePost {
-  body: string
-}
-
 export async function get({ params }: Request): Promise<Response> {
   // the `slug` parameter is available because
   // this file is called [slug].json.js
@@ -34,7 +30,7 @@ export async function get({ params }: Request): Promise<Response> {
 
   const parsedPost = fm<PostAttributes>(postSource)
 
-  const response = parseField<SinglePost>('body')({
+  const response = parseField('body')({
     ...parsedPost.attributes,
     body: parsedPost.body,
   })

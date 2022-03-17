@@ -15,7 +15,7 @@
         alt={project.image.image_description}
       />
     {/if}
-    {@html project.description}
+    {@html project.description.parsed}
   </section>
   <aside />
 </article>

@@ -4,6 +4,7 @@ import { basename } from 'path'
 import { pipe, partial, prop, sortBy, reverse, filter } from 'ramda'
 import fm from 'front-matter'
 import marked from 'marked'
+import type { ParsedMarkdown } from 'src/markdown/parse-markdown'
 
 const { NODE_ENV } = process.env
 
@@ -20,6 +21,7 @@ export interface PostContent extends PostAttributes {
   preview: string
   slug: string
   published: boolean
+  body: ParsedMarkdown
 }
 
 export async function getBlogListing(tag?: string) {

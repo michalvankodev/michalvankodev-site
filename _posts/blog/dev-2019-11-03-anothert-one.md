@@ -16,6 +16,19 @@ Lorem markdownum! Vota facis **naides**, volucres sternitur cingebant in Agre
 draconem et silvas utendum fallere, nec esse ora de sed. Patrium cacumen nisi
 penitus quis.
 
+```mermaid
+sequenceDiagram
+    participant dotcom
+    participant iframe
+    participant viewscreen
+    dotcom->>iframe: loads html w/ iframe url
+    iframe->>viewscreen: request template
+    viewscreen->>iframe: html & javascript
+    iframe->>dotcom: iframe ready
+    dotcom->>iframe: set mermaid data on iframe
+    iframe->>iframe: render mermaid
+```
+
     var cursor_cmos = data;
     var dithering_crm = powerpoint_market;
     if (characterFiber.subdirectoryMarket(up_dlc, goodput)) {

@@ -8,7 +8,7 @@
 <article>
   <h3>{work.name}</h3>
   <section class="description">
-    {@html work.description}
+    {@html work.description.parsed}
   </section>
 
   {#if work.address}

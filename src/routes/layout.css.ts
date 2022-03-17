@@ -32,6 +32,13 @@ globalStyle(
   }
 )
 
+globalStyle(`${mainContentClass} iframe`, {
+  width: vars.width.image,
+  boxShadow: vars.boxShadow.codeBoxShadow,
+  borderRadius: 3,
+  border: 0,
+})
+
 globalStyle(`${mainContentClass} h1, ${mainContentClass} footer`, {
   maxWidth: vars.width.headerFooterMax,
 })

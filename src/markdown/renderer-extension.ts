@@ -1,6 +1,7 @@
 import { generateSrcSet, getNFResize } from '$lib/large-media'
 import Prism from 'prismjs'
 import loadLanguages from 'prismjs/components/index.js'
+import { createMermaidDiv } from './diagrams'
 
 loadLanguages(['bash', 'markdown', 'json', 'yaml', 'typescript'])
 
@@ -39,6 +40,11 @@ export const renderer = {
   code(source: string, lang?: string) {
     // When lang is not specified it is usually an empty string which has to be handled
     const usedLang = !lang ? 'shell' : lang
+
+    if (lang === 'mermaid') {
+      return createMermaidDiv(source)
+    }
+
     const highlightedSource = Prism.highlight(
       source,
       Prism.languages[usedLang],
