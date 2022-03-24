@@ -3,14 +3,12 @@
   import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/page'
 
   export async function load({ fetch, url }: LoadInput): Promise<LoadOutput> {
-    const blogPostsResponse = await fetch(`/blog`, {
-      headers: { accept: 'application/json' },
-    })
+    const blogPostsResponse = await fetch(`/blog/articles`)
     const blogPostsContent = await blogPostsResponse.json()
     return {
       props: {
         latestPosts: take(5, blogPostsContent.posts),
-        // TODO Check if not bugged
+        // TODO Check if not bugged FIXME
         segment: '',
       },
     }

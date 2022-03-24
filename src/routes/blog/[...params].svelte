@@ -1,3 +1,15 @@
+<script lang="ts" context="module">
+  /**
+   * @type {import('@sveltejs/kit').Load}
+   */
+  export async function load({ fetch }) {
+    const articleResponse = await fetch(`/blog/articles`)
+      .then((r) => r.json())
+
+    return { props: { posts: articleResponse.posts } }
+  }
+</script>
+
 <script lang="ts">
   import ArticleFooter from '../../components/blog/ArticleFooter.svelte'
   import { postListClass, seeAllClass } from './index.css'
