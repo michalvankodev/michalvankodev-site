@@ -2,17 +2,18 @@
   import { take } from 'ramda'
   import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/page'
 
-  export function load({ fetch, page }: LoadInput): Promise<LoadOutput> {
-    return fetch(`/blog.json`)
-      .then((r) => r.json())
-      .then((posts) => {
-        return {
-          props: {
-            latestPosts: take(5, posts),
-            segment: page.path,
-          },
-        }
-      })
+  export async function load({ fetch, url }: LoadInput): Promise<LoadOutput> {
+    const blogPostsResponse = await fetch(`/blog`, {
+      headers: { accept: 'application/json' },
+    })
+    const blogPostsContent = await blogPostsResponse.json()
+    return {
+      props: {
+        latestPosts: take(5, blogPostsContent.posts),
+        // TODO Check if not bugged
+        segment: '',
+      },
+    }
   }
 </script>
 

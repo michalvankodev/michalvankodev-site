@@ -9,10 +9,9 @@ export interface SinglePost {
   body: string
 }
 
-export async function get({ params }: Request): Promise<Response> {
+export async function get({ params: { slug } }: Request): Promise<Response> {
   // the `slug` parameter is available because
   // this file is called [slug].json.js
-  const { slug } = params
 
   let postSource: string
   try {
@@ -34,12 +33,12 @@ export async function get({ params }: Request): Promise<Response> {
 
   const parsedPost = fm<PostAttributes>(postSource)
 
-  const response = parseField<SinglePost>('body')({
+  const post = parseField<SinglePost>('body')({
     ...parsedPost.attributes,
     body: parsedPost.body,
   })
 
   return {
-    body: response,
+    body: { post },
   }
 }
