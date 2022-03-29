@@ -1,11 +1,18 @@
 import { readdir, readFile } from 'fs'
 import { promisify } from 'util'
 import { basename } from 'path'
-import { pipe, partial, prop, sortBy, reverse, filter } from 'ramda'
+import { pipe, prop, sortBy, reverse, filter } from 'ramda'
 import fm from 'front-matter'
 import marked from 'marked'
+import {
+  filterAndCount,
+  type PaginationQuery,
+} from '$lib/pagination/pagination'
 
 const { NODE_ENV } = process.env
+// TODO remove ramda and migrate to ts-belt
+// TODO Pagination component for routing
+// TODO Tag filtering visualization
 
 export interface PostAttributes {
   layout: string
@@ -22,7 +29,7 @@ export interface PostContent extends PostAttributes {
   published: boolean
 }
 
-export async function getBlogListing(tag?: string) {
+export async function getBlogListing(paginationQuery: PaginationQuery) {
   const files = await promisify(readdir)(`_posts/blog/`, 'utf-8')
   const filteredFiles = filterDevelopmentFiles(files)
 
@@ -48,17 +55,11 @@ export async function getBlogListing(tag?: string) {
       }
     })
   )
-  const filteredContents = pipe<
-    PostContent[],
-    PostContent[],
-    PostContent[],
-    PostContent[],
-    PostContent[]
-  >(
-    sortBy(prop('date')),
-    reverse,
+  const filteredContents = pipe(
+    sortBy<PostContent>(prop('date')),
+    (items) => reverse(items),
     filter<typeof contents[0]>((article) => article.published),
-    partial(filterByTag, [tag])
+    filterAndCount(paginationQuery)
   )(contents)
 
   return filteredContents
@@ -68,10 +69,4 @@ function filterDevelopmentFiles(files: string[]) {
   return NODE_ENV !== 'production'
     ? files
     : files.filter((file) => !file.startsWith('dev-'))
-}
-
-function filterByTag(tag: string | undefined, contents: PostContent[]) {
-  return tag
-    ? contents.filter((content) => content.tags.includes(tag))
-    : contents
 }

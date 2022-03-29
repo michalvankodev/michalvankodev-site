@@ -10,12 +10,13 @@
     "build": "svelte-kit build --verbose",
     "preview": "svelte-kit preview",
     "start": "svelte-kit start",
-    "test": "run-p --race dev cy:run",
+    "test": "vitest",
     "lint": "prettier --check . && eslint --ignore-path .gitignore .",
     "format": "prettier --write .",
     "svgstore": "svgstore -o static/build/icons-sprite.svg src/svg/**.svg"
   },
   "dependencies": {
+    "@mobily/ts-belt": "^3.10.0",
     "@vanilla-extract/css": "^1.6.8",
     "@vanilla-extract/sprinkles": "^1.4.0",
     "@vanilla-extract/vite-plugin": "^3.1.4",
@@ -48,6 +49,7 @@
     "svgstore-cli": "^2.0.1",
     "tslib": "^2.3.1",
     "typescript": "^4.6.2",
-    "vite": "^2.8.6"
+    "vite": "^2.8.6",
+    "vitest": "^0.7.10"
   }
 }
