@@ -90,7 +90,7 @@ work_history:
     displayed: true
     address:
       name: eSOLUTIONS s.r.o.
-      location: Hroncová 2
+      location: Gorkého 8
       zipcode: 040 01
       city: Košice
       country: Slovakia
@@ -151,7 +151,7 @@ projects:
       This project is built with modern web technologies including: **CycleJS**, **Reactive Streams**, **D3**, **Jest**, **Webpack**.
     displayed: true
     image:
-      image_description: " responzIO main controller"
+      image_description: ' responzIO main controller'
       source: /images/uploads/responzio.png
     name: responzIO
   - description: >-
@@ -300,14 +300,16 @@ presentations:
       affect the future of the world.
   - displayed: true
     name: Spreading the web
-    description: A presentation about the rising number of use cases for utilizing
+    description:
+      A presentation about the rising number of use cases for utilizing
       web technologies outside of the web platform such as native mobile
       applications and robotics.
     link: https://michalvankodev.github.io/spreading-the-web/#/
   - displayed: true
     name: Docker
     link: http://michalvankodev.github.io/dockerpresentation/#/
-    description: An introduction to Docker containerization technology and how it
+    description:
+      An introduction to Docker containerization technology and how it
       differs from virtualization.
 education:
   - description: |-

@@ -10,6 +10,7 @@ const config = {
   kit: {
     adapter: adapterStatic(),
     vite: { plugins: [vanillaExtractPlugin()] },
+    prerender: { default: true }
   },
   preprocess: preprocess({
     sourceMap: dev,

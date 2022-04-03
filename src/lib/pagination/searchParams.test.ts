@@ -42,22 +42,37 @@ describe('get search params', () => {
   })
 
   test('should parse values into searchParams for first page', () => {
-    const params = 'tags/News/page/1'
-    expect(getPaginationSearchParams(7, params).toString()).toEqual(
+    const params = {
+      pageSize: 7,
+      page: 1,
+      filters: {
+        tags: 'News',
+      },
+    }
+    expect(getPaginationSearchParams(params).toString()).toEqual(
       'limit=7&offset=0&tags=News'
     )
   })
 
   test('should parse values into searchParams for third page', () => {
-    const params = 'tags/News/page/3'
-    expect(getPaginationSearchParams(7, params).toString()).toEqual(
+    const params = {
+      pageSize: 7,
+      page: 3,
+      filters: {
+        tags: 'News',
+      },
+    }
+    expect(getPaginationSearchParams(params).toString()).toEqual(
       'limit=7&offset=14&tags=News'
     )
   })
 
   test('should return first page without any params specified', () => {
-    const params = ''
-    expect(getPaginationSearchParams(7, params).toString()).toEqual(
+    const params = {
+      pageSize: 7,
+      page: 1,
+    }
+    expect(getPaginationSearchParams(params).toString()).toEqual(
       'limit=7&offset=0'
     )
   })

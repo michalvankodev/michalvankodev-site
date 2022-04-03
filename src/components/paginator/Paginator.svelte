@@ -1,0 +1,52 @@
+<script lang="ts">
+  import {
+    activePage,
+    listClass,
+    listItemClass,
+    pageLinkClass,
+  } from './Paginator.css'
+
+  import { getPaginatorPages, createHref } from './paginatorUtils'
+
+  // TODO styles
+  export const Divider = 'divider'
+
+  export let href: string
+  export let page: number
+  export let pageSize: number
+  export let totalCount: number
+  export let filters: Record<string, string>
+  let paginatorPages: (number | typeof Divider)[]
+
+  $: paginatorPages = getPaginatorPages({ page, pageSize, totalCount })
+</script>
+
+<ul class={listClass}>
+  {#if page !== 1}
+    <li class="{listItemClass} ">
+      <a class={pageLinkClass} href={createHref(href, filters, page - 1)}
+        >&lt;</a
+      >
+    </li>
+  {/if}
+  {#each paginatorPages as pageNumber}
+    {#if pageNumber === Divider}
+      <li class={listItemClass}>...</li>
+    {:else if page === pageNumber}
+      <li class="{listItemClass} {activePage}">{pageNumber}</li>
+    {:else}
+      <li class="{listItemClass} ">
+        <a class={pageLinkClass} href={createHref(href, filters, pageNumber)}
+          >{pageNumber}</a
+        >
+      </li>
+    {/if}
+  {/each}
+  {#if page !== paginatorPages.length}
+    <li class="{listItemClass} ">
+      <a class={pageLinkClass} href={createHref(href, filters, page + 1)}
+        >&gt;</a
+      >
+    </li>
+  {/if}
+</ul>

@@ -34,12 +34,26 @@ export function parseParams(params: string) {
   return Object.fromEntries(splits)
 }
 
+export function toParams(records: Record<string, string>) {
+  return Object.entries(records)
+    .map(([key, value]) => `${key}/${value}`)
+    .join('/')
+}
+
+export interface PaginationSearchParams {
+  pageSize: number
+  page: number
+  filters?: Record<string, string>
+}
+
 /**
  * Convert svelte `load` params into a `URLSearchParams` so they can be used to fetch endpoints with pagination queries
  */
-export function getPaginationSearchParams(pageSize: number, params: string) {
-  const { page = 1, ...filters } = parseParams(params)
-
+export function getPaginationSearchParams({
+  pageSize,
+  page,
+  filters,
+}: PaginationSearchParams) {
   const offset = pageSize * (page - 1)
   const limit = pageSize
   return new URLSearchParams({ limit, offset, ...filters })

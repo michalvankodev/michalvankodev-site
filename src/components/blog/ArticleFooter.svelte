@@ -21,7 +21,7 @@
       <ul class={tagsListClass}>
         {#each post.tags as tag}
           <li class={tagsListLiClass}>
-            <a href="/blog?tag={tag}">{tag}</a>
+            <a href="/blog/tags/{tag}">{tag}</a>
           </li>
         {/each}
       </ul>

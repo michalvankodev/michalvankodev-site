@@ -1,6 +1,4 @@
-import { identity } from 'ramda'
-import { flow, A } from '@mobily/ts-belt'
-const { drop, take } = A
+import { identity, drop, take, pipe } from 'ramda'
 
 export interface PaginationQuery {
   offset?: number
@@ -14,7 +12,9 @@ export interface PaginationResult<ItemType> {
 }
 
 export function dropAndTake<Item>({ offset = 0, limit = Infinity }) {
-  return flow(drop<Item>(offset), take<Item>(limit))
+  return pipe(drop<Item>(offset), take<Item>(limit)) as (
+    items: Item[]
+  ) => Item[]
 }
 
 export function filterByPropContains<Item>(filters: Record<string, string>) {
