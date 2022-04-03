@@ -8,7 +8,6 @@
 
   import { getPaginatorPages, createHref } from './paginatorUtils'
 
-  // TODO styles
   export const Divider = 'divider'
 
   export let href: string

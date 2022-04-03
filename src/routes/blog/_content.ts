@@ -10,9 +10,6 @@ import {
 } from '$lib/pagination/pagination'
 
 const { NODE_ENV } = process.env
-// TODO remove ramda and migrate to ts-belt
-// TODO Pagination component for routing
-// TODO Tag filtering visualization
 
 export interface PostAttributes {
   layout: string

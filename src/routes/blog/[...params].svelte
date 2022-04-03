@@ -41,7 +41,6 @@
   export let page: number
   export let pageSize: number
   let totalPages = Math.ceil(posts.totalCount / pageSize)
-  // TODO display filter name
 </script>
 
 <svelte:head>
