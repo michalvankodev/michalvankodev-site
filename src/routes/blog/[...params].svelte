@@ -47,6 +47,7 @@
   <title>My blog @michalvankodev</title>
 </svelte:head>
 
+{@debug posts}
 {#if posts.items.length === 0}
   <p class="no-posts">You've found void in the space.</p>
 {:else}

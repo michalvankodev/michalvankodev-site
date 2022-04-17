@@ -9,6 +9,7 @@
       props: {
         latestPosts: blogPostsContent.posts.items,
         // TODO Check if not bugged FIXME
+        // TODO remove console.logs
         segment: '',
       },
     }
