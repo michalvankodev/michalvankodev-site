@@ -14,7 +14,10 @@ export const appContentClass = style([
 
 export const mainContentClass = sprinkles({
   position: 'relative',
-  padding: '3x',
+  padding: {
+    mobile: '3x',
+    desktop: 'none',
+  },
 })
 
 // Layout global styles
@@ -24,7 +27,7 @@ export const mainContentClass = sprinkles({
 // TODO Create atomic classes for maxWidhts and use them everywhere in the content
 
 globalStyle(
-  `${mainContentClass} h1, ${mainContentClass} h2, ${mainContentClass} h3, ${mainContentClass} h4, ${mainContentClass} h5, ${mainContentClass} h6, ${mainContentClass} p, ${mainContentClass} ul, ${mainContentClass} ol, ${mainContentClass} figure, ${mainContentClass} img, ${mainContentClass} blockquote, ${mainContentClass} iframe, ${mainContentClass} footer`,
+  `${mainContentClass} h1, ${mainContentClass} h2, ${mainContentClass} h3, ${mainContentClass} h4, ${mainContentClass} h5, ${mainContentClass} h6, ${mainContentClass} p, ${mainContentClass} ul, ${mainContentClass} ol, ${mainContentClass} figure, ${mainContentClass} img, ${mainContentClass} blockquote, ${mainContentClass} iframe:not(.embed), ${mainContentClass} footer`,
   {
     maxWidth: vars.width.layoutMax,
     marginLeft: 'auto',
@@ -40,7 +43,7 @@ globalStyle(`${mainContentClass} h2`, {
   maxWidth: vars.width.additionalBlockMax,
 })
 
-globalStyle(`${mainContentClass} iframe`, {
+globalStyle(`${mainContentClass} iframe:not(.embed)`, {
   maxWidth: vars.width.additionalBlockMax,
   display: 'block',
 })

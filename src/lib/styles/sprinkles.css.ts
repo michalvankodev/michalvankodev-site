@@ -33,6 +33,7 @@ const responsiveProperties = defineProperties({
     ],
     alignItems: ['stretch', 'flex-start', 'center', 'flex-end'],
     flex: ['1'],
+    gap: vars.space,
     textAlign: ['center', 'justify', 'start', 'end'],
     textShadow: vars.textShadow,
     paddingTop: vars.space,
@@ -55,6 +56,7 @@ const responsiveProperties = defineProperties({
     height: vars.height,
     listStyle: ['none'],
     overflow: ['auto'],
+    aspectRatio: vars.aspectRatio,
   },
   shorthands: {
     padding: ['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight'],

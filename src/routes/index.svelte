@@ -4,6 +4,10 @@
     citeOwnerClass,
     mottoClass,
     profilePicClass,
+    twitchAsideClass,
+    twitchEmbedClass,
+    twitchIframeClass,
+    twitchStreamPromoClass,
     welcomeNoteClass,
   } from './index.css'
 </script>
@@ -47,3 +51,36 @@
   . I'll try to share some stories and opinions about things that I'm interested
   in.
 </p>
+
+<section class="twitch-stream-promo {twitchStreamPromoClass}">
+  <h2>Checkout my twitch stream</h2>
+  <div class="twitch-embed {twitchEmbedClass}">
+    <div class="twitch-video {twitchIframeClass}">
+      <iframe
+        title="My twitch channel"
+        src="https://player.twitch.tv/?channel=michalvankodev&parent=michalvanko.dev&parent=localhost&autoplay=false"
+        frameborder="0"
+        scrolling="no"
+        allowfullscreen
+        height="100%"
+        width="100%"
+        class="embed {twitchIframeClass}"
+      />
+    </div>
+    <aside class={twitchAsideClass}>
+      Come hang out and chat with me <strong>every Tuesday and Thursday</strong>
+      afternoon central Europe time. I stream working on my side-projects and talking
+      anything about the developer lifestyle.
+    </aside>
+    <!-- <div class="twitch-chat">
+    <iframe
+      title="Twitch chat"
+      frameborder="0"
+      scrolling="no"
+      src="https://www.twitch.tv/embed/michalvankodev/chat?parent=michalvanko.dev&parent=localhost"
+      height="100%"
+      width="100%"
+    />
+    </div> -->
+  </div>
+</section>

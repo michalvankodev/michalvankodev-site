@@ -19,6 +19,7 @@ export const colors = {
 }
 
 export const menuBackground = transparentize(0.6, colors.tearkiss)
+export const twitchEmbedBackground = transparentize(0.6, colors.pinky)
 export const background = tint(0.7, colors.lightCyan)
 export const codeBackground = tint(0.2, background)
 export const quoteBackground = darken(0.02, background)
@@ -130,6 +131,7 @@ export const vars = createGlobalTheme(':root', {
     )}`,
   },
   width: {
+    auto: 'auto',
     s: '400px',
     m: '700px',
     image: '800px',
@@ -145,5 +147,8 @@ export const vars = createGlobalTheme(':root', {
     full: '100hw',
     parent: '100%',
     image: '640px',
+  },
+  aspectRatio: {
+    monitor: '16 / 9',
   },
 })
