@@ -1,21 +1,13 @@
 <script lang="ts" context="module">
-  import {
-    getPaginationSearchParams,
-    parseParams,
-  } from '$lib/pagination/searchParams'
-
-  const pageSize = 7
+  import { parseParams } from '$lib/pagination/dropTakeParams'
 
   /**
    * @type {import('@sveltejs/kit').Load}
    */
   export async function load({ fetch, params }) {
-    console.log('params', params)
-    const { page = 1, ...filters } = parseParams(params.params)
-    const searchParams = getPaginationSearchParams({ pageSize, page, filters })
-    console.log('searchpprsm', searchParams)
+    const { page = 1, pageSize = 7, ...filters } = parseParams(params.params)
     const articleResponse = await fetch(
-      `/blog/articles?${searchParams.toString()}`
+      `/blog/articles/${params.params ? params.params : 'index'}.json`
     ).then((r) => r.json())
 
     return {
@@ -40,6 +32,7 @@
   export let filters: Record<string, string>
   export let page: number
   export let pageSize: number
+
   let totalPages = Math.ceil(posts.totalCount / pageSize)
 </script>
 
@@ -47,7 +40,6 @@
   <title>My blog @michalvankodev</title>
 </svelte:head>
 
-{@debug posts}
 {#if posts.items.length === 0}
   <p class="no-posts">You've found void in the space.</p>
 {:else}
@@ -75,7 +67,7 @@
   />
 </header>
 <ul class="post-list {postListClass}">
-  {#each posts.items as post}
+  {#each posts.items as post (post.slug)}
     <li>
       <article>
         <header>

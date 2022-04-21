@@ -1,4 +1,4 @@
-import { toParams } from '$lib/pagination/searchParams'
+import { toParams } from '$lib/pagination/dropTakeParams'
 import { last, range } from 'ramda'
 
 export const Divider = 'divider'
@@ -45,6 +45,5 @@ export function createHref(
   pageNumber: number
 ) {
   const filtersPath = toParams(filters)
-  console.log(filtersPath, filters)
   return `/${href}/${filtersPath ? filtersPath + '/' : ''}page/${pageNumber}`
 }

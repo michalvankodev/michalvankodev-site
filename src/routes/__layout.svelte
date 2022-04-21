@@ -3,7 +3,7 @@
   import type { LoadInput, LoadOutput } from '@sveltejs/kit/types/page'
 
   export async function load({ fetch, url }: LoadInput): Promise<LoadOutput> {
-    const blogPostsResponse = await fetch(`/blog/articles?limit=5`)
+    const blogPostsResponse = await fetch(`/blog/articles/pageSize/5.json`)
     const blogPostsContent = await blogPostsResponse.json()
     return {
       props: {
