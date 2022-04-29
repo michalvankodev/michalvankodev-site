@@ -53,7 +53,7 @@
 </p>
 
 <section class="twitch-stream-promo {twitchStreamPromoClass}">
-  <h2>Checkout my twitch stream</h2>
+  <h2>Follow my twitch stream</h2>
   <div class="twitch-embed {twitchEmbedClass}">
     <div class="twitch-video {twitchIframeClass}">
       <iframe
