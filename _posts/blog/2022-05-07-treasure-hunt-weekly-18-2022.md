@@ -1,13 +1,14 @@
 ---
 layout: blog
-title: "Weekly #18-2022"
+title: 'Treasure hunt - Weekly #18-2022'
 published: true
-date: 2022-05-06T08:35:51.818Z
+date: 2022-05-07T08:35:51.818Z
 tags:
   - News
   - Weekly
-notes: ""
+notes: ''
 ---
+
 I have so much news that I have no idea where to start.
 This one would be one of those posts that I will revisit many times to be able to look back and analyze what were my feelings and where I've stood and how I coped with them.
 
@@ -31,7 +32,7 @@ Maybe I should build my own company. It is something I've been thinking of for a
 
 ## DevBreak episode #2
 
-So on the exact day that I've left Sudolabs, I have been able to save the *DevBreak talk*. Not me exactly. It has been saved by my awesome friends [Daniela](https://www.linkedin.com/in/daniela-chovancova-boostello/), [Samuel](https://www.linkedin.com/in/samuelfarkas/), and [Filip](https://www.linkedin.com/in/filipjenik/). They've attended [HackKosice hackathon](<>) and were generous to talk about **their experience and impressions** on the *DevBreak talk*. [Go check out the episode](https://www.twitch.tv/videos/1468441353). They've brought a very good vibe and I had a great time talking with them.
+So on the exact day that I've left Sudolabs, I have been able to save the _DevBreak talk_. Not me exactly. It has been saved by my awesome friends [Daniela](https://www.linkedin.com/in/daniela-chovancova-boostello/), [Samuel](https://www.linkedin.com/in/samuelfarkas/), and [Filip](https://www.linkedin.com/in/filipjenik/). They've attended [HackKosice hackathon]() and were generous to talk about **their experience and impressions** on the _DevBreak talk_. [Go check out the episode](https://www.twitch.tv/videos/1468441353). They've brought a very good vibe and I had a great time talking with them.
 
 I've already contacted my next guest for episode #3 and I am very excited for this one. As I have a wedding to plan and attend I don't know when we will air the episode. But it will be a great one! Can't wait.
 
@@ -49,13 +50,14 @@ We have agreed with the community that we would like to also do some l33tcode ch
 
 This post is already filled with so much content, but I can't skip this chapter.
 
-![Wedding announcment](/images/uploads/20220422_214530.jpg "Wedding announcment")
+![Wedding announcment](/images/uploads/20220422_214530.jpg 'Wedding announcment')
 
 My and my soon-to-be beautiful wife are getting married next Saturday.
 Very exciting times. I am going to meet my whole family after so many years. It's going to be not only the party of the year but of a whole life.
 
 ## Picks
 
-* As I've been doing research on [Bevy game engine](https://bevyengine.org/), I've stumbled on this amazing [series of tutorials](https://www.youtube.com/watch?v=WnUzWuaMzuM&list=PLT_D88-MTFOPPl75g4WshL1Gx2bnGTUkz) by [Logic Projects](https://www.youtube.com/channel/UC7v3YEDa603x_84PgCPytzA). It's a really fast walkthrough of challenges during game development when starting with Bevy. It helped me build a better mental model of how should I structure entities and components for my own game.
+- As I've been doing research on [Bevy game engine](https://bevyengine.org/), I've stumbled on this amazing [series of tutorials](https://www.youtube.com/watch?v=WnUzWuaMzuM&list=PLT_D88-MTFOPPl75g4WshL1Gx2bnGTUkz) by [Logic Projects](https://www.youtube.com/channel/UC7v3YEDa603x_84PgCPytzA). It's a really fast walkthrough of challenges during game development when starting with Bevy. It helped me build a better mental model of how should I structure entities and components for my own game.
 
-* I've discovered a [great podcast](https://www.youtube.com/playlist?list=PLnEuXUQOvbCi5OgBipQDnUqXeSna5S6fz) by [Michal Truban](https://www.truban.sk/). I've listened to some episodes and I have to say that it is educational. Nice tips from [Andrea Vadkerti on coaching](https://www.youtube.com/watch?v=XzvJJJIjl90&list=PLnEuXUQOvbCi5OgBipQDnUqXeSna5S6fz&index=13). Or from [Matej Ftáčnik](https://www.youtube.com/watch?v=XYfBGkcePRw&list=PLnEuXUQOvbCi5OgBipQDnUqXeSna5S6fz&index=3) on how to run a successful company.
+- I've discovered a [great podcast](https://www.youtube.com/playlist?list=PLnEuXUQOvbCi5OgBipQDnUqXeSna5S6fz) by [Michal Truban](https://www.truban.sk/). I've listened to some episodes and I have to say that it is educational. Nice tips from [Andrea Vadkerti on coaching](https://www.youtube.com/watch?v=XzvJJJIjl90&list=PLnEuXUQOvbCi5OgBipQDnUqXeSna5S6fz&index=13). Or from [Matej Ftáčnik](https://www.youtube.com/watch?v=XYfBGkcePRw&list=PLnEuXUQOvbCi5OgBipQDnUqXeSna5S6fz&index=3) on how to run a successful company.
+
