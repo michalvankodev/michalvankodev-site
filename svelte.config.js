@@ -9,7 +9,10 @@ const dev = mode === 'development'
 const config = {
   kit: {
     adapter: adapterStatic(),
-    vite: { plugins: [vanillaExtractPlugin()] },
+    vite: {
+      plugins: [vanillaExtractPlugin()],
+      server: { fs: { allow: ['static/build'] } },
+    },
     prerender: { default: true },
   },
   preprocess: preprocess({

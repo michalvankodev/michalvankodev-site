@@ -71,10 +71,6 @@ export const sectionListSectionClass = sprinkles({
   marginY: '3x',
 })
 
-export const noWrapClass = sprinkles({
-  whiteSpace: 'nowrap',
-})
-
 export const listUlClass = sprinkles({
   listStyle: 'none',
   padding: 'none',
@@ -148,6 +144,12 @@ export const hrClass = style([
   },
 ])
 
+export const licenceText = sprinkles({
+  textAlign: 'center',
+  width: 'parent',
+  fontSize: 'xs',
+})
+
 export const latestPostsClass = style({})
 
 globalStyle(`${siteFooterClass} a`, {
@@ -165,4 +167,3 @@ globalStyle(`${siteFooterClass} a:hover`, {
 globalStyle(`${latestPostsClass} li a:visited:not(:hover)`, {
   color: vars.color.linkVisited,
 })
-
