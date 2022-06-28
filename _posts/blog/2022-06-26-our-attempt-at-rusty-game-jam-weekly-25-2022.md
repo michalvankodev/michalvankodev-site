@@ -24,6 +24,8 @@ This week I've attended a [Rusty game jam #2](https://itch.io/jam/rusty-jam-2). 
 
 ![Egg fetcher game preview](/images/uploads/screenshot-from-2022-06-26-22-37-16.png "Egg fetcher game preview")
 
+[You can check the rusult built with WASM here.](/showcase/egg-fetcher/)
+
 ## What's up with the weeklys
 
 I have to admit something. I was not inspired or motivated to write weeklys for the last two months. For that, I feel a little bumped as there were many good thoughts worth sharing. I was not very comfortable writing as the last month was very tough. During that time I was focused on inner development and figuring out how my brain responds to different stimuli. I've been able to find a new project to work on. The onboarding story was one of the hardest I went through. I managed to move on and stop thinking about what could've I done better in the past and focus more on what can I do better now.

@@ -14,7 +14,6 @@ export async function get({ params }) {
   )
   const paginationQuery = { ...paginationParams, filters }
   const filteredContents = await getBlogListing(paginationQuery)
-  console.log(filteredContents.items.map((item) => item.slug))
 
   return {
     status: 200,
