@@ -4,7 +4,7 @@
 
 <p>I've teamed up with <a href="https://github.com/silen-z/">@silen-z</a>. We haven't been able to finish the game. We didn't even make the mechanics we were thinking of. But I'd like to show <strong>the incomplete version of Egg-fetcher</strong> anyway. As we built it with Rust and <a href="https://bevyengine.org/">bevy engine</a> we were able to <a href="https://github.com/septum/rusty_jam_bevy_template">reuse a template</a> that had a configured WASM build. Therefore is very easy to just present the game in the browser.</p>
 
-<iframe src="/egg-fetcher/index.html" width="800" height="600"></iframe>
+<iframe title="Egg fetcher game" src="/egg-fetcher/index.html" width="800" height="600"></iframe>
 
 <p><strong>The only functional controls are arrows</strong>. We have built a collision system where the chickens should move out of the way of the player and his pet. The player is not able to move through the fences and so on. We wanted to <strong>create a puzzle</strong> where you would have to play fetch with your pet dog to control the chickens and simultaneously control player movement.</p>
 
