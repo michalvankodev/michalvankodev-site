@@ -13,7 +13,7 @@ I have been thinking for a long time about how should I continue my blog writing
 
 This time I want to try an experiment. Instead of writing this blog post, I am going to dictate it over to my phone and do some edits after. I've found that I can put my thoughts much quicker into something that can be edited. I know that I haven't been posting my weekly posts since June, but to be honest, I had to find some motivation over time and I will be not continuing with weeklies anymore. I would much rather post something with a theme around my life.
 
-![Big Ben](/images/uploads/img_7631.jpg "Photo of the Big Ben taken right accross the street")
+![Big Ben](/images/uploads/image_7115.jpg "Photo of the Big Ben taken right accross the street")
 
 We are on the 4th day of visiting London with my wife.
 We have been at *Buckingham Palace* yesterday. Today we were walking across the *Tower Bridge* and even though it is still just the 19th of November it's already Christmas time over here. There are Christmas markets at every single popular town square and alley.
