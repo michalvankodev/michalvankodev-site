@@ -12,8 +12,9 @@
     portfolioPageNavigationLinksClass,
     selectedClass,
   } from './Nav.css'
+  import { page } from "$app/stores"
 
-  export let segment
+  $: segment = $page.url.pathname
 </script>
 
 <nav class={navigationClass}>

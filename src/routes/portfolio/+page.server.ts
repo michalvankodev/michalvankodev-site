@@ -3,6 +3,7 @@ import { promisify } from 'util'
 import fm from 'front-matter'
 import marked from 'marked'
 import { parseField } from '../../markdown/parse-markdown'
+import type { PageServerLoad } from './$types'
 
 export interface RecordAttributes {
   name: string
@@ -50,16 +51,8 @@ export type PortfolioContent = {
   body: string
 }
 
-export async function get() {
-  let pageSource: string
-  try {
-    pageSource = await promisify(readFile)('_pages/portfolio.md', 'utf-8')
-  } catch (e) {
-    return {
-      status: 500,
-      body: 'Error loading portfolio source file. \n' + e.toString(),
-    }
-  }
+export const load = (async () => {
+  const pageSource = await promisify(readFile)('_pages/portfolio.md', 'utf-8')
 
   const parsed = fm<PortfolioAttributes>(pageSource)
   const workHistory = (parsed.attributes.work_history || [])
@@ -85,8 +78,5 @@ export async function get() {
     presentations,
   }
 
-  return {
-    status: 200,
-    body: response,
-  }
-}
+  return response;
+}) satisfies PageServerLoad

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { format } from 'date-fns'
-  import type { PostContent } from 'src/routes/blog/_content'
+  import type { PostContent } from 'src/routes/blog/content'
   import SvgIcon from './SvgIcon.svelte'
   import {
     boldClass,

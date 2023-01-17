@@ -1,30 +1,16 @@
-<script lang="ts" context="module">
-  /**
-   * @type {import('@sveltejs/kit').Load}
-   */
-  export async function load({ fetch }) {
-    const res = await fetch('portfolio.json')
-    const content = await res.json()
-    return {
-      props: {
-        content,
-      },
-    }
-  }
-</script>
-
 <script lang="ts">
   import Work from '../../components/portfolio/work.svelte'
   import Project from '../../components/portfolio/project.svelte'
   import Presentation from '../../components/portfolio/presentation.svelte'
-  import type { PortfolioContent } from './index.json'
+  import type { PageData } from './$types'
+
   import { listClass, listItemClass, nameTagClass } from './index.css'
 
-  export let content: PortfolioContent
+  export let data: PageData
 </script>
 
 <svelte:head>
-  <title>{content.title}</title>
+  <title>{data.title}</title>
 </svelte:head>
 
 <h1 class="name-tag {nameTagClass}">Michal Vanko</h1>
@@ -34,16 +20,16 @@
 </h2>
 
 <section id="personal-information">
-  {@html content.body}
+  {@html data.body}
 </section>
 
 <section id="work-history">
   <h2>Work experience</h2>
   <section class="work-history-prelude">
-    {@html content.workHistoryPrelude}
+    {@html data.workHistoryPrelude}
   </section>
   <ul class={listClass}>
-    {#each content.workHistory as work}
+    {#each data.workHistory as work}
       <li class={listItemClass}>
         <Work {work} />
       </li>
@@ -54,7 +40,7 @@
 <section id="projects">
   <h2>Projects</h2>
   <ul class={listClass}>
-    {#each content.projects as project}
+    {#each data.projects as project}
       <li class={listItemClass}>
         <Project {project} />
       </li>
@@ -65,7 +51,7 @@
 <section id="presentations">
   <h2>Presentations</h2>
   <ul class="">
-    {#each content.presentations as presentation}
+    {#each data.presentations as presentation}
       <li class="">
         <Presentation {presentation} />
       </li>
@@ -76,7 +62,7 @@
 <section id="education">
   <h2>Education</h2>
   <ul class={listClass}>
-    {#each content.education as work}
+    {#each data.education as work}
       <li class={listItemClass}>
         <Work {work} />
       </li>

@@ -1,23 +1,13 @@
 import adapterStatic from '@sveltejs/adapter-static'
-import preprocess from 'svelte-preprocess'
-import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
-
-const mode = process.env.NODE_ENV
-const dev = mode === 'development'
+import { vitePreprocess } from '@sveltejs/kit/vite'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
+  preprocess: vitePreprocess(),
   kit: {
     adapter: adapterStatic(),
-    vite: {
-      plugins: [vanillaExtractPlugin()],
-      server: { fs: { allow: ['static/build'] } },
-    },
-    prerender: { default: true },
+    // prerender: { default: true },
   },
-  preprocess: preprocess({
-    sourceMap: dev,
-  }),
 }
 
 export default config

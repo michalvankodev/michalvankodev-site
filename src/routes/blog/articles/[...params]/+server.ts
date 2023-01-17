@@ -2,9 +2,11 @@ import {
   getDropTakeFromPageParams,
   parseParams,
 } from '$lib/pagination/dropTakeParams'
-import { getBlogListing } from '../_content'
+import { json } from '@sveltejs/kit'
+import { getBlogListing } from '../../content'
+import type { RequestHandler } from './$types'
 
-export async function get({ params }) {
+export const GET = (async ({ params }) => {
   console.log('article-params', params)
   const handledParams = params.params === 'index' ? '' : params.params
   const { page = 1, pageSize = 7, ...filters } = parseParams(handledParams)
@@ -15,10 +17,7 @@ export async function get({ params }) {
   const paginationQuery = { ...paginationParams, filters }
   const filteredContents = await getBlogListing(paginationQuery)
 
-  return {
-    status: 200,
-    body: {
-      posts: filteredContents,
-    },
-  }
-}
+  return json({
+    posts: filteredContents,
+  })
+}) satisfies RequestHandler

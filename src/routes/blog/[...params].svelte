@@ -25,7 +25,7 @@
   import ArticleFooter from '../../components/blog/ArticleFooter.svelte'
   import Paginator from '../../components/paginator/Paginator.svelte'
   import { postListClass, seeAllClass } from './index.css'
-  import type { PostContent } from './_content'
+  import type { PostContent } from './content'
   import type { PaginationResult } from '$lib/pagination/pagination'
 
   export let posts: PaginationResult<PostContent>

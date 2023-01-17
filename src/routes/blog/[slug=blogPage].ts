@@ -2,7 +2,7 @@ import { readFile } from 'fs'
 import { promisify } from 'util'
 import fm from 'front-matter'
 import { parseField } from '../../markdown/parse-markdown'
-import type { PostAttributes } from './_content'
+import type { PostAttributes } from './content'
 import type { Request, Response } from '@sveltejs/kit'
 
 export interface SinglePost {

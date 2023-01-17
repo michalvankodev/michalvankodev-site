@@ -2,7 +2,7 @@
   import { horizontalBorderTopClass } from '$lib/styles/scoops.css'
 
   import { format } from 'date-fns'
-  import type { PostContent } from '../../routes/blog/_content'
+  import type { PostContent } from '../../routes/blog/content'
   import {
     footerClass,
     publishedClass,
