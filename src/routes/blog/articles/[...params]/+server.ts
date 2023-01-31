@@ -7,7 +7,6 @@ import { getBlogListing } from '../../content'
 import type { RequestHandler } from './$types'
 
 export const GET = (async ({ params }) => {
-  console.log('article-params', params)
   const handledParams = params.params === 'index' ? '' : params.params
   const { page = 1, pageSize = 7, ...filters } = parseParams(handledParams)
   const paginationParams = getDropTakeFromPageParams(
