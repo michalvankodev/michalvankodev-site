@@ -55,7 +55,7 @@ export async function getBlogListing(paginationQuery: PaginationQuery) {
   const filteredContents = pipe(
     sortBy<PostContent>(prop('date')),
     (items) => reverse(items),
-    filter<typeof contents[0]>((article) => article.published),
+    filter<(typeof contents)[0]>((article) => article.published),
     filterAndCount(paginationQuery)
   )(contents)
 
