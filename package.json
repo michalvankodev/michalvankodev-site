@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "start": "svelte-kit start",
     "test": "vitest",
-    "svgstore": "svgstore -o static/build/icons-sprite.svg src/svg/**.svg",
+    "svgstore": "svgstore -o src/svg/build/icons-sprite.svg src/svg/**.svg",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",

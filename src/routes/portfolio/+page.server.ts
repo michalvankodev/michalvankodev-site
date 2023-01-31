@@ -5,6 +5,8 @@ import marked from 'marked'
 import { parseField } from '../../markdown/parse-markdown'
 import type { PageServerLoad } from './$types'
 
+export const prerender = true
+
 export interface RecordAttributes {
   name: string
   description: string
@@ -78,5 +80,5 @@ export const load = (async () => {
     presentations,
   }
 
-  return response;
+  return response
 }) satisfies PageServerLoad

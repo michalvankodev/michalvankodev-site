@@ -6,6 +6,8 @@ import { error, json } from '@sveltejs/kit'
 import type { PostAttributes } from '../content'
 import type { PageServerLoad } from './$types'
 
+export const prerender = true
+
 export interface SinglePost {
   body: string
 }

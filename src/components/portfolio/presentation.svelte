@@ -26,7 +26,7 @@
 
   <section class="preview">
     <div class={presentationPreviewLinksClass}>
-      <a href="#presentation" on:click|preventDefault={togglePreviewVisible}
+      <a href="#presentations" on:click|preventDefault={togglePreviewVisible}
         >{previewVisible ? 'Close' : 'Open'} preview</a
       >
     </div>

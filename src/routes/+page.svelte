@@ -21,16 +21,16 @@
     <picture>
       <source
         media="(max-width: 550px)"
-        srcset={generateSrcSet('images/profile-portugal-portrait.jpg', {
+        srcset={generateSrcSet('/images/profile-portugal-portrait.jpg', {
           width: 500,
         })}
       />
       <img
         alt="Portrait"
-        srcset={generateSrcSet('images/profile-portugal-landscape.jpg', {
+        srcset={generateSrcSet('/images/profile-portugal-landscape.jpg', {
           width: 800,
         })}
-        src={getNFResize('images/profile-portugal-landscape.jpg', {
+        src={getNFResize('/images/profile-portugal-landscape.jpg', {
           width: 800,
         })}
       />

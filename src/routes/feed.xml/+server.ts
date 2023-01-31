@@ -1,6 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit'
 import { getFeed } from '../feed'
 
+export const prerender = true
 export const GET = (async ({ setHeaders }) => {
   const feed = await getFeed()
 
