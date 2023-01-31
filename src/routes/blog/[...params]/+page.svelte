@@ -1,39 +1,12 @@
-<script lang="ts" context="module">
-  import { parseParams } from '$lib/pagination/dropTakeParams'
-
-  /**
-   * @type {import('@sveltejs/kit').Load}
-   */
-  export async function load({ fetch, params }) {
-    const { page = 1, pageSize = 7, ...filters } = parseParams(params.params)
-    const articleResponse = await fetch(
-      `/blog/articles/${params.params ? params.params : 'index'}.json`
-    ).then((r) => r.json())
-
-    return {
-      props: {
-        posts: articleResponse.posts,
-        page: Number(page),
-        pageSize,
-        filters,
-      },
-    }
-  }
-</script>
-
 <script lang="ts">
-  import ArticleFooter from '../../components/blog/ArticleFooter.svelte'
-  import Paginator from '../../components/paginator/Paginator.svelte'
+  import ArticleFooter from '../../../components/blog/ArticleFooter.svelte'
+  import Paginator from '../../../components/paginator/Paginator.svelte'
   import { postListClass, seeAllClass } from './index.css'
-  import type { PostContent } from './content'
-  import type { PaginationResult } from '$lib/pagination/pagination'
+  import type { PageData } from './$types'
 
-  export let posts: PaginationResult<PostContent>
-  export let filters: Record<string, string>
-  export let page: number
-  export let pageSize: number
-
-  let totalPages = Math.ceil(posts.totalCount / pageSize)
+  export let data: PageData
+  let { posts, filters, page, pageSize } = data
+  $: ({ posts, filters, page, pageSize } = data)
 </script>
 
 <svelte:head>
