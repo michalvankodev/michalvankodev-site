@@ -1,7 +1,7 @@
 <script lang="ts">
   import ArticleFooter from '../../../components/blog/ArticleFooter.svelte'
   import Paginator from '../../../components/paginator/Paginator.svelte'
-  import { postListClass, seeAllClass } from './index.css'
+  import { postListClass, seeAllClass } from './page.css'
   import type { PageData } from './$types'
 
   export let data: PageData

@@ -9,7 +9,7 @@
     twitchIframeClass,
     twitchStreamPromoClass,
     welcomeNoteClass,
-  } from './index.css'
+  } from './page.css'
 </script>
 
 <svelte:head>

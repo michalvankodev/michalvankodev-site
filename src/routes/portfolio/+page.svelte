@@ -4,7 +4,7 @@
   import Presentation from '../../components/portfolio/presentation.svelte'
   import type { PageData } from './$types'
 
-  import { listClass, listItemClass, nameTagClass } from './index.css'
+  import { listClass, listItemClass, nameTagClass } from './page.css'
 
   export let data: PageData
 </script>

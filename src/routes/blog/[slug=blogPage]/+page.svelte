@@ -1,7 +1,7 @@
 <script lang="ts">
   import ArticleFooter from '../../../components/blog/ArticleFooter.svelte'
   import type { PageData } from './$types'
-  import { contentClass } from './blog.css'
+  import { contentClass } from './page.css'
 
   export let data: PageData
 </script>
