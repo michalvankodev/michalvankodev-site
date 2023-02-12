@@ -2,8 +2,8 @@ import { readFile } from 'fs'
 import { promisify } from 'util'
 import fm from 'front-matter'
 import { parseField } from '../../../markdown/parse-markdown'
-import { error, json } from '@sveltejs/kit'
-import type { PostAttributes } from '../content'
+import { error } from '@sveltejs/kit'
+import type { ArticleAttributes } from '$lib/content/articleContentListing'
 import type { PageServerLoad } from './$types'
 
 export const prerender = true
@@ -24,7 +24,7 @@ export const load = (async ({ params: { slug } }) => {
     throw e
   }
 
-  const parsedPost = fm<PostAttributes>(postSource)
+  const parsedPost = fm<ArticleAttributes>(postSource)
 
   const post = parseField<SinglePost>('body')({
     ...parsedPost.attributes,

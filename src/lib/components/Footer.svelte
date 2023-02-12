@@ -1,6 +1,6 @@
 <script lang="ts">
   import { format } from 'date-fns'
-  import type { PostContent } from 'src/routes/blog/content'
+  import type { ArticleContent } from '$lib/content/articleContentListing'
   import SvgIcon from './SvgIcon.svelte'
   import {
     boldClass,
@@ -22,7 +22,7 @@
     licenceText,
   } from './Footer.css'
 
-  export let latestPosts: PostContent[]
+  export let latestPosts: ArticleContent[]
 </script>
 
 <footer class="site-footer navigation-theme {siteFooterClass}">

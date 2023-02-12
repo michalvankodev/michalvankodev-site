@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-  <title>My blog @michalvankodev</title>
+  <title>Broadcasts @michalvankodev</title>
 </svelte:head>
 
 {#if posts.items.length === 0}
@@ -17,16 +17,14 @@
   <h1>
     {#if filters.tags}
       <em>{filters.tags}</em>
-    {:else}
-      Blog
     {/if}
-    posts
+    Broadcasts
   </h1>
   {#if filters.tags}
     <div class={seeAllClass}>
-      <a href="/blog">See all posts</a>
+      <a href="/broadcasts">See all broadcasts</a>
     </div>
   {/if}
 {/if}
 
-<ArticlePreviewList {...data} segment="blog" />
+<ArticlePreviewList {...data} segment="broadcasts" />

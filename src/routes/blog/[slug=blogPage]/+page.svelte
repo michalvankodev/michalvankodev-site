@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ArticleFooter from '../../../components/blog/ArticleFooter.svelte'
+  import ArticleFooter from '$lib/components/articles/ArticlePreviewFooter/ArticlePreviewFooter.svelte'
   import type { PageData } from './$types'
   import { contentClass } from './page.css'
 
@@ -15,4 +15,4 @@
 <div class="content {contentClass}">
   {@html data.body}
 </div>
-<ArticleFooter post={data} />
+<ArticleFooter article={data} segment="blog" />

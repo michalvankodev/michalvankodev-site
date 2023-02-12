@@ -10,12 +10,11 @@
 
   export const Divider = 'divider'
 
-  export let href: string
+  export let segment: string
   export let page: number
   export let pageSize: number
   export let totalCount: number
   export let filters: Record<string, string>
-  let paginatorPages: (number | typeof Divider)[]
 
   $: paginatorPages = getPaginatorPages({ page, pageSize, totalCount })
 </script>
@@ -23,7 +22,7 @@
 <ul class={listClass}>
   {#if page !== 1}
     <li class="{listItemClass} ">
-      <a class={pageLinkClass} href={createHref(href, filters, page - 1)}
+      <a class={pageLinkClass} href={createHref(segment, filters, page - 1)}
         >&lt;</a
       >
     </li>
@@ -35,7 +34,7 @@
       <li class="{listItemClass} {activePage}">{pageNumber}</li>
     {:else}
       <li class="{listItemClass} ">
-        <a class={pageLinkClass} href={createHref(href, filters, pageNumber)}
+        <a class={pageLinkClass} href={createHref(segment, filters, pageNumber)}
           >{pageNumber}</a
         >
       </li>
@@ -43,7 +42,7 @@
   {/each}
   {#if page !== paginatorPages.length}
     <li class="{listItemClass} ">
-      <a class={pageLinkClass} href={createHref(href, filters, page + 1)}
+      <a class={pageLinkClass} href={createHref(segment, filters, page + 1)}
         >&gt;</a
       >
     </li>

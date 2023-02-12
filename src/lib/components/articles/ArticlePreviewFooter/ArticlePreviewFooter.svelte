@@ -2,26 +2,27 @@
   import { horizontalBorderTopClass } from '$lib/styles/scoops.css'
 
   import { format } from 'date-fns'
-  import type { PostContent } from '../../routes/blog/content'
+  import type { ArticleContent } from '$lib/content/articleContentListing'
   import {
     footerClass,
     publishedClass,
     publishedLabelClass,
     tagsListClass,
     tagsListLiClass,
-  } from './ArticleFooter.css'
+  } from './ArticlePreviewFooter.css'
 
-  export let post: PostContent
+  export let segment: string
+  export let article: ArticleContent
 </script>
 
 <footer class="{footerClass} {horizontalBorderTopClass}">
   <div class="article-tags">
-    {#if post.tags.length > 0}
+    {#if article.tags.length > 0}
       <span class="lighten">Tags:</span>
       <ul class={tagsListClass}>
-        {#each post.tags as tag}
+        {#each article.tags as tag}
           <li class={tagsListLiClass}>
-            <a href="/blog/tags/{tag}">{tag}</a>
+            <a href="/{segment}/tags/{tag}">{tag}</a>
           </li>
         {/each}
       </ul>
@@ -29,8 +30,8 @@
   </div>
   <div class="created-at">
     <span class={publishedLabelClass}>Published on</span>
-    <time datetime={post.date} class={publishedClass}>
-      {format(new Date(post.date), "do MMMM',' y")}
+    <time datetime={article.date} class={publishedClass}>
+      {format(new Date(article.date), "do MMMM',' y")}
     </time>
   </div>
 </footer>

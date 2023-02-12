@@ -11,7 +11,7 @@ import {
 
 const { NODE_ENV } = process.env
 
-export interface PostAttributes {
+export interface ArticleAttributes {
   layout: string
   title: string
   published: boolean
@@ -20,7 +20,7 @@ export interface PostAttributes {
   tags: string[]
 }
 
-export interface PostContent extends PostAttributes {
+export interface ArticleContent extends ArticleAttributes {
   preview: string
   slug: string
   published: boolean
@@ -36,7 +36,7 @@ export async function getBlogListing(paginationQuery: PaginationQuery) {
         `_posts/blog/${file}`,
         'utf-8'
       )
-      const parsedAttributes = fm<PostAttributes>(fileContent)
+      const parsedAttributes = fm<ArticleAttributes>(fileContent)
 
       const lineOfTextRegExp = /^(?:\w|\[).+/gm
       const lines = parsedAttributes.body
@@ -53,7 +53,7 @@ export async function getBlogListing(paginationQuery: PaginationQuery) {
     })
   )
   const filteredContents = pipe(
-    sortBy<PostContent>(prop('date')),
+    sortBy<ArticleContent>(prop('date')),
     (items) => reverse(items),
     filter<(typeof contents)[0]>((article) => article.published),
     filterAndCount(paginationQuery)
