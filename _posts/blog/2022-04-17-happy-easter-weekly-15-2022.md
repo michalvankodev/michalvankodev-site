@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: "Happy Easter - Weekly #15-2022"
+segments:
+  - blog
 published: true
 date: 2022-04-17T08:05:05.489Z
 tags:

@@ -34,6 +34,7 @@ export function filterAndCount<Item extends Record<string, any>>({
   ...dropTakeParams
 }: PaginationQuery) {
   return function (items: Item[]) {
+    console.log(filters);
     const filterFunction = filters
       ? filterByPropContains<Item>(filters)
       : identity

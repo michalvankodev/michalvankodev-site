@@ -1,6 +1,10 @@
 ---
 layout: blog
 title: dev - Ide to ? copy
+segments:
+  - blog
+  - broadcasts
+  - cookbook
 published: true
 date: 2020-01-09T17:24:13.481Z
 thumbnail: /images/uploads/screenshot.gif

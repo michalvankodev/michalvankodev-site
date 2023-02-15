@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: Podcast episode about Agile development
+segments:
+  - blog
 published: true
 date: 2021-02-16T09:09:57.102Z
 tags:

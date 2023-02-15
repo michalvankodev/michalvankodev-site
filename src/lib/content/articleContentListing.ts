@@ -52,6 +52,7 @@ export async function getBlogListing(paginationQuery: PaginationQuery) {
       }
     })
   )
+  console.log(paginationQuery);
   const filteredContents = pipe(
     sortBy<ArticleContent>(prop('date')),
     (items) => reverse(items),

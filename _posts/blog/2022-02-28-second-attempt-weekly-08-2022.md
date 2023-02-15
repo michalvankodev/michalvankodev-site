@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: "Second attempt @ Weekly #08-2022"
+segments:
+  - blog
 published: true
 date: 2022-02-28T11:49:53.914Z
 tags:

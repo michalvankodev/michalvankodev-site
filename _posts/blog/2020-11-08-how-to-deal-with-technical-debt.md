@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: How to deal with technical debt
+segments:
+  - blog
 published: true
 date: 2020-11-08T15:57:18.797Z
 tags:

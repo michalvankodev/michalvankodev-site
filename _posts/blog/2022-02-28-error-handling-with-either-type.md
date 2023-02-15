@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: Error handling with Either<Type>
+segments:
+  - blog
 published: true
 date: 2022-02-28T11:30:54.195Z
 tags:

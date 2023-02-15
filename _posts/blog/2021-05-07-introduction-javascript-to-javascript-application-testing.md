@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: Introduction to JavaScript Application testing 
+segments:
+  - blog
 published: true
 date: 2021-05-07T14:44:57.102Z # update date accordingly
 tags:

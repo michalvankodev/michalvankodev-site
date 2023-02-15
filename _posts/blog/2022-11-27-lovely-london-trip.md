@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: Lovely London Trip
+segments:
+  - blog
 published: true
 date: 2022-11-27T19:49:09.204Z
 tags:

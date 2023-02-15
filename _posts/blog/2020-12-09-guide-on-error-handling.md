@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: Guide on error handling
+segments:
+  - blog
 published: true
 date: 2020-12-09T14:44:11.948Z
 tags:
