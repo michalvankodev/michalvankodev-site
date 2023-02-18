@@ -8,24 +8,13 @@ import {
   filterAndCount,
   type PaginationQuery,
 } from '$lib/pagination/pagination'
+import type { ArticleAttributes } from './articleContent'
+
+export interface ArticlePreviewAttributes extends ArticleAttributes {
+  preview: string
+}
 
 const { NODE_ENV } = process.env
-
-export interface ArticleAttributes {
-  layout: string
-  title: string
-  published: boolean
-  date: string
-  thumbnail: string
-  tags: string[]
-}
-
-export interface ArticleContent extends ArticleAttributes {
-  preview: string
-  slug: string
-  published: boolean
-}
-
 export async function getBlogListing(paginationQuery: PaginationQuery) {
   const files = await promisify(readdir)(`_posts/blog/`, 'utf-8')
   const filteredFiles = filterDevelopmentFiles(files)
@@ -52,9 +41,8 @@ export async function getBlogListing(paginationQuery: PaginationQuery) {
       }
     })
   )
-  console.log(paginationQuery);
   const filteredContents = pipe(
-    sortBy<ArticleContent>(prop('date')),
+    sortBy<ArticlePreviewAttributes>(prop('date')),
     (items) => reverse(items),
     filter<(typeof contents)[0]>((article) => article.published),
     filterAndCount(paginationQuery)

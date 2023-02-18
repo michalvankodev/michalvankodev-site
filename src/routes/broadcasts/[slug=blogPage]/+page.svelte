@@ -15,4 +15,4 @@
 <div class="content {contentClass}">
   {@html data.body}
 </div>
-<ArticleFooter article={data} segment="blog" />
+<ArticleFooter article={data} segment="broadcasts" />

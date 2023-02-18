@@ -3,7 +3,7 @@ import { promisify } from 'util'
 import fm from 'front-matter'
 // TODO Switch marked for unified
 import marked from 'marked'
-import { parseField } from '../../markdown/parse-markdown'
+import { parseField } from '$lib/markdown/parse-markdown'
 import type { PageServerLoad } from './$types'
 
 export const prerender = true

@@ -3,7 +3,7 @@ import {
   parseParams,
 } from '$lib/pagination/dropTakeParams'
 import { json } from '@sveltejs/kit'
-import { getBlogListing } from '$lib/content/articleContentListing'
+import { getBlogListing } from '$lib/articleContent/articleContentListing'
 import type { RequestHandler } from './$types'
 
 export const prerender = true
