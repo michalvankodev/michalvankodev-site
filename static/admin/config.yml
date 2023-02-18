@@ -25,7 +25,7 @@ collections:
         multiple: true
         options: 
           - { label: 'Blog', value: 'blog' }
-          - { label: 'Broadcasts', value:  'Broadcasts' }
+          - { label: 'Broadcasts', value:  'broadcasts' }
           - { label: 'Cookbook', value: 'cookbook' }
         default: ['blog']
       - {

@@ -19,3 +19,9 @@ globalStyle(`${contentClass} img:only-child`, {
   display: 'block',
   margin: '0 auto',
 })
+
+globalStyle(`${contentClass} .video-embed`, {
+  margin: '0 auto',
+  maxWidth: vars.width.image,
+  aspectRatio: vars.aspectRatio.monitor,
+})
