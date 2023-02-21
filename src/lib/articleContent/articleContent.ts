@@ -1,12 +1,13 @@
-import { error } from "@sveltejs/kit";
-import fm from "front-matter";
-import { readFile } from "fs";
-import { parseField } from "$lib/markdown/parse-markdown";
-import { promisify } from "util";
+import { error } from '@sveltejs/kit'
+import fm from 'front-matter'
+import { readFile } from 'fs'
+import { parseField } from '$lib/markdown/parse-markdown'
+import { promisify } from 'util'
 
 export interface ArticleAttributes {
   slug: string
   layout: string
+  segments: string[]
   title: string
   published: boolean
   date: string

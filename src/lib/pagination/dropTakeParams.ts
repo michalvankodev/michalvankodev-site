@@ -1,9 +1,9 @@
-import { splitEvery } from 'ramda'
+import { init, splitEvery } from 'ramda'
 
 export function parseParams(params: string) {
-  const splittedParams = params.split('/')
+  let splittedParams = params.split('/')
   if (splittedParams.length % 2 !== 0) {
-    return []
+    splittedParams = init(splittedParams)
   }
   const splits = splitEvery(2, splittedParams)
   return Object.fromEntries(splits)

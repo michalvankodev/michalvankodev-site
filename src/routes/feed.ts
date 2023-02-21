@@ -1,5 +1,5 @@
+import { getBlogListing } from '$lib/articleContent/articleContentListing'
 import { Feed } from 'feed'
-import { getBlogListing } from './blog/content'
 
 export async function getFeed() {
   const feed = new Feed({

@@ -8,7 +8,6 @@ import type { RequestHandler } from './$types'
 
 export const prerender = true
 export const GET = (async ({ params }) => {
-  console.log(params);
   const handledParams = params.params === 'index' ? '' : params.params
   const { page = 1, pageSize = 7, ...filters } = parseParams(handledParams)
   const paginationParams = getDropTakeFromPageParams(
