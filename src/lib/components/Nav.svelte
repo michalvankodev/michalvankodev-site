@@ -12,40 +12,48 @@
     portfolioPageNavigationLinksClass,
     selectedClass,
   } from './Nav.css'
-  import { page } from "$app/stores"
+  import { page } from '$app/stores'
 
   $: segment = $page.url.pathname
+
+  let links = [
+    {
+      label: 'Introduction',
+      url: '/',
+    },
+    {
+      label: 'Blog',
+      url: '/blog',
+    },
+    {
+      label: 'Broadcasts',
+      url: '/broadcasts',
+    },
+    // {
+    //   label: "Dev's Cookery",
+    //   url: '/cookery',
+    // },
+    {
+      label: 'Portfolio',
+      url: '/portfolio',
+    },
+  ]
 </script>
 
 <nav class={navigationClass}>
   <section class={navigationContentClass}>
     <ul class={navigationLinksClass}>
-      <li>
-        <a class={classNames({ [selectedClass]: segment === '/' })} href="/">
-          Introduction
-        </a>
-      </li>
-      <!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
-		     the blog data when we hover over the link or tap it on a touchscreen -->
-      <li>
-        <a
-          rel="prefetch"
-          class={classNames({ [selectedClass]: segment.startsWith('/blog') })}
-          href="/blog"
-        >
-          Blog
-        </a>
-      </li>
-      <li>
-        <a
-          class={classNames({
-            [selectedClass]: segment.startsWith('/portfolio'),
-          })}
-          href="/portfolio"
-        >
-          Portfolio
-        </a>
-      </li>
+      {#each links as link}
+        <li>
+          <a
+            rel="prefetch"
+            class={classNames({ [selectedClass]: segment === link.url })}
+            href={link.url}
+          >
+            {link.label}
+          </a>
+        </li>
+      {/each}
     </ul>
 
     <aside class="logo-section {logoSectionClass}">

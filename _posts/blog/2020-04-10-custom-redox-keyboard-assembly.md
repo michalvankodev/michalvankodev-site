@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: Custom Redox keyboard assembly
+segments:
+  - blog
 published: true
 date: 2020-04-10T15:16:54.820Z
 thumbnail: /images/uploads/img_20200301_171735.jpg

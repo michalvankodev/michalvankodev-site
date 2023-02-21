@@ -11,11 +11,13 @@ export function getPaginatorPages({
   page: number
   pageSize: number
   totalCount: number
-}) {
+}): (number | typeof Divider)[] {
   const maxLinksLength = 7
   const linksAroundActive = 2
   const totalPages = Math.ceil(totalCount / pageSize)
-  const daco = range(1, totalPages + 1).reduce((acc, link) => {
+  const shownPages = range(1, totalPages + 1).reduce<
+    (number | typeof Divider)[]
+  >((acc, link) => {
     const isFirst = link === 1
     const isLast = link === totalPages
     const isPageOnStart = page <= 3 && link < maxLinksLength
@@ -36,7 +38,7 @@ export function getPaginatorPages({
     return [...acc, link]
   }, [])
 
-  return daco
+  return shownPages
 }
 
 export function createHref(

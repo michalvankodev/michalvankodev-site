@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: First Weekly
+segments:
+  - blog
 published: true
 date: 2022-02-06T17:13:02.611Z
 tags:

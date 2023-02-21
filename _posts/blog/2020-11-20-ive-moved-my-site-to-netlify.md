@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: I've moved my site to Netlify
+segments:
+  - blog
 published: true
 date: 2020-11-20T20:35:05.230Z
 tags:

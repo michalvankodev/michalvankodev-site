@@ -1,6 +1,6 @@
 <script lang="ts">
   import { format } from 'date-fns'
-  import type { PostContent } from 'src/routes/blog/content'
+  import type { ArticlePreviewAttributes } from '$lib/articleContent/articleContentListing'
   import SvgIcon from './SvgIcon.svelte'
   import {
     boldClass,
@@ -22,7 +22,7 @@
     licenceText,
   } from './Footer.css'
 
-  export let latestPosts: PostContent[]
+  export let latestPosts: ArticlePreviewAttributes[]
 </script>
 
 <footer class="site-footer navigation-theme {siteFooterClass}">
@@ -61,7 +61,7 @@
       <ul class={listUlClass}>
         {#each latestPosts as post}
           <li class={listLiClass}>
-            <a rel="prefetch" href="/blog/{post.slug}">
+            <a rel="prefetch" href="/{post.segments[0]}/{post.slug}">
               <span>{post.title}</span>
               <time class="date {dateClass}" datetime={post.date}>
                 - {format(new Date(post.date), 'do MMM, yyyy')}

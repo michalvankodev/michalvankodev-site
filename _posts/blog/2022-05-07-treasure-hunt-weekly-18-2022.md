@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: 'Treasure hunt - Weekly #18-2022'
+segments:
+  - blog
 published: true
 date: 2022-05-07T08:35:51.818Z
 tags:

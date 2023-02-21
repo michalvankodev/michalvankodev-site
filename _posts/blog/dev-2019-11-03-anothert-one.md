@@ -1,6 +1,10 @@
 ---
 layout: blog
 title: dev - Anothert one
+segments:
+  - blog
+  - broadcasts
+  - cookbook
 published: true
 date: 2019-11-03T11:01:32.621Z
 thumbnail: /images/uploads/responzio.png

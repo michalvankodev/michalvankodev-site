@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: How I've built my website
+segments:
+  - blog
 published: true
 date: 2020-02-28T16:00:55.791Z
 thumbnail: /images/uploads/DSC01202.jpg

@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: Samsung Galaxy Buds+ Review
+segments:
+  - blog
 published: true
 date: 2020-06-07T22:58:18.797Z # TODO executable line for generating date
 tags:

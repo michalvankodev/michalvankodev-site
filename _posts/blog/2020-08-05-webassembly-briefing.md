@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: WebAssembly briefing
+segments:
+  - blog
 published: true
 date: 2020-08-05T15:38:18.797Z # TODO executable line for generating date
 tags:

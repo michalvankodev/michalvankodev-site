@@ -1,12 +1,10 @@
 <script lang="ts">
-  import ArticleFooter from '../../../components/blog/ArticleFooter.svelte'
-  import Paginator from '../../../components/paginator/Paginator.svelte'
-  import { postListClass, seeAllClass } from './page.css'
   import type { PageData } from './$types'
+  import ArticlePreviewList from '$lib/components/articles/ArticlePreviewList/ArticlePreviewList.svelte'
+  import { seeAllClass } from '$lib/components/articles/ArticlePreviewList/ArticlePreviewList.css'
 
   export let data: PageData
-  let { posts, filters, page, pageSize } = data
-  $: ({ posts, filters, page, pageSize } = data)
+  $: ({ posts, filters } = data)
 </script>
 
 <svelte:head>
@@ -30,36 +28,5 @@
     </div>
   {/if}
 {/if}
-<header>
-  <Paginator
-    href="blog"
-    {page}
-    {pageSize}
-    {filters}
-    totalCount={posts.totalCount}
-  />
-</header>
-<ul class="post-list {postListClass}">
-  {#each posts.items as post (post.slug)}
-    <li>
-      <article>
-        <header>
-          <h2>
-            <a rel="prefetch" href="/blog/{post.slug}">{post.title}</a>
-          </h2>
-        </header>
-        {@html post.preview}
-      </article>
-      <ArticleFooter {post} />
-    </li>
-  {/each}
-</ul>
-<footer>
-  <Paginator
-    href="blog"
-    {page}
-    {pageSize}
-    {filters}
-    totalCount={posts.totalCount}
-  />
-</footer>
+
+<ArticlePreviewList {...data} segment="blog" />

@@ -17,7 +17,10 @@ export function dropAndTake<Item>({ offset = 0, limit = Infinity }) {
   ) => Item[]
 }
 
-export function filterByPropContains<Item>(filters: Record<string, string>) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function filterByPropContains<Item extends Record<string, any>>(
+  filters: Record<string, string>
+) {
   return function (items: Item[]) {
     return items.filter((item) => {
       return Object.entries(filters).every(([fieldName, value]) =>
@@ -27,7 +30,8 @@ export function filterByPropContains<Item>(filters: Record<string, string>) {
   }
 }
 
-export function filterAndCount<Item>({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function filterAndCount<Item extends Record<string, any>>({
   filters,
   ...dropTakeParams
 }: PaginationQuery) {

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Work from '../../components/portfolio/work.svelte'
-  import Project from '../../components/portfolio/project.svelte'
-  import Presentation from '../../components/portfolio/presentation.svelte'
+  import Work from './components/work.svelte'
+  import Project from './components/project.svelte'
+  import Presentation from './components/presentation.svelte'
   import type { PageData } from './$types'
 
   import { listClass, listItemClass, nameTagClass } from './page.css'

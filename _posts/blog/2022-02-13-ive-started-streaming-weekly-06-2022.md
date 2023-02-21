@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: "I've started streaming - Weekly #06-2022 "
+segments:
+  - blog
 published: true
 date: 2022-02-13T19:39:33.578Z
 tags:

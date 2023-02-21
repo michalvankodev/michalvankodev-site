@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: Logging recommendations
+segments:
+  - blog
 published: true
 date: 2020-12-18T14:39:53.533Z
 tags:

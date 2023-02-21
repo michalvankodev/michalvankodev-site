@@ -1,6 +1,8 @@
 ---
 layout: blog
 title: "Coming from DevBreak - Weekly #11-2022"
+segments:
+  - blog
 published: true
 date: 2022-03-19T21:22:35.128Z
 tags:

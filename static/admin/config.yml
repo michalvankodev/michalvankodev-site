@@ -19,6 +19,15 @@ collections:
     fields: # The fields for each document, usually in front matter
       - { label: 'Layout', name: 'layout', widget: 'hidden', default: 'blog' }
       - { label: 'Title', name: 'title', widget: 'string' }
+      - label: 'Segments'
+        name: 'segments'
+        widget: 'select'
+        multiple: true
+        options: 
+          - { label: 'Blog', value: 'blog' }
+          - { label: 'Broadcasts', value:  'broadcasts' }
+          - { label: 'Cookbook', value: 'cookbook' }
+        default: ['blog']
       - {
           label: 'Published',
           name: 'published',
