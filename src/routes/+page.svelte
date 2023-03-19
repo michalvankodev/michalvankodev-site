@@ -59,6 +59,7 @@
       <iframe
         title="My twitch channel"
         src="https://player.twitch.tv/?channel=michalvankodev&parent=michalvanko.dev&parent=localhost&autoplay=false"
+        loading="lazy"
         frameborder="0"
         scrolling="no"
         allowfullscreen
