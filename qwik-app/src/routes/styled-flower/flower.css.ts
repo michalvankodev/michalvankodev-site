@@ -1,10 +1,12 @@
-import { style, styled } from 'styled-vanilla-extract/qwik';
+import { style } from '@vanilla-extract/css'
+import { styled } from 'styled-vanilla-extract/qwik'
+import { sprinkles } from '../../styles/sprinkles.css'
 
-export const header = style({});
+export const header = style({})
 
-export const pride = style({});
+export const pride = style({})
 
-export const odd = style({});
+export const odd = sprinkles({ flex: '1' })
 
 export const Host = styled.div`
   display: grid;
@@ -23,11 +25,11 @@ export const Host = styled.div`
   height: 500px;
 
   contain: strict;
-`;
+`
 
 export const Range = styled.input`
   width: 100%;
-`;
+`
 
 export const Square = styled.div`
   --size: calc(40px + var(--index) * var(--size-step));
@@ -35,7 +37,9 @@ export const Square = styled.div`
   display: block;
   width: var(--size);
   height: var(--size);
-  transform: rotateZ(calc(var(--rotation) * var(--state) * (var(--center) - var(--index))));
+  transform: rotateZ(
+    calc(var(--rotation) * var(--state) * (var(--center) - var(--index)))
+  );
   transition-property: transform, border-color;
   transition-duration: 5s;
   transition-timing-function: ease-in-out;
@@ -50,7 +54,9 @@ export const Square = styled.div`
   contain: strict;
 
   &${odd} {
-    --luminance: calc(1 - calc(calc(var(--index) * var(--odd-color-step)) / 256));
+    --luminance: calc(
+      1 - calc(calc(var(--index) * var(--odd-color-step)) / 256)
+    );
     background: rgb(
       calc(172 * var(--luminance)),
       calc(127 * var(--luminance)),
@@ -76,4 +82,4 @@ export const Square = styled.div`
   ${pride} &:nth-child(12n + 11) {
     background: #760089;
   }
-`;
+`
