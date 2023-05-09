@@ -34,6 +34,7 @@ export const navigationLinksClass = sprinkles({
   padding: 'none',
   display: 'flex',
   flex: '1',
+  flexWrap: 'wrap',
 })
 
 export const logoSectionClass = sprinkles({
