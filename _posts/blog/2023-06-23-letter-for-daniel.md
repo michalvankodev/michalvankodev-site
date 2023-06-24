@@ -11,9 +11,11 @@ tags:
 ---
 It's 18. 06. 2023 01:00 just after midnight. Your mother had some ache in her back for a few hours but she just wanted to get some sleep before she brings you into this world. After a few hours of talking some sense to her, I made her come to the hospital with me. Nurses are smiling at us so that we look very happy and not like she is having pain. We will see.
 
+![Your last moments in your mother's womb]( "Your last moments in your mother's womb")
+
 Your due date was just yesterday. For the whole day, people were asking us what was going on and nothing was going on. You've decided to cause some pain just before we want to go to sleep.
 
-Your mom is now being inspected while I wait outside. I hope she will let me know whether I can go home. I'll probably not go to sleep even if I should. I cannot wait for you to come to this world. You are coming to the happiest couple I know of. We are very much in love with your mother. We want to make our love even bigger by sharing it with someone special like you. You will always be special to us.
+Your mom is now being inspected while I wait outside. I hope she will let me know whether I can go home. I'll probably not be able to fall asleep even if I should. I cannot wait for you to come to this world. You are coming to the happiest couple I know of. We are very much in love with your mother. We want to make our love even bigger by sharing it with someone special like you. You will always be special to us.
 
 I still cannot believe that we have made it to this point in life.
 
@@ -23,11 +25,15 @@ I don't have an idea when you will be able to find this letter. Read it. And bel
 You are coming into this world into a very happy and loving family. Nothing is perfect but at the same time, it cannot be better. All of your grandparents are looking forward to helping us take the best care of you. Your cousin, Timea, is just 1 year old so I don't know how she is going to appreciate you stealing the spotlight from her. I believe you two will create a great team together.
 We are not yet decided on other siblings. We would both like to have more kids. We are just hesitant. We don't know whether we are capable of taking... (finish this sentence).
 
+![Our first moment together](/images/uploads/20230618_143334crop.jpg "Our first moment together")
+
 You made it to this world, yesterday. Congratulations. You don't have an idea how lucky you are. You're very healthy as well as your mom. I didn't plan on being present during your birth. I usually get dizzy just talking about injuries and surgeries. I just went in because I wanted to support your mom. I've never seen anyone experiencing this much pain and I admire every woman who had to go through this. It was a life-changing experience for me. It wasn't very pretty. There was blood and many different fluids. But seeing you come out healthy right into your mother's arms was the most heartwarming experience I've ever seen. Your mom was so happy. She immediately said you have her eyes. 
-Just right after we were celebrating you with the whole staff I got to spend some time just with you. You were so calm. I couldn't believe that just right after being born, you already trusted me and been feeling cozy around me.
+Just right after we were celebrating you with the whole staff I got to spend some time just with you. You were so calm. I couldn't believe that just right after being born, you already trusted me and you've been feeling cozy around me.
 You are very lucky. Not that many kids are born into loving families. Remember - You are special.
 
 Today, your grandparents are coming for a visit. They are so so excited. Every one of them. I bet that they get you many gifts. Happy one day to you.
+
+![Your grandmother couldn't wait to hold you in her arms](/images/uploads/20230619_142638.jpg "Your grandmother couldn't wait to hold you in her arms")
 
 I just can't comprehend how fortunate you are. Thinking of how cringy you will feel when you will be reading this in your teenage. But don't worry, you will get over it. 
 
@@ -37,3 +43,5 @@ Words can sometimes hurt but not all words are true. It's hard to distinguish th
 Don't believe someone just their words. Believe in actions. And if you have a hard time thinking who to believe, look at their actions and see whether they are trying to help somebody or they are trying to hurt someone. Very often they will just follow their agenda believing they are doing good but do they? Throughout the centuries, people have wanted to rule over others. They found many creative ways. They didn't have bright minds that were able to explain how the physics of this universe works. They invented stories that will help them not to focus on those and push their ideals onto others. Many many times are proven wrong but so eager to fight for their ideals that their stories are still considered true because they are afraid to admit that they have been living a lie and sacrificing their time for something that is just another storyteller's idea. Even if everyone believes that something is the truth, only proof can prove it.
 
 You've been so healthy that you've been released home early. Your first day at home has been great. You thought me that 5 AM is a great time to wake up. The sun is already up and shining so we can shine as well. Your whole family loves you. I love your Mom. I love You. Thank you for coming into our lives. We will always love you.
+
+![Your first day at home. You shared the happiness with us.](/images/uploads/20230621_204051.jpg "Your first day at home. You shared the happiness with us.")
