@@ -4,14 +4,14 @@ title: Letter for Daniel
 segments:
   - blog
 published: true
-date: 2023-06-23T08:44:12.659Z
+date: 2023-06-24T16:34:45.527Z
 tags:
   - News
   - Personal
 ---
 It's 18. 06. 2023 01:00 just after midnight. Your mother had some ache in her back for a few hours but she just wanted to get some sleep before she brings you into this world. After a few hours of talking some sense to her, I made her come to the hospital with me. Nurses are smiling at us so that we look very happy and not like she is having pain. We will see.
 
-![Your last moments in your mother's womb]( "Your last moments in your mother's womb")
+![Your last moments in your mother's womb](/images/uploads/img_9715-rotated.jpg "Your last moments in your mother's womb")
 
 Your due date was just yesterday. For the whole day, people were asking us what was going on and nothing was going on. You've decided to cause some pain just before we want to go to sleep.
 
