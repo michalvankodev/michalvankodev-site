@@ -27,7 +27,7 @@ export const mainContentClass = sprinkles({
 // TODO Create atomic classes for maxWidhts and use them everywhere in the content
 
 globalStyle(
-  `${mainContentClass} h1, ${mainContentClass} h2, ${mainContentClass} h3, ${mainContentClass} h4, ${mainContentClass} h5, ${mainContentClass} h6, ${mainContentClass} p, ${mainContentClass} ul, ${mainContentClass} ol, ${mainContentClass} figure, ${mainContentClass} img, ${mainContentClass} blockquote, ${mainContentClass} iframe:not(.embed), ${mainContentClass} footer`,
+  `${mainContentClass} h1, ${mainContentClass} h2, ${mainContentClass} h3, ${mainContentClass} h4, ${mainContentClass} h5, ${mainContentClass} h6, ${mainContentClass} p, ${mainContentClass} ul, ${mainContentClass} ol, ${mainContentClass} figure, ${mainContentClass} img, ${mainContentClass} blockquote, ${mainContentClass} iframe:not(.embed), ${mainContentClass} footer, ${mainContentClass} table`,
   {
     maxWidth: vars.width.layoutMax,
     marginLeft: 'auto',
@@ -52,6 +52,12 @@ globalStyle(`${mainContentClass} img`, {
   maxWidth: vars.width.parent,
   borderRadius: 5,
   boxShadow: vars.boxShadow.contentBoxShadow,
+})
+
+globalStyle(`${mainContentClass} table`, {
+  maxWidth: vars.width.image,
+  fontSize: vars.fontSize.sm,
+  lineHeight: vars.lineHeight['3x'],
 })
 
 globalStyle(`${mainContentClass} figure`, {
