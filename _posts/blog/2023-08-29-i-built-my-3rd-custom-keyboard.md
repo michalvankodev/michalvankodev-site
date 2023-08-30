@@ -16,11 +16,17 @@ When I was young and still had time to play games on a regular basis I got mysel
 A few years later I found the [r/MechanicalKeyboards](https://www.reddit.com/r/MechanicalKeyboards/) subreddit. I was amazed by the collection of custom-made keyboards and the variety of switches and other customization that is available.
 I decided to **make my own split orthodox Redox keyboard** with **very light switches** so I could type fast. At least that's what I was thinking, but after a few days, I realized that those switches were a mistake. There are so many articles on the internet about how to pick switches, but I guess **it's just finding what is good for each person by experience**.
 
+![My custom redox keyboard](/images/uploads/img_20200301_121954.jpg "My custom redox keyboard")
+
 At the same time, **I've switched to the [Colemak layout](https://colemak.com/)**. This one was perhaps the **best choice that I could make** at that time. My wrists were hurting and the ease of typing words with much less friction really helps out today. The time of struggle was definitely worth it.
 There is this new layout on the block called [Workman](https://workmanlayout.org/), where the author is going through some tests calculating various metrics on written novels. It can be easily deductible that no matter what layout you choose, it will save you many many meters of travel in comparison to QWERTY.
 
 While I was using my Redox for a few months I got to know what is the potential of [QMK](https://docs.qmk.fm/#/). I figured that I didn't need that many keys on the keyboard. I was searching for a minimalistic keyboard and setup and I found Redox's smaller cousin [Minidox](https://github.com/That-Canadian/MiniDox_PCB).
 I've opted for a 36-key layout with 2 keys dedicated to switching between 4 different layouts. It was a very nice experience. I was amazed that **I could fit a full keyboard functionality with media keys onto a 36-key keyboard**. I've opted for brown switches back again. I didn't want to risk making high noise while writing on a keyboard and I was missing the tactile feel when you press the key.
+
+![My Minidox keyboard](/images/uploads/20210420_155540_03.jpg "My Minidox keyboard")
+
+
 
 The only downside of these keyboards was that they had very fragile USB ports on the ProMicros. I was very hesitant whether I should take them with me to the office or on the road. It happened multiple times that I had to solder out the ProMicros and substitute them with a new part. The experience of desoldering a microcontroller from a PCB is horrible.
 
@@ -63,10 +69,20 @@ Another customization is that while the shield is designed for a wired connectio
 | KAILH BOX JADE Switches                               | 40          | 24 EUR  | [🛒](https://www.eloquentclicks.com/product/novelkeys-x-kailh-box-jade-switch/)                                    |
 | nice!nano V2 Wireless Controller                      | 2           | 52 EUR  | [🛒](https://42keebs.eu/shop/parts/controllers/nice-nano-v2-wireless-controller/)                                  |
 
+I attempted to print the keyboard shield myself, but I've been only successful in printing the tents. I had to ask my friend to print me the upper body of the Skeletyl. The shield can be easily printed in a PLA so it is really cheap. I can sum up the costs to 10 EUR for the parts.
+
+![3D printed shield of the Skeletyl](/images/uploads/20230223_083626-1-.jpg "3D printed shield of the Skeletyl")
+
+
+
 ## Assembly
 
 The assembly was done on [my twitch stream](https://twitch.tv/michalvankodev) in the span of a single weekend. It took perhaps around **7 hours in total**.
 I've managed to solder everything together. The hardest part was to take off the isolant of the cables. I hurt my fingers a bit. 
+
+![Wiring of switches and diodes](/images/uploads/20230226_130037.jpg "Wiring of switches and diodes")
+
+
 
 At first, it seemed that the keyboard would not work. It was not responding at all and I was tired already to debug it that night.
 I almost didn't sleep as I was browsing through all the possible mistakes I could've made. I stumbled on a *reddit* thread where someone mentioned that the issue might also be a **different way of wiring the grid**.
