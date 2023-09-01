@@ -14,6 +14,11 @@ export const profilePicClass = sprinkles({
   marginY: 'none',
 })
 
+export const profilePicImgClass = style({
+  aspectRatio: "auto 800 / 709",
+  maxHeight: '66vh'
+})
+
 export const mottoClass = sprinkles({
   textAlign: 'center',
   marginX: 'auto',

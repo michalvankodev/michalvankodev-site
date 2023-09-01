@@ -4,6 +4,7 @@
     citeOwnerClass,
     mottoClass,
     profilePicClass,
+    profilePicImgClass,
     twitchAsideClass,
     twitchEmbedClass,
     twitchIframeClass,
@@ -19,14 +20,9 @@
 <header class="index-header">
   <figure class="profile-pic {profilePicClass}">
     <picture>
-      <source
-        media="(max-width: 550px)"
-        srcset={generateSrcSet('/images/profile-portugal-portrait.jpg', {
-          width: 500,
-        })}
-      />
       <img
         alt="Portrait"
+        class="{profilePicImgClass}"
         srcset={generateSrcSet('/images/profile-portugal-landscape.jpg', {
           width: 800,
         })}
