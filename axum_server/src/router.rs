@@ -1,11 +1,11 @@
-use crate::post_parser::parse_post;
+use crate::{pages::index::render_index, post_parser::parse_post};
 use axum::{extract::MatchedPath, http::Request, routing::get, Router};
 use tower_http::trace::TraceLayer;
 use tracing::info_span;
 
 pub fn get_router() -> Router {
     Router::new()
-        .route("/", get(|| async { "Hello, World!" }))
+        .route("/", get(render_index))
         .route("/blog/:post_id", get(parse_post))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {

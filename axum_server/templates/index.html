@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Introduction{% endblock %}
+
+{% block content %}
+<header class="index-header">
+  <figure class="profile-pic">
+    <picture>
+      <img
+        alt="Portrait"
+        {# TODO generate `srcset` for optimal image #}
+        {# TODO Take a new photo #}
+        src="/images/profile-portugal-landscape.jpg"
+      />
+    </picture>
+  </figure>
+
+  <p class="motto">
+    <cite>“Let your ambition carry you.”</cite>
+    <span class="cite-owner">- La Flame</span>
+  </p>
+</header>
+
+<p>
+  Hey, welcome to my personal website. My name is
+  <strong>Michal&nbsp;Vanko</strong>
+  and I'm a
+  <em> <a href="https://en.wikipedia.org/wiki/Programmer">programmer</a> </em>
+  . I'll try to share some stories and opinions about things that I'm interested
+  in.
+</p>
+
+<section class="twitch-stream-promo">
+  <h2>Follow my twitch stream</h2>
+  <div class="twitch-embed">
+    <div class="twitch-video">
+      <iframe
+        title="My twitch channel"
+        src="https://player.twitch.tv/?channel=michalvankodev&parent=michalvanko.dev&parent=localhost&autoplay=false"
+        loading="lazy"
+        frameborder="0"
+        scrolling="no"
+        allowfullscreen
+        height="100%"
+        width="100%"
+        class="embed"
+      />
+    </div>
+    <aside>
+      Come hang out and chat with me <strong>every Tuesday and Thursday</strong>
+      afternoon central Europe time. I stream working on my side-projects and talking
+      anything about the developer lifestyle.
+    </aside>
+  </div>
+</section>
+{% endblock %}

@@ -1,8 +1,10 @@
 use axum;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+mod pages;
 mod post_parser;
 mod router;
+// mod template;
 
 #[tokio::main]
 async fn main() {
