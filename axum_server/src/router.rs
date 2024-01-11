@@ -1,4 +1,4 @@
-use crate::{pages::index::render_index, post_parser::parse_post};
+use crate::pages::{index::render_index, post::render_post};
 use axum::{extract::MatchedPath, http::Request, routing::get, Router};
 use tower_http::trace::TraceLayer;
 use tracing::info_span;
@@ -6,7 +6,7 @@ use tracing::info_span;
 pub fn get_router() -> Router {
     Router::new()
         .route("/", get(render_index))
-        .route("/blog/:post_id", get(parse_post))
+        .route("/blog/:post_id", get(render_post))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
                 // Log the matched route's path (with placeholders not filled in).

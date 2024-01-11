@@ -1,11 +1,11 @@
-use axum::{extract::Path, http::StatusCode, response::Html};
+use axum::http::StatusCode;
 use chrono::{DateTime, Utc};
 use gray_matter::{engine::YAML, Matter};
 use markdown::{to_html_with_options, CompileOptions, Constructs, Options, ParseOptions};
-use serde::{Deserialize, Deserializer};
+use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 use tokio::fs;
 
-fn deserialize_date<'de, D>(deserializer: D) -> Result<DateTime<Utc>, D::Error>
+pub fn deserialize_date<'de, D>(deserializer: D) -> Result<DateTime<Utc>, D::Error>
 where
     D: Deserializer<'de>,
 {
@@ -19,20 +19,14 @@ where
     }
 }
 
-#[derive(Deserialize, Debug)]
-pub struct Metadata {
-    pub layout: String,
-    pub title: String,
-    pub segments: Vec<String>,
-    pub published: bool,
-    #[serde(deserialize_with = "deserialize_date")]
-    pub date: DateTime<Utc>,
-    pub thumbnail: String,
-    pub tags: Vec<String>,
+pub struct ParseResult<Metadata> {
+    pub content: String,
+    pub metadata: Metadata,
 }
 
-pub async fn parse_post(Path(post_id): Path<String>) -> Result<Html<String>, StatusCode> {
-    let path = format!("../_posts/blog/{}.md", post_id);
+pub async fn parse_post<'de, Metadata: DeserializeOwned>(
+    path: &str,
+) -> Result<ParseResult<Metadata>, StatusCode> {
     let contents = fs::read_to_string(path).await;
 
     let raw_content = match contents {
@@ -58,10 +52,7 @@ pub async fn parse_post(Path(post_id): Path<String>) -> Result<Html<String>, Sta
         ..Default::default()
     };
 
-    let matter = Matter::<YAML>::new();
-    let _metadata = matter.parse_with_struct::<Metadata>(&raw_content);
     let parsed = to_html_with_options(&raw_content, &markdown_options);
-
     let content = match parsed {
         Err(reason) => {
             tracing::error!(reason);
@@ -70,5 +61,19 @@ pub async fn parse_post(Path(post_id): Path<String>) -> Result<Html<String>, Sta
         Ok(content) => content,
     };
 
-    return Ok(Html(content));
+    let matter = Matter::<YAML>::new();
+    let parsed_metadata = matter.parse_with_struct::<Metadata>(&raw_content);
+
+    let metadata = match parsed_metadata {
+        None => {
+            tracing::error!("Failed to parse metadata");
+            return Err(StatusCode::INTERNAL_SERVER_ERROR);
+        }
+        Some(metadata) => metadata,
+    };
+
+    return Ok(ParseResult {
+        content,
+        metadata: metadata.data,
+    });
 }
