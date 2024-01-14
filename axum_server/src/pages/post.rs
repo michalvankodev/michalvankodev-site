@@ -13,7 +13,7 @@ pub struct PostMetadata {
     pub published: bool,
     #[serde(deserialize_with = "deserialize_date")]
     pub date: DateTime<Utc>,
-    pub thumbnail: String,
+    pub thumbnail: Option<String>,
     pub tags: Vec<String>,
 }
 

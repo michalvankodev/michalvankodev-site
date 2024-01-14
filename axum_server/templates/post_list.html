@@ -1,0 +1,21 @@
+{% if posts.len() == 0 %}
+<p class="no-posts">You've found void in the space.</p>
+{% else %}
+<h1>{# if filters.tags #} {# <em>{filters.tags}</em> #} Blog posts</h1>
+
+{#if filters.tags#}
+<div class="{seeAllClass}">
+  <a href="/blog">See all posts</a>
+</div>
+{% endif%}
+
+<ul>
+  {% for post in posts %}
+  <li>
+    {# <ArticlePreviewCard {article} {segment} /> #} {#
+    <ArticleFooter {article} {segment} /> #} {{post.metadata.title}}
+  </li>
+  {% endfor %}
+</ul>
+
+{# <ArticlePreviewList {...data} segment="blog" /> #}
