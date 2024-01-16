@@ -7,6 +7,7 @@ pub fn get_router() -> Router {
     Router::new()
         .route("/", get(render_index))
         .route("/blog", get(render_post_list))
+        .route("/blog/tags/:tag", get(render_post_list))
         .route("/blog/:post_id", get(render_post))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {

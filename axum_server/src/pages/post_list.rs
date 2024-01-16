@@ -1,5 +1,5 @@
 use askama::Template;
-use axum::http::StatusCode;
+use axum::{extract::Path, http::StatusCode};
 use tokio::fs::read_dir;
 use tracing::info;
 
@@ -11,10 +11,13 @@ use super::post::PostMetadata;
 #[template(path = "post_list.html")]
 pub struct PostListTemplate {
     pub posts: Vec<ParseResult<PostMetadata>>,
-    // TODO tags and pagination
+    pub tag: Option<String>,
 }
 
-pub async fn render_post_list() -> Result<PostListTemplate, StatusCode> {
+pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTemplate, StatusCode> {
+    // I will forget what happens here in a week. But essentially it's pattern matching and shadowing
+    let tag = tag.map(|Path(tag)| tag);
+
     let path = "../_posts/blog/";
     let mut dir = read_dir(path)
         .await
@@ -33,7 +36,22 @@ pub async fn render_post_list() -> Result<PostListTemplate, StatusCode> {
         posts.push(post);
     }
 
-    Ok(PostListTemplate { posts })
+    let posts = match &tag {
+        Some(tag) => posts
+            .into_iter()
+            .filter(|post| {
+                post.metadata
+                    .tags
+                    .iter()
+                    .map(|post_tag| post_tag.to_lowercase())
+                    .collect::<String>()
+                    .contains(&tag.to_lowercase())
+            })
+            .collect(),
+        None => posts,
+    };
+
+    Ok(PostListTemplate { posts, tag })
 }
 
 // TODO Do we want pagination or not? Ask designer
