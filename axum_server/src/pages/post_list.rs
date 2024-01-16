@@ -16,18 +16,12 @@ pub struct PostListTemplate {
 
 pub async fn render_post_list() -> Result<PostListTemplate, StatusCode> {
     let path = "../_posts/blog/";
-    let dir = read_dir(path).await;
+    let mut dir = read_dir(path)
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
     let mut posts: Vec<ParseResult<PostMetadata>> = Vec::new();
 
-    let mut files = match dir {
-        Err(_reason) => {
-            // TODO find the real reason
-            return Err(StatusCode::INTERNAL_SERVER_ERROR);
-        }
-        Ok(files) => files,
-    };
-
-    while let Some(file) = files
+    while let Some(file) = dir
         .next_entry()
         .await
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?

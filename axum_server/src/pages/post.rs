@@ -21,7 +21,7 @@ pub struct PostMetadata {
 #[template(path = "post.html")]
 pub struct PostTemplate {
     pub title: String,
-    pub content: String,
+    pub body: String,
 }
 
 pub async fn render_post(Path(post_id): Path<String>) -> Result<PostTemplate, StatusCode> {
@@ -29,6 +29,6 @@ pub async fn render_post(Path(post_id): Path<String>) -> Result<PostTemplate, St
     let parsed = parse_post::<PostMetadata>(&path).await?;
     Ok(PostTemplate {
         title: parsed.metadata.title,
-        content: parsed.content,
+        body: parsed.body,
     })
 }
