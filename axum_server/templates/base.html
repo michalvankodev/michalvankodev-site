@@ -31,7 +31,8 @@
     <link rel="icon" type="image/png" href="/m-logo-192.png" />
   </head>
   <body>
-    {% block content %} Placeholder {% endblock %}
-    {# footer, should be not dependant on the each individual handler but it should have it's own handler #}
+    {% block content %} Placeholder {% endblock %} {# footer, should be not
+    dependant on the each individual handler but it should have it's own handler
+    #} {{ site_footer|safe }}
   </body>
 </html>

@@ -1,8 +1,9 @@
-use askama::filters::format;
 use axum;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+mod components;
 mod pages;
+mod post_list;
 mod post_parser;
 mod router;
 // mod template;

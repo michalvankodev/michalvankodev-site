@@ -3,7 +3,10 @@ use axum::{extract::Path, http::StatusCode};
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
 
-use crate::post_parser::{deserialize_date, parse_post};
+use crate::{
+    components::site_footer::{render_site_footer, SiteFooter},
+    post_parser::{deserialize_date, parse_post},
+};
 
 #[derive(Deserialize, Debug)]
 pub struct PostMetadata {
@@ -22,13 +25,20 @@ pub struct PostMetadata {
 pub struct PostTemplate {
     pub title: String,
     pub body: String,
+    pub site_footer: SiteFooter,
 }
 
 pub async fn render_post(Path(post_id): Path<String>) -> Result<PostTemplate, StatusCode> {
+    let site_footer = tokio::spawn(render_site_footer());
     let path = format!("../_posts/blog/{}.md", post_id);
     let parsed = parse_post::<PostMetadata>(&path).await?;
+
+    let site_footer = site_footer
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
     Ok(PostTemplate {
         title: parsed.metadata.title,
         body: parsed.body,
+        site_footer,
     })
 }
