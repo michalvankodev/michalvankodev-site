@@ -37,7 +37,7 @@ pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTempl
         posts.push(post);
     }
 
-    let posts = match &tag {
+    let mut posts = match &tag {
         Some(tag) => posts
             .into_iter()
             .filter(|post| {
@@ -51,6 +51,16 @@ pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTempl
             .collect(),
         None => posts,
     };
+
+    if std::env::var("TARGET")
+        .unwrap_or_else(|_| "DEV".to_owned())
+        .eq("PROD")
+    {
+        posts = posts
+            .into_iter()
+            .filter(|post| !post.slug.starts_with("dev"))
+            .collect()
+    }
 
     Ok(PostListTemplate {
         title: "Posts".to_owned(),

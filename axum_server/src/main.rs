@@ -1,3 +1,4 @@
+use askama::filters::format;
 use axum;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -22,9 +23,10 @@ async fn main() {
     // build our application with a single route
     let app = router::get_router();
     // run our app with hyper, listening globally on port 3080
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3080").await.unwrap();
+    let port = std::option_env!("PORT").unwrap_or("3080");
+    let addr = format!("0.0.0.0:{}", port);
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
 
-// TODO Port from env variable
 // TODO displaying Image from netlify CDN
