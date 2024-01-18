@@ -10,6 +10,7 @@ use super::post::PostMetadata;
 #[derive(Template)]
 #[template(path = "post_list.html")]
 pub struct PostListTemplate {
+    pub title: String,
     pub posts: Vec<ParseResult<PostMetadata>>,
     pub tag: Option<String>,
 }
@@ -51,9 +52,12 @@ pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTempl
         None => posts,
     };
 
-    Ok(PostListTemplate { posts, tag })
+    Ok(PostListTemplate {
+        title: "Posts".to_owned(),
+        posts,
+        tag,
+    })
 }
 
-// TODO Do we want pagination or not? Ask designer
-// TODO How are we going to implement tags? The path extractor would have to make decision on wether we have a path or a blog post
-// TODO Refactor `?` with `.map_err`
+// TODO Do we want pagination or not? Ask designer/ We don't want itt
+// TODO when tags are true render different "see all post" message

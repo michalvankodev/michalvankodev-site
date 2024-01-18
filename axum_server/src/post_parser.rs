@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use axum::http::StatusCode;
 use chrono::{DateTime, Utc};
 use gray_matter::{engine::YAML, Matter};
@@ -22,6 +24,7 @@ where
 pub struct ParseResult<Metadata> {
     pub body: String,
     pub metadata: Metadata,
+    pub slug: String,
 }
 
 pub async fn parse_post<'de, Metadata: DeserializeOwned>(
@@ -60,8 +63,16 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
             return StatusCode::INTERNAL_SERVER_ERROR;
         })?;
 
+    let filename = Path::new(path)
+        .file_stem()
+        .ok_or(StatusCode::INTERNAL_SERVER_ERROR)?
+        .to_str()
+        .ok_or(StatusCode::INTERNAL_SERVER_ERROR)?
+        .to_owned();
+
     return Ok(ParseResult {
         body,
         metadata: metadata.data,
+        slug: filename,
     });
 }

@@ -1,4 +1,4 @@
-{% if posts.len() == 0 %}
+{% extends "base.html" %} {% block content %} {% if posts.len() == 0 %}
 <p class="no-posts">You've found void in the space.</p>
 {% else %}
 <h1>{# if filters.tags #} {# <em>{filters.tags}</em> #} Blog posts</h1>
@@ -12,10 +12,11 @@
 <ul>
   {% for post in posts %}
   <li>
-    {# <ArticlePreviewCard {article} {segment} /> #} {#
-    <ArticleFooter {article} {segment} /> #} {{post.metadata.title}}
+    {% include "post_preview_card.html" %} {#
+    <ArticlePreviewCard {article} {segment} /> #} {#
+    <ArticleFooter {article} {segment} /> #}
   </li>
   {% endfor %}
 </ul>
 
-{# <ArticlePreviewList {...data} segment="blog" /> #}
+{# <ArticlePreviewList {...data} segment="blog" /> #} {% endblock %}

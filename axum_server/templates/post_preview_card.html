@@ -1,0 +1,27 @@
+<article>
+  <header>
+    <h2>
+      <a rel="prefetch" href="/blog/{{post.slug}}">{{post.metadata.title}}</a>
+    </h2>
+  </header>
+  {# article preview, maybe implement as a filter? #}
+</article>
+
+<footer>
+  <div class="article-tags">
+    {% if post.metadata.tags.len() > 0 %}
+    <span class="lighten">Tags:</span>
+    <ul>
+      {% for tag in post.metadata.tags %}
+      <li class="{tagsListLiClass}">
+        <a href="/blog/tags/{{tag}}">{{tag}}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+  <div class="created-at">
+    <span>Published on</span>
+    <time datetime="{post.metadata.date}"> {{post.metadata.date}} </time>
+  </div>
+</footer>

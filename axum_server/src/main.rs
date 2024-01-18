@@ -27,4 +27,4 @@ async fn main() {
 }
 
 // TODO Port from env variable
-// TODO templating system
+// TODO displaying Image from netlify CDN
