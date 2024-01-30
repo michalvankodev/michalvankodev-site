@@ -1,0 +1,32 @@
+port := env_var_or_default('PORT', '3080')
+
+# Run dev server in watch mode
+dev: 
+	cargo watch -x run
+
+# Run server in production mode
+prod:
+    cargo run --release
+
+# Wait for port to listen to connections
+wait_for_port:
+	#!/usr/bin/env bash
+	set -euxo pipefail
+	while ! nc -z localhost {{port}}; do
+	sleep 3
+	done
+
+# Kill the application running on port
+kill:
+	kill $(lsof -t -i:{{port}})
+
+# Clean the dist folder
+clean:
+	rm -rf dist
+
+# SSG export of production server
+export: clean
+	just prod &
+	just wait_for_port
+	- wget --convert-links -r -p --level 1 -E -P dist --no-host-directories localhost:{{port}}
+	just kill
