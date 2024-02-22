@@ -1,8 +1,15 @@
 port := env_var_or_default('PORT', '3080')
 
+# Tailwind in watch mode
+tailwind:
+	npx tailwindcss -i ./styles/input.css -o ./styles/output.css --watch
+
+server_dev: 
+	cargo watch -x run
+
 # Run dev server in watch mode
 dev: 
-	cargo watch -x run
+	(just server_dev; just tailwind) | parallel
 
 # Run server in production mode
 prod:

@@ -4,7 +4,10 @@ use chrono::{DateTime, Utc};
 use serde::Deserialize;
 
 use crate::{
-    components::site_footer::{render_site_footer, SiteFooter},
+    components::{
+        site_footer::{render_site_footer, SiteFooter},
+        site_header::HeaderProps,
+    },
     post_parser::{deserialize_date, parse_post},
 };
 
@@ -26,6 +29,7 @@ pub struct PostTemplate {
     pub title: String,
     pub body: String,
     pub site_footer: SiteFooter,
+    pub header_props: HeaderProps,
 }
 
 pub async fn render_post(Path(post_id): Path<String>) -> Result<PostTemplate, StatusCode> {
@@ -40,5 +44,6 @@ pub async fn render_post(Path(post_id): Path<String>) -> Result<PostTemplate, St
         title: parsed.metadata.title,
         body: parsed.body,
         site_footer,
+        header_props: HeaderProps::default(),
     })
 }

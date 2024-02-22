@@ -2,7 +2,10 @@ use askama::Template;
 use axum::{extract::Path, http::StatusCode};
 
 use crate::{
-    components::site_footer::{render_site_footer, SiteFooter},
+    components::{
+        site_footer::{render_site_footer, SiteFooter},
+        site_header::HeaderProps,
+    },
     post_list::get_post_list,
     post_parser::ParseResult,
 };
@@ -16,6 +19,7 @@ pub struct PostListTemplate {
     pub posts: Vec<ParseResult<PostMetadata>>,
     pub tag: Option<String>,
     pub site_footer: SiteFooter,
+    pub header_props: HeaderProps,
 }
 
 pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTemplate, StatusCode> {
@@ -51,6 +55,7 @@ pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTempl
         posts,
         tag,
         site_footer,
+        header_props: HeaderProps::default(),
     })
 }
 

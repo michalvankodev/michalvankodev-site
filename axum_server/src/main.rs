@@ -1,4 +1,5 @@
 use axum;
+use tower_http::services::ServeDir;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod components;
@@ -23,7 +24,7 @@ async fn main() {
         .init();
 
     // build our application with a single route
-    let app = router::get_router();
+    let app = router::get_router().nest_service("/styles", ServeDir::new("styles"));
     // run our app with hyper, listening globally on port 3080
     let port = std::option_env!("PORT").unwrap_or("3080");
     let addr = format!("0.0.0.0:{}", port);

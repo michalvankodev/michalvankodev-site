@@ -22,6 +22,9 @@
       href="https://michalvanko.dev/feed.json"
     />
 
+    <!-- Tailwind output file -->
+    <link rel="stylesheet" href="/styles/output.css" />
+
     <link rel="stylesheet" href="/print.css" media="print" />
     <link rel="stylesheet" href="/fonts.css" />
     <link rel="manifest" href="/manifest.json" />
@@ -31,8 +34,9 @@
     <link rel="icon" type="image/png" href="/m-logo-192.png" />
   </head>
   <body>
-    {% block content %} Placeholder {% endblock %} {# footer, should be not
-    dependant on the each individual handler but it should have it's own handler
-    #} {{ site_footer|safe }}
+    {% include "site_header.html" %}
+    {% block content %} Placeholder {% endblock %}
+    {# footer, should be not dependant on the each individual handler but it should have it's own handler #}
+    {{ site_footer|safe }}
   </body>
 </html>
