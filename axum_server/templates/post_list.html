@@ -1,13 +1,13 @@
 {% extends "base.html" %} {% block content %} {% if posts.len() == 0 %}
 <p class="no-posts">You've found void in the space.</p>
 {% else %}
-<h1>{# if filters.tags #} {# <em>{filters.tags}</em> #} Blog posts</h1>
-
-{#if filters.tags#}
-<div class="{seeAllClass}">
-  <a href="/blog">See all posts</a>
-</div>
-{% endif%}
+<h1 class="mx-6 mt-3 text-4xl text-blue-900 font-extrabold">
+{% if let Some(t) = tag %}
+<em>{{t}}</em> 
+{% else %}
+ Blog posts
+{% endif %}
+</h1>
 
 <ul>
   {% for post in posts %}
@@ -19,4 +19,5 @@
   {% endfor %}
 </ul>
 
+{% endif %}
 {% endblock %}
