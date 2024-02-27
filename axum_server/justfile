@@ -11,6 +11,10 @@ server_dev:
 dev: 
 	(just server_dev; just tailwind) | parallel
 
+# Run dev server in watch mode
+test: 
+	cargo test
+
 # Run server in production mode
 prod:
     cargo run --release

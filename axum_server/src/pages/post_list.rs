@@ -4,7 +4,7 @@ use axum::{extract::Path, http::StatusCode};
 use crate::{
     components::{
         site_footer::{render_site_footer, SiteFooter},
-        site_header::HeaderProps,
+        site_header::{HeaderProps, Link},
     },
     post_list::get_post_list,
     post_parser::ParseResult,
@@ -50,12 +50,21 @@ pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTempl
         .await
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
+    // TODO if we have a tag we want to go back to all posts, otherwise we don't
+    let header_props = match tag {
+        Some(_) => HeaderProps::with_back_link(Link {
+            href: "/blog".to_string(),
+            label: "All posts".to_string(),
+        }),
+        None => HeaderProps::default(),
+    };
+
     Ok(PostListTemplate {
         title: "Posts".to_owned(),
         posts,
         tag,
         site_footer,
-        header_props: HeaderProps::default(),
+        header_props,
     })
 }
 

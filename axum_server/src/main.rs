@@ -1,5 +1,6 @@
 use axum;
 use tower_http::services::ServeDir;
+use tower_livereload::LiveReloadLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod components;
@@ -25,6 +26,10 @@ async fn main() {
 
     // build our application with a single route
     let app = router::get_router().nest_service("/styles", ServeDir::new("styles"));
+
+    #[cfg(debug_assertions)]
+    let app = app.layer(LiveReloadLayer::new());
+
     // run our app with hyper, listening globally on port 3080
     let port = std::option_env!("PORT").unwrap_or("3080");
     let addr = format!("0.0.0.0:{}", port);

@@ -4,26 +4,20 @@ pub struct Link {
 }
 
 pub struct HeaderProps {
-    pub links: Vec<Link>,
+    pub back_link: Option<Link>,
 }
 
 impl Default for HeaderProps {
     fn default() -> Self {
+        Self { back_link: None }
+    }
+}
+
+impl HeaderProps {
+    pub fn with_back_link(link: Link) -> Self {
         Self {
-            links: vec![
-                Link {
-                    href: "/".to_string(),
-                    label: "Introduction".to_string(),
-                },
-                Link {
-                    href: "/blog".to_string(),
-                    label: "Blog".to_string(),
-                },
-                Link {
-                    href: "/portfolio".to_string(),
-                    label: "Portfolio".to_string(),
-                },
-            ],
+            back_link: Some(link),
+            ..Default::default()
         }
     }
 }

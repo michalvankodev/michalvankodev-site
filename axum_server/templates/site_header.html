@@ -1,31 +1,19 @@
 <header class="min-h-full bg-blue-50">
-<nav class="">
-  <section>
-    <ul class="">
-      {% for link in header_props.links %}
-        <li>
-          <a
-            rel="prefetch"
-            class=""
-            href="{{link.href}}"
-          >
-            {{link.label}}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-
-    <aside class="logo-section ">
-      <a class="logo" href=".">
-        <img
-          class=""
-          src="/m-logo.svg"
-          alt="m logo"
-          width="44px"
-          height="44px"
-        />
+<nav class="flex">
+  {% match header_props.back_link %}
+  {% when Some with (link) %}
+  <a
+    class="p-3 text-lg font-medium drop-shadow-md"
+    href="{{link.href}}"
+  >
+    {{link.label}}
+  </a>
+  {% when None %}
+  {% endmatch %}
+    <aside class="flex logo-section flex-grow justify-end content-end">
+      <a class="logo p-3 text-base" href=".">
+        @michalvankodev
       </a>
     </aside>
-  </section>
 </nav>
 </header>
