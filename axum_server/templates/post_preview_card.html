@@ -1,11 +1,11 @@
 <article>
   <header class="px-4 mb-3"> 
-    <h2 class="text-2xl">
+    <h2 class="text-3xl font-semibold text-blue-900">
       <a rel="prefetch" href="/blog/{{post.slug}}">{{post.metadata.title}}</a>
     </h2>
     <section class="created-at m-1 text-right text-sm text-gray-600">
       <span>Published on</span>
-      <time datetime="{post.metadata.date}"> {{post.metadata.date}} </time>
+      <time datetime="{post.metadata.date}"> {{post.metadata.date|pretty_date}} </time>
     </section>
   </header>
 

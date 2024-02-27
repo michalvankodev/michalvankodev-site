@@ -6,6 +6,7 @@ use crate::{
         site_footer::{render_site_footer, SiteFooter},
         site_header::{HeaderProps, Link},
     },
+    filters,
     post_list::get_post_list,
     post_parser::ParseResult,
 };

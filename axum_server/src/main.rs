@@ -5,6 +5,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod components;
 mod feed;
+mod filters;
 mod pages;
 mod post_list;
 mod post_parser;
