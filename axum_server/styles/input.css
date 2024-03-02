@@ -2,19 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  .article-body {
-    h1 {
-      @apply px-4 text-2xl text-blue-900 my-2;
-    }
-    h2 {
-      @apply px-4 text-xl text-blue-900 my-2;
-    }
-    p {
-      @apply px-4 my-2;
-    }
-    pre {
-      @apply p-4 my-1 overflow-auto text-sm;
+.article-body {
+  h1 {
+    @apply px-4 text-2xl text-blue-900 my-2;
+  }
+  h2 {
+    @apply px-4 text-xl text-blue-900 my-2;
+  }
+  p {
+    @apply px-4 my-2;
+  }
+  pre {
+    @apply p-4 my-1 overflow-auto text-sm;
+  }
+  figure {
+    @apply m-4;
+
+    img {
+      @apply rounded shadow-md;
     }
   }
+  figcaption {
+    @apply mt-2 text-center text-sm italic text-blue-800;
+  }
+  table {
+    @apply m-2 overflow-auto text-sm;
+  }
+}
+
+.video-embed {
+  @apply m-4;
 }

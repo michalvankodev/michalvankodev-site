@@ -91,6 +91,7 @@ fn parse_html(markdown: &str) -> String {
                               alt="{alt}"
                               src="{src}"
                             />
+                            <figcaption>
                         "#,
                         alt = title,
                         src = dest_url,
@@ -100,7 +101,7 @@ fn parse_html(markdown: &str) -> String {
             }
             _ => event,
         },
-        Event::End(TagEnd::Image) => Event::Html("</figure>".into()),
+        Event::End(TagEnd::Image) => Event::Html("</figcaption></figure>".into()),
         _ => event,
     });
 
