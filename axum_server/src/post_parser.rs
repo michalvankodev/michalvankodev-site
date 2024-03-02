@@ -2,11 +2,7 @@ use std::path::Path;
 
 use axum::http::StatusCode;
 use chrono::{DateTime, Utc};
-use comrak::{
-    format_html,
-    nodes::{AstNode, NodeValue},
-    parse_document, Arena, Options,
-};
+use comrak::{format_html_with_plugins, parse_document, Arena, Options};
 use gray_matter::{engine::YAML, Matter};
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 use tokio::fs;
@@ -88,25 +84,32 @@ fn parse_html(markdown: &str) -> String {
 
     let root = parse_document(&arena, markdown, &options);
 
-    fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F)
-    where
-        F: Fn(&'a AstNode<'a>),
-    {
-        f(node);
-        for c in node.children() {
-            iter_nodes(c, f);
-        }
-    }
+    // fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F)
+    // where
+    //     F: Fn(&'a AstNode<'a>),
+    // {
+    //     f(node);
+    //     for c in node.children() {
+    //         iter_nodes(c, f);
+    //     }
+    // }
 
-    iter_nodes(root, &|node| match &mut node.data.borrow_mut().value {
-        &mut NodeValue::Text(ref mut _text) => {
-            // let orig = std::mem::replace(text, String::new());
-            // *text = orig.replace("my", "your");
-        }
-        _ => (),
-    });
+    // iter_nodes(root, &mut |node| match &mut node.data.borrow_mut().value {
+    //     &mut NodeValue::Text(ref mut _text) => {
+    //         // let orig = std::mem::replace(text, String::new());
+    //         // *text = orig.replace("my", "your");
+    //     }
+    //     &mut NodeValue::Image(ref mut img) => {
+    //         let title = img.title;
+    //         let mut fig_caption = Node::new(NodeValue::Text("Figure Caption".into()));
+    //         let mut fig = Node::new(NodeValue::HtmlInline("ahoj".to_string()));
+    //         *node = fig;
+    //         // NodeValue::HtmlInline("".to_string());
+    //     }
+    //     _ => (),
+    // });
 
     let mut html = vec![];
-    format_html(root, &options, &mut html).unwrap();
+    format_html_with_plugins(root, &options, &mut html, &plugins).unwrap();
     return String::from_utf8(html).unwrap();
 }
