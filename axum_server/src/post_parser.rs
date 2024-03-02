@@ -2,8 +2,8 @@ use std::path::Path;
 
 use axum::http::StatusCode;
 use chrono::{DateTime, Utc};
-use comrak::{format_html_with_plugins, parse_document, Arena, Options};
 use gray_matter::{engine::YAML, Matter};
+use pulldown_cmark::{Event, Options, Parser, Tag, TagEnd};
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 use tokio::fs;
 
@@ -60,56 +60,52 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
 }
 
 fn parse_html(markdown: &str) -> String {
-    let mut options = Options::default();
-    options.parse.smart = true;
-    options.parse.relaxed_autolinks = true;
-    options.extension.strikethrough = true;
-    // options.extension.tagfilter = true;
-    options.extension.table = true;
-    options.extension.autolink = true;
-    options.extension.tasklist = true;
-    options.extension.superscript = true;
-    options.extension.header_ids = Some("".to_string());
-    options.extension.footnotes = false;
-    options.extension.description_lists = false;
-    options.extension.multiline_block_quotes = false;
-    options.extension.shortcodes = true;
-    options.render.hardbreaks = true;
-    options.render.github_pre_lang = true;
-    options.render.full_info_string = true;
-    options.render.unsafe_ = true;
+    let mut options = Options::empty();
+    options.insert(Options::ENABLE_TABLES);
+    options.insert(Options::ENABLE_FOOTNOTES);
+    options.insert(Options::ENABLE_STRIKETHROUGH);
+    options.insert(Options::ENABLE_TASKLISTS);
+    options.insert(Options::ENABLE_SMART_PUNCTUATION);
+    options.insert(Options::ENABLE_HEADING_ATTRIBUTES);
 
-    // The returned nodes are created in the supplied Arena, and are bound by its lifetime.
-    let arena = Arena::new();
+    let parser = Parser::new_ext(&markdown, options).map(|event| match event {
+        Event::Start(ref tag) => match tag {
+            // Parsing images considers `alt` attribute as inner `Text` event
+            // Therefore the `[alt]` is rendered in html as subtitle
+            // and the `[](url "title")` `title` is rendered as `alt` attribute
+            Tag::Image {
+                link_type,
+                dest_url,
+                title,
+                id,
+            } => {
+                println!(
+                    "Image link_type: {:?} url: {} title: {} id: {}",
+                    link_type, dest_url, title, id
+                );
+                // TODO src set
+                Event::Html(
+                    format!(
+                        r#"<figure>
+                            <img
+                              alt="{alt}"
+                              src="{src}"
+                            />
+                        "#,
+                        alt = title,
+                        src = dest_url,
+                    )
+                    .into(),
+                )
+            }
+            _ => event,
+        },
+        Event::End(TagEnd::Image) => Event::Html("</figure>".into()),
+        _ => event,
+    });
 
-    let root = parse_document(&arena, markdown, &options);
-
-    // fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F)
-    // where
-    //     F: Fn(&'a AstNode<'a>),
-    // {
-    //     f(node);
-    //     for c in node.children() {
-    //         iter_nodes(c, f);
-    //     }
-    // }
-
-    // iter_nodes(root, &mut |node| match &mut node.data.borrow_mut().value {
-    //     &mut NodeValue::Text(ref mut _text) => {
-    //         // let orig = std::mem::replace(text, String::new());
-    //         // *text = orig.replace("my", "your");
-    //     }
-    //     &mut NodeValue::Image(ref mut img) => {
-    //         let title = img.title;
-    //         let mut fig_caption = Node::new(NodeValue::Text("Figure Caption".into()));
-    //         let mut fig = Node::new(NodeValue::HtmlInline("ahoj".to_string()));
-    //         *node = fig;
-    //         // NodeValue::HtmlInline("".to_string());
-    //     }
-    //     _ => (),
-    // });
-
-    let mut html = vec![];
-    format_html_with_plugins(root, &options, &mut html, &plugins).unwrap();
-    return String::from_utf8(html).unwrap();
+    // Write to String buffer.
+    let mut html = String::new();
+    pulldown_cmark::html::push_html(&mut html, parser);
+    return html;
 }
