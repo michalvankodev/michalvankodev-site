@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  .article-body {
+    h1 {
+      @apply px-4 text-2xl text-blue-900 my-2;
+    }
+    h2 {
+      @apply px-4 text-xl text-blue-900 my-2;
+    }
+    p {
+      @apply px-4 my-2;
+    }
+    pre {
+      @apply p-4 my-1 overflow-auto text-sm;
+    }
+  }
+}

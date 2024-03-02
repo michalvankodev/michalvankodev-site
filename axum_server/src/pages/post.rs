@@ -1,3 +1,4 @@
+use crate::filters;
 use askama::Template;
 use axum::{extract::Path, http::StatusCode};
 use chrono::{DateTime, Utc};
@@ -28,6 +29,7 @@ pub struct PostMetadata {
 pub struct PostTemplate {
     pub title: String,
     pub body: String,
+    pub date: DateTime<Utc>,
     pub site_footer: SiteFooter,
     pub header_props: HeaderProps,
 }
@@ -42,6 +44,7 @@ pub async fn render_post(Path(post_id): Path<String>) -> Result<PostTemplate, St
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
     Ok(PostTemplate {
         title: parsed.metadata.title,
+        date: parsed.metadata.date,
         body: parsed.body,
         site_footer,
         header_props: HeaderProps::default(),

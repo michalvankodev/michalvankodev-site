@@ -3,9 +3,19 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block content %}
-<h1>{{title}}</h1>
+<article>
+  <header class="px-4">
+  <h1 class="text-3xl text-blue-900 mb-3">{{title}}</h1>
+  <section class="created-at m-1 text-right text-sm text-gray-600">
+    <span>Published on</span>
+    <time datetime="{date}"> {{date|pretty_date}} </time>
+  </section>
+</header>
 
-<article>{{body|escape("none")}}</article>
+<section class="article-body">
+  {{body|escape("none")}}
+</section>
+</article>
 
 {# footer #}
 {% endblock %}

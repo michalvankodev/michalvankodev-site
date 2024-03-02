@@ -2,8 +2,12 @@ use std::path::Path;
 
 use axum::http::StatusCode;
 use chrono::{DateTime, Utc};
+use comrak::{
+    format_html,
+    nodes::{AstNode, NodeValue},
+    parse_document, Arena, Options,
+};
 use gray_matter::{engine::YAML, Matter};
-use markdown::{to_html_with_options, CompileOptions, Constructs, Options, ParseOptions};
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 use tokio::fs;
 
@@ -35,26 +39,6 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
         // TODO Proper reasoning for an error
         .map_err(|_| StatusCode::NOT_FOUND)?;
 
-    let markdown_options = Options {
-        parse: ParseOptions {
-            constructs: Constructs {
-                frontmatter: true,
-                ..Default::default()
-            },
-            ..Default::default()
-        },
-        compile: CompileOptions {
-            allow_dangerous_html: true,
-            ..Default::default()
-        },
-        ..Default::default()
-    };
-
-    let body = to_html_with_options(&file_contents, &markdown_options).map_err(|reason| {
-        tracing::error!(reason);
-        return StatusCode::INTERNAL_SERVER_ERROR;
-    })?;
-
     let matter = Matter::<YAML>::new();
     let metadata = matter
         .parse_with_struct::<Metadata>(&file_contents)
@@ -62,6 +46,8 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
             tracing::error!("Failed to parse metadata");
             return StatusCode::INTERNAL_SERVER_ERROR;
         })?;
+
+    let body = parse_html(&metadata.content);
 
     let filename = Path::new(path)
         .file_stem()
@@ -75,4 +61,52 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
         metadata: metadata.data,
         slug: filename,
     });
+}
+
+fn parse_html(markdown: &str) -> String {
+    let mut options = Options::default();
+    options.parse.smart = true;
+    options.parse.relaxed_autolinks = true;
+    options.extension.strikethrough = true;
+    // options.extension.tagfilter = true;
+    options.extension.table = true;
+    options.extension.autolink = true;
+    options.extension.tasklist = true;
+    options.extension.superscript = true;
+    options.extension.header_ids = Some("".to_string());
+    options.extension.footnotes = false;
+    options.extension.description_lists = false;
+    options.extension.multiline_block_quotes = false;
+    options.extension.shortcodes = true;
+    options.render.hardbreaks = true;
+    options.render.github_pre_lang = true;
+    options.render.full_info_string = true;
+    options.render.unsafe_ = true;
+
+    // The returned nodes are created in the supplied Arena, and are bound by its lifetime.
+    let arena = Arena::new();
+
+    let root = parse_document(&arena, markdown, &options);
+
+    fn iter_nodes<'a, F>(node: &'a AstNode<'a>, f: &F)
+    where
+        F: Fn(&'a AstNode<'a>),
+    {
+        f(node);
+        for c in node.children() {
+            iter_nodes(c, f);
+        }
+    }
+
+    iter_nodes(root, &|node| match &mut node.data.borrow_mut().value {
+        &mut NodeValue::Text(ref mut _text) => {
+            // let orig = std::mem::replace(text, String::new());
+            // *text = orig.replace("my", "your");
+        }
+        _ => (),
+    });
+
+    let mut html = vec![];
+    format_html(root, &options, &mut html).unwrap();
+    return String::from_utf8(html).unwrap();
 }
