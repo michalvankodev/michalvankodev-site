@@ -600,12 +600,24 @@ video {
   flex-grow: 1;
 }
 
+.flex-row {
+  flex-direction: row;
+}
+
 .content-end {
   align-content: flex-end;
 }
 
+.content-around {
+  align-content: space-around;
+}
+
 .justify-end {
   justify-content: flex-end;
+}
+
+.justify-around {
+  justify-content: space-around;
 }
 
 .border-blue-200 {
@@ -705,6 +717,11 @@ video {
 .text-gray-800 {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
+}
+
+.text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
 }
 
 .drop-shadow-md {

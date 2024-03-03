@@ -30,6 +30,7 @@ pub struct PostTemplate {
     pub title: String,
     pub body: String,
     pub date: DateTime<Utc>,
+    pub tags: Vec<String>,
     pub site_footer: SiteFooter,
     pub header_props: HeaderProps,
 }
@@ -45,6 +46,7 @@ pub async fn render_post(Path(post_id): Path<String>) -> Result<PostTemplate, St
     Ok(PostTemplate {
         title: parsed.metadata.title,
         date: parsed.metadata.date,
+        tags: parsed.metadata.tags,
         body: parsed.body,
         site_footer,
         header_props: HeaderProps::default(),

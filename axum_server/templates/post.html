@@ -6,10 +6,17 @@
 <article>
   <header class="px-4">
   <h1 class="text-3xl text-blue-900 mb-3">{{title}}</h1>
-  <section class="created-at m-1 text-right text-sm text-gray-600">
-    <span>Published on</span>
-    <time datetime="{date}"> {{date|pretty_date}} </time>
-  </section>
+  <aside class="flex justify-around flex-row">
+    <section class="">
+    {% for tag in tags %}
+      <a href="/blog/tags/{{tag}}" class="text-blue-700">#{{tag}}</a>
+    {% endfor %}
+    </section>
+    <section class="created-at m-1 text-right text-sm text-gray-600">
+      <span>Published on</span>
+      <time datetime="{date}"> {{date|pretty_date}} </time>
+    </section>
+  </aside>
 </header>
 
 <section class="article-body">
