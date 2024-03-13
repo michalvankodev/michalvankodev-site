@@ -1,7 +1,49 @@
+{% macro contact_link(svg, title, href, text) %}
+
+<a
+  class="flex align-center"
+  href="{{href}}"
+  title="{{title}}"
+>
+  <svg aria-hidden="true" class="h-6 w-6 fill-blue-950">
+    <use xlink:href="/svg/icons-sprite.svg#{{svg}}" />
+  </svg>
+  <span>{{text}}</span>
+</a>
+
+{% endmacro %}
+
 <footer>
-  {% for post in latest_posts %}
+  <section>
+  <h3 class="text-lg text-blue-950">Contact</h3>
 
-  <article>{{post.metadata.title}}</article>
-
-  {% endfor %}
+  <ul>
+    <li>
+      {% call contact_link("mail", "E-mail address", "mailto: michalvankosk@gmail.com", "michalvankosk@gmail.com") %}
+    </li>
+    <li>
+      {% call contact_link("twitch", "Twitch channel", "https://twitch.tv/michalvankodev", "Twitch") %}
+    </li>
+    <li>
+      {% call contact_link("discord", "Discord channel", "TODO link na discord", "Discord channel") %}
+    </li>
+    <li>
+      {% call contact_link("tiktok", "TikTok channel", "https://tiktok.com/@michalvankodev", "TikTok") %}
+    </li>
+    <li>
+      {% call contact_link("youtube", "YouTube channel", "https://www.youtube.com/@michalvankodev", "YouTube") %}
+    </li>
+    <li>
+      {% call contact_link("twitter", "Twitter profile", "https://twitter.com/michalvankodev", "Twitter") %}
+    </li>
+    <li>
+      {% call contact_link("instagram", "Instagram profile", "https://instagram.com/michalvankodev", "Instagram") %}
+    </li>
+    <li>
+      {% call contact_link("github", "GitHub profile", "https://github.com/michalvankodev", "GitHub") %}
+    </li>
+    <li>
+      {% call contact_link("linkedin", "LinkedIn profile", "https://www.linkedin.com/in/michal-vanko-dev/", "LinkedIn") %}
+    </li>
+  </ul>
 </footer>

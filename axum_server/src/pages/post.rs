@@ -1,4 +1,4 @@
-use crate::filters;
+use crate::{components::site_header::Link, filters};
 use askama::Template;
 use axum::{extract::Path, http::StatusCode};
 use chrono::{DateTime, Utc};
@@ -49,6 +49,9 @@ pub async fn render_post(Path(post_id): Path<String>) -> Result<PostTemplate, St
         tags: parsed.metadata.tags,
         body: parsed.body,
         site_footer,
-        header_props: HeaderProps::default(),
+        header_props: HeaderProps::with_back_link(Link {
+            href: "/blog".to_string(),
+            label: "All posts".to_string(),
+        }),
     })
 }

@@ -4,6 +4,12 @@ port := env_var_or_default('PORT', '3080')
 tailwind:
 	npx tailwindcss -i ./styles/input.css -o ./styles/output.css --watch
 
+# svg sprite creation
+# TODO change route on svetle project deletion 
+# TODO #directory-swap
+svgstore:
+   npx svgstore -o ../static/svg/icons-sprite.svg ../src/svg/**.svg
+
 server_dev: 
 	cargo watch -x run
 

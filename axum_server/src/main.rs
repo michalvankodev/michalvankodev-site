@@ -28,7 +28,8 @@ async fn main() {
     // build our application with a single route
     let app = router::get_router()
         .nest_service("/styles", ServeDir::new("styles"))
-        .nest_service("/images", ServeDir::new("../static/images"));
+        .nest_service("/images", ServeDir::new("../static/images"))
+        .nest_service("/svg", ServeDir::new("../static/svg"));
 
     #[cfg(debug_assertions)]
     let app = app.layer(LiveReloadLayer::new());

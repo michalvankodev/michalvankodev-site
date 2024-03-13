@@ -548,6 +548,10 @@ video {
   margin: 0.25rem;
 }
 
+.m-4 {
+  margin: 1rem;
+}
+
 .mx-4 {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -566,6 +570,10 @@ video {
 .my-3 {
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
 }
 
 .mb-3 {
@@ -588,12 +596,32 @@ video {
   display: flex;
 }
 
+.hidden {
+  display: none;
+}
+
 .h-0 {
   height: 0px;
 }
 
+.h-12 {
+  height: 3rem;
+}
+
+.h-6 {
+  height: 1.5rem;
+}
+
 .min-h-full {
   min-height: 100%;
+}
+
+.w-12 {
+  width: 3rem;
+}
+
+.w-6 {
+  width: 1.5rem;
 }
 
 .flex-grow {
@@ -608,16 +636,28 @@ video {
   align-content: flex-end;
 }
 
-.content-around {
-  align-content: space-around;
+.items-center {
+  align-items: center;
 }
 
 .justify-end {
   justify-content: flex-end;
 }
 
-.justify-around {
-  justify-content: space-around;
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.border {
+  border-width: 1px;
 }
 
 .border-blue-200 {
@@ -635,6 +675,15 @@ video {
   background-color: rgb(30 64 175 / var(--tw-bg-opacity));
 }
 
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.fill-blue-950 {
+  fill: #172554;
+}
+
 .p-3 {
   padding: 0.75rem;
 }
@@ -649,8 +698,17 @@ video {
   padding-right: 1.25rem;
 }
 
+.pr-3 {
+  padding-right: 0.75rem;
+}
+
 .text-right {
   text-align: right;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 
 .text-3xl {
@@ -694,6 +752,10 @@ video {
   font-style: italic;
 }
 
+.leading-5 {
+  line-height: 1.25rem;
+}
+
 .text-blue-700 {
   --tw-text-opacity: 1;
   color: rgb(29 78 216 / var(--tw-text-opacity));
@@ -709,6 +771,11 @@ video {
   color: rgb(30 58 138 / var(--tw-text-opacity));
 }
 
+.text-blue-950 {
+  --tw-text-opacity: 1;
+  color: rgb(23 37 84 / var(--tw-text-opacity));
+}
+
 .text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
@@ -717,11 +784,6 @@ video {
 .text-gray-800 {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
-}
-
-.text-blue-600 {
-  --tw-text-opacity: 1;
-  color: rgb(37 99 235 / var(--tw-text-opacity));
 }
 
 .drop-shadow-md {
@@ -832,9 +894,4 @@ video {
 
 .video-embed {
   margin: 1rem;
-}
-
-.after\:content-\[\'\2c \'\]::after {
-  --tw-content: ',';
-  content: var(--tw-content);
 }

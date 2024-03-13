@@ -1,0 +1,11 @@
+<section class="article-tags text-base">
+  {% if tags.len() > 0 %}
+  <ul class="inline">
+    {% for tag in tags %}
+    <li class="inline italic text-blue-700">
+      <a href="/blog/tags/{{tag}}">#{{tag}}</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
