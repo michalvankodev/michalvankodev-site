@@ -1,6 +1,9 @@
 use crate::{
     feed::render_rss_feed,
-    pages::{index::render_index, post::render_post, post_list::render_post_list},
+    pages::{
+        contact::render_contact, index::render_index, post::render_post,
+        post_list::render_post_list,
+    },
 };
 use axum::{extract::MatchedPath, http::Request, routing::get, Router};
 use tower_http::trace::TraceLayer;
@@ -12,6 +15,7 @@ pub fn get_router() -> Router {
         .route("/blog", get(render_post_list))
         .route("/blog/tags/:tag", get(render_post_list))
         .route("/blog/:post_id", get(render_post))
+        .route("/contact", get(render_contact))
         .route("/feed.xml", get(render_rss_feed))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
