@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+a {
+  @apply text-pink-600 underline underline-offset-2;
+
+  &:hover {
+    @apply transition text-blue-400;
+  }
+}
+
 .article-body {
   h1 {
     @apply px-4 text-2xl text-blue-900 my-2;

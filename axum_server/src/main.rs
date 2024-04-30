@@ -10,6 +10,7 @@ mod pages;
 mod post_list;
 mod post_parser;
 mod router;
+mod tag_list;
 // mod template;
 
 #[tokio::main]

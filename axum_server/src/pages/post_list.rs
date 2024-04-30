@@ -51,7 +51,6 @@ pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTempl
         .await
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
-    // TODO if we have a tag we want to go back to all posts, otherwise we don't
     let header_props = match tag {
         Some(_) => HeaderProps::with_back_link(Link {
             href: "/blog".to_string(),
@@ -68,6 +67,3 @@ pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTempl
         header_props,
     })
 }
-
-// TODO Do we want pagination or not? Ask designer/ We don't want itt
-// TODO when tags are true render different "see all post" message
