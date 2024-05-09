@@ -3,13 +3,13 @@ layout: blog
 title: Error handling with Either<Type>
 segments:
   - blog
+  - featured
 published: true
 date: 2022-02-28T11:30:54.195Z
 tags:
   - Development
   - Guide
 ---
-
 We have started a new small internal project for automating a few workflows around counting worked hours and time offs.
 
 ## Application architecture
@@ -22,7 +22,7 @@ It will run on a server with a possibility of migrating into serverless when we 
 
 As it is not a classic web server application I had to come up with slightly different error handling as we are used to. I've been trying to find a semi-functional API with all the good practices described in my [guide on error handling](/blog/2020-12-09-guide-on-error-handling). The main goal is to not let users be presented with internal information about errors. We want to show user-friendly messages instead.
 I call this API semi-functional as **I didn't want to use monads** and go 100% functional. We use simple asynchronous functions to handle interactions.
-The goal is to handle errors that are expected. Unexpected errors should still be thrown and caught by an _"Error boundary"_ around the whole app that will handle and log the error.
+The goal is to handle errors that are expected. Unexpected errors should still be thrown and caught by an *"Error boundary"* around the whole app that will handle and log the error.
 
 ## Error types
 

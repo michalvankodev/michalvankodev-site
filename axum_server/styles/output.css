@@ -554,6 +554,10 @@ video {
   --tw-contain-style:  ;
 }
 
+.row-span-3 {
+  grid-row: span 3 / span 3;
+}
+
 .m-1 {
   margin: 0.25rem;
 }
@@ -594,16 +598,6 @@ video {
 .mx-6 {
   margin-left: 1.5rem;
   margin-right: 1.5rem;
-}
-
-.my-0 {
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
-.my-0\.5 {
-  margin-top: 0.125rem;
-  margin-bottom: 0.125rem;
 }
 
 .my-12 {
@@ -653,6 +647,10 @@ video {
   display: flex;
 }
 
+.grid {
+  display: grid;
+}
+
 .hidden {
   display: none;
 }
@@ -685,6 +683,14 @@ video {
   flex-grow: 1;
 }
 
+.grid-flow-col {
+  grid-auto-flow: column;
+}
+
+.grid-rows-3 {
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
 .flex-row {
   flex-direction: row;
 }
@@ -711,6 +717,10 @@ video {
 
 .justify-between {
   justify-content: space-between;
+}
+
+.gap-4 {
+  gap: 1rem;
 }
 
 .rounded {

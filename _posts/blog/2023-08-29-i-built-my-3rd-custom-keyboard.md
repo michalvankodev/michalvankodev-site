@@ -3,6 +3,7 @@ layout: blog
 title: I built my 3rd custom keyboard
 segments:
   - blog
+  - featured
 published: true
 date: 2023-08-29T19:34:17.071Z
 tags:

@@ -1,8 +1,9 @@
 ---
 layout: blog
-title: "Keyboards & ergonomics of 21st century"
+title: Keyboards & ergonomics of 21st century
 segments:
   - broadcasts
+  - featured
 published: true
 date: 2023-04-27T21:22:21.191Z
 tags:

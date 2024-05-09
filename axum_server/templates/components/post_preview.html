@@ -1,0 +1,15 @@
+<article class="grid grid-rows-3 grid-flow-col gap-4">
+	<aside class="row-span-3">
+	  <svg aria-hidden="true" class="h-12 w-12 fill-blue-950">
+	    <use xlink:href="/svg/icons-sprite.svg#mail" />
+	  </svg>
+	</aside>
+	<header>
+		<h3 class="text-lg font-medium mb-1">{{post.metadata.title}}</h3>
+	</header>
+	<section class="text-sm leading-5 text-gray-800">{{post.body|description_filter|safe}}</section>
+	<footer>
+	  Footrik
+	</footer>
+</article>
+

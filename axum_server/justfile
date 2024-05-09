@@ -13,6 +13,11 @@ svgstore:
 server_dev: 
 	cargo watch -x run
 
+# CMS server for local dev
+# TODO #directory-swap
+decap_server:
+	cd .. && npx decap-server
+
 # Run dev server in watch mode
 dev: 
 	(just server_dev; just tailwind) | parallel

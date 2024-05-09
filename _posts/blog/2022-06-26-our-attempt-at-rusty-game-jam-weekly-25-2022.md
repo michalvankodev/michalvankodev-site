@@ -3,6 +3,7 @@ layout: blog
 title: "Our attempt at Rusty game jam - Weekly #25-2022"
 segments:
   - blog
+  - featured
 published: true
 date: 2022-06-26T20:02:47.419Z
 tags:

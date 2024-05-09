@@ -3,6 +3,7 @@ layout: blog
 title: Transition to Colemak keyboard layout
 segments:
   - blog
+  - featured
 published: true
 date: 2020-05-11T05:38:18.797Z
 tags:

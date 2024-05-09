@@ -1,7 +1,7 @@
 use crate::{
     feed::render_rss_feed,
     pages::{
-        contact::render_contact, index::render_index, post::render_post,
+        admin::render_admin, contact::render_contact, index::render_index, post::render_post,
         post_list::render_post_list,
     },
 };
@@ -16,6 +16,7 @@ pub fn get_router() -> Router {
         .route("/blog/tags/:tag", get(render_post_list))
         .route("/blog/:post_id", get(render_post))
         .route("/contact", get(render_contact))
+        .route("/admin", get(render_admin))
         .route("/feed.xml", get(render_rss_feed))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
