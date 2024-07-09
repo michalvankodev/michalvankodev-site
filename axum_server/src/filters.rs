@@ -12,7 +12,7 @@ pub fn description_filter(body: &String) -> ::askama::Result<String> {
     let description = body
         .lines()
         .filter(|line| line.starts_with("<p"))
-        .take(3)
+        .take(2)
         .collect::<Vec<&str>>()
         .join("\n");
     debug!(description);
