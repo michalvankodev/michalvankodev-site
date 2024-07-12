@@ -1,4 +1,5 @@
 {%- import "components/talent_card.html" as tc -%}
+{%- import "components/social_card.html" as sc -%}
 {% extends "base.html" %}
 
 {% block title %}Introduction{% endblock %}
@@ -39,7 +40,7 @@
 
 <section id="blog">
 <h2 class="text-blue-950 font-semibold text-2xl m-5">Blog</h2>
-  <section id="tags">
+  <section id="blog-tags">
     <ul class="mx-5">
      {% for tag in blog_tags %}
       <li class="inline-block mx-0.5 p-0.5">
@@ -60,21 +61,56 @@
   </ul>
 </section>
 
+<section id="socials">
+  <h2 class="text-blue-950 font-semibold text-2xl m-5">Socials</h2>
+  {% call sc::social_card_start("twitch", "I stream (almost) regularly on <em>twitch.tv</em>") %}
+    <script src= "https://player.twitch.tv/js/embed/v1.js"></script>
+    <div id="twitch-player" class="h-64 rounded overflow-hidden"></div>
+    <script type="text/javascript">
+      var options = {
+        width: "100%",
+        height: "100%",
+        channel: "michalvankodev",
+        parent: ["localhost"]
+      };
+      var player = new Twitch.Player("twitch-player", options);
+      player.setVolume(0.5);
+    </script>
+  {% call sc::social_card_end() %}
+
+  {% call sc::social_card_start("tiktok", "Highlight can be found on <em>TikTok</em>") %}
+  <!-- STYLES needed to overwrite tiktok embed css -->
+  <blockquote
+    class="overflow-hidden p-0 m-0 tiktok-embed bg-pink-200"
+    cite="https://www.tiktok.com/@michalvankodev"
+    data-unique-id="michalvankodev"
+    data-embed-from="embed_page"
+    data-embed-type="creator"
+    style="max-width:780px; min-width:288px; margin: 0; padding: 0; border-radius: 8px"
+  >
+    <section>
+       <a target="_blank" href="https://www.tiktok.com/@michalvankodev?refer=creator_embed">@michalvankodev</a>
+    </section>
+  </blockquote>
+  <script async src="https://www.tiktok.com/embed.js"></script>
+  {% call sc::social_card_end() %}
+</section>
+
 <section class="twitch-stream-promo">
   <h2>Follow my twitch stream</h2>
   <div class="twitch-embed">
     <div class="twitch-video">
-      <iframe
-        title="My twitch channel"
-        src="https://player.twitch.tv/?channel=michalvankodev&parent=michalvanko.dev&parent=localhost&autoplay=false"
-        loading="lazy"
-        frameborder="0"
-        scrolling="no"
-        allowfullscreen
-        height="100%"
-        width="100%"
-        class="embed"
-      />
+      <!-- <iframe -->
+        <!-- title="My twitch channel" -->
+        <!-- src="https://player.twitch.tv/?channel=michalvankodev&parent=michalvanko.dev&parent=localhost&autoplay=false" -->
+        <!-- loading="lazy" -->
+        <!-- frameborder="0" -->
+        <!-- scrolling="no" -->
+        <!-- allowfullscreen -->
+        <!-- height="100%" -->
+        <!-- width="100%" -->
+        <!-- class="embed" -->
+      <!-- /> -->
     </div>
     <aside>
       Come hang out and chat with me <strong>every Tuesday and Thursday</strong>

@@ -1,0 +1,16 @@
+{% macro social_card_start(svg, heading) %}
+
+<section class="border rounded-md bg-pink-200 m-4 p-4">
+	<header class="flex text-center justify-center items-center gap-2 mb-2">
+		 <svg aria-hidden="true" class="h-7 w-7 fill-blue-950">
+	    <use xlink:href="/svg/icons-sprite.svg#{{svg}}" />
+	  </svg>
+		<h3 class="text-lg font-medium mb-1">{{heading|safe}}</h3>
+	</header>
+
+{% endmacro %}
+
+{% macro social_card_end() %}
+	</section>
+</section>
+{% endmacro %}
