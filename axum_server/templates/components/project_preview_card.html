@@ -1,0 +1,37 @@
+<article>
+  <header class="px-4 mb-3"> 
+    <h2 class="text-3xl font-semibold text-blue-900">
+     {{project.metadata.title}}
+    </h2>
+    <p class="px-5 text-gray-800">
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make</p>
+  </header>
+  <!-- <hr class="border-blue-950 my-5"> -->
+
+  {% match project.metadata.cover_image %}
+  {% when Some with (source) %}
+  <figure>
+    <!-- <img src="{{source}}" /> -->
+		<!-- TODO <figure> -->
+	  <svg aria-hidden="true" class="h-12 w-12 fill-blue-950">
+	    <use xlink:href="/svg/icons-sprite.svg#mail" />
+	  </svg>
+
+  </figure>
+  {% when None %}
+  {% endmatch %}
+
+
+	<footer class="text-sm">
+    <h3 class="text-3xl font-semibold text-blue-900">
+     TODO classification
+    </h3>
+    <ul class="inline-block">
+     {% for tag in project.metadata.tags %}
+      <li class="inline-block">
+        {{tag}}
+      </li>
+      {% endfor %}
+    </ul>
+	</footer>
+</article>

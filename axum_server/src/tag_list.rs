@@ -1,4 +1,7 @@
-use crate::{pages::post::PostMetadata, post_list::get_post_list};
+use crate::{
+    pages::post::{PostMetadata, BLOG_POST_PATH},
+    post_list::get_post_list,
+};
 use axum::http::StatusCode;
 use std::collections::HashMap;
 use tracing::debug;
@@ -6,7 +9,7 @@ use tracing::debug;
 pub async fn get_popular_blog_tags() -> Result<Vec<String>, StatusCode> {
     const TAGS_LENGTH: usize = 7;
 
-    let post_list = get_post_list::<PostMetadata>().await?;
+    let post_list = get_post_list::<PostMetadata>(BLOG_POST_PATH).await?;
     let tags_sum = post_list
         .into_iter()
         .flat_map(|post| post.metadata.tags)

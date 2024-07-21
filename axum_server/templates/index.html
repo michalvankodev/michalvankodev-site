@@ -116,27 +116,20 @@
 
 </section>
 
-<section class="twitch-stream-promo">
-  <h2>Follow my twitch stream</h2>
-  <div class="twitch-embed">
-    <div class="twitch-video">
-      <!-- <iframe -->
-        <!-- title="My twitch channel" -->
-        <!-- src="https://player.twitch.tv/?channel=michalvankodev&parent=michalvanko.dev&parent=localhost&autoplay=false" -->
-        <!-- loading="lazy" -->
-        <!-- frameborder="0" -->
-        <!-- scrolling="no" -->
-        <!-- allowfullscreen -->
-        <!-- height="100%" -->
-        <!-- width="100%" -->
-        <!-- class="embed" -->
-      <!-- /> -->
-    </div>
-    <aside>
-      Come hang out and chat with me <strong>every Tuesday and Thursday</strong>
-      afternoon central Europe time. I stream working on my side-projects and talking
-      anything about the developer lifestyle.
-    </aside>
-  </div>
+<hr class="border-blue-950 m-5">
+
+<section id="showcase">
+  <h2 class="text-blue-950 font-semibold text-2xl m-5">Showcase</h2>
+
+  <ul class="mx-5">
+   {% for project in featured_projects %}
+    <li class="my-2">
+      {% include "components/project_preview_card.html" %}
+    </li>
+   {% endfor %}
+  </ul>
+
 </section>
+
+
 {% endblock %}

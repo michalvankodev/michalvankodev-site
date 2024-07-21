@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use axum::http::StatusCode;
 use serde::de::DeserializeOwned;
 use tokio::fs::read_dir;
@@ -6,7 +8,7 @@ use tracing::info;
 use crate::post_parser::{parse_post, ParseResult};
 
 pub async fn get_post_list<'de, Metadata: DeserializeOwned>(
-    path: &str,
+    path: &Path,
 ) -> Result<Vec<ParseResult<Metadata>>, StatusCode> {
     // let path = "../_posts/blog/";
     let mut dir = read_dir(path)

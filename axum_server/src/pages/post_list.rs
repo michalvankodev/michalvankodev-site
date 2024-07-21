@@ -11,7 +11,7 @@ use crate::{
     post_parser::ParseResult,
 };
 
-use super::post::PostMetadata;
+use super::post::{PostMetadata, BLOG_POST_PATH};
 
 #[derive(Template)]
 #[template(path = "post_list.html")]
@@ -28,7 +28,7 @@ pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTempl
     let tag = tag.map(|Path(tag)| tag);
 
     let site_footer = tokio::spawn(render_site_footer());
-    let mut post_list = get_post_list::<PostMetadata>().await?;
+    let mut post_list = get_post_list::<PostMetadata>(BLOG_POST_PATH).await?;
     post_list.sort_by_key(|post| post.metadata.date);
     post_list.reverse();
 

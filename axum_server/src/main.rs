@@ -5,10 +5,13 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod components;
 mod featured_posts;
+mod featured_projects;
 mod feed;
 mod filters;
 mod pages;
 mod post_list;
+// mod project_list;
+// TODO make post and project modules
 mod post_parser;
 mod router;
 mod tag_list;

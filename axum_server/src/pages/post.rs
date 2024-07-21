@@ -12,6 +12,8 @@ use crate::{
     post_parser::{deserialize_date, parse_post},
 };
 
+pub const BLOG_POST_PATH: &str = "../_posts/blog";
+
 #[derive(Deserialize, Debug)]
 pub struct PostMetadata {
     pub layout: String,

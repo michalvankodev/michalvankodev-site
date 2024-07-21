@@ -98,22 +98,12 @@ collections:
                   default: true,
                 }
               - { label: Description, name: description, widget: markdown }
-              - label: Image
-                name: image
-                widget: object
-                fields:
-                  - {
-                      label: Source,
-                      name: source,
-                      widget: image,
-                      required: false,
-                    }
-                  - {
-                      label: Image description,
-                      name: image_description,
-                      widget: string,
-                      required: false,
-                    }
+              - {
+                  label: Cover image,
+                  name: cover_image,
+                  widget: image,
+                  required: false,
+                }
           - label: Presentations
             name: presentations
             widget: list
@@ -139,3 +129,44 @@ collections:
                   default: true,
                 }
               - { label: Description, name: description, widget: markdown }
+  - name: 'projects' # Used in routes, e.g., /admin/collections/blog
+    label: 'Showcase projects' # Used in the UI
+    folder: '_projects/' # The path to the folder where the documents are stored
+    create: true # Allow users to create new documents in this collection
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}' # Filename template, e.g., YYYY-MM-DD-title.md
+    fields: # The fields for each document, usually in front matter
+      - { label: Project name, name: title, widget: string }
+      - {
+          label: Displayed,
+          name: displayed,
+          widget: boolean,
+          default: true,
+        }
+      - { label: Description, name: description, widget: markdown }
+      - {
+          label: Cover image,
+          name: cover_image,
+          widget: image,
+          required: false,
+        }
+      - {
+          label: Classification,
+          name: classification,
+          widget: 'select',
+          options: [
+            { label: 'Web application', value: 'webapp' },
+            { label: 'Web-site', value:  'website' },
+            { label: 'Video Game', value: 'videogame' },
+            { label: 'Embedded system', value: 'embedded' },
+            { label: 'Presentation', value: 'presentation' },
+          ],
+          default: 'webapp'
+        }
+      - {
+          label: 'Tags',
+          name: 'tags',
+          widget: 'list',
+          default: ['Webapp'],
+          required: false,
+        }
+      - { label: 'Featured', name: 'featured', widget: "boolean", default: false }

@@ -3,10 +3,13 @@ use axum::response::IntoResponse;
 use chrono::Utc;
 use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
 
+use crate::pages::post::BLOG_POST_PATH;
 use crate::{pages::post::PostMetadata, post_list::get_post_list};
 
 pub async fn render_rss_feed() -> Result<impl IntoResponse, StatusCode> {
-    let mut post_list = get_post_list::<PostMetadata>().await.unwrap_or(vec![]);
+    let mut post_list = get_post_list::<PostMetadata>(BLOG_POST_PATH)
+        .await
+        .unwrap_or(vec![]);
     post_list.sort_by_key(|post| post.metadata.date);
     post_list.reverse();
 
