@@ -1,5 +1,6 @@
 use askama::Template;
 use axum::http::StatusCode;
+use tokio::try_join;
 
 use crate::filters;
 use crate::{
@@ -27,27 +28,13 @@ pub struct IndexTemplate {
 }
 
 pub async fn render_index() -> Result<IndexTemplate, StatusCode> {
-    let site_footer = tokio::spawn(render_site_footer());
-    let blog_tags = tokio::spawn(get_popular_blog_tags());
-    let featured_posts = tokio::spawn(get_featured_posts());
-    let featured_projects = tokio::spawn(get_featured_projects());
-
-    let blog_tags = blog_tags
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)??;
-
-    let site_footer = site_footer
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
-
-    let featured_posts = featured_posts
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)??;
-
-    let featured_projects = featured_projects
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)??;
-    // TODO convert projects into cms
+    let (site_footer, blog_tags, featured_posts, featured_projects) = try_join!(
+        render_site_footer(),
+        get_popular_blog_tags(),
+        get_featured_posts(),
+        get_featured_projects()
+    )
+    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     Ok(IndexTemplate {
         site_footer,

@@ -1,4 +1,5 @@
 use askama::Template;
+use axum::http::StatusCode;
 
 use crate::{
     pages::post::{PostMetadata, BLOG_POST_PATH},
@@ -12,10 +13,9 @@ pub struct SiteFooter {
     pub latest_posts: Vec<ParseResult<PostMetadata>>,
 }
 
-pub async fn render_site_footer() -> SiteFooter {
-    let mut post_list = get_post_list::<PostMetadata>(BLOG_POST_PATH)
-        .await
-        .unwrap_or(vec![]);
+// TODO remove whole site footer anyway
+pub async fn render_site_footer() -> Result<SiteFooter, StatusCode> {
+    let mut post_list = get_post_list::<PostMetadata>(BLOG_POST_PATH).await?;
     post_list.sort_by_key(|post| post.metadata.date);
     post_list.reverse();
 
@@ -23,5 +23,5 @@ pub async fn render_site_footer() -> SiteFooter {
         .into_iter()
         .take(6)
         .collect::<Vec<ParseResult<PostMetadata>>>();
-    SiteFooter { latest_posts }
+    Ok(SiteFooter { latest_posts })
 }
