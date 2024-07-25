@@ -3,6 +3,7 @@ use askama::Template;
 use axum::{extract::Path, http::StatusCode};
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
+use tokio::try_join;
 
 use crate::{
     components::{
@@ -38,13 +39,10 @@ pub struct PostTemplate {
 }
 
 pub async fn render_post(Path(post_id): Path<String>) -> Result<PostTemplate, StatusCode> {
-    let site_footer = tokio::spawn(render_site_footer());
     let path = format!("../_posts/blog/{}.md", post_id);
-    let parsed = parse_post::<PostMetadata>(&path).await?;
+    let parse_post = parse_post::<PostMetadata>(&path);
+    let (site_footer, parsed) = try_join!(render_site_footer(), parse_post)?;
 
-    let site_footer = site_footer
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
     Ok(PostTemplate {
         title: parsed.metadata.title,
         date: parsed.metadata.date,

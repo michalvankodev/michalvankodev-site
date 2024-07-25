@@ -33,8 +33,7 @@ pub async fn render_index() -> Result<IndexTemplate, StatusCode> {
         get_popular_blog_tags(),
         get_featured_posts(),
         get_featured_projects()
-    )
-    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    )?;
 
     Ok(IndexTemplate {
         site_footer,

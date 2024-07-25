@@ -23,10 +23,7 @@ pub struct ContactPageTemplate {
 }
 
 pub async fn render_contact() -> Result<ContactPageTemplate, StatusCode> {
-    let site_footer = tokio::spawn(render_site_footer());
-    let site_footer = site_footer
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let site_footer = render_site_footer().await?;
     let links = vec![
         ContactLink {
             href: "mailto: michalvankosk@gmail.com".to_string(),

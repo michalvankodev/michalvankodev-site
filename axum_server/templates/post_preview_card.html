@@ -4,7 +4,7 @@
       <a rel="prefetch" href="/blog/{{post.slug}}">{{post.metadata.title}}</a>
     </h2>
     <aside class="flex justify-between">
-    {% let tags = post.metadata.tags %}
+    {% let tags = post.metadata.tags.clone() %}
     {% include "post_tag_list.html" %}
     <section class="created-at m-1 text-right text-sm text-gray-600">
       <span>Published on</span>

@@ -27,7 +27,7 @@ pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTempl
     // I will forget what happens here in a week. But essentially it's pattern matching and shadowing
     let tag = tag.map(|Path(tag)| tag);
 
-    let site_footer = tokio::spawn(render_site_footer());
+    let site_footer = render_site_footer().await?;
     let mut post_list = get_post_list::<PostMetadata>(BLOG_POST_PATH).await?;
     post_list.sort_by_key(|post| post.metadata.date);
     post_list.reverse();
@@ -46,10 +46,6 @@ pub async fn render_post_list(tag: Option<Path<String>>) -> Result<PostListTempl
             .collect(),
         None => post_list,
     };
-
-    let site_footer = site_footer
-        .await
-        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     let header_props = match tag {
         Some(_) => HeaderProps::with_back_link(Link {
