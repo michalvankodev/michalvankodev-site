@@ -9,4 +9,15 @@ pub struct ProjectMetadata {
     pub cover_image: Option<String>,
     pub tags: Vec<String>,
     pub featured: bool,
+    pub link: Option<String>,
+}
+
+pub fn translate_classification(classification: &str) -> &str {
+    match classification {
+        "webapp" => "Web application",
+        "website" => "Web site",
+        "presentation" => "Presentation",
+        "videogame" => "Video game",
+        any => any,
+    }
 }

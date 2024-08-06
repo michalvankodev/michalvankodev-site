@@ -40,7 +40,7 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
         .parse_with_struct::<Metadata>(&file_contents)
         .ok_or_else(|| {
             tracing::error!("Failed to parse metadata");
-            return StatusCode::INTERNAL_SERVER_ERROR;
+            StatusCode::INTERNAL_SERVER_ERROR
         })?;
 
     let body = parse_html(&metadata.content);
@@ -52,14 +52,14 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
         .ok_or(StatusCode::INTERNAL_SERVER_ERROR)?
         .to_owned();
 
-    return Ok(ParseResult {
+    Ok(ParseResult {
         body,
         metadata: metadata.data,
         slug: filename,
-    });
+    })
 }
 
-fn parse_html(markdown: &str) -> String {
+pub fn parse_html(markdown: &str) -> String {
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
     options.insert(Options::ENABLE_FOOTNOTES);
@@ -68,45 +68,45 @@ fn parse_html(markdown: &str) -> String {
     options.insert(Options::ENABLE_SMART_PUNCTUATION);
     options.insert(Options::ENABLE_HEADING_ATTRIBUTES);
 
-    let parser = Parser::new_ext(&markdown, options).map(|event| match event {
-        Event::Start(ref tag) => match tag {
-            // Parsing images considers `alt` attribute as inner `Text` event
-            // Therefore the `[alt]` is rendered in html as subtitle
-            // and the `[](url "title")` `title` is rendered as `alt` attribute
-            Tag::Image {
-                link_type,
-                dest_url,
-                title,
-                id,
-            } => {
-                println!(
-                    "Image link_type: {:?} url: {} title: {} id: {}",
-                    link_type, dest_url, title, id
-                );
-                // TODO src set
-                Event::Html(
-                    format!(
-                        r#"<figure>
+    let parser = Parser::new_ext(markdown, options).map(|event| match event {
+        /*
+        Parsing images considers `alt` attribute as inner `Text` event
+        Therefore the `[alt]` is rendered in html as subtitle
+        and the `[](url "title")` `title` is rendered as `alt` attribute
+        */
+        Event::Start(Tag::Image {
+            link_type,
+            dest_url,
+            title,
+            id,
+        }) => {
+            println!(
+                "Image link_type: {:?} url: {} title: {} id: {}",
+                link_type, dest_url, title, id
+            );
+            // TODO src set
+            Event::Html(
+                format!(
+                    r#"<figure>
                             <img
                               alt="{alt}"
                               src="{src}"
                             />
                             <figcaption>
                         "#,
-                        alt = title,
-                        src = dest_url,
-                    )
-                    .into(),
+                    alt = title,
+                    src = dest_url,
                 )
-            }
-            _ => event,
-        },
+                .into(),
+            )
+        }
+        Event::Start(_) => event,
         Event::End(TagEnd::Image) => Event::Html("</figcaption></figure>".into()),
         _ => event,
     });
 
-    // Write to String buffer.
+    // Write to String buffer
     let mut html = String::new();
     pulldown_cmark::html::push_html(&mut html, parser);
-    return html;
+    html
 }

@@ -144,6 +144,12 @@ collections:
         }
       - { label: Description, name: description, widget: markdown }
       - {
+          label: Link,
+          name: link,
+          widget: string,
+          required: false,
+        }
+      - {
           label: Cover image,
           name: cover_image,
           widget: image,
