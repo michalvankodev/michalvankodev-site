@@ -1,15 +1,16 @@
-use crate::{
-    pages::post::{PostMetadata, BLOG_POST_PATH},
-    post_list::get_post_list,
-};
 use axum::http::StatusCode;
 use std::collections::HashMap;
 use tracing::debug;
 
+use crate::{
+    blog_posts::blog_post_model::{BlogPostMetadata, BLOG_POST_PATH},
+    post_utils::post_listing::get_post_list,
+};
+
 pub async fn get_popular_blog_tags() -> Result<Vec<String>, StatusCode> {
     const TAGS_LENGTH: usize = 7;
 
-    let post_list = get_post_list::<PostMetadata>(BLOG_POST_PATH).await?;
+    let post_list = get_post_list::<BlogPostMetadata>(BLOG_POST_PATH).await?;
     let tags_sum = post_list
         .into_iter()
         .flat_map(|post| post.metadata.tags)

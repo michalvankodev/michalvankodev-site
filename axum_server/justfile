@@ -20,7 +20,10 @@ decap_server:
 
 # Run dev server in watch mode
 dev: 
-	(just server_dev; just tailwind) | parallel
+	#!/usr/bin/env -S parallel --shebang --ungroup --jobs {{ num_cpus() }}
+	just server_dev
+	just tailwind
+	just decap_server
 
 # Run dev server in watch mode
 test: 

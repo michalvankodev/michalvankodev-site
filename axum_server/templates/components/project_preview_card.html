@@ -35,7 +35,7 @@
 
 	<footer class="text-sm px-4">
     <h3 class="text-xl font-semibold text-blue-900 my-2">
-      {{crate::pages::project::translate_classification(project.metadata.classification)}}
+      {{crate::projects::project_model::translate_classification(project.metadata.classification)}}
     </h3>
     <ul class="inline-block">
      {% for tag in project.metadata.tags %}

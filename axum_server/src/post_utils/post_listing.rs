@@ -3,7 +3,7 @@ use serde::de::DeserializeOwned;
 use tokio::fs::read_dir;
 use tracing::info;
 
-use crate::post_parser::{parse_post, ParseResult};
+use super::post_parser::{parse_post, ParseResult};
 
 pub async fn get_post_list<'de, Metadata: DeserializeOwned>(
     path: &str,

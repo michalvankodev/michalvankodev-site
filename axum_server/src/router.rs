@@ -1,8 +1,8 @@
 use crate::{
     feed::render_rss_feed,
     pages::{
-        admin::render_admin, contact::render_contact, index::render_index, post::render_post,
-        post_list::render_post_list,
+        admin::render_admin, blog_post_list::render_blog_post_list,
+        blog_post_page::render_blog_post, contact::render_contact, index::render_index,
     },
 };
 use axum::{extract::MatchedPath, http::Request, routing::get, Router};
@@ -12,9 +12,9 @@ use tracing::info_span;
 pub fn get_router() -> Router {
     Router::new()
         .route("/", get(render_index))
-        .route("/blog", get(render_post_list))
-        .route("/blog/tags/:tag", get(render_post_list))
-        .route("/blog/:post_id", get(render_post))
+        .route("/blog", get(render_blog_post_list))
+        .route("/blog/tags/:tag", get(render_blog_post_list))
+        .route("/blog/:post_id", get(render_blog_post))
         .route("/contact", get(render_contact))
         .route("/admin", get(render_admin))
         .route("/feed.xml", get(render_rss_feed))

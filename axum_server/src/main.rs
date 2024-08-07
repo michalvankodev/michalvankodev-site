@@ -3,18 +3,14 @@ use tower_http::services::ServeDir;
 use tower_livereload::LiveReloadLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+mod blog_posts;
 mod components;
-mod featured_posts;
-mod featured_projects;
 mod feed;
 mod filters;
 mod pages;
-mod post_list;
-// mod project_list;
-// TODO make post and project modules
-mod post_parser;
+mod post_utils;
+mod projects;
 mod router;
-mod tag_list;
 // mod template;
 
 #[tokio::main]
