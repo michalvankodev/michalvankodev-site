@@ -18,11 +18,11 @@
 
   {% match project.metadata.cover_image %}
   {% when Some with (source) %}
-  <figure class="my-2">
+  <figure class="mx-4 my-2">
       {% match project.metadata.link %}
       {% when Some with (href) %}
       <a href="{{href}}">
-        <img src="{{source}}" />
+        <img src="{{source}}" class="object-contain w-full aspect-video"/>
       </a>
       {% when None %}
       <img src="{{source}}" />
@@ -39,7 +39,7 @@
     </h3>
     <ul class="inline-block">
      {% for tag in project.metadata.tags %}
-      <li class="inline-block text-blue-700 italic">
+      <li class="inline-block text-pink-950">
         {{tag}}
       </li>
       {% endfor %}
