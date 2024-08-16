@@ -8,6 +8,7 @@ mod components;
 mod feed;
 mod filters;
 mod pages;
+mod picture_generator;
 mod post_utils;
 mod projects;
 mod router;

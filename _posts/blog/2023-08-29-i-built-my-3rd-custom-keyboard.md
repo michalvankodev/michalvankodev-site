@@ -6,6 +6,7 @@ segments:
   - featured
 published: true
 date: 2023-08-29T19:34:17.071Z
+thumbnail: /images/uploads/20230226_130037.jpg
 tags:
   - News
   - Keyboards

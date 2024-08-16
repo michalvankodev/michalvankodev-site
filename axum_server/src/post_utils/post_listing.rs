@@ -30,11 +30,8 @@ pub async fn get_post_list<'de, Metadata: DeserializeOwned>(
         .unwrap_or_else(|_| "DEV".to_owned())
         .eq("PROD")
     {
-        posts = posts
-            .into_iter()
-            .filter(|post| !post.slug.starts_with("dev"))
-            .collect()
+        posts.retain(|post| !post.slug.starts_with("dev"))
     }
 
-    return Ok(posts);
+    Ok(posts)
 }

@@ -5,6 +5,7 @@ segments:
   - broadcasts
 published: true
 date: 2023-01-21T20:22:21.191Z
+thumbnail: /images/uploads/devbreak-4-3-.png
 tags:
   - DevBreak
 ---

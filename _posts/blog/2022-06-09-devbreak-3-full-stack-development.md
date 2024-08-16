@@ -5,6 +5,7 @@ segments:
   - broadcasts
 published: true
 date: 2022-06-09T20:22:21.191Z
+thumbnail: /images/uploads/deevbreakdoninik.jpeg
 tags:
   - DevBreak
 ---

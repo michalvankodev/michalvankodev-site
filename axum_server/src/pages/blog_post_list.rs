@@ -30,6 +30,7 @@ pub async fn render_blog_post_list(
     let site_footer = render_site_footer().await?;
     let mut post_list = get_post_list::<BlogPostMetadata>(BLOG_POST_PATH).await?;
     post_list.sort_by_key(|post| post.metadata.date);
+    post_list.retain(|post| post.metadata.published);
     post_list.reverse();
 
     let posts = match &tag {

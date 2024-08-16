@@ -7,7 +7,6 @@ pub const BLOG_POST_PATH: &str = "../_posts/blog";
 
 #[derive(Deserialize, Debug)]
 pub struct BlogPostMetadata {
-    pub layout: String,
     pub title: String,
     pub segments: Vec<String>,
     pub published: bool,

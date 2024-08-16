@@ -1,16 +1,17 @@
 ---
-layout: blog
-title: "Our attempt at Rusty game jam - Weekly #25-2022"
 segments:
   - blog
   - featured
+notes: ""
+layout: blog
+title: "Our attempt at Rusty game jam - Weekly #25-2022"
 published: true
 date: 2022-06-26T20:02:47.419Z
+thumbnail: /images/uploads/screenshot-from-2022-06-26-22-37-16.png
 tags:
   - News
   - Weekly
   - Development
-notes: ""
 ---
 Long time no see!
 

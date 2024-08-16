@@ -6,6 +6,7 @@ segments:
   - featured
 published: true
 date: 2023-04-27T21:22:21.191Z
+thumbnail: /images/uploads/teta.png
 tags:
   - Presentation
   - Keyboards

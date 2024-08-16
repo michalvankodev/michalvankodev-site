@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.4.7 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.9 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -672,10 +672,6 @@ video {
   aspect-ratio: 16 / 9;
 }
 
-.aspect-\[4\/3\] {
-  aspect-ratio: 4/3;
-}
-
 .h-0 {
   height: 0px;
 }
@@ -830,11 +826,6 @@ video {
 .object-contain {
   -o-object-fit: contain;
      object-fit: contain;
-}
-
-.object-cover {
-  -o-object-fit: cover;
-     object-fit: cover;
 }
 
 .p-0 {

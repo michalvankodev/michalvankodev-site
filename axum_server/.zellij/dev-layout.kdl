@@ -15,6 +15,10 @@ layout {
             command "just"
             args "tailwind"
         }
+		pane {
+            command "just"
+            args "decap_server"
+        }
 	}
     pane size=2 borderless=true {
         plugin location="zellij:status-bar"
