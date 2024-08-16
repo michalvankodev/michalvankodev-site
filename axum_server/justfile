@@ -25,9 +25,12 @@ dev:
 	just tailwind
 	just decap_server
 
-# Run dev server in watch mode
+# Run tests
 test: 
 	cargo test
+
+test_watch:
+	cargo watch -x test
 
 # Run server in production mode
 prod:
