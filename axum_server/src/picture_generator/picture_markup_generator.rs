@@ -1,4 +1,9 @@
-use std::path::{Path, PathBuf};
+use std::{
+    cmp::Ordering,
+    path::{Path, PathBuf},
+};
+
+use image::{GenericImageView, ImageReader};
 
 pub const PIXEL_DENSITIES: [f32; 5] = [1., 1.5, 2., 3., 4.];
 
@@ -10,9 +15,15 @@ pub enum ExportFormat {
     PNG,
 }
 
-pub fn generate_picture_markup(orig_img_path: &str, width: u32, height: u32) -> String {
+pub fn generate_picture_markup(
+    orig_img_path: &str,
+    width: u32,
+    height: u32,
+) -> Result<String, anyhow::Error> {
     let exported_formats = get_export_formats(orig_img_path);
     let path_to_generated = get_generated_file_name(orig_img_path);
+    let orig_img = ImageReader::open(&orig_img_path)?.decode()?;
+    let orig_img_dimensions = orig_img.dimensions();
     let resolutions = vec![
         (300, 200, 1.),
         (450, 300, 1.5),
@@ -20,6 +31,7 @@ pub fn generate_picture_markup(orig_img_path: &str, width: u32, height: u32) -> 
         (900, 600, 3.),
         (1200, 800, 4.),
     ];
+    let resolutions = get_resolutions(orig_img_dimensions, width, height);
 
     for export_format in exported_formats {
 
@@ -28,7 +40,107 @@ pub fn generate_picture_markup(orig_img_path: &str, width: u32, height: u32) -> 
         // let resolutions = get_resolutions(width, height);
     }
     let result = format!("<picture></picture>");
-    result
+    Ok(result)
+}
+
+fn get_resolutions(
+    (orig_width, orig_height): (u32, u32),
+    width: u32,
+    height: u32,
+) -> Vec<(u32, u32, f32)> {
+    let mut resolutions: Vec<(u32, u32, f32)> = vec![];
+    for pixel_density in PIXEL_DENSITIES {
+        let (density_width, density_height) = (
+            (pixel_density * width as f32).floor() as u32,
+            (pixel_density * height as f32).floor() as u32,
+        );
+
+        if density_width > orig_width || density_height > orig_height {
+            let (max_width, max_height) =
+                get_max_resolution((orig_width, orig_height), width, height);
+            resolutions.push((max_width, max_height, pixel_density));
+            break;
+        }
+        resolutions.push((density_width, density_height, pixel_density));
+    }
+    resolutions
+}
+
+#[test]
+fn test_get_resolutions() {
+    // TODO what should happen if there are different dimensions?
+    // We should get as most as possible?
+    assert_eq!(
+        get_resolutions((320, 200), 320, 200),
+        vec![(320, 200, 1.)],
+        "Only original size fits"
+    );
+    assert_eq!(
+        get_resolutions((500, 400), 320, 200),
+        vec![(320, 200, 1.), (480, 300, 1.5), (500, 305, 2.)],
+        "Should only create sizes that fits and fill the max possible for the last one - width"
+    );
+    assert_eq!(
+        get_resolutions((400, 600), 300, 200),
+        vec![(300, 200, 1.), (400, 266, 1.5)],
+        "Should only create sizes that fits and fill the max possible for the last one - height"
+    );
+    assert_eq!(
+        get_resolutions((1200, 900), 320, 200),
+        vec![
+            (320, 200, 1.),
+            (480, 300, 1.5),
+            (640, 400, 2.),
+            (960, 600, 3.),
+            (1200, 900, 4.)
+        ],
+        "Should create all possible sizes, with the last one maxed"
+    );
+}
+
+fn get_max_resolution(
+    (orig_width, orig_height): (u32, u32),
+    width: u32,
+    height: u32,
+) -> (u32, u32) {
+    let width_scale = orig_width as f32 / width as f32;
+    let height_scale = orig_height as f32 / height as f32;
+
+    let scale = match width_scale.partial_cmp(&height_scale) {
+        Some(Ordering::Less) => width_scale,
+        Some(Ordering::Greater) => height_scale,
+        _ => width_scale,
+    };
+    (
+        (width as f32 * scale) as u32,
+        (height as f32 * scale) as u32,
+    )
+}
+
+#[test]
+fn test_get_max_resolution() {
+    assert_eq!(
+        get_max_resolution((320, 200), 320, 200),
+        (320, 200),
+        "Original size fits"
+    );
+    // THINK: Real curious if this is what I want to do. Rather than use CSS to `object-cover` original image size
+    assert_eq!(
+        get_max_resolution((200, 200), 300, 200),
+        (200, 133),
+        "Image has to be smaller"
+    );
+
+    assert_eq!(
+        get_max_resolution((1000, 1000), 200, 100),
+        (1000, 500),
+        "width is maxed"
+    );
+    assert_eq!(
+        get_max_resolution((1000, 1000), 100, 200),
+        (500, 1000),
+        "height is maxed"
+    );
 }
 
 fn get_generated_file_name(orig_img_path: &str) -> PathBuf {
@@ -56,11 +168,6 @@ fn test_get_generated_paths() {
             .unwrap_or(""),
         "./generated_images/images/uploads/img_name"
     );
-}
-
-// TODO get original img resolution and determine how many exports are going to be needed
-fn get_resolutions(orig_width: i32, orig_height: i32, width: i32, height: i32) -> Vec<(i32, i32)> {
-    todo!("get original img resolution and determine how many exports are going to be needed")
 }
 
 fn generate_srcset(new_path: &str, width: u32, height: u32) -> &str {
@@ -118,7 +225,8 @@ fn test_generate_picture_markup() {
         </picture>
     """#;
     assert_eq!(
-        generate_picture_markup(orig_img_path, width, height),
+        generate_picture_markup(orig_img_path, width, height)
+            .expect("picture markup has to be generated"),
         result
     );
 }
