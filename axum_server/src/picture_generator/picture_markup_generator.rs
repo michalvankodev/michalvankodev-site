@@ -55,7 +55,10 @@ fn get_resolutions(
             (pixel_density * height as f32).floor() as u32,
         );
 
-        if density_width > orig_width || density_height > orig_height {
+        // The equal sign `=` was added just to prevent next occurence of the loop
+        // In case of the `orig_width` and `orig_height` being the same as `width` and `height`
+        // See test case #1
+        if density_width >= orig_width || density_height >= orig_height {
             let (max_width, max_height) =
                 get_max_resolution((orig_width, orig_height), width, height);
             resolutions.push((max_width, max_height, pixel_density));
@@ -68,8 +71,6 @@ fn get_resolutions(
 
 #[test]
 fn test_get_resolutions() {
-    // TODO what should happen if there are different dimensions?
-    // We should get as most as possible?
     assert_eq!(
         get_resolutions((320, 200), 320, 200),
         vec![(320, 200, 1.)],
@@ -77,7 +78,7 @@ fn test_get_resolutions() {
     );
     assert_eq!(
         get_resolutions((500, 400), 320, 200),
-        vec![(320, 200, 1.), (480, 300, 1.5), (500, 305, 2.)],
+        vec![(320, 200, 1.), (480, 300, 1.5), (500, 312, 2.)],
         "Should only create sizes that fits and fill the max possible for the last one - width"
     );
     assert_eq!(
@@ -92,7 +93,7 @@ fn test_get_resolutions() {
             (480, 300, 1.5),
             (640, 400, 2.),
             (960, 600, 3.),
-            (1200, 900, 4.)
+            (1200, 750, 4.)
         ],
         "Should create all possible sizes, with the last one maxed"
     );
