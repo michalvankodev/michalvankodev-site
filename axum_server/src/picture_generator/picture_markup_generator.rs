@@ -1,8 +1,10 @@
 use std::{
     cmp::Ordering,
     path::{Path, PathBuf},
+    str::FromStr,
 };
 
+use axum::handler::HandlerWithoutStateExt;
 use image::{GenericImageView, ImageReader};
 
 pub const PIXEL_DENSITIES: [f32; 5] = [1., 1.5, 2., 3., 4.];
@@ -15,6 +17,17 @@ pub enum ExportFormat {
     PNG,
 }
 
+impl ExportFormat {
+    pub fn get_extension(&self) -> &str {
+        match self {
+            ExportFormat::JPG => "jpg",
+            ExportFormat::AVIF => "avif",
+            ExportFormat::SVG => "svg",
+            ExportFormat::PNG => "png",
+        }
+    }
+}
+
 pub fn generate_picture_markup(
     orig_img_path: &str,
     width: u32,
@@ -22,24 +35,18 @@ pub fn generate_picture_markup(
 ) -> Result<String, anyhow::Error> {
     let exported_formats = get_export_formats(orig_img_path);
     let path_to_generated = get_generated_file_name(orig_img_path);
-    let orig_img = ImageReader::open(&orig_img_path)?.decode()?;
+    let orig_img = ImageReader::open(orig_img_path)?.decode()?;
     let orig_img_dimensions = orig_img.dimensions();
-    let resolutions = vec![
-        (300, 200, 1.),
-        (450, 300, 1.5),
-        (600, 400, 2.),
-        (900, 600, 3.),
-        (1200, 800, 4.),
-    ];
     let resolutions = get_resolutions(orig_img_dimensions, width, height);
 
-    for export_format in exported_formats {
+    let source_tags = exported_formats.iter().map(|format| {
+        let srcset = generate_srcset(&path_to_generated, format, &resolutions);
+    });
 
-        // TODO get original img resolution and determine how many exports are going to be needed
-        // let orig_img_resolution =
-        // let resolutions = get_resolutions(width, height);
-    }
-    let result = format!("<picture></picture>");
+    let mut result = String::from("<picture>");
+
+    result.push_str("</picture>");
+
     Ok(result)
 }
 
@@ -171,8 +178,28 @@ fn test_get_generated_paths() {
     );
 }
 
-fn generate_srcset(new_path: &str, width: u32, height: u32) -> &str {
-    todo!("generate srcset")
+fn generate_srcset(
+    path_name: &Path,
+    format: &ExportFormat,
+    resolutions: &[(u32, u32, f32)],
+) -> String {
+    resolutions
+        .iter()
+        .map(|resolution| {
+            let extension = format.get_extension();
+            let (width, height, density) = resolution;
+            let path = path_name
+                .to_str()
+                .expect("Path to an image has to be valid");
+            let formatted_density = if density.fract() == 0.0 {
+                format!("{}", density) // Convert to integer if there is no decimal part
+            } else {
+                format!("{:.1}", density) // Format to 1 decimal place if there is a fractional part
+            };
+            format!("{path}_{width}x{height}.{extension} {formatted_density}x")
+        })
+        .collect::<Vec<String>>()
+        .join(", ")
 }
 
 fn get_export_formats(orig_img_path: &str) -> Vec<ExportFormat> {
@@ -196,11 +223,20 @@ fn test_get_export_formats() {
 }
 #[test]
 fn test_generate_srcset() {
-    let width = 400;
-    let height = 200;
-    let orig_img_path = "./images/uploads/img_name.jpg";
-    let result = "./generated_images/images/uploads/img_name_400x200.avif 1x, ./generated_images/images/uploads/img_name_500x300.avif 1.5x, ./generated_images/images/uploads/img_name_800x400.avif 2x, ./generated_images/images/uploads/img_name_1200x600.avif 3x, ./generated_images/images/uploads/img_name_1600x800.avif 4x";
-    assert_eq!(generate_srcset(orig_img_path, width, height), result)
+    let orig_img_path = PathBuf::from_str("./generated_images/images/uploads/img_name").unwrap();
+    let export_format = ExportFormat::AVIF;
+    let resolutions = vec![
+        (320, 200, 1.),
+        (480, 300, 1.5),
+        (640, 400, 2.),
+        (960, 600, 3.),
+        (1200, 750, 4.),
+    ];
+    let result = "./generated_images/images/uploads/img_name_320x200.avif 1x, ./generated_images/images/uploads/img_name_480x300.avif 1.5x, ./generated_images/images/uploads/img_name_640x400.avif 2x, ./generated_images/images/uploads/img_name_960x600.avif 3x, ./generated_images/images/uploads/img_name_1200x750.avif 4x";
+    assert_eq!(
+        generate_srcset(&orig_img_path, &export_format, &resolutions),
+        result
+    )
 }
 
 #[test]
