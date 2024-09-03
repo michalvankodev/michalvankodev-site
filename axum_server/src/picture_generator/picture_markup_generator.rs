@@ -26,12 +26,21 @@ impl ExportFormat {
             ExportFormat::PNG => "png",
         }
     }
+    pub fn get_type(&self) -> &str {
+        match self {
+            ExportFormat::JPG => "image/jpeg",
+            ExportFormat::AVIF => "image/avif",
+            ExportFormat::SVG => "image/svg+xml",
+            ExportFormat::PNG => "image/png",
+        }
+    }
 }
 
 pub fn generate_picture_markup(
     orig_img_path: &str,
     width: u32,
     height: u32,
+    alt_text: &str,
 ) -> Result<String, anyhow::Error> {
     let exported_formats = get_export_formats(orig_img_path);
     let path_to_generated = get_generated_file_name(orig_img_path);
@@ -39,15 +48,51 @@ pub fn generate_picture_markup(
     let orig_img_dimensions = orig_img.dimensions();
     let resolutions = get_resolutions(orig_img_dimensions, width, height);
 
-    let source_tags = exported_formats.iter().map(|format| {
-        let srcset = generate_srcset(&path_to_generated, format, &resolutions);
-    });
+    let source_tags = exported_formats
+        .iter()
+        .map(|format| {
+            let srcset = generate_srcset(&path_to_generated, format, &resolutions);
+            let format_type = format.get_type();
+            format!(
+                r#"<source
+                srcset="{srcset}"
+                type="{format_type}"
+            >"#
+            )
+        })
+        .collect::<Vec<String>>()
+        .join("\n");
 
-    let mut result = String::from("<picture>");
+    let image_path = get_image_path(
+        &path_to_generated,
+        resolutions.first().expect("Should this error ever happen?"),
+        exported_formats.last().expect("Can this one ever happen?"),
+    );
+    let image_tag = format!(
+        r#"<img
+            src="{image_path}"
+            width="{width}"
+            height="{height}"
+            alt="{alt_text}"
+        >"#
+    );
 
-    result.push_str("</picture>");
+    let result = format!(
+        r#"<picture>
+            {source_tags}
+            {image_tag}
+        </picture>"#
+    );
 
     Ok(result)
+}
+
+fn get_image_path(path: &Path, resolution: &(u32, u32, f32), format: &ExportFormat) -> String {
+    let path_name = path.to_str().expect("Image has to have a valid path");
+    let (width, height, _) = resolution;
+    let extension = format.get_extension();
+
+    format!("{path_name}_{width}x{height}.{extension}")
 }
 
 fn get_resolutions(
@@ -151,13 +196,28 @@ fn test_get_max_resolution() {
     );
 }
 
+fn strip_prefixes(path: &Path) -> &Path {
+    // Loop to remove all leading "../" components
+    let mut parent_path = path
+        .parent()
+        .expect("there should be a parent route to an image");
+    while let Ok(stripped) = parent_path
+        .strip_prefix("..")
+        .or(parent_path.strip_prefix("."))
+    {
+        parent_path = stripped;
+    }
+    parent_path
+}
+
 fn get_generated_file_name(orig_img_path: &str) -> PathBuf {
     let path = Path::new(&orig_img_path);
-    let parent = path
-        .parent()
-        .expect("There should be a parent route to an image")
-        .strip_prefix(".")
-        .unwrap();
+    // let parent = path
+    //     .parent()
+    //     .expect("There should be a parent route to an image")
+    //     .strip_prefix(".")
+    //     .unwrap();
+    let parent = strip_prefixes(path);
     let file_name = path
         .file_stem()
         .expect("There should be a name for every img");
@@ -178,25 +238,19 @@ fn test_get_generated_paths() {
     );
 }
 
-fn generate_srcset(
-    path_name: &Path,
-    format: &ExportFormat,
-    resolutions: &[(u32, u32, f32)],
-) -> String {
+fn generate_srcset(path: &Path, format: &ExportFormat, resolutions: &[(u32, u32, f32)]) -> String {
     resolutions
         .iter()
         .map(|resolution| {
             let extension = format.get_extension();
             let (width, height, density) = resolution;
-            let path = path_name
-                .to_str()
-                .expect("Path to an image has to be valid");
+            let path_name = path.to_str().expect("Path to an image has to be valid");
             let formatted_density = if density.fract() == 0.0 {
                 format!("{}", density) // Convert to integer if there is no decimal part
             } else {
                 format!("{:.1}", density) // Format to 1 decimal place if there is a fractional part
             };
-            format!("{path}_{width}x{height}.{extension} {formatted_density}x")
+            format!("{path_name}_{width}x{height}.{extension} {formatted_density}x")
         })
         .collect::<Vec<String>>()
         .join(", ")
@@ -243,26 +297,25 @@ fn test_generate_srcset() {
 fn test_generate_picture_markup() {
     let width = 300;
     let height = 200;
-    let orig_img_path = "./images/uploads/img_name.jpg";
-    let result = r#"""
-        <picture>
+    let orig_img_path = "../static/images/uploads/2020-03-23_20-24-06_393.jpg";
+    let result = r#"<picture>
             <source
-                srcset="./generated_images/images/uploads/img_name_300x200.avif 1x, ./generated_images/images/uploads/img_name_450x300.avif 1.5x, ./generated_images/images/uploads/img_name_600x400.avif 2x, ./generated_images/images/uploads/img_name_900x600.avif 3x, ./generated_images/images/uploads/img_name_1200x800.avif 4x"
+                srcset="./generated_images/static/images/uploads/2020-03-23_20-24-06_393_300x200.avif 1x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_450x300.avif 1.5x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_600x400.avif 2x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_900x600.avif 3x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_1200x800.avif 4x"
                 type="image/avif"
-            > 
-            <source
-                srcset="./generated_images/images/uploads/img_name_300x200.jpg 1x, ./generated_images/images/uploads/img_name_450x300.jpg 1.5x, ./generated_images/images/uploads/img_name_600x400.jpg 2x, ./generated_images/images/uploads/img_name_900x600.jpg 3x, ./generated_images/images/uploads/img_name_1200x800.jpg 4x"
+            >
+<source
+                srcset="./generated_images/static/images/uploads/2020-03-23_20-24-06_393_300x200.jpg 1x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_450x300.jpg 1.5x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_600x400.jpg 2x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_900x600.jpg 3x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_1200x800.jpg 4x"
                 type="image/jpeg"
             >
             <img
-                src="./generated_images/images/uploads/img_name_300x200.jpg"
-                width="300"
-                height="200"
-            >
-        </picture>
-    """#;
+            src="./generated_images/static/images/uploads/2020-03-23_20-24-06_393_300x200.jpg"
+            width="300"
+            height="200"
+            alt="Testing image alt"
+        >
+        </picture>"#;
     assert_eq!(
-        generate_picture_markup(orig_img_path, width, height)
+        generate_picture_markup(orig_img_path, width, height, "Testing image alt")
             .expect("picture markup has to be generated"),
         result
     );
