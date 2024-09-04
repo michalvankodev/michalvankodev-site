@@ -1,40 +1,15 @@
 use std::{
     cmp::Ordering,
     path::{Path, PathBuf},
-    str::FromStr,
+    str::FromStr as _,
 };
 
-use axum::handler::HandlerWithoutStateExt;
+use anyhow::Context;
 use image::{GenericImageView, ImageReader};
 
+use super::export_format::ExportFormat;
+
 pub const PIXEL_DENSITIES: [f32; 5] = [1., 1.5, 2., 3., 4.];
-
-#[derive(Debug, PartialEq)]
-pub enum ExportFormat {
-    JPG,
-    AVIF,
-    SVG,
-    PNG,
-}
-
-impl ExportFormat {
-    pub fn get_extension(&self) -> &str {
-        match self {
-            ExportFormat::JPG => "jpg",
-            ExportFormat::AVIF => "avif",
-            ExportFormat::SVG => "svg",
-            ExportFormat::PNG => "png",
-        }
-    }
-    pub fn get_type(&self) -> &str {
-        match self {
-            ExportFormat::JPG => "image/jpeg",
-            ExportFormat::AVIF => "image/avif",
-            ExportFormat::SVG => "image/svg+xml",
-            ExportFormat::PNG => "image/png",
-        }
-    }
-}
 
 pub fn generate_picture_markup(
     orig_img_path: &str,
@@ -44,7 +19,13 @@ pub fn generate_picture_markup(
 ) -> Result<String, anyhow::Error> {
     let exported_formats = get_export_formats(orig_img_path);
     let path_to_generated = get_generated_file_name(orig_img_path);
-    let orig_img = ImageReader::open(orig_img_path)?.decode()?;
+
+    // TODO This should get removed when we move the project structure #move
+    let dev_only_img_path = Path::new("../static/").join(orig_img_path.strip_prefix("/").unwrap());
+
+    let orig_img = ImageReader::open(&dev_only_img_path)
+        .with_context(|| format!("Failed to read instrs from {:?}", &dev_only_img_path))?
+        .decode()?;
     let orig_img_dimensions = orig_img.dimensions();
     let resolutions = get_resolutions(orig_img_dimensions, width, height);
 
@@ -221,20 +202,20 @@ fn get_generated_file_name(orig_img_path: &str) -> PathBuf {
     let file_name = path
         .file_stem()
         .expect("There should be a name for every img");
-    let result = Path::new("./generated_images/")
-        .join(parent)
+    let result = Path::new("/generated_images/")
+        .join(parent.strip_prefix("/").unwrap())
         .join(file_name);
     result
 }
 
 #[test]
 fn test_get_generated_paths() {
-    let orig_img_path = "./images/uploads/img_name.jpg";
+    let orig_img_path = "/images/uploads/img_name.jpg";
     assert_eq!(
         get_generated_file_name(orig_img_path)
             .to_str()
             .unwrap_or(""),
-        "./generated_images/images/uploads/img_name"
+        "/generated_images/images/uploads/img_name"
     );
 }
 
@@ -271,13 +252,13 @@ fn get_export_formats(orig_img_path: &str) -> Vec<ExportFormat> {
 #[test]
 fn test_get_export_formats() {
     assert_eq!(
-        get_export_formats("./images/uploads/img_name.jpg"),
+        get_export_formats("/images/uploads/img_name.jpg"),
         vec![ExportFormat::AVIF, ExportFormat::JPG]
     )
 }
 #[test]
 fn test_generate_srcset() {
-    let orig_img_path = PathBuf::from_str("./generated_images/images/uploads/img_name").unwrap();
+    let orig_img_path = PathBuf::from_str("/generated_images/images/uploads/img_name").unwrap();
     let export_format = ExportFormat::AVIF;
     let resolutions = vec![
         (320, 200, 1.),
@@ -286,7 +267,7 @@ fn test_generate_srcset() {
         (960, 600, 3.),
         (1200, 750, 4.),
     ];
-    let result = "./generated_images/images/uploads/img_name_320x200.avif 1x, ./generated_images/images/uploads/img_name_480x300.avif 1.5x, ./generated_images/images/uploads/img_name_640x400.avif 2x, ./generated_images/images/uploads/img_name_960x600.avif 3x, ./generated_images/images/uploads/img_name_1200x750.avif 4x";
+    let result = "/generated_images/images/uploads/img_name_320x200.avif 1x, /generated_images/images/uploads/img_name_480x300.avif 1.5x, /generated_images/images/uploads/img_name_640x400.avif 2x, /generated_images/images/uploads/img_name_960x600.avif 3x, /generated_images/images/uploads/img_name_1200x750.avif 4x";
     assert_eq!(
         generate_srcset(&orig_img_path, &export_format, &resolutions),
         result
@@ -297,18 +278,18 @@ fn test_generate_srcset() {
 fn test_generate_picture_markup() {
     let width = 300;
     let height = 200;
-    let orig_img_path = "../static/images/uploads/2020-03-23_20-24-06_393.jpg";
+    let orig_img_path = "/images/uploads/2020-03-23_20-24-06_393.jpg";
     let result = r#"<picture>
             <source
-                srcset="./generated_images/static/images/uploads/2020-03-23_20-24-06_393_300x200.avif 1x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_450x300.avif 1.5x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_600x400.avif 2x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_900x600.avif 3x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_1200x800.avif 4x"
+                srcset="/generated_images/images/uploads/2020-03-23_20-24-06_393_300x200.avif 1x, /generated_images/images/uploads/2020-03-23_20-24-06_393_450x300.avif 1.5x, /generated_images/images/uploads/2020-03-23_20-24-06_393_600x400.avif 2x, /generated_images/images/uploads/2020-03-23_20-24-06_393_900x600.avif 3x, /generated_images/images/uploads/2020-03-23_20-24-06_393_1200x800.avif 4x"
                 type="image/avif"
             >
 <source
-                srcset="./generated_images/static/images/uploads/2020-03-23_20-24-06_393_300x200.jpg 1x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_450x300.jpg 1.5x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_600x400.jpg 2x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_900x600.jpg 3x, ./generated_images/static/images/uploads/2020-03-23_20-24-06_393_1200x800.jpg 4x"
+                srcset="/generated_images/images/uploads/2020-03-23_20-24-06_393_300x200.jpg 1x, /generated_images/images/uploads/2020-03-23_20-24-06_393_450x300.jpg 1.5x, /generated_images/images/uploads/2020-03-23_20-24-06_393_600x400.jpg 2x, /generated_images/images/uploads/2020-03-23_20-24-06_393_900x600.jpg 3x, /generated_images/images/uploads/2020-03-23_20-24-06_393_1200x800.jpg 4x"
                 type="image/jpeg"
             >
             <img
-            src="./generated_images/static/images/uploads/2020-03-23_20-24-06_393_300x200.jpg"
+            src="/generated_images/images/uploads/2020-03-23_20-24-06_393_300x200.jpg"
             width="300"
             height="200"
             alt="Testing image alt"

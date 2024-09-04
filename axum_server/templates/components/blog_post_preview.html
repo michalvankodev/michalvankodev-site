@@ -1,11 +1,11 @@
 <article class="grid grid-cols-[1fr_2fr] grid-flow-col gap-4">
 	<aside class="row-span-3">
-		<!-- TODO <figure> -->
-		<!-- TODO Thumbnail -->
-	  <!-- <svg aria-hidden="true" class="h-12 w-12 fill-blue-950"> -->
-	    <!-- <use xlink:href="/svg/icons-sprite.svg#mail" /> -->
-	  <!-- </svg> -->
-		<figure>
+		{% match post.metadata.thumbnail %}
+		{% when Some with (orig_path) %}
+		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail").unwrap()|safe }}
+		{% when None %}
+		<div> TODO default obrazok </div>
+		{% endmatch %}
 	</aside>
 	<header>
 		<h3 class="text-lg font-bold mb-1">{{post.metadata.title}}</h3>

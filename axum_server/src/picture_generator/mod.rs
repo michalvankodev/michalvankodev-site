@@ -21,4 +21,5 @@ It can be used from the rust code
 It should be used from the templates as well
 */
 
+pub mod export_format;
 pub mod picture_markup_generator;
