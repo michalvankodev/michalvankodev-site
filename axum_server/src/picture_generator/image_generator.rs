@@ -1,6 +1,7 @@
 use std::{fs::create_dir_all, path::Path};
 
 use image::{imageops::FilterType, DynamicImage};
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use tracing::{debug, error};
 
 use super::export_format::ExportFormat;
@@ -11,8 +12,8 @@ pub fn generate_images(
     resolutions: &[(u32, u32, f32)],
     formats: &[ExportFormat],
 ) -> Result<(), anyhow::Error> {
-    formats.iter().for_each(|format| {
-        resolutions.iter().for_each(|resolution| {
+    formats.par_iter().for_each(|format| {
+        resolutions.par_iter().for_each(|resolution| {
             let (width, height, _) = *resolution;
             // let image = image.clone();
             let resized = image.resize_to_fill(width, height, FilterType::Triangle);

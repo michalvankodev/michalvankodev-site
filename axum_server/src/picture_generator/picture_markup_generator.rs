@@ -2,6 +2,7 @@ use std::{
     cmp::Ordering,
     path::{Path, PathBuf},
     str::FromStr as _,
+    sync::Arc,
 };
 
 use anyhow::Context;
@@ -30,13 +31,32 @@ pub fn generate_picture_markup(
     let resolutions = get_resolutions(orig_img_dimensions, width, height);
 
     // TODO lets generate images
-    generate_images(
-        &orig_img,
-        &path_to_generated,
-        &resolutions,
-        &exported_formats,
-    )
-    .with_context(|| "Failed to generate images".to_string())?;
+
+    let orig_img_arc = Arc::new(orig_img);
+    let orig_img_clone = Arc::clone(&orig_img_arc);
+    let path_to_generated_arc = Arc::new(path_to_generated);
+    let path_to_generated_clone = Arc::clone(&path_to_generated_arc);
+    let resolutions_arc = Arc::new(resolutions);
+    let resolutions_clone = Arc::clone(&resolutions_arc);
+    let exported_formats_arc = Arc::new(exported_formats);
+    let exported_formats_clone = Arc::clone(&exported_formats_arc);
+
+    tokio::spawn(async move {
+        let orig_img = orig_img_clone.as_ref();
+        let path_to_generated = path_to_generated_clone.as_ref();
+        let resolutions = resolutions_clone.as_ref();
+        let exported_formats = exported_formats_clone.as_ref();
+
+        let result = generate_images(orig_img, path_to_generated, resolutions, exported_formats)
+            .with_context(|| "Failed to generate images".to_string());
+        if let Err(e) = result {
+            tracing::error!("Error: {}", e);
+        }
+    });
+
+    let exported_formats = Arc::clone(&exported_formats_arc);
+    let path_to_generated = Arc::clone(&path_to_generated_arc);
+    let resolutions = Arc::clone(&resolutions_arc);
 
     let source_tags = exported_formats
         .iter()
