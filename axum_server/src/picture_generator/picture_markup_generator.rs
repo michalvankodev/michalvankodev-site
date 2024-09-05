@@ -7,7 +7,7 @@ use std::{
 use anyhow::Context;
 use image::{GenericImageView, ImageReader};
 
-use super::export_format::ExportFormat;
+use super::{export_format::ExportFormat, image_generator::generate_images};
 
 pub const PIXEL_DENSITIES: [f32; 5] = [1., 1.5, 2., 3., 4.];
 
@@ -28,6 +28,15 @@ pub fn generate_picture_markup(
         .decode()?;
     let orig_img_dimensions = orig_img.dimensions();
     let resolutions = get_resolutions(orig_img_dimensions, width, height);
+
+    // TODO lets generate images
+    generate_images(
+        &orig_img,
+        &path_to_generated,
+        &resolutions,
+        &exported_formats,
+    )
+    .with_context(|| "Failed to generate images".to_string())?;
 
     let source_tags = exported_formats
         .iter()
@@ -243,8 +252,8 @@ fn get_export_formats(orig_img_path: &str) -> Vec<ExportFormat> {
         .and_then(|ext| ext.to_str());
 
     match path {
-        Some("jpg" | "jpeg") => vec![ExportFormat::AVIF, ExportFormat::JPG],
-        Some("png") => vec![ExportFormat::AVIF, ExportFormat::PNG],
+        Some("jpg" | "jpeg") => vec![ExportFormat::Avif, ExportFormat::Jpeg],
+        Some("png") => vec![ExportFormat::Avif, ExportFormat::Png],
         Some(_) | None => vec![],
     }
 }
@@ -253,13 +262,13 @@ fn get_export_formats(orig_img_path: &str) -> Vec<ExportFormat> {
 fn test_get_export_formats() {
     assert_eq!(
         get_export_formats("/images/uploads/img_name.jpg"),
-        vec![ExportFormat::AVIF, ExportFormat::JPG]
+        vec![ExportFormat::Avif, ExportFormat::Jpeg]
     )
 }
 #[test]
 fn test_generate_srcset() {
     let orig_img_path = PathBuf::from_str("/generated_images/images/uploads/img_name").unwrap();
-    let export_format = ExportFormat::AVIF;
+    let export_format = ExportFormat::Avif;
     let resolutions = vec![
         (320, 200, 1.),
         (480, 300, 1.5),

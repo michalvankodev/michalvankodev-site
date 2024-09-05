@@ -15,3 +15,6 @@ Cargo.lock
 
 # `dist` folder with the export of SSG
 dist/
+
+# Image generator
+generated_images/
