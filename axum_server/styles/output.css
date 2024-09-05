@@ -724,6 +724,14 @@ video {
   grid-template-columns: 1fr 2fr;
 }
 
+.grid-cols-\[min-content_1fr\] {
+  grid-template-columns: min-content 1fr;
+}
+
+.grid-cols-\[max-content_1fr\] {
+  grid-template-columns: max-content 1fr;
+}
+
 .flex-row {
   flex-direction: row;
 }
