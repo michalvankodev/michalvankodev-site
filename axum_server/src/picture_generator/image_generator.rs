@@ -24,6 +24,7 @@ pub fn generate_images(
                 .with_extension(format.get_extension());
 
             if save_path.exists() {
+                debug!("Skip generating {save_path:?} - Already exists");
                 return;
             }
 

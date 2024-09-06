@@ -2,7 +2,7 @@
 	<aside class="row-span-3">
 		{% match post.metadata.thumbnail %}
 		{% when Some with (orig_path) %}
-		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail").unwrap()|safe }}
+		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", true).unwrap()|safe }}
 		{% when None %}
 		<div> TODO default obrazok </div>
 		{% endmatch %}

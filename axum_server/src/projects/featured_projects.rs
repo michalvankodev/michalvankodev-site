@@ -14,7 +14,7 @@ pub async fn get_featured_projects() -> Result<Vec<ParseResult<ProjectMetadata>>
         .into_iter()
         .filter(|post| post.metadata.featured)
         .map(|mut post| {
-            post.metadata.description = parse_html(&post.metadata.description);
+            post.metadata.description = parse_html(&post.metadata.description, false);
             post
         })
         .collect();

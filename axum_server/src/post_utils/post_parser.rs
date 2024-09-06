@@ -6,6 +6,9 @@ use gray_matter::{engine::YAML, Matter};
 use pulldown_cmark::{Event, Options, Parser, Tag, TagEnd};
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 use tokio::fs;
+use tracing::debug;
+
+use crate::picture_generator::picture_markup_generator::generate_picture_markup;
 
 pub fn deserialize_date<'de, D>(deserializer: D) -> Result<DateTime<Utc>, D::Error>
 where
@@ -29,6 +32,7 @@ pub struct ParseResult<Metadata> {
 
 pub async fn parse_post<'de, Metadata: DeserializeOwned>(
     path: &str,
+    generate_images: bool,
 ) -> Result<ParseResult<Metadata>, StatusCode> {
     let file_contents = fs::read_to_string(path)
         .await
@@ -43,7 +47,7 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
             StatusCode::INTERNAL_SERVER_ERROR
         })?;
 
-    let body = parse_html(&metadata.content);
+    let body = parse_html(&metadata.content, generate_images);
 
     let filename = Path::new(path)
         .file_stem()
@@ -59,7 +63,7 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
     })
 }
 
-pub fn parse_html(markdown: &str) -> String {
+pub fn parse_html(markdown: &str, generate_images: bool) -> String {
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
     options.insert(Options::ENABLE_FOOTNOTES);
@@ -80,22 +84,41 @@ pub fn parse_html(markdown: &str) -> String {
             title,
             id,
         }) => {
-            println!(
+            // TODO Get image resolution
+
+            // Place image into the content with scaled reso to a boundary
+            let picture_markup =
+                generate_picture_markup(&dest_url, 500, 500, &title, generate_images).unwrap_or(
+                    format!(
+                        r#"
+                        <img
+                          alt="{alt}"
+                          src="{src}"
+                        />"#,
+                        alt = title,
+                        src = dest_url,
+                    ),
+                );
+            // let picture_markup = format!(
+            //     r#"
+            //             <img
+            //               alt="{alt}"
+            //               src="{src}"
+            //             />"#,
+            //     alt = title,
+            //     src = dest_url,
+            // );
+
+            debug!(
                 "Image link_type: {:?} url: {} title: {} id: {}",
                 link_type, dest_url, title, id
             );
-            // TODO src set
             Event::Html(
                 format!(
                     r#"<figure>
-                            <img
-                              alt="{alt}"
-                              src="{src}"
-                            />
-                            <figcaption>
-                        "#,
-                    alt = title,
-                    src = dest_url,
+                        {picture_markup}
+                        <figcaption>
+                    "#,
                 )
                 .into(),
             )

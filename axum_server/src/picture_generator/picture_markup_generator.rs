@@ -1,12 +1,11 @@
 use std::{
     cmp::Ordering,
     path::{Path, PathBuf},
-    str::FromStr as _,
     sync::Arc,
 };
 
 use anyhow::Context;
-use image::{GenericImageView, ImageReader};
+use image::{image_dimensions, ImageReader};
 
 use super::{export_format::ExportFormat, image_generator::generate_images};
 
@@ -17,23 +16,27 @@ pub fn generate_picture_markup(
     width: u32,
     height: u32,
     alt_text: &str,
+    generate_image: bool,
 ) -> Result<String, anyhow::Error> {
+    if !orig_img_path.starts_with("/") {
+        return Ok(format!(
+            r#"<img
+              alt="{alt_text}"
+              src="{orig_img_path}"
+            />"#
+        ));
+    }
+
     let exported_formats = get_export_formats(orig_img_path);
     let path_to_generated = get_generated_file_name(orig_img_path);
 
     // TODO This should get removed when we move the project structure #move
-    let dev_only_img_path = Path::new("../static/").join(orig_img_path.strip_prefix("/").unwrap());
+    let dev_only_img_path =
+        Path::new("../static/").join(orig_img_path.strip_prefix("/").unwrap_or(orig_img_path));
 
-    let orig_img = ImageReader::open(&dev_only_img_path)
-        .with_context(|| format!("Failed to read instrs from {:?}", &dev_only_img_path))?
-        .decode()?;
-    let orig_img_dimensions = orig_img.dimensions();
+    let orig_img_dimensions = image_dimensions(&dev_only_img_path).unwrap();
     let resolutions = get_resolutions(orig_img_dimensions, width, height);
 
-    // TODO lets generate images
-
-    let orig_img_arc = Arc::new(orig_img);
-    let orig_img_clone = Arc::clone(&orig_img_arc);
     let path_to_generated_arc = Arc::new(path_to_generated);
     let path_to_generated_clone = Arc::clone(&path_to_generated_arc);
     let resolutions_arc = Arc::new(resolutions);
@@ -41,18 +44,25 @@ pub fn generate_picture_markup(
     let exported_formats_arc = Arc::new(exported_formats);
     let exported_formats_clone = Arc::clone(&exported_formats_arc);
 
-    tokio::spawn(async move {
-        let orig_img = orig_img_clone.as_ref();
-        let path_to_generated = path_to_generated_clone.as_ref();
-        let resolutions = resolutions_clone.as_ref();
-        let exported_formats = exported_formats_clone.as_ref();
+    if generate_image {
+        rayon::spawn(move || {
+            let orig_img = ImageReader::open(&dev_only_img_path)
+                .with_context(|| format!("Failed to read instrs from {:?}", &dev_only_img_path))
+                .unwrap()
+                .decode()
+                .unwrap();
+            let path_to_generated = path_to_generated_clone.as_ref();
+            let resolutions = resolutions_clone.as_ref();
+            let exported_formats = exported_formats_clone.as_ref();
 
-        let result = generate_images(orig_img, path_to_generated, resolutions, exported_formats)
-            .with_context(|| "Failed to generate images".to_string());
-        if let Err(e) = result {
-            tracing::error!("Error: {}", e);
-        }
-    });
+            let result =
+                generate_images(&orig_img, path_to_generated, resolutions, exported_formats)
+                    .with_context(|| "Failed to generate images".to_string());
+            if let Err(e) = result {
+                tracing::error!("Error: {}", e);
+            }
+        });
+    }
 
     let exported_formats = Arc::clone(&exported_formats_arc);
     let path_to_generated = Arc::clone(&path_to_generated_arc);
@@ -232,7 +242,11 @@ fn get_generated_file_name(orig_img_path: &str) -> PathBuf {
         .file_stem()
         .expect("There should be a name for every img");
     let result = Path::new("/generated_images/")
-        .join(parent.strip_prefix("/").unwrap())
+        .join(
+            parent
+                .strip_prefix("/")
+                .unwrap_or(Path::new("/generated_images/")),
+        )
         .join(file_name);
     result
 }
@@ -287,7 +301,9 @@ fn test_get_export_formats() {
 }
 #[test]
 fn test_generate_srcset() {
-    let orig_img_path = PathBuf::from_str("/generated_images/images/uploads/img_name").unwrap();
+    let orig_img_path =
+        <PathBuf as std::str::FromStr>::from_str("/generated_images/images/uploads/img_name")
+            .unwrap();
     let export_format = ExportFormat::Avif;
     let resolutions = vec![
         (320, 200, 1.),
@@ -325,7 +341,7 @@ fn test_generate_picture_markup() {
         >
         </picture>"#;
     assert_eq!(
-        generate_picture_markup(orig_img_path, width, height, "Testing image alt")
+        generate_picture_markup(orig_img_path, width, height, "Testing image alt", false)
             .expect("picture markup has to be generated"),
         result
     );

@@ -22,7 +22,7 @@ pub async fn get_post_list<'de, Metadata: DeserializeOwned>(
         let file_path = file.path();
         let file_path_str = file_path.to_str().unwrap();
         info!(":{}", file_path_str);
-        let post = parse_post::<Metadata>(file_path_str).await?;
+        let post = parse_post::<Metadata>(file_path_str, false).await?;
         posts.push(post);
     }
 

@@ -21,7 +21,7 @@ pub struct BlogPostTemplate {
 
 pub async fn render_blog_post(Path(post_id): Path<String>) -> Result<BlogPostTemplate, StatusCode> {
     let path = format!("../_posts/blog/{}.md", post_id);
-    let parse_post = parse_post::<BlogPostMetadata>(&path);
+    let parse_post = parse_post::<BlogPostMetadata>(&path, true);
     let parsed = parse_post.await?;
 
     Ok(BlogPostTemplate {
