@@ -36,7 +36,6 @@
   <body class="bg-blue-50">
     {% include "site_header.html" %}
     {% block content %} Placeholder {% endblock %}
-    {# footer, should be not dependant on the each individual handler but it should have it's own handler #}
-    {{ site_footer|safe }}
+    {% include "site_footer.html" %}
   </body>
 </html>

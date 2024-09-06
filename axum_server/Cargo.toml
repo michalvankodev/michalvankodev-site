@@ -29,10 +29,12 @@ rustflags = ["-Z", "threads=8"]
 
 [profile.dev]
 debug = true
-opt-level = 1
+opt-level = 0
+codegen-units = 16
 lto = "thin"
 panic = "unwind"
 strip = false
+incremental = true
 
 [profile.dev.package.askama_derive]
 opt-level = 3
