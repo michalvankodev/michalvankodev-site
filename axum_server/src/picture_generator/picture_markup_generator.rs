@@ -1,5 +1,4 @@
 use std::{
-    cmp::Ordering,
     path::{Path, PathBuf},
     sync::Arc,
 };
@@ -7,7 +6,10 @@ use std::{
 use anyhow::Context;
 use image::{image_dimensions, ImageReader};
 
-use super::{export_format::ExportFormat, image_generator::generate_images};
+use super::{
+    export_format::ExportFormat, image_generator::generate_images,
+    resolutions::get_max_resolution_with_crop,
+};
 
 pub const PIXEL_DENSITIES: [f32; 5] = [1., 1.5, 2., 3., 4.];
 
@@ -18,15 +20,6 @@ pub fn generate_picture_markup(
     alt_text: &str,
     generate_image: bool,
 ) -> Result<String, anyhow::Error> {
-    if !orig_img_path.starts_with("/") {
-        return Ok(format!(
-            r#"<img
-              alt="{alt_text}"
-              src="{orig_img_path}"
-            />"#
-        ));
-    }
-
     let exported_formats = get_export_formats(orig_img_path);
     let path_to_generated = get_generated_file_name(orig_img_path);
 
@@ -123,8 +116,8 @@ fn get_resolutions(
     let mut resolutions: Vec<(u32, u32, f32)> = vec![];
     for pixel_density in PIXEL_DENSITIES {
         let (density_width, density_height) = (
-            (pixel_density * width as f32).floor() as u32,
-            (pixel_density * height as f32).floor() as u32,
+            (pixel_density * width as f32) as u32,
+            (pixel_density * height as f32) as u32,
         );
 
         // The equal sign `=` was added just to prevent next occurence of the loop
@@ -132,7 +125,7 @@ fn get_resolutions(
         // See test case #1
         if density_width >= orig_width || density_height >= orig_height {
             let (max_width, max_height) =
-                get_max_resolution((orig_width, orig_height), width, height);
+                get_max_resolution_with_crop((orig_width, orig_height), width, height);
             resolutions.push((max_width, max_height, pixel_density));
             break;
         }
@@ -168,51 +161,6 @@ fn test_get_resolutions() {
             (1200, 750, 4.)
         ],
         "Should create all possible sizes, with the last one maxed"
-    );
-}
-
-fn get_max_resolution(
-    (orig_width, orig_height): (u32, u32),
-    width: u32,
-    height: u32,
-) -> (u32, u32) {
-    let width_scale = orig_width as f32 / width as f32;
-    let height_scale = orig_height as f32 / height as f32;
-
-    let scale = match width_scale.partial_cmp(&height_scale) {
-        Some(Ordering::Less) => width_scale,
-        Some(Ordering::Greater) => height_scale,
-        _ => width_scale,
-    };
-    (
-        (width as f32 * scale) as u32,
-        (height as f32 * scale) as u32,
-    )
-}
-
-#[test]
-fn test_get_max_resolution() {
-    assert_eq!(
-        get_max_resolution((320, 200), 320, 200),
-        (320, 200),
-        "Original size fits"
-    );
-    // THINK: Real curious if this is what I want to do. Rather than use CSS to `object-cover` original image size
-    assert_eq!(
-        get_max_resolution((200, 200), 300, 200),
-        (200, 133),
-        "Image has to be smaller"
-    );
-
-    assert_eq!(
-        get_max_resolution((1000, 1000), 200, 100),
-        (1000, 500),
-        "width is maxed"
-    );
-    assert_eq!(
-        get_max_resolution((1000, 1000), 100, 200),
-        (500, 1000),
-        "height is maxed"
     );
 }
 

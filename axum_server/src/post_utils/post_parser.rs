@@ -3,12 +3,17 @@ use std::path::Path;
 use axum::http::StatusCode;
 use chrono::{DateTime, Utc};
 use gray_matter::{engine::YAML, Matter};
+use image::image_dimensions;
 use pulldown_cmark::{Event, Options, Parser, Tag, TagEnd};
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 use tokio::fs;
 use tracing::debug;
 
-use crate::picture_generator::picture_markup_generator::generate_picture_markup;
+use crate::picture_generator::{
+    picture_markup_generator::generate_picture_markup, resolutions::get_max_resolution,
+};
+
+pub const MAX_BLOG_IMAGE_RESOLUTION: (u32, u32) = (1000, 800);
 
 pub fn deserialize_date<'de, D>(deserializer: D) -> Result<DateTime<Utc>, D::Error>
 where
@@ -84,12 +89,32 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
             title,
             id,
         }) => {
-            // TODO Get image resolution
+            if !dest_url.starts_with("/") {
+                return Event::Html(
+                    format!(
+                        r#"<img
+                          alt="{title}"
+                          src="{dest_url}"
+                        />"#
+                    )
+                    .into(),
+                );
+            }
+
+            let dev_only_img_path =
+                Path::new("../static/").join(dest_url.strip_prefix("/").unwrap_or(&dest_url));
+            let img_dimensions = image_dimensions(&dev_only_img_path).unwrap();
+
+            let (max_width, max_height) = get_max_resolution(
+                img_dimensions,
+                MAX_BLOG_IMAGE_RESOLUTION.0,
+                MAX_BLOG_IMAGE_RESOLUTION.1,
+            );
 
             // Place image into the content with scaled reso to a boundary
             let picture_markup =
-                generate_picture_markup(&dest_url, 500, 500, &title, generate_images).unwrap_or(
-                    format!(
+                generate_picture_markup(&dest_url, max_width, max_height, &title, generate_images)
+                    .unwrap_or(format!(
                         r#"
                         <img
                           alt="{alt}"
@@ -97,8 +122,7 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
                         />"#,
                         alt = title,
                         src = dest_url,
-                    ),
-                );
+                    ));
             // let picture_markup = format!(
             //     r#"
             //             <img
