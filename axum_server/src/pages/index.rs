@@ -7,10 +7,7 @@ use crate::{
         blog_post_model::BlogPostMetadata, featured_blog_posts::get_featured_blog_posts,
         tag_list::get_popular_blog_tags,
     },
-    components::{
-        site_footer::{render_site_footer, SiteFooter},
-        site_header::HeaderProps,
-    },
+    components::site_header::HeaderProps,
     filters,
     post_utils::post_parser::ParseResult,
     projects::{featured_projects::get_featured_projects, project_model::ProjectMetadata},
@@ -19,7 +16,6 @@ use crate::{
 #[derive(Template)]
 #[template(path = "index.html")]
 pub struct IndexTemplate {
-    site_footer: SiteFooter,
     header_props: HeaderProps,
     blog_tags: Vec<String>,
     featured_blog_posts: Vec<ParseResult<BlogPostMetadata>>,
@@ -27,15 +23,13 @@ pub struct IndexTemplate {
 }
 
 pub async fn render_index() -> Result<IndexTemplate, StatusCode> {
-    let (site_footer, blog_tags, featured_blog_posts, featured_projects) = try_join!(
-        render_site_footer(),
+    let (blog_tags, featured_blog_posts, featured_projects) = try_join!(
         get_popular_blog_tags(),
         get_featured_blog_posts(),
         get_featured_projects()
     )?;
 
     Ok(IndexTemplate {
-        site_footer,
         header_props: HeaderProps::default(),
         blog_tags,
         featured_blog_posts,

@@ -1,10 +1,7 @@
 use askama::Template;
 use axum::http::StatusCode;
 
-use crate::components::{
-    site_footer::{render_site_footer, SiteFooter},
-    site_header::HeaderProps,
-};
+use crate::components::site_header::HeaderProps;
 
 pub struct ContactLink {
     pub href: String,
@@ -17,13 +14,11 @@ pub struct ContactLink {
 #[template(path = "contact.html")]
 pub struct ContactPageTemplate {
     pub title: String,
-    pub site_footer: SiteFooter,
     pub header_props: HeaderProps,
     pub links: Vec<ContactLink>,
 }
 
 pub async fn render_contact() -> Result<ContactPageTemplate, StatusCode> {
-    let site_footer = render_site_footer().await?;
     let links = vec![
         ContactLink {
             href: "mailto: michalvankosk@gmail.com".to_string(),
@@ -77,7 +72,6 @@ pub async fn render_contact() -> Result<ContactPageTemplate, StatusCode> {
 
     Ok(ContactPageTemplate {
         title: "Contact".to_owned(),
-        site_footer,
         header_props: HeaderProps::default(),
         links,
     })
