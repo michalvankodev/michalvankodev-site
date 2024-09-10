@@ -12,32 +12,58 @@ a {
 
 .article-body {
   h1 {
-    @apply px-4 text-2xl text-blue-900 my-2;
+    @apply px-4 text-2xl text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-4xl lg:text-5xl;
   }
   h2 {
-    @apply px-4 text-xl text-blue-900 my-2;
+    @apply px-4 text-xl text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-2xl md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-4xl;
   }
   p {
-    @apply px-4 my-2;
+    @apply px-4 my-2 text-slate-950 text-justify mx-auto max-w-read md:text-lg md:my-8 lg:text-2xl;
   }
   pre {
-    @apply p-4 my-1 overflow-auto text-sm;
+    @apply p-4 my-1 overflow-auto text-sm mx-auto max-w-read;
   }
   figure {
-    @apply m-4;
+    @apply p-4;
 
     img {
-      @apply rounded shadow-md;
+      @apply rounded shadow-md mx-auto max-w-image;
     }
   }
   figcaption {
-    @apply mt-2 text-center text-sm italic text-blue-800;
+    @apply mt-2 text-center text-sm italic text-blue-800 md:text-base lg:text-lg;
   }
+
   table {
-    @apply m-2 overflow-auto text-sm;
+    @apply text-sm mx-auto max-w-image table-auto border-collapse border-spacing-12 border border-gray-200 rounded md:text-base md:my-4 lg:text-xl lg:my-8;
+  }
+
+  thead {
+    @apply bg-blue-100;
+  }
+
+  tbody {
+    @apply bg-slate-50;
+  }
+
+  td,
+  th {
+    @apply py-0.5 px-2 border-b md:py-2 md:px-5;
+  }
+
+  tr {
+    @apply even:bg-slate-100;
+  }
+
+  blockquote {
+    @apply mx-6 py-1 px-2 bg-pink-50 lg:mx-auto max-w-note border-l-4 border-pink-500;
+
+    p {
+      @apply my-2 md:my-4 text-slate-600 max-w-note;
+    }
   }
 }
 
 .video-embed {
-  @apply m-4;
+  @apply m-4 mx-auto max-w-image aspect-video;
 }

@@ -13,7 +13,7 @@ use crate::picture_generator::{
     picture_markup_generator::generate_picture_markup, resolutions::get_max_resolution,
 };
 
-pub const MAX_BLOG_IMAGE_RESOLUTION: (u32, u32) = (1000, 800);
+pub const MAX_BLOG_IMAGE_RESOLUTION: (u32, u32) = (1280, 860);
 
 pub fn deserialize_date<'de, D>(deserializer: D) -> Result<DateTime<Utc>, D::Error>
 where

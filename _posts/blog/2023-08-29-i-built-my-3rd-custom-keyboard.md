@@ -60,7 +60,7 @@ Another customization is that while the shield is designed for a wired connectio
 > Tip: If you plan on using your keyboard with a desktop computer, you might want to consider a wired connection. BIOS boot up check will not pass without a physical connection to a keyboard. I have to have 2 keyboards on my desk now :( 
 
 | Item                                                  | Quantity    | Price   | Link                                                                                                               |
-| ----------------------------------------------------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| :---------------------------------------------------- | :---------- | ------: | ------------------------------------------------------------------------------------------------------------------ |
 | DSA Blank Keycaps                                     | 4           | 14 EUR  | [🛒](https://www.aliexpress.com/item/1005002587285218.html?spm=a2g0o.order_list.0.0.3e541802H3XiA6)                |
 | Brass Hot Melt Inset Nuts M4 X D6.0 X L5.0            | 6 of 50pcs  | 3 EUR   | [🛒](https://www.aliexpress.com/item/4000232925592.html?spm=a2g0o.order_list.order_list_main.43.6e0d1802Xk8ijl)    |
 | M4 * 8 Screws                                         | 6 of 100pcs | 3 ELR   | [🛒](https://www.aliexpress.com/item/32896139810.html?spm=a2g0o.order_list.order_list_main.38.6e0d1802Xk8ijl)      |

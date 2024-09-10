@@ -234,8 +234,11 @@ fn get_export_formats(orig_img_path: &str) -> Vec<ExportFormat> {
         .and_then(|ext| ext.to_str());
 
     match path {
-        Some("jpg" | "jpeg") => vec![ExportFormat::Avif, ExportFormat::Jpeg],
-        Some("png") => vec![ExportFormat::Avif, ExportFormat::Png],
+        // THINK: Do we want to enable avif? It's very expensive to encode
+        // Some("jpg" | "jpeg") => vec![ExportFormat::Avif, ExportFormat::Jpeg],
+        // Some("png") => vec![ExportFormat::Avif, ExportFormat::Png],
+        Some("jpg" | "jpeg") => vec![ExportFormat::Jpeg],
+        Some("png") => vec![ExportFormat::Png],
         Some(_) | None => vec![],
     }
 }

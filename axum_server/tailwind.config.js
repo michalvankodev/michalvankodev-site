@@ -2,7 +2,18 @@
 module.exports = {
 	content: ["./templates/**/*.html"],
 	theme: {
-		extend: {},
+		extend: {
+			spacing: {
+				note: "60rem",
+				read: "64rem",
+				image: "70rem",
+			},
+			width: {
+				note: "60rem",
+				read: "64rem",
+				image: "70rem",
+			},
+		},
 	},
 	plugins: [],
 };

@@ -2,7 +2,7 @@
   {% if tags.len() > 0 %}
   <ul class="inline">
     {% for tag in tags %}
-    <li class="inline italic text-blue-700">
+    <li class="inline italic text-blue-700 md:text-lg">
       <a href="/blog/tags/{{tag}}">#{{tag}}</a>
     </li>
     {% endfor %}

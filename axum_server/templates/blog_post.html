@@ -3,22 +3,24 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block content %}
-<article>
-  <header class="px-4">
-  <h1 class="text-3xl text-blue-900 mb-3 font-semibold">{{title}}</h1>
+<article class="mb-6">
+  <header class="px-4 max-w-read mx-auto">
+  <h1 class="text-3xl md:text-4xl lg:text-6xl lg:mt-20 text-blue-900 mb-3 font-semibold">{{title}}</h1>
   <aside class="flex justify-between flex-row">
     {% include "post_tag_list.html" %}
-    <section class="created-at m-1 text-right text-sm text-gray-600">
+    <section class="created-at m-1 text-right text-sm text-gray-600 md:text-lg">
       <span>Published on</span>
       <time datetime="{date}"> {{date|pretty_date}} </time>
     </section>
   </aside>
 </header>
 
-<section class="article-body">
-  {{body|escape("none")}}
-</section>
+  <section class="article-body">
+    {{body|escape("none")}}
+  </section>
 </article>
+
+<!-- TODO: Next recommendations for reading -->
 
 {# footer #}
 {% endblock %}
