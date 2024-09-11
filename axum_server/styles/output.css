@@ -1229,6 +1229,10 @@ a {
     margin-right: auto;
   }
   table {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  table {
     max-width: 70rem;
   }
   table {
@@ -1255,12 +1259,6 @@ a {
   table {
     font-size: 0.875rem;
     line-height: 1.25rem;
-  }
-  @media (min-width: 768px) {
-    table {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-    }
   }
   @media (min-width: 768px) {
     table {
@@ -1369,6 +1367,77 @@ a {
         margin-top: 1rem;
         margin-bottom: 1rem;
       }
+    }
+  }
+  :not(pre) code {
+    border-radius: 0.25rem;
+  }
+  :not(pre) code {
+    border-width: 1px;
+  }
+  :not(pre) code {
+    --tw-border-opacity: 1;
+    border-color: rgb(147 197 253 / var(--tw-border-opacity));
+  }
+  :not(pre) code {
+    --tw-bg-opacity: 1;
+    background-color: rgb(219 234 254 / var(--tw-bg-opacity));
+  }
+  :not(pre) code {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  :not(pre) code {
+    padding-top: 0.125rem;
+    padding-bottom: 0.125rem;
+  }
+  :not(pre) code {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  :not(pre) code {
+    --tw-text-opacity: 1;
+    color: rgb(80 7 36 / var(--tw-text-opacity));
+  }
+  @media (min-width: 768px) {
+    :not(pre) code {
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    :not(pre) code {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+  }
+  pre code pre {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+  pre code pre {
+    border-radius: 0.25rem;
+  }
+  pre code pre {
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+  @media (min-width: 1024px) {
+    pre code pre {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  @media (min-width: 1024px) {
+    pre code pre {
+      max-width: 60rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    pre code pre {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
     }
   }
 }

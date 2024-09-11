@@ -23,6 +23,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 image = "0.25.2"
 anyhow = "1.0.86"
 rayon = "1.10.0"
+syntect = "5.2.0"
 
 [build]
 rustflags = ["-Z", "threads=8"]

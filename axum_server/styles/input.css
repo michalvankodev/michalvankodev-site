@@ -35,7 +35,7 @@ a {
   }
 
   table {
-    @apply text-sm mx-auto max-w-image table-auto border-collapse border-spacing-12 border border-gray-200 rounded md:text-base md:my-4 lg:text-xl lg:my-8;
+    @apply text-sm mx-auto my-4 max-w-image table-auto border-collapse border-spacing-12 border border-gray-200 rounded md:text-base lg:text-xl lg:my-8;
   }
 
   thead {
@@ -61,6 +61,14 @@ a {
     p {
       @apply my-2 md:my-4 text-slate-600 max-w-note;
     }
+  }
+
+  :not(pre) code {
+    @apply text-pink-950 rounded border border-blue-300 px-1 py-0.5 bg-blue-100 text-sm md:text-base lg:text-xl;
+  }
+
+  pre code pre {
+    @apply mx-2 rounded lg:mx-auto lg:text-lg shadow-sm lg:max-w-note;
   }
 }
 

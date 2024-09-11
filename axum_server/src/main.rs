@@ -48,9 +48,6 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
-// TODO Display blog posts
-// TODO Markdown notes
-// TODO code snippets highlighting
 // TODO responsive design
 // TODO Colors
 // TODO go live pipeline

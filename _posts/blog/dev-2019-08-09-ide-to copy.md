@@ -27,6 +27,16 @@ similis: caput te prodere disceditis: quinque: an et in, accipis divitior talia?
 Per deducit ademi, _sub_ qvem orbatura Pindo te manus verbaque **tuorum nati**
 vivere, an me detectique est. Decoram erat mediaque auras.
 
+`sh ./oneliner.sh`
+
+This is a paragraph with a `reference to code` inside.
+This is a paragraph with a `reference to code` inside.
+This is a paragraph with a `reference to code` inside.
+This is a paragraph with a `reference to code` inside.
+This is a paragraph with a `reference to code` inside.
+This is a paragraph with a `reference to code` inside.
+This is a paragraph with a `reference to code` inside.
+
 > Leti ensis mihi torquere fiducia me sunt nec prima caeli quaeras et coma
 > tinctis sibi; tua fidem aethera. Animosque ferret vultus puellari poteris
 > florilegae ignes crevisse ad pulvere recenti, luce male; neque nec!
@@ -51,7 +61,7 @@ praemia pariter exaestuat fecerat. Haemonio quem: _in_ sibi spectans parmam,
 tetenderat filia ait quo calcitrat at vides, cui iuvenem rerum erat. Eminus
 flammas iamque.
 
-```typescript
+```ts
 var brouterVisualRecycle =
   netmaskExbibyteMac +
   download(twitter_serp_yobibyte, backlinkDirectBandwidth, hot)
@@ -73,7 +83,7 @@ Erat Iunonis pennis lugubris, vixque nec quo tua lacrimarum nubila nobiscum.
 Ferrum inhaeret ille; operi in Theseus contingere fateri, mirabatur, consequar
 ullis, exuit fatemur humani iustis!
 
-```
+```js
 var mpeg_reader_modifier = jfs;
 if (318464 >= association_thunderbolt_bar) {
     copyrightMemoryWep.skinHeaderEmoticon =

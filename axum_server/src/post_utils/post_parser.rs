@@ -4,8 +4,9 @@ use axum::http::StatusCode;
 use chrono::{DateTime, Utc};
 use gray_matter::{engine::YAML, Matter};
 use image::image_dimensions;
-use pulldown_cmark::{Event, Options, Parser, Tag, TagEnd};
+use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
+use syntect::{highlighting::ThemeSet, html::highlighted_html_for_string, parsing::SyntaxSet};
 use tokio::fs;
 use tracing::debug;
 
@@ -68,6 +69,11 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
     })
 }
 
+enum TextKind {
+    Text,
+    Code(String),
+}
+
 pub fn parse_html(markdown: &str, generate_images: bool) -> String {
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
@@ -76,6 +82,11 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
     options.insert(Options::ENABLE_TASKLISTS);
     options.insert(Options::ENABLE_SMART_PUNCTUATION);
     options.insert(Options::ENABLE_HEADING_ATTRIBUTES);
+
+    let mut text_kind = TextKind::Text;
+    let syntax_set = SyntaxSet::load_defaults_newlines();
+    let theme_set = ThemeSet::load_defaults();
+    let theme = theme_set.themes.get("InspiredGitHub").unwrap();
 
     let parser = Parser::new_ext(markdown, options).map(|event| match event {
         /*
@@ -123,16 +134,6 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
                         alt = title,
                         src = dest_url,
                     ));
-            // let picture_markup = format!(
-            //     r#"
-            //             <img
-            //               alt="{alt}"
-            //               src="{src}"
-            //             />"#,
-            //     alt = title,
-            //     src = dest_url,
-            // );
-
             debug!(
                 "Image link_type: {:?} url: {} title: {} id: {}",
                 link_type, dest_url, title, id
@@ -147,8 +148,37 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
                 .into(),
             )
         }
+        Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) => {
+            text_kind = TextKind::Code(lang.to_string());
+            Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang)))
+        }
+        Event::Text(text) => match &text_kind {
+            TextKind::Code(lang) => {
+                // TODO Check https://github.com/trishume/syntect/pull/535 for typescript support
+                let lang = if ["ts".to_string(), "typescript".to_string()].contains(lang) {
+                    "javascript"
+                } else {
+                    lang
+                };
+                let syntax_reference = syntax_set
+                    .find_syntax_by_token(lang)
+                    .unwrap_or(syntax_set.find_syntax_plain_text());
+                syntax_set.syntaxes().iter().for_each(|sr| {
+                    debug!("{}", sr.name);
+                });
+                let highlighted =
+                    highlighted_html_for_string(&text, &syntax_set, syntax_reference, theme)
+                        .unwrap();
+                Event::Html(highlighted.into())
+            }
+            _ => Event::Text(text),
+        },
         Event::Start(_) => event,
         Event::End(TagEnd::Image) => Event::Html("</figcaption></figure>".into()),
+        Event::End(TagEnd::CodeBlock) => {
+            text_kind = TextKind::Text;
+            Event::End(TagEnd::CodeBlock)
+        }
         _ => event,
     });
 
