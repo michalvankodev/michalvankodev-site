@@ -5,131 +5,135 @@
 {% block title %}Introduction{% endblock %}
 
 {% block content %}
-<header class="index-header hidden">
-  <figure class="profile-pic">
-    <picture>
-      <img
-        alt="Portrait"
-        {# TODO generate `srcset` for optimal image #}
-        {# TODO Take a new photo #}
-        src="/images/profile-portugal-landscape.jpg"
-      />
-    </picture>
-  </figure>
+<section class="index-container lg:grid lg:grid-cols-2 xl:grid-cols-[1fr_2fr] lg:gap-y-8 lg:gap-x-32 max-w-maxindex mx-auto">
+  <section id="about-me">
+    <header class="index-header hidden">
+      <figure class="profile-pic">
+        <picture>
+          <img
+            alt="Portrait"
+            {# TODO generate `srcset` for optimal image #}
+            {# TODO Take a new photo #}
+            src="/images/profile-portugal-landscape.jpg"
+          />
+        </picture>
+      </figure>
 
-  <p class="motto">
-    <cite>“Let your ambition carry you.”</cite>
-    <span class="cite-owner">- La Flame</span>
-  </p>
-</header>
+      <p class="motto">
+        <cite>“Let your ambition carry you.”</cite>
+        <span class="cite-owner">- La Flame</span>
+      </p>
+    </header>
 
-<h2 class="text-blue-950 font-semibold text-2xl m-5">About me</h2>
+    <h2 class="text-blue-950 font-semibold text-2xl m-5 md:text-4xl">About me</h2>
 
-<p class="mx-5">
-  Welcome to my personal website. My name is
-  <strong>Michal&nbsp;Vanko</strong>
-  and I'm a
-  <em> <a href="https://en.wikipedia.org/wiki/Programmer">programmer</a> </em>
-  . I am developing software for more than half of my life and <strong>I love it!</strong> Sometimes I stream working on my side projects and building a <a href="https://discord.gg/2cGg7kwZEh">community of like minded people</a>. Here you can find blogs of my thoughts and journeys, as well as links to my socials where you can see other content.</p>
+    <p class="mx-5 md:text-xl">
+      Welcome to my personal website. My name is
+      <strong>Michal&nbsp;Vanko</strong>
+      and I'm a
+      <em> <a href="https://en.wikipedia.org/wiki/Programmer">programmer</a> </em>
+      . I am developing software for more than half of my life and <strong>I love it!</strong> Sometimes I stream working on my side projects and building a <a href="https://discord.gg/2cGg7kwZEh">community of like minded people</a>. Here you can find blogs of my thoughts and journeys, as well as links to my socials where you can see other content.</p>
 
-<section id="talent-cards">
-  {% call tc::talent_card("code", "Web development", "Extensive expertise in creating performant, live web applications and websites") %}
-  {% call tc::talent_card("gamepad", "Game development", "Extensive expertise in creating performant, live web applications and websites") %}
-  {% call tc::talent_card("person-chalkboard", "Mentoring & Consulting", "I offer consulting sessions to assist you in developing <strong>higher-quality software</strong> and share insights from crafting robust, professional web applications. <a href=\"TODO callendly\">Schedule a session with me</a> and elevate your projects together.") %}
-</section
+    <section id="talent-cards">
+      {% call tc::talent_card("code", "Web development", "Extensive expertise in creating performant, live web applications and websites") %}
+      {% call tc::talent_card("gamepad", "Game development", "Extensive expertise in creating performant, live web applications and websites") %}
+      {% call tc::talent_card("person-chalkboard", "Mentoring & Consulting", "I offer consulting sessions to assist you in developing <strong>higher-quality software</strong> and share insights from crafting robust, professional web applications. <a href=\"TODO callendly\">Schedule a session with me</a> and elevate your projects together.") %}
+    </section>
+  </section>
 
-<section id="blog">
-<h2 class="text-blue-950 font-semibold text-2xl m-5">Blog</h2>
-  <section id="blog-tags">
+  <section id="blog" class="lg:col-span-2 lg:row-start-2 xl:col-auto xl:row-start-auto xl:row-span-2">
+    <h2 class="text-blue-950 font-semibold text-2xl md:text-4xl m-5">Blog</h2>
+    <section id="blog-tags">
+      <ul class="mx-5">
+       {% for tag in blog_tags %}
+        <li class="inline-block mx-0.5 p-0.5 md:text-xl">
+          <a href="/blog/tags/{{tag}}" class="text-pink-950">#{{tag|capitalize}}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+    <hr class="border-blue-950 m-5">
+
     <ul class="mx-5">
-     {% for tag in blog_tags %}
-      <li class="inline-block mx-0.5 p-0.5">
-        <a href="/blog/tags/{{tag}}" class="text-pink-950">#{{tag|capitalize}}</a>
+     {% for post in featured_blog_posts %}
+      <li>
+        {% include "components/blog_post_preview.html" %}
+        <hr class="border-blue-950 my-5">
       </li>
-      {% endfor %}
+     {% endfor %}
     </ul>
   </section>
-  <hr class="border-blue-950 m-5">
 
-  <ul class="mx-5">
-   {% for post in featured_blog_posts %}
-    <li>
-      {% include "components/blog_post_preview.html" %}
-      <hr class="border-blue-950 my-5">
-    </li>
-   {% endfor %}
-  </ul>
-</section>
+  <section id="socials">
+    <h2 class="text-blue-950 font-semibold text-2xl m-5 md:text-4xl">Socials</h2>
+    {% call sc::social_card_start("twitch", "I stream (almost) regularly on <em>twitch.tv</em>") %}
+      <!-- <script src= "https://player.twitch.tv/js/embed/v1.js"></script> -->
+      <!-- <div id="twitch-player" class="h-64 aspect-video rounded overflow-hidden"></div> -->
+      <!-- <script type="text/javascript"> -->
+        <!-- var options = { -->
+          <!-- width: "100%", -->
+          <!-- height: "100%", -->
+          <!-- channel: "michalvankodev", -->
+          <!-- parent: ["localhost"] -->
+        <!-- }; -->
+        <!-- var player = new Twitch.Player("twitch-player", options); -->
+        <!-- player.setVolume(0.5); -->
+      </script>
+    {% call sc::social_card_end() %}
 
-<section id="socials">
-  <h2 class="text-blue-950 font-semibold text-2xl m-5">Socials</h2>
-  {% call sc::social_card_start("twitch", "I stream (almost) regularly on <em>twitch.tv</em>") %}
-    <!-- <script src= "https://player.twitch.tv/js/embed/v1.js"></script> -->
-    <!-- <div id="twitch-player" class="h-64 aspect-video rounded overflow-hidden"></div> -->
-    <!-- <script type="text/javascript"> -->
-      <!-- var options = { -->
-        <!-- width: "100%", -->
-        <!-- height: "100%", -->
-        <!-- channel: "michalvankodev", -->
-        <!-- parent: ["localhost"] -->
-      <!-- }; -->
-      <!-- var player = new Twitch.Player("twitch-player", options); -->
-      <!-- player.setVolume(0.5); -->
-    </script>
-  {% call sc::social_card_end() %}
+    {% call sc::social_card_start("tiktok", "Highlights can be found on <em>TikTok</em>") %}
+    <!-- STYLES needed to overwrite tiktok embed css -->
+    <!-- <blockquote -->
+      <!-- class="h-64 aspect-video overflow-hidden p-0 m-0 tiktok-embed bg-pink-200" -->
+      <!-- cite="https://www.tiktok.com/@michalvankodev" -->
+      <!-- data-unique-id="michalvankodev" -->
+      <!-- data-embed-from="embed_page" -->
+      <!-- data-embed-type="creator" -->
+      <!-- style="max-width:780px; min-width:288px; margin: 0; padding: 0; border-radius: 8px" -->
+    <!-- > -->
+      <!-- <section> -->
+         <!-- <a target="_blank" href="https://www.tiktok.com/@michalvankodev?refer=creator_embed">@michalvankodev</a> -->
+      <!-- </section> -->
+    <!-- </blockquote> -->
+    <!-- <script async src="https://www.tiktok.com/embed.js"></script> -->
+    {% call sc::social_card_end() %}
 
-  {% call sc::social_card_start("tiktok", "Highlights can be found on <em>TikTok</em>") %}
-  <!-- STYLES needed to overwrite tiktok embed css -->
-  <!-- <blockquote -->
-    <!-- class="h-64 aspect-video overflow-hidden p-0 m-0 tiktok-embed bg-pink-200" -->
-    <!-- cite="https://www.tiktok.com/@michalvankodev" -->
-    <!-- data-unique-id="michalvankodev" -->
-    <!-- data-embed-from="embed_page" -->
-    <!-- data-embed-type="creator" -->
-    <!-- style="max-width:780px; min-width:288px; margin: 0; padding: 0; border-radius: 8px" -->
-  <!-- > -->
-    <!-- <section> -->
-       <!-- <a target="_blank" href="https://www.tiktok.com/@michalvankodev?refer=creator_embed">@michalvankodev</a> -->
-    <!-- </section> -->
-  <!-- </blockquote> -->
-  <!-- <script async src="https://www.tiktok.com/embed.js"></script> -->
-  {% call sc::social_card_end() %}
-
-  {% call sc::social_card_start("youtube", "Vlogs and highlights can be found on <em>YouTube</em>") %}
-  <!-- TODO create our own youtube widget which will populate this window on build -->
-  <!-- <iframe -->
-    <!-- class="h-64 aspect-video" -->
-    <!-- id="ytplayer" -->
-    <!-- type="text/html" -->
-    <!-- width="100%" -->
-    <!-- height="100%" -->
-    <!-- src="https://www.youtube.com/embed/?listType=playlist&list=PLjUl8tFKyR8rCsckLn93PAwQg6tf0cyBl&enablejsapi=1&color=white" -->
-    <!-- frameborder="0" -->
-    <!-- allowfullscreen -->
-  <!-- ></iframe> -->
-  {% call sc::social_card_end() %}
+    {% call sc::social_card_start("youtube", "Vlogs and highlights can be found on <em>YouTube</em>") %}
+    <!-- TODO create our own youtube widget which will populate this window on build -->
+    <!-- <iframe -->
+      <!-- class="h-64 aspect-video" -->
+      <!-- id="ytplayer" -->
+      <!-- type="text/html" -->
+      <!-- width="100%" -->
+      <!-- height="100%" -->
+      <!-- src="https://www.youtube.com/embed/?listType=playlist&list=PLjUl8tFKyR8rCsckLn93PAwQg6tf0cyBl&enablejsapi=1&color=white" -->
+      <!-- frameborder="0" -->
+      <!-- allowfullscreen -->
+    <!-- ></iframe> -->
+    {% call sc::social_card_end() %}
 
 
-  {% call sc::social_card_start("instagram", "Photos and stories shared on <em>Instagram</em>") %}
-  <!-- <blockquote class="instagram-media aspect-video h-64" data-instgrm-permalink="https://www.instagram.com/michalvankodev/" data-instgrm-version="12" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; height:256px; max-height:100%;"></blockquote><script async src="https://www.instagram.com/embed.js"></script> -->
-  {% call sc::social_card_end() %}
+    {% call sc::social_card_start("instagram", "Photos and stories shared on <em>Instagram</em>") %}
+    <!-- <blockquote class="instagram-media aspect-video h-64" data-instgrm-permalink="https://www.instagram.com/michalvankodev/" data-instgrm-version="12" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; height:256px; max-height:100%;"></blockquote><script async src="https://www.instagram.com/embed.js"></script> -->
+    {% call sc::social_card_end() %}
 
-</section>
+  </section>
 
-<hr class="border-blue-950 m-5">
+  <hr class="border-blue-950 m-5 lg:hidden">
 
-<section id="showcase">
-  <h2 class="text-blue-950 font-semibold text-2xl m-5">Showcase</h2>
+  <section id="showcase" class="col-span-2">
+    <h2 class="text-blue-950 font-semibold text-2xl m-5 md:text-4xl">Showcase</h2>
 
-  <ul class="mx-5">
-   {% for project in featured_projects %}
-    <li class="my-2">
-      {% include "components/project_preview_card.html" %}
-    </li>
-   {% endfor %}
-  </ul>
+    <ul class="mx-5 md:grid md:grid-cols-2 md:justify-stretch md:items-stretch xl:grid-cols-3">
+     {% for project in featured_projects %}
+      <li class="my-2">
+        {% include "components/project_preview_card.html" %}
+      </li>
+     {% endfor %}
+    </ul>
 
-</section>
+  </section>
+</section> <!-- /.index-container -->
 
 
 {% endblock %}

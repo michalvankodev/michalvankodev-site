@@ -1,6 +1,6 @@
 <article class="border rounded-md bg-white m-4 p-4">
   <header class="px-4 mb-3"> 
-    <h2 class="text-xl font-semibold text-blue-900">
+    <h2 class="text-xl font-semibold text-blue-900 md:text-2xl">
       {% match project.metadata.link %}
       {% when Some with (href) %}
       <a href="{{href}}" class="text-blue-900 no-underline">
@@ -10,9 +10,9 @@
       {{project.metadata.title}}
       {% endmatch %}
     </h2>
-    <p class="text-gray-800 text-lg my-2">
+    <section class="description text-slate-800 my-2 md:text-xl">
       {{project.metadata.description|safe}}
-    </p>
+    </section>
   </header>
   <!-- <hr class="border-blue-950 my-5"> -->
 
@@ -33,8 +33,8 @@
   {% endmatch %}
 
 
-	<footer class="text-sm px-4">
-    <h3 class="text-xl font-semibold text-blue-900 my-2">
+	<footer class="text-sm px-4 md:text-base">
+    <h3 class="text-xl font-semibold text-blue-900 my-2 md:text-2xl">
       {{crate::projects::project_model::translate_classification(project.metadata.classification)}}
     </h3>
     <ul class="inline-block">

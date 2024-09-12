@@ -2,15 +2,15 @@
 
 <section class="flex border rounded bg-white m-4 p-3">
 	<aside class="flex justify-center items-center pr-3">
-	  <svg aria-hidden="true" class="h-12 w-12 fill-blue-950">
+	  <svg aria-hidden="true" class="fill-blue-950 h-12 w-12 md:h-16 md:w-16">
 	    <use xlink:href="/svg/icons-sprite.svg#{{svg}}" />
 	  </svg>
 	</aside>
 	<section>
 		<header>
-			<h3 class="text-lg font-medium mb-1">{{heading}}</h3>
+			<h3 class="text-lg font-medium mb-1 md:text-2xl">{{heading}}</h3>
 		</header>
-		<p class="text-sm leading-5 text-gray-800">{{description|safe}}</p>
+		<p class="text-sm leading-5 text-gray-800 md:text-lg">{{description|safe}}</p>
 	</section>
 </section>
 
