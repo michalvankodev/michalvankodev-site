@@ -49,5 +49,7 @@ async fn main() {
 }
 
 // TODO responsive design
+// - contact
+// TODO Fix header menu link on blog
 // TODO Colors
 // TODO go live pipeline

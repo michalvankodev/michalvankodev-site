@@ -27,7 +27,7 @@
 
     <h2 class="text-blue-950 font-semibold text-2xl m-5 md:text-4xl">About me</h2>
 
-    <p class="mx-5 md:text-xl">
+    <p class="mx-5 md:text-xl text-justify">
       Welcome to my personal website. My name is
       <strong>Michal&nbsp;Vanko</strong>
       and I'm a
@@ -42,7 +42,7 @@
   </section>
 
   <section id="blog" class="lg:col-span-2 lg:row-start-2 xl:col-auto xl:row-start-auto xl:row-span-2">
-    <h2 class="text-blue-950 font-semibold text-2xl md:text-4xl m-5">Blog</h2>
+    <h2 class="text-blue-950 font-semibold text-2xl md:text-4xl m-5"><a href="/blog" class="text-blue-950 no-underline">Blog</a></h2>
     <section id="blog-tags">
       <ul class="mx-5">
        {% for tag in blog_tags %}
@@ -58,80 +58,20 @@
      {% for post in featured_blog_posts %}
       <li>
         {% include "components/blog_post_preview.html" %}
-        <hr class="border-blue-950 my-5">
+        <hr class="border-blue-950 my-5 md:my-8">
       </li>
      {% endfor %}
     </ul>
   </section>
 
   <section id="socials">
-    <h2 class="text-blue-950 font-semibold text-2xl m-5 md:text-4xl">Socials</h2>
-    {% call sc::social_card_start("twitch", "I stream (almost) regularly on <em>twitch.tv</em>") %}
-      <!-- <script src= "https://player.twitch.tv/js/embed/v1.js"></script> -->
-      <!-- <div id="twitch-player" class="h-64 aspect-video rounded overflow-hidden"></div> -->
-      <!-- <script type="text/javascript"> -->
-        <!-- var options = { -->
-          <!-- width: "100%", -->
-          <!-- height: "100%", -->
-          <!-- channel: "michalvankodev", -->
-          <!-- parent: ["localhost"] -->
-        <!-- }; -->
-        <!-- var player = new Twitch.Player("twitch-player", options); -->
-        <!-- player.setVolume(0.5); -->
-      </script>
-    {% call sc::social_card_end() %}
-
-    {% call sc::social_card_start("tiktok", "Highlights can be found on <em>TikTok</em>") %}
-    <!-- STYLES needed to overwrite tiktok embed css -->
-    <!-- <blockquote -->
-      <!-- class="h-64 aspect-video overflow-hidden p-0 m-0 tiktok-embed bg-pink-200" -->
-      <!-- cite="https://www.tiktok.com/@michalvankodev" -->
-      <!-- data-unique-id="michalvankodev" -->
-      <!-- data-embed-from="embed_page" -->
-      <!-- data-embed-type="creator" -->
-      <!-- style="max-width:780px; min-width:288px; margin: 0; padding: 0; border-radius: 8px" -->
-    <!-- > -->
-      <!-- <section> -->
-         <!-- <a target="_blank" href="https://www.tiktok.com/@michalvankodev?refer=creator_embed">@michalvankodev</a> -->
-      <!-- </section> -->
-    <!-- </blockquote> -->
-    <!-- <script async src="https://www.tiktok.com/embed.js"></script> -->
-    {% call sc::social_card_end() %}
-
-    {% call sc::social_card_start("youtube", "Vlogs and highlights can be found on <em>YouTube</em>") %}
-    <!-- TODO create our own youtube widget which will populate this window on build -->
-    <!-- <iframe -->
-      <!-- class="h-64 aspect-video" -->
-      <!-- id="ytplayer" -->
-      <!-- type="text/html" -->
-      <!-- width="100%" -->
-      <!-- height="100%" -->
-      <!-- src="https://www.youtube.com/embed/?listType=playlist&list=PLjUl8tFKyR8rCsckLn93PAwQg6tf0cyBl&enablejsapi=1&color=white" -->
-      <!-- frameborder="0" -->
-      <!-- allowfullscreen -->
-    <!-- ></iframe> -->
-    {% call sc::social_card_end() %}
-
-
-    {% call sc::social_card_start("instagram", "Photos and stories shared on <em>Instagram</em>") %}
-    <!-- <blockquote class="instagram-media aspect-video h-64" data-instgrm-permalink="https://www.instagram.com/michalvankodev/" data-instgrm-version="12" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; height:256px; max-height:100%;"></blockquote><script async src="https://www.instagram.com/embed.js"></script> -->
-    {% call sc::social_card_end() %}
-
+    {% include "sections/social.html" %}
   </section>
 
   <hr class="border-blue-950 m-5 lg:hidden">
 
   <section id="showcase" class="col-span-2">
-    <h2 class="text-blue-950 font-semibold text-2xl m-5 md:text-4xl">Showcase</h2>
-
-    <ul class="mx-5 md:grid md:grid-cols-2 md:justify-stretch md:items-stretch xl:grid-cols-3">
-     {% for project in featured_projects %}
-      <li class="my-2">
-        {% include "components/project_preview_card.html" %}
-      </li>
-     {% endfor %}
-    </ul>
-
+    {% include "sections/showcase.html" %}
   </section>
 </section> <!-- /.index-container -->
 

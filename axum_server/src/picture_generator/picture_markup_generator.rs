@@ -27,7 +27,7 @@ pub fn generate_picture_markup(
     let dev_only_img_path =
         Path::new("../static/").join(orig_img_path.strip_prefix("/").unwrap_or(orig_img_path));
 
-    let orig_img_dimensions = image_dimensions(&dev_only_img_path).unwrap();
+    let orig_img_dimensions = image_dimensions(&dev_only_img_path)?;
     let resolutions = get_resolutions(orig_img_dimensions, width, height);
 
     let path_to_generated_arc = Arc::new(path_to_generated);

@@ -1,17 +1,19 @@
-<article class="grid grid-cols-[max-content_1fr] grid-flow-col gap-4">
+<article class="grid grid-cols-[max-content_1fr] grid-rows-[max-content_1fr_max-content] grid-flow-col gap-4 md:gap-x-8">
 	<aside class="row-span-3">
 		{% match post.metadata.thumbnail %}
 		{% when Some with (orig_path) %}
-		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", true).unwrap()|safe }}
+		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", true).unwrap_or("".to_string())|safe }}
 		{% when None %}
 		<div> TODO default obrazok </div>
 		{% endmatch %}
 	</aside>
 	<header>
-		<h3 class="text-lg font-bold mb-1 md:text-3xl">{{post.metadata.title}}</h3>
+		<h3 class="text-lg font-bold mb-1 md:text-3xl">
+		  <a rel="prefetch" href="/blog/{{post.slug}}">{{post.metadata.title}}</a>
+		</h3>
 	</header>
-	<section class="text-base leading-5 text-gray-800 md:text-xl">{{post.body|description_filter|safe}}</section>
-	<footer class="text-sm">
+	<section class="text-base leading-5 text-gray-800 md:text-xl text-justify">{{post.body|description_filter|safe}}</section>
+	<footer class="text-sm md:text-base lg:text-lg">
     <ul class="inline-block">
      {% for tag in post.metadata.tags %}
       <li class="inline-block">

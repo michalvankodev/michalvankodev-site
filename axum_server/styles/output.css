@@ -633,11 +633,6 @@ video {
   margin-bottom: 1.5rem;
 }
 
-.my-auto {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -750,6 +745,14 @@ video {
   grid-template-columns: max-content 1fr;
 }
 
+.grid-rows-\[max-content_max-content_max-content\] {
+  grid-template-rows: max-content max-content max-content;
+}
+
+.grid-rows-\[max-content_1fr_max-content\] {
+  grid-template-rows: max-content 1fr max-content;
+}
+
 .flex-row {
   flex-direction: row;
 }
@@ -784,24 +787,6 @@ video {
 
 .gap-4 {
   gap: 1rem;
-}
-
-.gap-8 {
-  gap: 2rem;
-}
-
-.gap-x-64 {
-  -moz-column-gap: 16rem;
-       column-gap: 16rem;
-}
-
-.gap-y-8 {
-  row-gap: 2rem;
-}
-
-.gap-x-32 {
-  -moz-column-gap: 8rem;
-       column-gap: 8rem;
 }
 
 .overflow-hidden {
@@ -913,6 +898,10 @@ video {
 
 .text-right {
   text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
 }
 
 .text-2xl {
@@ -1492,6 +1481,11 @@ a {
 }
 
 @media (min-width: 768px) {
+  .md\:my-8 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
   .md\:grid {
     display: grid;
   }
@@ -1514,6 +1508,15 @@ a {
 
   .md\:justify-stretch {
     justify-content: stretch;
+  }
+
+  .md\:gap-8 {
+    gap: 2rem;
+  }
+
+  .md\:gap-x-8 {
+    -moz-column-gap: 2rem;
+         column-gap: 2rem;
   }
 
   .md\:text-2xl {
@@ -1545,11 +1548,25 @@ a {
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
+
+  .md\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .md\:text-6xl {
+    font-size: 3.75rem;
+    line-height: 1;
+  }
 }
 
 @media (min-width: 1024px) {
   .lg\:col-span-2 {
     grid-column: span 2 / span 2;
+  }
+
+  .lg\:row-span-2 {
+    grid-row: span 2 / span 2;
   }
 
   .lg\:row-start-2 {
@@ -1558,6 +1575,10 @@ a {
 
   .lg\:mt-20 {
     margin-top: 5rem;
+  }
+
+  .lg\:block {
+    display: block;
   }
 
   .lg\:grid {
@@ -1572,6 +1593,18 @@ a {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .lg\:grid-cols-\[1fr_2fr\] {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .lg\:grid-cols-\[2fr_1fr\] {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .lg\:grid-rows-\[min-content_1fr\] {
+    grid-template-rows: min-content 1fr;
+  }
+
   .lg\:gap-x-32 {
     -moz-column-gap: 8rem;
          column-gap: 8rem;
@@ -1584,6 +1617,11 @@ a {
   .lg\:text-6xl {
     font-size: 3.75rem;
     line-height: 1;
+  }
+
+  .lg\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
 }
 

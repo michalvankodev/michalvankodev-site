@@ -1,0 +1,56 @@
+{%- import "components/social_card.html" as sc -%}
+{% extends "base.html" %}
+{% block content %}
+
+<section id="blog-container" class="lg:grid lg:grid-cols-[2fr_1fr] lg:grid-rows-[min-content_1fr] lg:gap-x-32 max-w-maxindex mx-auto">
+  <section id="blog-list" class="lg:row-span-2">
+    {% if posts.len() == 0 %}
+    <p class="no-posts">You've found void in the space.</p>
+    {% else %}
+    <h1 class="m-5 text-4xl text-blue-950 font-extrabold md:text-6xl">
+    {% if let Some(t) = tag %}
+    <em>{{t}}</em> 
+    {% else %}
+     Blog posts
+    {% endif %}
+    </h1>
+
+    <section id="blog-tags">
+      <ul class="mx-5">
+       {% for tag in blog_tags %}
+        <li class="inline-block mx-0.5 p-0.5 md:text-xl">
+          <a href="/blog/tags/{{tag}}" class="text-pink-950">#{{tag|capitalize}}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <hr class="border-blue-950 m-5 md:my-8">
+
+    <ul class="mx-5">
+      {% for post in posts %}
+      <li>
+        {% include "components/blog_post_preview.html" %}
+        <hr class="border-blue-950 my-5 md:my-8">
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </section> <!-- /#blog-list -->
+  <section id="socials" class="hidden lg:block">
+    {% include "sections/social.html" %}
+  </section> <!-- /#socials -->
+  
+  <section id="showcase" class="hidden lg:block">
+    <h2 class="text-blue-950 font-semibold text-2xl m-5 md:text-4xl">Showcase</h2>
+
+    <ul class="">
+     {% for project in featured_projects %}
+      <li class="my-2">
+        {% include "components/project_preview_card.html" %}
+      </li>
+     {% endfor %}
+    </ul>
+  </section> <!-- /#showcase -->
+</section> <!-- /#blog-container -->
+{% endblock %}

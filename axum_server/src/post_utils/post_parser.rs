@@ -163,9 +163,6 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
                 let syntax_reference = syntax_set
                     .find_syntax_by_token(lang)
                     .unwrap_or(syntax_set.find_syntax_plain_text());
-                syntax_set.syntaxes().iter().for_each(|sr| {
-                    debug!("{}", sr.name);
-                });
                 let highlighted =
                     highlighted_html_for_string(&text, &syntax_set, syntax_reference, theme)
                         .unwrap();

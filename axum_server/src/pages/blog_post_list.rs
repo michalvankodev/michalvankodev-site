@@ -1,20 +1,27 @@
 use askama::Template;
 use axum::{extract::Path, http::StatusCode};
+use tokio::try_join;
 
 use crate::{
-    blog_posts::blog_post_model::{BlogPostMetadata, BLOG_POST_PATH},
+    blog_posts::{
+        blog_post_model::{BlogPostMetadata, BLOG_POST_PATH},
+        tag_list::get_popular_blog_tags,
+    },
     components::site_header::{HeaderProps, Link},
     filters,
     post_utils::{post_listing::get_post_list, post_parser::ParseResult},
+    projects::{featured_projects::get_featured_projects, project_model::ProjectMetadata},
 };
 
 #[derive(Template)]
-#[template(path = "post_list.html")]
+#[template(path = "blog_post_list.html")]
 pub struct PostListTemplate {
     pub title: String,
     pub posts: Vec<ParseResult<BlogPostMetadata>>,
     pub tag: Option<String>,
     pub header_props: HeaderProps,
+    pub blog_tags: Vec<String>,
+    pub featured_projects: Vec<ParseResult<ProjectMetadata>>,
 }
 
 pub async fn render_blog_post_list(
@@ -23,7 +30,12 @@ pub async fn render_blog_post_list(
     // I will forget what happens here in a week. But essentially it's pattern matching and shadowing
     let tag = tag.map(|Path(tag)| tag);
 
-    let mut post_list = get_post_list::<BlogPostMetadata>(BLOG_POST_PATH).await?;
+    let (blog_tags, featured_projects, mut post_list) = try_join!(
+        get_popular_blog_tags(),
+        get_featured_projects(),
+        get_post_list::<BlogPostMetadata>(BLOG_POST_PATH)
+    )?;
+
     post_list.sort_by_key(|post| post.metadata.date);
     post_list.retain(|post| post.metadata.published);
     post_list.reverse();
@@ -56,5 +68,7 @@ pub async fn render_blog_post_list(
         posts,
         tag,
         header_props,
+        blog_tags,
+        featured_projects,
     })
 }
