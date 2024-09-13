@@ -2,6 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: 'Comfortaa';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 300;
+    src:
+      local('Comfortaa Light'),
+      local('Comfortaa'),
+      url(/fonts/comfortaa/Comfortaa-Light.woff2) format('woff2'),
+      url(/fonts/comfortaa/Comfortaa-Light.ttf) format('truetype');
+  }
+  @font-face {
+    font-family: 'Comfortaa';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+    src:
+      local('Comfortaa Regular'),
+      local('Comfortaa'),
+      url(/fonts/comfortaa/Comfortaa-Regular.woff2) format('woff2'),
+      url(/fonts/comfortaa/Comfortaa-Regular.ttf) format('truetype');
+  }
+  @font-face {
+    font-family: 'Comfortaa';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500;
+    src:
+      local('Comfortaa Medium'),
+      local('Comfortaa'),
+      url(/fonts/comfortaa/Comfortaa-Medium.woff2) format('woff2'),
+      url(/fonts/comfortaa/Comfortaa-Medium.ttf) format('truetype');
+  }
+  @font-face {
+    font-family: 'Comfortaa';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 600;
+    src:
+      local('Comfortaa SemiBold'),
+      local('Comfortaa'),
+      url(/fonts/comfortaa/Comfortaa-SemiBold.woff2) format('woff2'),
+      url(/fonts/comfortaa/Comfortaa-SemiBold.ttf) format('truetype');
+  }
+  @font-face {
+    font-family: 'Comfortaa';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 700;
+    src:
+      local('Comfortaa Bold'),
+      local('Comfortaa'),
+      url(/fonts/comfortaa/Comfortaa-Bold.woff2) format('woff2'),
+      url(/fonts/comfortaa/Comfortaa-Bold.ttf) format('truetype');
+  }
+  @font-face {
+    font-family: 'Baloo2';
+    font-style: normal;
+    font-display: swap;
+    src:
+      local('Baloo2'),
+      url(/fonts/baloo2/Baloo2-VariableFont_wght.ttf) format('truetype');
+  }
+}
+
 a {
   @apply text-pink-600 underline underline-offset-2;
 

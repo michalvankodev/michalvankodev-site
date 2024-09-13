@@ -31,6 +31,7 @@ async fn main() {
     let app = router::get_router()
         .nest_service("/styles", ServeDir::new("styles"))
         .nest_service("/images", ServeDir::new("../static/images"))
+        .nest_service("/fonts", ServeDir::new("../static/fonts"))
         .nest_service("/generated_images", ServeDir::new("generated_images"))
         .nest_service("/svg", ServeDir::new("../static/svg"))
         .nest_service(
@@ -49,6 +50,7 @@ async fn main() {
 }
 
 // TODO responsive design
+// TODO Variable weight for font, setup boldness for <strong> and h1 h2 ... elements
 // - contact
 // TODO Colors
 // TODO go live pipeline
