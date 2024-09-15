@@ -19,14 +19,24 @@ module.exports = {
 			spacing: {
 				note: "60rem",
 				read: "64rem",
-				image: "70rem",
+				image: "min(70rem, 95vw)",
 				maxindex: "100rem",
 			},
 			width: {
 				note: "60rem",
 				read: "64rem",
-				image: "70rem",
+				image: "min(70rem, 95vw)",
 				maxindex: "100rem",
+			},
+			fontSize: {
+				readxl: [
+					"1.75rem",
+					{
+						lineHeight: "2.25rem",
+						letterSpacing: "-0.015em",
+						fontWeight: "400",
+					},
+				],
 			},
 		},
 	},

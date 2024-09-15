@@ -1157,6 +1157,9 @@ a {
     line-height: 2rem;
   }
   h1 {
+    font-weight: 600;
+  }
+  h1 {
     --tw-text-opacity: 1;
     color: rgb(30 58 138 / var(--tw-text-opacity));
   }
@@ -1192,6 +1195,9 @@ a {
   h2 {
     font-size: 1.25rem;
     line-height: 1.75rem;
+  }
+  h2 {
+    font-weight: 600;
   }
   h2 {
     --tw-text-opacity: 1;
@@ -1265,9 +1271,14 @@ a {
   }
   @media (min-width: 1024px) {
     p {
-      font-size: 1.5rem;
-      line-height: 2rem;
+      font-size: 1.75rem;
+      line-height: 2.25rem;
+      letter-spacing: -0.015em;
+      font-weight: 400;
     }
+  }
+  strong {
+    font-weight: 500;
   }
   pre {
     margin-top: 0.25rem;
@@ -1299,15 +1310,17 @@ a {
       margin-right: auto;
     }
     img {
-      max-width: 70rem;
-    }
-    img {
       border-radius: 0.25rem;
     }
     img {
       --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
       --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
       box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    }
+    @media (min-width: 1024px) {
+      img {
+        max-width: min(70rem, 95vw);
+      }
     }
   }
   figcaption {
@@ -1348,7 +1361,7 @@ a {
     margin-bottom: 1rem;
   }
   table {
-    max-width: 70rem;
+    max-width: min(70rem, 95vw);
   }
   table {
     table-layout: auto;
@@ -1562,7 +1575,7 @@ a {
   margin-left: auto;
   margin-right: auto;
   aspect-ratio: 16 / 9;
-  max-width: 70rem;
+  max-width: min(70rem, 95vw);
 }
 
 .hover\:bg-pink-200:hover {

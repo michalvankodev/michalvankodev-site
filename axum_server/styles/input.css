@@ -78,13 +78,16 @@ a {
 
 .article-body {
   h1 {
-    @apply px-4 text-2xl text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-4xl lg:text-5xl;
+    @apply px-4 text-2xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-4xl lg:text-5xl;
   }
   h2 {
-    @apply px-4 text-xl text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-2xl md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-4xl;
+    @apply px-4 text-xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-2xl md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-4xl;
   }
   p {
-    @apply px-4 my-2 text-slate-950 text-justify mx-auto max-w-read md:text-lg md:my-8 lg:text-2xl;
+    @apply px-4 my-2 text-slate-950 text-justify mx-auto max-w-read md:text-lg md:my-8 lg:text-readxl;
+  }
+  strong {
+    @apply font-medium;
   }
   pre {
     @apply p-4 my-1 overflow-auto text-sm mx-auto max-w-read;
@@ -93,7 +96,7 @@ a {
     @apply p-4;
 
     img {
-      @apply rounded shadow-md mx-auto max-w-image;
+      @apply rounded shadow-md mx-auto lg:max-w-image;
     }
   }
   figcaption {
