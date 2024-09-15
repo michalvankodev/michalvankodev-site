@@ -49,8 +49,14 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
-// TODO responsive design
-// TODO Variable weight for font, setup boldness for <strong> and h1 h2 ... elements
-// - contact
+// TODO Socials
+// TODO ul li article styles
+// TODO header height difference
+// - fotos
 // TODO Colors
+// TODO print css and other 404 css linked in base.html
 // TODO go live pipeline
+// TODO after release
+// - contact
+// - projects page
+// - linktree page

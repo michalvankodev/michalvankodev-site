@@ -52,9 +52,18 @@ kill:
 clean:
 	rm -rf dist
 
+# SSG
+ssg:
+	- wget --no-convert-links -r -p -E -P dist --no-host-directories 127.0.0.1:{{port}}
+	- wget -P dist/svg 127.0.0.1:{{port}}/svg/icons-sprite.svg
+  
+# Preview server
+preview:
+  npx http-server dist
+
 # SSG export of production server
 export: clean
 	just prod &
 	just wait_for_port
-	- wget --convert-links -r -p --level 1 -E -P dist --no-host-directories localhost:{{port}}
+	just ssg
 	just kill
