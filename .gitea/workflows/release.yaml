@@ -4,6 +4,9 @@ on:
    branches: 
      - main
 
+env:
+  PORT: 3081
+
 jobs:
   release:
     name: release
@@ -13,7 +16,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - uses: taiki-e/install-action@just
-      - run: cd axum_server && just export
+      - run: cd axum_server && just prod &
+      - uses: iFaxity/wait-on-action@v1.2.1
+        with: 
+          resource: http://localhost:3001
+      - run: cd axum_server && just ssg
       - uses: actions/upload-artifact@v4
         with:
           name: dist
