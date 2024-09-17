@@ -28,11 +28,10 @@ syntect = "5.2.0"
 [build]
 rustflags = ["-Z", "threads=8"]
 
-[target.x86_64-unknown-linux-gnu]
-rustflags = [
-    "-C", "link-arg=-fuse-ld=lld"
-]
-
+# [target.x86_64-unknown-linux-gnu]
+# rustflags = [
+#     "-C", "link-arg=-fuse-ld=lld"
+# ]
 
 [profile.dev]
 debug = false
