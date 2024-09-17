@@ -8,4 +8,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo test --all-features
+      - run: cd axum_server && cargo test --all-features
