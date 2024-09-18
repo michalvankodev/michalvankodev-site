@@ -11,7 +11,8 @@ jobs:
   release:
     name: release
     runs-on: ubuntu-latest
-    container: ubuntu
+    container: 
+      image: node:18
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
