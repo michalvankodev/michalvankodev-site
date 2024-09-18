@@ -22,10 +22,12 @@ jobs:
         with:
           run: just prod
           working-directory: axum_server
-          wait-on: http://localhost:3001
+          wait-on: http://localhost:3081
           wait-for: 10m
           tail: true
-      - run: cd axum_server && just ssg
+      - name: run ssg
+        run: just ssg
+        working-directory: axum_server
       - uses: actions/upload-artifact@v4
         with:
           name: dist
