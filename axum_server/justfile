@@ -67,3 +67,6 @@ export: clean
 	just wait_for_port
 	just ssg
 	just kill
+
+deploy:
+ rsync -avz -e ssh ./dist/ michalvanko@katelyn:.config/containers/systemd/michalvankodev-site/dist/ 

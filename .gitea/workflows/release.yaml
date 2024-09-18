@@ -11,12 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
+      - name: cache
+        uses: Swatinem/rust-cache@v2
+        working-directory: axum_server
       - uses: taiki-e/install-action@just
-      - run: cd axum_server && just prod &
-      - uses: iFaxity/wait-on-action@v1.2.1
-        with: 
-          resource: http://localhost:3001
+      - uses: JarvusInnovations/background-action@v1
+        run: cd axum_server && just prod
+        working-directory: axum_server
+        wait-on: http://localhost:3001
+        wait-for: 10m
+        tail: true
       - run: cd axum_server && just ssg
       - uses: actions/upload-artifact@v4
         with:
