@@ -46,6 +46,7 @@ async fn main() {
     let port = std::option_env!("PORT").unwrap_or("3080");
     let addr = format!("0.0.0.0:{}", port);
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+    info!("axum_server listening on http://{}", addr);
     axum::serve(listener, app).await.unwrap();
 }
 
