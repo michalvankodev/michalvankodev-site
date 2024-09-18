@@ -19,11 +19,12 @@ jobs:
         working-directory: axum_server
       - uses: taiki-e/install-action@just
       - uses: JarvusInnovations/background-action@v1
-        run: cd axum_server && just prod
-        working-directory: axum_server
-        wait-on: http://localhost:3001
-        wait-for: 10m
-        tail: true
+        with:
+          run: just prod
+          working-directory: axum_server
+          wait-on: http://localhost:3001
+          wait-for: 10m
+          tail: true
       - run: cd axum_server && just ssg
       - uses: actions/upload-artifact@v4
         with:
