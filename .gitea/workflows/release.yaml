@@ -31,7 +31,7 @@ jobs:
         run: cargo build --release
         working-directory: axum_server
       - name: Run server in background
-        run: just prod
+        run: just prod > server.log &
         working-directory: axum_server
       - uses: cygnetdigital/wait_for_response@v2.0.0
         with:
