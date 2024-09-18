@@ -31,7 +31,7 @@ jobs:
         with:
           run: cd axum_server && just prod > server.log 2>&1 &
       - name: Wait for server
-        uses: iFaxity/wait-on-action
+        uses: iFaxity/wait-on-action@v1.2.1
         with:
           resource: http://localhost:3081
       - name: run ssg
