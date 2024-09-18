@@ -27,9 +27,7 @@ jobs:
       #     wait-for: 10m
       #     tail: true
 
-      - uses: nickderobertis/background-task-action@v1
-        with:
-          run: cd axum_server && just prod > server.log 2>&1 &
+      - run: cd axum_server && just prod > server.log 2>&1 &
       - name: Wait for server
         uses: iFaxity/wait-on-action@v1.2.1
         with:
