@@ -31,8 +31,9 @@ jobs:
         with:
           run: cd axum_server && just prod > server.log 2>&1 &
       - name: Wait for server
-        run: |
-          curl --retry 50 --retry-delay 3 --fail --retry-connrefused -Lsv http://localhost:3081
+        uses: iFaxity/wait-on-action
+        with:
+          resource: http://localhost:3081
       - name: run ssg
         run: just ssg
         working-directory: axum_server
