@@ -27,11 +27,8 @@ jobs:
       #     wait-for: 10m
       #     tail: true
 
-      - run: cd axum_server && just prod > server.log 2>&1 &
-      - name: Wait for server
-        uses: iFaxity/wait-on-action@v1.2.1
-        with:
-          resource: http://localhost:3081
+      - run: cd axum_server && cargo build --release
+      - run: cd axum_server && just prod &
       - name: run ssg
         run: just ssg
         working-directory: axum_server
