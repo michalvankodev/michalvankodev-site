@@ -4,6 +4,7 @@ use axum::http::StatusCode;
 use chrono::{DateTime, Utc};
 use gray_matter::{engine::YAML, Matter};
 use image::image_dimensions;
+use indoc::formatdoc;
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 use syntect::{highlighting::ThemeSet, html::highlighted_html_for_string, parsing::SyntaxSet};
@@ -71,6 +72,7 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
 
 enum TextKind {
     Text,
+    Heading(Option<String>),
     Code(String),
 }
 
@@ -102,7 +104,7 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
         }) => {
             if !dest_url.starts_with("/") {
                 return Event::Html(
-                    format!(
+                    formatdoc!(
                         r#"<img
                           alt="{title}"
                           src="{dest_url}"
@@ -125,7 +127,7 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
             // Place image into the content with scaled reso to a boundary
             let picture_markup =
                 generate_picture_markup(&dest_url, max_width, max_height, &title, generate_images)
-                    .unwrap_or(format!(
+                    .unwrap_or(formatdoc!(
                         r#"
                         <img
                           alt="{alt}"
@@ -139,7 +141,7 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
                 link_type, dest_url, title, id
             );
             Event::Html(
-                format!(
+                formatdoc!(
                     r#"<figure>
                         {picture_markup}
                         <figcaption>
@@ -168,13 +170,44 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
                         .unwrap();
                 Event::Html(highlighted.into())
             }
+            TextKind::Heading(provided_id) => {
+                let heading_id = provided_id.clone().unwrap_or({
+                    text.to_lowercase()
+                        .replace(|c: char| !c.is_alphanumeric(), "-")
+                });
+                Event::Html(
+                    formatdoc!(
+                        r##"
+                            <a name="{heading_id}" class="anchor" href="#{heading_id}">
+                              <span class="header-link"></span>
+                            </a>
+                            {text}
+                            "##
+                    )
+                    .into(),
+                )
+            }
             _ => Event::Text(text),
         },
+        Event::Start(Tag::Heading {
+            level,
+            id,
+            classes: _,
+            attrs: _,
+        }) => {
+            let id_str = id.map(|id| id.to_string());
+            text_kind = TextKind::Heading(id_str);
+            Event::Html(format!("<{level}>").into())
+        }
         Event::Start(_) => event,
         Event::End(TagEnd::Image) => Event::Html("</figcaption></figure>".into()),
         Event::End(TagEnd::CodeBlock) => {
             text_kind = TextKind::Text;
             Event::End(TagEnd::CodeBlock)
+        }
+        Event::End(TagEnd::Heading(heading_level)) => {
+            text_kind = TextKind::Text;
+            Event::End(TagEnd::Heading(heading_level))
         }
         _ => event,
     });

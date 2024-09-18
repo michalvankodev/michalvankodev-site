@@ -53,8 +53,6 @@ async fn main() {
 
 // TODO Socials
 // - fotos
-// TODO ul li article styles
-// TODO header height difference
 // TODO Colors
 // TODO print css and other 404 css linked in base.html
 // TODO go live pipeline

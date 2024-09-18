@@ -5,6 +5,7 @@ use std::{
 
 use anyhow::Context;
 use image::{image_dimensions, ImageReader};
+use indoc::formatdoc;
 
 use super::{
     export_format::ExportFormat, image_generator::generate_images,
@@ -66,7 +67,7 @@ pub fn generate_picture_markup(
         .map(|format| {
             let srcset = generate_srcset(&path_to_generated, format, &resolutions);
             let format_type = format.get_type();
-            format!(
+            formatdoc!(
                 r#"<source
                 srcset="{srcset}"
                 type="{format_type}"
@@ -81,7 +82,7 @@ pub fn generate_picture_markup(
         resolutions.first().expect("Should this error ever happen?"),
         exported_formats.last().expect("Can this one ever happen?"),
     );
-    let image_tag = format!(
+    let image_tag = formatdoc!(
         r#"<img
             src="{image_path}"
             width="{width}"
@@ -90,7 +91,7 @@ pub fn generate_picture_markup(
         >"#
     );
 
-    let result = format!(
+    let result = formatdoc!(
         r#"<picture>
             {source_tags}
             {image_tag}
@@ -272,10 +273,12 @@ fn test_generate_srcset() {
 
 #[test]
 fn test_generate_picture_markup() {
+    use indoc::indoc;
     let width = 300;
     let height = 200;
     let orig_img_path = "/images/uploads/2020-03-23_20-24-06_393.jpg";
-    let result = r#"<picture>
+    let result = indoc! {
+        r#"<picture>
             <source
                 srcset="/generated_images/images/uploads/2020-03-23_20-24-06_393_300x200.avif 1x, /generated_images/images/uploads/2020-03-23_20-24-06_393_450x300.avif 1.5x, /generated_images/images/uploads/2020-03-23_20-24-06_393_600x400.avif 2x, /generated_images/images/uploads/2020-03-23_20-24-06_393_900x600.avif 3x, /generated_images/images/uploads/2020-03-23_20-24-06_393_1200x800.avif 4x"
                 type="image/avif"
@@ -290,7 +293,8 @@ fn test_generate_picture_markup() {
             height="200"
             alt="Testing image alt"
         >
-        </picture>"#;
+        </picture>"#,
+    };
     assert_eq!(
         generate_picture_markup(orig_img_path, width, height, "Testing image alt", false)
             .expect("picture markup has to be generated"),

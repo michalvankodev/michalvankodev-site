@@ -38,7 +38,9 @@ I've set a new **sub goal** for buying a streaming PC. I'll buy it when the stre
 
 Last week I've been showing off new headphones that I've ordered and the *YouTube* algorithm has been suggesting great videos on the topic since. I will give another shoutout. This time it is to [Joshua's Valour *YouTube* channel](https://www.youtube.com/channel/UCx9bOYEjkevIDYONBAstK-A)
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/hoLMdrD5pic" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div class="video-embed">
+<iframe class="embed" width="100%" height="100%" src="https://www.youtube.com/embed/hoLMdrD5pic" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
 
 My next pick will be a [podcast *Lifespan* hosted by Dr. David Sinclair](https://open.spotify.com/show/3PkkSdQE8DfeiKvSk1Mg1J) where he talks about what we can do and how should we treat our bodies to live a longer and healthier life.
 
