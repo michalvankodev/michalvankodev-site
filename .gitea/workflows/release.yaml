@@ -18,13 +18,21 @@ jobs:
         uses: Swatinem/rust-cache@v2
         working-directory: axum_server
       - uses: taiki-e/install-action@just
-      - uses: JarvusInnovations/background-action@v1
+
+      # - uses: JarvusInnovations/background-action@v1
+      #   with:
+      #     run: just prod &
+      #     working-directory: axum_server
+      #     wait-on: http://localhost:3081
+      #     wait-for: 10m
+      #     tail: true
+
+      - uses: nickderobertis/background-task-action@v1
         with:
-          run: just prod &
-          working-directory: axum_server
-          wait-on: http://localhost:3081
-          wait-for: 10m
-          tail: true
+          run: cd axum_server && just prod
+      - name: Wait for server
+        run: |
+          curl --retry 20 --retry-delay 3 --fail --retry-connrefused -Lsv http://localhost:3081
       - name: run ssg
         run: just ssg
         working-directory: axum_server
