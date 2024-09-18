@@ -20,7 +20,7 @@ jobs:
       - uses: taiki-e/install-action@just
       - uses: JarvusInnovations/background-action@v1
         with:
-          run: just prod
+          run: just prod &
           working-directory: axum_server
           wait-on: http://localhost:3081
           wait-for: 10m
