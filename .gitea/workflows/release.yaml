@@ -29,13 +29,15 @@ jobs:
 
       - uses: nickderobertis/background-task-action@v1
         with:
-          run: cd axum_server && just prod
+          run: cd axum_server && just prod > server.log 2>&1 &
       - name: Wait for server
         run: |
-          curl --retry 20 --retry-delay 3 --fail --retry-connrefused -Lsv http://localhost:3081
+          curl --retry 50 --retry-delay 3 --fail --retry-connrefused -Lsv http://localhost:3081
       - name: run ssg
         run: just ssg
         working-directory: axum_server
+      - name: Server log
+        run: cat axum_server/server.log
       - uses: actions/upload-artifact@v4
         with:
           name: dist
