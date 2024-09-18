@@ -31,11 +31,11 @@ jobs:
         run: cargo build --release
         working-directory: axum_server
       - name: Run server in background
-        run: just prod 
+        run: just prod &
         working-directory: axum_server
       - uses: cygnetdigital/wait_for_response@v2.0.0
         with:
-          url: 'http://localhost:3081/'
+          url: 'http://127.0.0.1:3081/'
           responseCode: '200,500'
           timeout: 50000
           interval: 2000
