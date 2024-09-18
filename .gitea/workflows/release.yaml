@@ -27,8 +27,12 @@ jobs:
       #     wait-for: 10m
       #     tail: true
 
-      - run: cd axum_server && cargo build --release > server.log &
-      - run: cd axum_server && just prod &
+      - name: Build release
+        run: cargo build --release
+        working-directory: axum_server
+      - name: Run server in background
+        run: just prod > server.log &
+        working-directory: axum_server
       - name: run ssg
         run: just ssg
         working-directory: axum_server
