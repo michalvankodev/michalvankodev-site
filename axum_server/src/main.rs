@@ -1,6 +1,7 @@
 use axum::{self};
 use tower_http::services::ServeDir;
 use tower_livereload::LiveReloadLayer;
+use tracing::info;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod blog_posts;
@@ -45,8 +46,8 @@ async fn main() {
     // run our app with hyper, listening globally on port 3080
     let port = std::option_env!("PORT").unwrap_or("3080");
     let addr = format!("0.0.0.0:{}", port);
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-    info!("axum_server listening on http://{}", addr);
+    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
+    info!("axum_server listening on http://{}", &addr);
     axum::serve(listener, app).await.unwrap();
 }
 
