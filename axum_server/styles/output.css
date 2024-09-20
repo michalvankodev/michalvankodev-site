@@ -888,10 +888,6 @@ video {
   border-radius: 0.25rem;
 }
 
-.rounded-2xl {
-  border-radius: 1rem;
-}
-
 .rounded-full {
   border-radius: 9999px;
 }
@@ -906,10 +902,6 @@ video {
 
 .border-2 {
   border-width: 2px;
-}
-
-.border-4 {
-  border-width: 4px;
 }
 
 .border-blue-500 {
@@ -1142,6 +1134,10 @@ a {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
+}
+
+strong {
+  font-weight: 500;
 }
 
 .article-body {
@@ -1406,9 +1402,6 @@ a {
       letter-spacing: -0.015em;
       font-weight: 400;
     }
-  }
-  strong {
-    font-weight: 500;
   }
   pre {
     margin-top: 0.25rem;

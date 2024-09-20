@@ -55,7 +55,6 @@ async fn main() {
 // - fotos
 // TODO Colors
 // Text slate, and gray should be somehow customised
-// STRONG bold-medium
 // TODO print css and other 404 css linked in base.html
 // TODO go live pipeline
 // TODO after release

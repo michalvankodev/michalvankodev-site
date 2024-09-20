@@ -76,6 +76,10 @@ a {
   }
 }
 
+strong {
+  @apply font-medium;
+}
+
 .article-body {
   h1 {
     @apply px-4 text-2xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-4xl lg:text-5xl;
@@ -94,9 +98,6 @@ a {
 
   p {
     @apply px-4 my-2 text-slate-950 text-justify mx-auto max-w-read md:text-lg md:my-8 lg:text-readxl;
-  }
-  strong {
-    @apply font-medium;
   }
   pre {
     @apply p-4 my-1 overflow-auto text-sm mx-auto max-w-read;

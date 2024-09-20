@@ -177,12 +177,9 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
                 });
                 Event::Html(
                     formatdoc!(
-                        r##"
-                            <a name="{heading_id}" class="anchor" href="#{heading_id}">
-                              <span class="header-link"></span>
-                            </a>
+                        r##"id="{heading_id}">
                             {text}
-                            "##
+                        "##
                     )
                     .into(),
                 )
@@ -197,7 +194,7 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
         }) => {
             let id_str = id.map(|id| id.to_string());
             text_kind = TextKind::Heading(id_str);
-            Event::Html(format!("<{level}>").into())
+            Event::Html(format!("<{level} ").into())
         }
         Event::Start(_) => event,
         Event::End(TagEnd::Image) => Event::Html("</figcaption></figure>".into()),
