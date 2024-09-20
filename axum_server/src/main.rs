@@ -54,8 +54,11 @@ async fn main() {
 
 // TODO Socials
 // - fotos
-// TODO go live pipeline
+// consulting session link
+// TODO Change DNS system
+// THINK deploy to alula? rather then katelyn? can be change whenever
 // TODO after release
+// OG tags
 // Remove old web completely
 // Restructure repository
 // - contact

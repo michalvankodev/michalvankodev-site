@@ -64,7 +64,7 @@ pub async fn render_blog_post_list(
     };
 
     Ok(PostListTemplate {
-        title: "Posts".to_owned(),
+        title: "Blog posts".to_owned(),
         posts,
         tag,
         header_props,

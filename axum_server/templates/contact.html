@@ -1,25 +1,27 @@
 {% extends "base.html" %}
 {% block content %} 
 
-<h1 class="mx-6 mt-3 text-4xl text-blue-950 font-extrabold">
-  Contact
-</h1>
+<section id="contact-page">
+  <h1 class="mx-6 mt-3 text-4xl text-blue-950 font-extrabold lg:mx-auto max-w-read">
+    Contact
+  </h1>
 
-<ul class="mx-6">
-  {% for link in links %}
-  <li class="my-6">
-    <a
-      class="flex border-2 place-content-center items-center rounded-full border-blue-500 py-5 hover:bg-pink-200 transition-colors"
-      href="{{link.href}}"
-      title="{{link.title}}"
-    >
-      <svg aria-hidden="true" class="h-6 w-6 fill-blue-950 mx-2">
-        <use xlink:href="/svg/icons-sprite.svg#{{link.svg}}" />
-      </svg>
-      <span class="text-lg font-semibold">{{link.label}}</span>
-    </a>
-  </li>
-  {% endfor %}
-</ul>
+  <ul class="mx-6">
+    {% for link in links %}
+    <li class="my-2 sm:my-4 lg:my-6 max-w-[32rem] mx-auto">
+      <a
+        class="flex border-2 place-content-center items-center rounded-full text-blue-900 border-blue-500 py-2 sm:py-4 hover:bg-pink-200 fill-blue-900 hover:fill-blue-400 transition-colors no-underline"
+        href="{{link.href}}"
+        title="{{link.title}}"
+      >
+        <svg aria-hidden="true" class="h-6 w-6 mx-2 self-start">
+          <use xlink:href="/svg/icons-sprite.svg#{{link.svg}}" />
+        </svg>
+        <span class="text-lg font-semibold">{{link.label}}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
 
 {% endblock %}
