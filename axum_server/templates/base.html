@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>{% block title %} {{title}} @michalvankodev {% endblock %}</title>
+    <title>{% block title %} {{title}} {% endblock %} @michalvankodev</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <meta name="theme-color" content="#333333" />
@@ -13,16 +13,13 @@
       rel="alternate"
       type="application/rss+xml"
       title="RSS feed for latest posts"
-      href="https://michalvanko.dev/feed.xml"
+      href="/feed.xml"
     />
 
     <!-- Tailwind output file -->
     <link rel="stylesheet" href="/styles/output.css" />
 
-    <link rel="stylesheet" href="/print.css" media="print" />
-    <link rel="stylesheet" href="/fonts.css" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="stylesheet" href="/prism.css" />
 
     <link rel="icon" type="image/svg+xml" href="/m-logo.svg" />
     <link rel="icon" type="image/png" href="/m-logo-192.png" />

@@ -807,10 +807,6 @@ video {
   width: 180px;
 }
 
-.w-full {
-  width: 100%;
-}
-
 .max-w-maxindex {
   max-width: 100rem;
 }
@@ -826,6 +822,11 @@ video {
 .-translate-y-1\.5 {
   --tw-translate-y: -0.375rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.break-inside-avoid {
+  -moz-column-break-inside: avoid;
+       break-inside: avoid;
 }
 
 .grid-flow-col {
@@ -914,6 +915,11 @@ video {
   border-color: rgb(11 39 70 / var(--tw-border-opacity));
 }
 
+.border-slate-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(203 213 225 / var(--tw-border-opacity));
+}
+
 .bg-blue-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(225 239 253 / var(--tw-bg-opacity));
@@ -936,11 +942,6 @@ video {
 
 .fill-blue-950 {
   fill: #0b2746;
-}
-
-.object-contain {
-  -o-object-fit: contain;
-     object-fit: contain;
 }
 
 .p-0 {
@@ -1083,19 +1084,14 @@ video {
   color: rgb(11 39 70 / var(--tw-text-opacity));
 }
 
-.text-gray-600 {
-  --tw-text-opacity: 1;
-  color: rgb(75 85 99 / var(--tw-text-opacity));
-}
-
-.text-gray-800 {
-  --tw-text-opacity: 1;
-  color: rgb(31 41 55 / var(--tw-text-opacity));
-}
-
 .text-pink-950 {
   --tw-text-opacity: 1;
   color: rgb(80 2 56 / var(--tw-text-opacity));
+}
+
+.text-slate-600 {
+  --tw-text-opacity: 1;
+  color: rgb(71 85 105 / var(--tw-text-opacity));
 }
 
 .text-slate-800 {
@@ -1105,11 +1101,6 @@ video {
 
 .no-underline {
   text-decoration-line: none;
-}
-
-.drop-shadow-md {
-  --tw-drop-shadow: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06));
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .transition-colors {
@@ -1138,6 +1129,10 @@ a {
 
 strong {
   font-weight: 500;
+}
+
+img[height] {
+  height: revert-layer;
 }
 
 .article-body {
@@ -1505,7 +1500,7 @@ strong {
   }
   table {
     --tw-border-opacity: 1;
-    border-color: rgb(229 231 235 / var(--tw-border-opacity));
+    border-color: rgb(226 232 240 / var(--tw-border-opacity));
   }
   table {
     font-size: 0.875rem;
@@ -1925,5 +1920,11 @@ strong {
 
   .xl\:grid-cols-\[1fr_2fr\] {
     grid-template-columns: 1fr 2fr;
+  }
+}
+
+@media print {
+  .print\:hidden {
+    display: none;
   }
 }

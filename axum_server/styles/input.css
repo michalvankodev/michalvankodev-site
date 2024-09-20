@@ -80,6 +80,10 @@ strong {
   @apply font-medium;
 }
 
+img[height] {
+  height: revert-layer;
+}
+
 .article-body {
   h1 {
     @apply px-4 text-2xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-4xl lg:text-5xl;
@@ -114,7 +118,7 @@ strong {
   }
 
   table {
-    @apply text-sm mx-auto my-4 max-w-image table-auto border-collapse border-spacing-12 border border-gray-200 rounded md:text-base lg:text-xl lg:my-8;
+    @apply text-sm mx-auto my-4 max-w-image table-auto border-collapse border-spacing-12 border border-slate-200 rounded md:text-base lg:text-xl lg:my-8;
   }
 
   thead {

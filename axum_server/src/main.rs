@@ -35,6 +35,7 @@ async fn main() {
         .nest_service("/fonts", ServeDir::new("../static/fonts"))
         .nest_service("/generated_images", ServeDir::new("generated_images"))
         .nest_service("/svg", ServeDir::new("../static/svg"))
+        // TODO manifest logos have bad link, #directory-swap
         .nest_service(
             "/config.yml",
             ServeDir::new("../static/resources/config.yml"),
@@ -53,11 +54,10 @@ async fn main() {
 
 // TODO Socials
 // - fotos
-// TODO Colors
-// Text slate, and gray should be somehow customised
-// TODO print css and other 404 css linked in base.html
 // TODO go live pipeline
 // TODO after release
+// Remove old web completely
+// Restructure repository
 // - contact
 // - projects page
 // - linktree page

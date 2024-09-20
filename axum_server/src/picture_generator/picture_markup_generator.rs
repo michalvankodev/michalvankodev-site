@@ -22,13 +22,24 @@ pub fn generate_picture_markup(
     generate_image: bool,
 ) -> Result<String, anyhow::Error> {
     let exported_formats = get_export_formats(orig_img_path);
+
+    if exported_formats.is_empty() {
+        return Ok(formatdoc!(
+            r#"<img
+            src="{orig_img_path}"
+            width="{width}"
+            height="{height}"
+            alt="{alt_text}"
+        >"#
+        ));
+    }
     let path_to_generated = get_generated_file_name(orig_img_path);
 
-    // TODO This should get removed when we move the project structure #move
-    let dev_only_img_path =
+    // TODO This should get removed when we move the project structure #directory-swap
+    let disk_img_path =
         Path::new("../static/").join(orig_img_path.strip_prefix("/").unwrap_or(orig_img_path));
 
-    let orig_img_dimensions = image_dimensions(&dev_only_img_path)?;
+    let orig_img_dimensions = image_dimensions(&disk_img_path)?;
     let resolutions = get_resolutions(orig_img_dimensions, width, height);
 
     let path_to_generated_arc = Arc::new(path_to_generated);
@@ -40,8 +51,8 @@ pub fn generate_picture_markup(
 
     if generate_image {
         rayon::spawn(move || {
-            let orig_img = ImageReader::open(&dev_only_img_path)
-                .with_context(|| format!("Failed to read instrs from {:?}", &dev_only_img_path))
+            let orig_img = ImageReader::open(&disk_img_path)
+                .with_context(|| format!("Failed to read instrs from {:?}", &disk_img_path))
                 .unwrap()
                 .decode()
                 .unwrap();

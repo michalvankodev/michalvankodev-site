@@ -3,7 +3,7 @@
   {% match header_props.back_link %}
   {% when Some with (link) %}
   <a
-    class="px-3 py-2 text-lg font-medium"
+    class="px-3 py-2 text-lg font-medium print:hidden"
     href="{{link.href}}"
   >
     {{link.label}}
@@ -16,5 +16,5 @@
       </a>
     </aside>
 </nav>
-<hr class="border-blue-950 mx-5">
+<hr class="border-slate-300 mx-5">
 </header>

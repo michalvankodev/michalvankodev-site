@@ -1,4 +1,4 @@
-<article class="grid grid-cols-[max-content_1fr] grid-rows-[max-content_1fr_max-content] grid-flow-col gap-4 md:gap-x-8">
+<article class="grid grid-cols-[max-content_1fr] grid-rows-[max-content_1fr_max-content] grid-flow-col gap-4 md:gap-x-8 break-inside-avoid">
 	<aside class="row-span-3 self-center">
 		{% match post.metadata.thumbnail %}
 		{% when Some with (orig_path) %}
@@ -14,7 +14,7 @@
 		  <a rel="prefetch" href="/blog/{{post.slug}}" class="text-blue-950 no-underline">{{post.metadata.title}}</a>
 		</h3>
 	</header>
-	<section class="text-base leading-5 text-gray-800 md:text-xl text-justify">{{post.body|description_filter|safe}}</section>
+	<section class="text-base leading-5 text-slate-800 md:text-xl text-justify">{{post.body|description_filter|safe}}</section>
 	<footer class="text-sm md:text-base lg:text-lg">
     <ul class="inline-block">
      {% for tag in post.metadata.tags %}

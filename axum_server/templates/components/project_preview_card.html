@@ -1,4 +1,4 @@
-<article class="border rounded-md bg-white m-4 p-4">
+<article class="border rounded-md bg-white m-4 p-4 break-inside-avoid">
   <header class="px-4 mb-3"> 
     <h2 class="text-xl font-semibold text-blue-900 md:text-2xl">
       {% match project.metadata.link %}
@@ -18,16 +18,17 @@
 
   {% match project.metadata.cover_image %}
   {% when Some with (source) %}
-  <figure class="mx-4 my-2">
+  {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 420, 236, "Project cover", true).unwrap_or("cover not found".to_string()) %}
+  <figure class="mx-4 my-2 flex justify-center">
       {% match project.metadata.link %}
       {% when Some with (href) %}
       <a href="{{href}}">
-        <img src="{{source}}" class="object-contain w-full aspect-video"/>
+       {{picture|safe}}
       </a>
       {% when None %}
-      <img src="{{source}}" />
+       {{picture|safe}}
       {% endmatch %}
-		<!-- TODO <figure> -->
+		<!-- TODO <figure> generate_image -->
   </figure>
   {% when None %}
   {% endmatch %}

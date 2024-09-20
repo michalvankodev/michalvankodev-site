@@ -7,23 +7,22 @@
 {% block content %}
 <section class="index-container lg:grid lg:grid-cols-2 xl:grid-cols-[1fr_2fr] lg:gap-y-8 lg:gap-x-32 max-w-maxindex mx-auto">
   <section id="about-me">
-    <header class="index-header hidden">
-      <figure class="profile-pic">
-        <picture>
-          <img
-            alt="Portrait"
-            {# TODO generate `srcset` for optimal image #}
-            {# TODO Take a new photo #}
-            src="/images/profile-portugal-landscape.jpg"
-          />
-        </picture>
-      </figure>
+    <!-- <header class="index-header hidden"> -->
+      <!-- <figure class="profile-pic"> -->
+        <!-- <picture> -->
+          <!-- <img -->
+            <!-- alt="Portrait" -->
+            <!-- {# TODO Take a new photo #} -->
+            <!-- src="/images/profile-portugal-landscape.jpg" -->
+          <!-- /> -->
+        <!-- </picture> -->
+      <!-- </figure> -->
 
-      <p class="motto">
-        <cite>“Let your ambition carry you.”</cite>
-        <span class="cite-owner">- La Flame</span>
-      </p>
-    </header>
+      <!-- <p class="motto"> -->
+        <!-- <cite>“Let your ambition carry you.”</cite> -->
+        <!-- <span class="cite-owner">- La Flame</span> -->
+      <!-- </p> -->
+    <!-- </header> -->
 
     <h2 class="text-blue-950 font-bold text-2xl m-5 md:text-4xl">About me</h2>
 
@@ -52,13 +51,13 @@
         {% endfor %}
       </ul>
     </section>
-    <hr class="border-blue-950 m-5">
+    <hr class="border-slate-300 m-5">
 
     <ul class="mx-5">
      {% for post in featured_blog_posts %}
       <li>
         {% include "components/blog_post_preview.html" %}
-        <hr class="border-blue-950 my-5 md:my-8">
+        <hr class="border-slate-300 my-5 md:my-8">
       </li>
      {% endfor %}
     </ul>
@@ -68,7 +67,7 @@
     {% include "sections/social.html" %}
   </section>
 
-  <hr class="border-blue-950 m-5 lg:hidden">
+  <hr class="border-slate-300 m-5 lg:hidden">
 
   <section id="showcase" class="col-span-2">
     {% include "sections/showcase.html" %}
