@@ -18,7 +18,7 @@
 
   {% match project.metadata.cover_image %}
   {% when Some with (source) %}
-  {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 420, 236, "Project cover", true).unwrap_or("cover not found".to_string()) %}
+  {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 420, 236, "Project cover", Some("max-h-[236px]"), true).unwrap_or("cover not found".to_string()) %}
   <figure class="mx-4 my-2 flex justify-center">
       {% match project.metadata.link %}
       {% when Some with (href) %}

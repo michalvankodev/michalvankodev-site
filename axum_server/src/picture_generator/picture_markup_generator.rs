@@ -19,9 +19,15 @@ pub fn generate_picture_markup(
     width: u32,
     height: u32,
     alt_text: &str,
+    class_name: Option<&str>,
     generate_image: bool,
 ) -> Result<String, anyhow::Error> {
     let exported_formats = get_export_formats(orig_img_path);
+    let class_attr = if let Some(class) = class_name {
+        format!(r#"class="{class}""#)
+    } else {
+        "".to_string()
+    };
 
     if exported_formats.is_empty() {
         return Ok(formatdoc!(
@@ -29,6 +35,7 @@ pub fn generate_picture_markup(
             src="{orig_img_path}"
             width="{width}"
             height="{height}"
+            {class_attr}
             alt="{alt_text}"
         >"#
         ));
@@ -99,6 +106,7 @@ pub fn generate_picture_markup(
             width="{width}"
             height="{height}"
             alt="{alt_text}"
+            {class_attr}
         >"#
     );
 
@@ -307,8 +315,15 @@ fn test_generate_picture_markup() {
         </picture>"#,
     };
     assert_eq!(
-        generate_picture_markup(orig_img_path, width, height, "Testing image alt", false)
-            .expect("picture markup has to be generated"),
+        generate_picture_markup(
+            orig_img_path,
+            width,
+            height,
+            "Testing image alt",
+            None,
+            false
+        )
+        .expect("picture markup has to be generated"),
         result
     );
 }

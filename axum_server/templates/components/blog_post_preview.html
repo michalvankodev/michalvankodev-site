@@ -1,8 +1,8 @@
-<article class="grid grid-cols-[max-content_1fr] grid-rows-[max-content_1fr_max-content] grid-flow-col gap-4 md:gap-x-8 break-inside-avoid">
-	<aside class="row-span-3 self-center">
+<article class="sm:grid sm:grid-cols-[max-content_1fr] sm:grid-rows-[max-content_1fr_max-content] sm:grid-flow-col sm:gap-4 md:gap-x-8 break-inside-avoid clear-both sm:clear-none">
+	<aside class="row-span-3 self-center float-start sm:float-none mr-3 mb-3 sm:ml-0 sm:mb-0">
 		{% match post.metadata.thumbnail %}
 		{% when Some with (orig_path) %}
-		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", true).unwrap_or("thumbnail not found".to_string())|safe }}
+		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", None, true).unwrap_or("thumbnail not found".to_string())|safe }}
 		{% when None %}
 		<div> 
 			{% include "components/blog_post_default_thumbnail.html" %}
@@ -15,7 +15,7 @@
 		</h3>
 	</header>
 	<section class="text-base leading-5 text-slate-800 md:text-xl text-justify">{{post.body|description_filter|safe}}</section>
-	<footer class="text-sm md:text-base lg:text-lg">
+	<footer class="text-sm md:text-base lg:text-lg mt-3 sm:mt-0">
     <ul class="inline-block">
      {% for tag in post.metadata.tags %}
       <li class="inline-block">

@@ -76,10 +76,6 @@ strong {
   @apply font-medium;
 }
 
-img[height] {
-  height: revert-layer;
-}
-
 .article-body {
   h1 {
     @apply px-4 text-2xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-4xl lg:text-5xl;

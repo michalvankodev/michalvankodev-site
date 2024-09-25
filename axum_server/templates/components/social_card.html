@@ -1,15 +1,15 @@
-{% macro social_card_start(svg, heading) %}
+{% macro social_card_start(svg, heading, img) %}
 
-<section class="border rounded-md bg-pink-200 m-4 p-4">
+<section class="border rounded-md bg-pink-200 m-4 p-4 w-fit">
 	<header class="flex text-center justify-center items-center gap-2 mb-2">
 		 <svg aria-hidden="true" class="h-7 w-7 fill-blue-950">
 	    <use xlink:href="/svg/icons-sprite.svg#{{svg}}" />
 	  </svg>
 		<h3 class="text-lg font-medium mb-1">{{heading|safe}}</h3>
 	</header>
+	{% let alt_text = format!("{svg} thumbnail") %}
 
-{% endmacro %}
+	{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(img, 420, 200, alt_text, Some("h-auto"), true).unwrap_or("thumbnail not found".to_string())|safe }}
 
-{% macro social_card_end() %}
-	</section>
+</section>
 {% endmacro %}

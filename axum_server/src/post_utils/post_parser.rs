@@ -125,17 +125,23 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
             );
 
             // Place image into the content with scaled reso to a boundary
-            let picture_markup =
-                generate_picture_markup(&dest_url, max_width, max_height, &title, generate_images)
-                    .unwrap_or(formatdoc!(
-                        r#"
+            let picture_markup = generate_picture_markup(
+                &dest_url,
+                max_width,
+                max_height,
+                &title,
+                None,
+                generate_images,
+            )
+            .unwrap_or(formatdoc!(
+                r#"
                         <img
                           alt="{alt}"
                           src="{src}"
                         />"#,
-                        alt = title,
-                        src = dest_url,
-                    ));
+                alt = title,
+                src = dest_url,
+            ));
             debug!(
                 "Image link_type: {:?} url: {} title: {} id: {}",
                 link_type, dest_url, title, id
