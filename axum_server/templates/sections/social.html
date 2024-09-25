@@ -1,12 +1,14 @@
 <h2 class="text-blue-950 font-bold text-2xl m-5 md:text-4xl">Socials</h2>
 
-<section class="flex flex-col items-center">
+<section class="grid grid-flow-row justify-center">
 {% call sc::social_card_start("twitch", "I stream (almost) regularly on <em>twitch.tv</em>", "images/social/instagram_plain.png") %}
 
 {% call sc::social_card_start("tiktok", "Highlights can be found on <em>TikTok</em>", "images/social/instagram_plain.png") %}
 
 {% call sc::social_card_start("youtube", "Vlogs and highlights can be found on <em>YouTube</em>", "images/social/instagram_plain.png") %}
 
+<div class="lg:hidden xl:block">
 {% call sc::social_card_start("instagram", "Photos and stories shared on <em>Instagram</em>", "images/social/instagram_plain.png") %}
+</div>
 
 </section>
