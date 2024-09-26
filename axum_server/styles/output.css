@@ -1777,6 +1777,17 @@ article a:visited {
   transition-delay: 75ms;
 }
 
+.social-card-youtube:hover {
+  border-radius: 0px;
+  transform: scale(1.02);
+  transition-delay: 100ms;
+}
+
+.social-card-instagram:hover {
+  filter: brightness(84%);
+  transition-delay: 100ms;
+}
+
 .social-card-tiktok {
   position: relative;
   &:hover {

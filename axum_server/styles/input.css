@@ -179,6 +179,17 @@ article a {
   transition-delay: 75ms;
 }
 
+.social-card-youtube:hover {
+  @apply rounded-none;
+  transform: scale(1.02);
+  transition-delay: 100ms;
+}
+
+.social-card-instagram:hover {
+  filter: brightness(84%);
+  transition-delay: 100ms;
+}
+
 .social-card-tiktok {
   position: relative;
 
