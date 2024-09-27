@@ -15,7 +15,7 @@
 		</h3>
 	</header>
 	<section class="text-base leading-5 text-slate-800 md:text-xl text-justify">{{post.body|description_filter|safe}}</section>
-	<footer class="text-sm md:text-base lg:text-lg mt-3 sm:mt-0">
+	<footer class="text-sm md:text-base lg:text-lg mt-3 sm:mt-0 clear-both sm:clear-none">
     <ul class="inline-block">
      {% for tag in post.metadata.tags %}
       <li class="inline-block">

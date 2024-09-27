@@ -18,6 +18,7 @@ pub struct ProjectListTemplate {
 pub async fn render_projects_list() -> Result<ProjectListTemplate, StatusCode> {
     let mut project_list = get_post_list::<ProjectMetadata>("../_projects").await?;
 
+    project_list.sort_by_key(|post| post.slug.to_string());
     project_list.retain(|project| project.metadata.displayed);
     project_list.reverse();
 
