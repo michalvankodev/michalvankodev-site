@@ -35,7 +35,7 @@ rustflags = ["-Z", "threads=8"]
 # ]
 
 [profile.dev]
-debug = false
+debug = true
 opt-level = 0
 # codegen-units = 16
 # lto = "thin"

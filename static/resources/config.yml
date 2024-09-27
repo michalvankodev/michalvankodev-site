@@ -96,7 +96,7 @@ collections:
                   widget: boolean,
                   default: true,
                 }
-              - { label: Description, name: description, widget: markdown }
+              - { label: Description, name: body, widget: markdown }
               - {
                   label: Cover image,
                   name: cover_image,
@@ -141,7 +141,7 @@ collections:
           widget: boolean,
           default: true,
         }
-      - { label: Description, name: description, widget: markdown }
+      - { label: Description, name: body, widget: markdown }
       - {
           label: Link,
           name: link,

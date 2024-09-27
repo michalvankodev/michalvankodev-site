@@ -1,20 +1,20 @@
 <header class="min-h-full bg-blue-50 mb-5">
-<nav class="flex">
-  {% match header_props.back_link %}
-  {% when Some with (link) %}
-  <a
-    class="px-3 py-2 text-lg font-medium print:hidden"
-    href="{{link.href}}"
-  >
-    {{link.label}}
-  </a>
-  {% when None %}
-  {% endmatch %}
-    <aside class="flex logo-section flex-grow justify-end content-end">
-      <a class="logo p-3 text-base" href="/">
-        @michalvankodev
-      </a>
-    </aside>
-</nav>
-<hr class="border-slate-300 mx-5">
+  <nav class="flex">
+    {% match header_props.back_link %}
+    {% when Some with (link) %}
+    <a
+      class="px-3 py-2 text-lg font-medium print:hidden"
+      href="{{link.href}}"
+    >
+      {{link.label}}
+    </a>
+    {% when None %}
+    {% endmatch %}
+      <aside class="flex logo-section flex-grow justify-end content-end">
+        <a class="logo p-3 text-base" href="/">
+          @michalvankodev
+        </a>
+      </aside>
+  </nav>
+  <hr class="border-slate-300 mx-5">
 </header>

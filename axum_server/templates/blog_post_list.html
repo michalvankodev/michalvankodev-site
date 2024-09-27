@@ -42,15 +42,18 @@
   </section> <!-- /#socials -->
   
   <section id="showcase" class="hidden lg:block">
-    <h2 class="text-blue-950 font-bold text-2xl m-5 md:text-4xl">Showcase</h2>
+    <h2 class="text-blue-950 font-bold text-2xl m-5 md:text-4xl"><a href="/showcase" class="text-blue-950 no-underline">Showcase</a></h2>
 
-    <ul class="">
+    <ul class="mx-6">
      {% for project in featured_projects %}
-      <li class="my-2">
+      <li class="my-4">
         {% include "components/project_preview_card.html" %}
       </li>
      {% endfor %}
     </ul>
+    <section class="text-center my-3 md:text-lg">
+     <a href="/showcase">check out more projects</a> 
+    </section>
   </section> <!-- /#showcase -->
 </section> <!-- /#blog-container -->
 {% endblock %}

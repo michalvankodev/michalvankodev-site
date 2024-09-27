@@ -117,7 +117,7 @@ For example this is the model of this blog post:
 Neat part of the _CMS_ are those widgets. In editor they will be presented by appropriate component as well as in the editor preview.
 I am very satisfied with it and I recommend it.
 
-## What's next
+## What's next {#whats-next}
 
 I've decided not to wait for perfect product and I want to release this blog as soon as possible. I will have same approach as with other products. Make a <abbr title="Minimum Viable Product">**MVP**</abbr> and then release features as they are done.
 I've put some features into _Github Projects Board_. I will very likely make a redesign with experimental layout changes. I'd like to experiment with colors and make the blog look distinguishable and personal while maintaining accessibility.

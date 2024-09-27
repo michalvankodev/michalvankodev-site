@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section id="project-list-container" class="max-w-maxindex mx-auto">
+  <section id="project-list">
+    {% if project_list.len() == 0 %}
+    <p class="no-posts">You've found void in the space.</p>
+    {% else %}
+    <h1 class="m-5 text-4xl text-blue-950 font-extrabold md:text-6xl">
+     Showcase
+    </h1>
+
+    <ul class="m-6 grid grid-flow-row gap-6 md:grid-cols-2 md:grid-rows-[masonry] md:justify-stretch md:items-stretch xl:grid-cols-3">
+      {% for project in project_list %}
+      <li>
+        {% include "components/project_preview_card.html" %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </section> <!-- /#project-list -->
+ 
+</section> <!-- /#project-list-container -->
+{% endblock %}

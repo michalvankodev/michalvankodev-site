@@ -46,7 +46,7 @@ wait_for_port:
 
 # Kill the application running on port
 kill:
-	kill $(lsof -t -i:{{port}})
+	kill $(pidof axum_server)
 
 # Clean the dist folder
 clean:

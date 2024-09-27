@@ -1,3 +1,4 @@
+use core::panic;
 use std::path::Path;
 
 use axum::http::StatusCode;
@@ -9,7 +10,7 @@ use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 use syntect::{highlighting::ThemeSet, html::highlighted_html_for_string, parsing::SyntaxSet};
 use tokio::fs;
-use tracing::debug;
+use tracing::{debug, error, info};
 
 use crate::picture_generator::{
     picture_markup_generator::generate_picture_markup, resolutions::get_max_resolution,
@@ -89,6 +90,7 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
     let syntax_set = SyntaxSet::load_defaults_newlines();
     let theme_set = ThemeSet::load_defaults();
     let theme = theme_set.themes.get("InspiredGitHub").unwrap();
+    let mut heading_ended: Option<bool> = None;
 
     let parser = Parser::new_ext(markdown, options).map(|event| match event {
         /*
@@ -181,14 +183,24 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
                     text.to_lowercase()
                         .replace(|c: char| !c.is_alphanumeric(), "-")
                 });
-                Event::Html(
-                    formatdoc!(
-                        r##"id="{heading_id}">
-                            {text}
-                        "##
-                    )
-                    .into(),
-                )
+                debug!("heading_id: {}", heading_id.clone());
+                match heading_ended {
+                    None => {
+                        error!("Heading should have set state");
+                        panic!("Heading should have set state");
+                    }
+                    Some(true) => Event::Html(text),
+                    Some(false) => {
+                        heading_ended = Some(true);
+                        Event::Html(
+                            formatdoc!(
+                                r##"id="{heading_id}">
+                            {text}"##
+                            )
+                            .into(),
+                        )
+                    }
+                }
             }
             _ => Event::Text(text),
         },
@@ -199,7 +211,9 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
             attrs: _,
         }) => {
             let id_str = id.map(|id| id.to_string());
+            debug!("heading_start: {:?}, level: {}", &id_str, level);
             text_kind = TextKind::Heading(id_str);
+            heading_ended = Some(false);
             Event::Html(format!("<{level} ").into())
         }
         Event::Start(_) => event,
@@ -210,6 +224,7 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
         }
         Event::End(TagEnd::Heading(heading_level)) => {
             text_kind = TextKind::Text;
+            heading_ended = None;
             Event::End(TagEnd::Heading(heading_level))
         }
         _ => event,

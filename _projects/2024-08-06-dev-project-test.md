@@ -1,9 +1,9 @@
 ---
 title: dev project test
-displayed: true
-description: Testing project
+displayed: false
 classification: webapp
 tags:
   - Webapp
 featured: false
 ---
+Testing project

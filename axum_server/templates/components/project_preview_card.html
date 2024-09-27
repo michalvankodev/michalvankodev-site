@@ -1,4 +1,4 @@
-<section class="border rounded-md bg-white m-4 p-4 break-inside-avoid">
+<section class="border rounded-md bg-white p-4 break-inside-avoid">
   <header class="px-4 mb-3"> 
     <h2 class="text-xl font-semibold text-blue-900 md:text-2xl">
       {% match project.metadata.link %}
@@ -11,7 +11,7 @@
       {% endmatch %}
     </h2>
     <section class="description text-slate-800 my-2 md:text-xl text-justify">
-      {{project.metadata.description|safe}}
+      {{project.body|safe}}
     </section>
   </header>
   <!-- <hr class="border-blue-950 my-5"> -->
