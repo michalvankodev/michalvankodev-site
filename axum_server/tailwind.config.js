@@ -6,7 +6,8 @@ module.exports = {
 			fontFamily: {
 				sans: [
 					"Baloo2",
-					"Comfortaa",
+					"Baloo2 Noto Fallback",
+					"Baloo2 Fallback",
 					"ui-sans-serif",
 					"system-ui",
 					"sans-serif",

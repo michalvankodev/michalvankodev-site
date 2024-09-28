@@ -25,6 +25,9 @@
     <link rel="icon" type="image/png" href="/images/m-logo-192.png" />
   </head>
   <body class="bg-blue-50">
+    <div class="preload-assets" style="display: none">
+        {% include "icons/sprite.svg" %}
+    </div>
     {% include "site_header.html" %}
     {% block content %} Placeholder {% endblock %}
     {% include "site_footer.html" %}

@@ -154,7 +154,7 @@ html,
   -o-tab-size: 4;
      tab-size: 4;
   /* 3 */
-  font-family: Baloo2, Comfortaa, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  font-family: Baloo2, Baloo2 Noto Fallback, Baloo2 Fallback, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   /* 4 */
   font-feature-settings: normal;
   /* 5 */
@@ -555,86 +555,6 @@ video {
 }
 
 @font-face {
-  font-family: 'Comfortaa';
-
-  font-style: normal;
-
-  font-display: swap;
-
-  font-weight: 300;
-
-  src:
-      local('Comfortaa Light'),
-      local('Comfortaa'),
-      url(/fonts/comfortaa/Comfortaa-Light.woff2) format('woff2'),
-      url(/fonts/comfortaa/Comfortaa-Light.ttf) format('truetype');
-}
-
-@font-face {
-  font-family: 'Comfortaa';
-
-  font-style: normal;
-
-  font-display: swap;
-
-  font-weight: 400;
-
-  src:
-      local('Comfortaa Regular'),
-      local('Comfortaa'),
-      url(/fonts/comfortaa/Comfortaa-Regular.woff2) format('woff2'),
-      url(/fonts/comfortaa/Comfortaa-Regular.ttf) format('truetype');
-}
-
-@font-face {
-  font-family: 'Comfortaa';
-
-  font-style: normal;
-
-  font-display: swap;
-
-  font-weight: 500;
-
-  src:
-      local('Comfortaa Medium'),
-      local('Comfortaa'),
-      url(/fonts/comfortaa/Comfortaa-Medium.woff2) format('woff2'),
-      url(/fonts/comfortaa/Comfortaa-Medium.ttf) format('truetype');
-}
-
-@font-face {
-  font-family: 'Comfortaa';
-
-  font-style: normal;
-
-  font-display: swap;
-
-  font-weight: 600;
-
-  src:
-      local('Comfortaa SemiBold'),
-      local('Comfortaa'),
-      url(/fonts/comfortaa/Comfortaa-SemiBold.woff2) format('woff2'),
-      url(/fonts/comfortaa/Comfortaa-SemiBold.ttf) format('truetype');
-}
-
-@font-face {
-  font-family: 'Comfortaa';
-
-  font-style: normal;
-
-  font-display: swap;
-
-  font-weight: 700;
-
-  src:
-      local('Comfortaa Bold'),
-      local('Comfortaa'),
-      url(/fonts/comfortaa/Comfortaa-Bold.woff2) format('woff2'),
-      url(/fonts/comfortaa/Comfortaa-Bold.ttf) format('truetype');
-}
-
-@font-face {
   font-family: 'Baloo2';
 
   font-style: normal;
@@ -643,7 +563,61 @@ video {
 
   src:
       local('Baloo2'),
-      url(/fonts/baloo2/Baloo2-VariableFont_wght.ttf) format('truetype');
+      url(/fonts/baloo2/Baloo2-Latin-Variable-wght.woff2) format('woff2');
+}
+
+/* latin-ext */
+
+@font-face {
+  font-family: 'Baloo 2';
+
+  font-style: normal;
+
+  font-weight: 400 800;
+
+  font-display: swap;
+
+  src: url(/fonts/baloo2/Baloo2-Latin-Variable-ext-wght.woff2) format('woff2');
+
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF,
+      U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Baloo2 Fallback';
+
+  font-style: normal;
+
+  font-weight: 400;
+
+  src: local('BlinkMacSystemFont'), local('Segoe UI'), local('Helvetica Neue'),
+      local('Arial');
+
+  ascent-override: 111.2%;
+
+  descent-override: 54.05%;
+
+  line-gap-override: 0%;
+
+  size-adjust: 96.95%;
+}
+
+@font-face {
+  font-family: 'Baloo2 Noto Fallback';
+
+  font-style: normal;
+
+  font-weight: 400;
+
+  src: local('Noto Sans');
+
+  ascent-override: 88%;
+
+  descent-override: none;
+
+  line-gap-override: 0%;
+
+  size-adjust: 92%;
 }
 
 .col-span-2 {

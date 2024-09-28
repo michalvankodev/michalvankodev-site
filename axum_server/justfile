@@ -8,7 +8,7 @@ tailwind:
 # TODO change route on svetle project deletion 
 # TODO #directory-swap
 svgstore:
-   npx svgstore -o ../static/svg/icons-sprite.svg ../src/svg/**.svg
+   npx svgstore -o templates/icons/sprite.svg ../src/svg/**.svg
 
 server_dev: 
 	cargo watch -x run
@@ -33,7 +33,7 @@ test_watch:
 	cargo watch -x test
 
 # Run server in production mode
-prod:
+prod $TARGET="PROD":
     cargo run --release
 
 # Wait for port to listen to connections
@@ -55,7 +55,6 @@ clean:
 # SSG
 ssg:
 	- wget --no-convert-links -r -p -E -P dist --no-host-directories 127.0.0.1:{{port}}
-	- wget -P dist/svg 127.0.0.1:{{port}}/svg/icons-sprite.svg
   
 # Preview server
 preview:
