@@ -5,18 +5,15 @@ tailwind:
 	npx tailwindcss -i ./styles/input.css -o ./styles/output.css --watch
 
 # svg sprite creation
-# TODO change route on svetle project deletion 
-# TODO #directory-swap
 svgstore:
-   npx svgstore -o templates/icons/sprite.svg ../src/svg/**.svg
+   npx svgstore -o templates/icons/sprite.svg src/svg/**.svg
 
 server_dev: 
 	cargo watch -x run
 
 # CMS server for local dev
-# TODO #directory-swap
 decap_server:
-	cd .. && npx decap-server
+	npx decap-server
 
 # Run dev server in watch mode
 dev: 

@@ -3,7 +3,7 @@ use serde::Deserialize;
 
 use crate::post_utils::post_parser::deserialize_date;
 
-pub const BLOG_POST_PATH: &str = "../_posts/blog";
+pub const BLOG_POST_PATH: &str = "_posts/blog";
 
 #[derive(Deserialize, Debug)]
 pub struct BlogPostMetadata {

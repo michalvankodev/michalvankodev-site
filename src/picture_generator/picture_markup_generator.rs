@@ -42,9 +42,8 @@ pub fn generate_picture_markup(
     }
     let path_to_generated = get_generated_file_name(orig_img_path);
 
-    // TODO This should get removed when we move the project structure #directory-swap
     let disk_img_path =
-        Path::new("../static/").join(orig_img_path.strip_prefix("/").unwrap_or(orig_img_path));
+        Path::new("static/").join(orig_img_path.strip_prefix("/").unwrap_or(orig_img_path));
 
     let orig_img_dimensions = image_dimensions(&disk_img_path)?;
     let resolutions = get_resolutions(orig_img_dimensions, width, height);

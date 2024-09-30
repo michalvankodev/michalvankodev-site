@@ -8,7 +8,6 @@ use super::post_parser::{parse_post, ParseResult};
 pub async fn get_post_list<'de, Metadata: DeserializeOwned>(
     path: &str,
 ) -> Result<Vec<ParseResult<Metadata>>, StatusCode> {
-    // let path = "../_posts/blog/";
     let mut dir = read_dir(path)
         .await
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;

@@ -31,15 +31,11 @@ async fn main() {
     // build our application with a single route
     let app = router::get_router()
         .nest_service("/styles", ServeDir::new("styles"))
-        .nest_service("/images", ServeDir::new("../static/images"))
-        .nest_service("/fonts", ServeDir::new("../static/fonts"))
+        .nest_service("/images", ServeDir::new("static/images"))
+        .nest_service("/fonts", ServeDir::new("static/fonts"))
         .nest_service("/generated_images", ServeDir::new("generated_images"))
-        .nest_service("/svg", ServeDir::new("../static/svg"))
-        // TODO manifest logos have bad link, #directory-swap
-        .nest_service(
-            "/config.yml",
-            ServeDir::new("../static/resources/config.yml"),
-        );
+        .nest_service("/svg", ServeDir::new("static/svg"))
+        .nest_service("/config.yml", ServeDir::new("static/resources/config.yml")); // Decap CMS config
 
     #[cfg(debug_assertions)]
     let app = app.layer(LiveReloadLayer::new());
@@ -59,6 +55,4 @@ async fn main() {
 // THINK deploy to alula? rather then katelyn? can be change whenever
 // TODO after release
 // OG tags
-// Remove old web completely
-// Restructure repository
 // - projects page

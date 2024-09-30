@@ -117,7 +117,7 @@ pub fn parse_html(markdown: &str, generate_images: bool) -> String {
             }
 
             let dev_only_img_path =
-                Path::new("../static/").join(dest_url.strip_prefix("/").unwrap_or(&dest_url));
+                Path::new("static/").join(dest_url.strip_prefix("/").unwrap_or(&dest_url));
             let img_dimensions = image_dimensions(&dev_only_img_path).unwrap();
 
             let (max_width, max_height) = get_max_resolution(

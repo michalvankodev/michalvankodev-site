@@ -2,6 +2,7 @@ use askama::Template;
 use axum::{extract::Path, http::StatusCode};
 use chrono::{DateTime, Utc};
 
+use crate::blog_posts::blog_post_model::BLOG_POST_PATH;
 use crate::{
     blog_posts::blog_post_model::BlogPostMetadata, components::site_header::Link, filters,
     post_utils::post_parser::parse_post,
@@ -20,7 +21,7 @@ pub struct BlogPostTemplate {
 }
 
 pub async fn render_blog_post(Path(post_id): Path<String>) -> Result<BlogPostTemplate, StatusCode> {
-    let path = format!("../_posts/blog/{}.md", post_id);
+    let path = format!("{}/{}.md", BLOG_POST_PATH, post_id);
     let parse_post = parse_post::<BlogPostMetadata>(&path, true);
     let parsed = parse_post.await?;
 
