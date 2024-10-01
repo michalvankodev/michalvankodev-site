@@ -1,6 +1,10 @@
 use askama::Template;
-use axum::{extract::Path, http::StatusCode};
+use axum::{
+    extract::{OriginalUri, Path, RawQuery},
+    http::StatusCode,
+};
 use tokio::try_join;
+use tracing::debug;
 
 use crate::{
     blog_posts::{
@@ -22,10 +26,12 @@ pub struct PostListTemplate {
     pub header_props: HeaderProps,
     pub blog_tags: Vec<String>,
     pub featured_projects: Vec<ParseResult<ProjectMetadata>>,
+    pub current_url: String,
 }
 
 pub async fn render_blog_post_list(
     tag: Option<Path<String>>,
+    OriginalUri(original_uri): OriginalUri,
 ) -> Result<PostListTemplate, StatusCode> {
     // I will forget what happens here in a week. But essentially it's pattern matching and shadowing
     let tag = tag.map(|Path(tag)| tag);
@@ -63,12 +69,21 @@ pub async fn render_blog_post_list(
         None => HeaderProps::default(),
     };
 
+    debug!("uri:{:?}", original_uri);
+
+    let title = if let Some(tag) = &tag {
+        format!("{tag} blog posts")
+    } else {
+        "Blog posts".to_string()
+    };
+
     Ok(PostListTemplate {
-        title: "Blog posts".to_owned(),
+        title,
         posts,
         tag,
         header_props,
         blog_tags,
         featured_projects,
+        current_url: original_uri.to_string(),
     })
 }

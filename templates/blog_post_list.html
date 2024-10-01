@@ -1,5 +1,13 @@
 {%- import "components/social_card.html" as sc -%}
 {% extends "base.html" %}
+
+{% block og_meta %}
+<meta property="og:title" content="{{title}} @michalvankodev" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://michalvanko.dev{{current_url}}" />
+<meta property="og:image" content="https://michalvanko.dev/images/m-logo.svg" />
+{% endblock %}
+
 {% block content %}
 
 <section id="blog-container" class="lg:grid lg:grid-cols-[2fr_1fr] lg:grid-rows-[min-content_1fr] lg:gap-x-32 max-w-maxindex mx-auto">

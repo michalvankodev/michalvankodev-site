@@ -16,6 +16,13 @@
       href="/feed.xml"
     />
 
+    {% block og_meta %}
+    <meta property="og:title" content="{% block title %} {{ title }} {% endblock %} @michalvankodev" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://michalvanko.dev" />
+    <meta property="og:image" content="https://michalvanko.dev/images/m-logo.svg" />
+    {% endblock %}
+
     <!-- Tailwind output file -->
     <link rel="stylesheet" href="/styles/output.css" />
 

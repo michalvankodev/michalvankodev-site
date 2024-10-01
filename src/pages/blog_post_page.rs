@@ -18,6 +18,8 @@ pub struct BlogPostTemplate {
     pub date: DateTime<Utc>,
     pub tags: Vec<String>,
     pub header_props: HeaderProps,
+    pub slug: String,
+    pub thumbnail: Option<String>,
 }
 
 pub async fn render_blog_post(Path(post_id): Path<String>) -> Result<BlogPostTemplate, StatusCode> {
@@ -30,6 +32,8 @@ pub async fn render_blog_post(Path(post_id): Path<String>) -> Result<BlogPostTem
         date: parsed.metadata.date,
         tags: parsed.metadata.tags,
         body: parsed.body,
+        slug: parsed.slug,
+        thumbnail: parsed.metadata.thumbnail,
         header_props: HeaderProps::with_back_link(Link {
             href: "/blog".to_string(),
             label: "All posts".to_string(),

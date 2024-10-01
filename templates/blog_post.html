@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}{{title}}{% endblock %}
+{% block og_meta %}
+<meta property="og:title" content="{{title}}" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://michalvanko.dev/blog/{{slug}}" />
+{% match thumbnail %}
+{% when Some with (img) %}
+<meta property="og:image" content="https://michalvanko.dev{{img}}" />
+{% when None %}
+<meta property="og:image" content="https://michalvanko.dev/images/m-logo.svg" />
+{% endmatch %}
+
+{% endblock %}
 
 {% block content %}
 <article class="mb-6">
