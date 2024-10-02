@@ -2125,6 +2125,11 @@ article a:visited {
   .xl\:grid-cols-\[1fr_2fr\] {
     grid-template-columns: 1fr 2fr;
   }
+
+  .xl\:gap-x-32 {
+    -moz-column-gap: 8rem;
+         column-gap: 8rem;
+  }
 }
 
 @media print {

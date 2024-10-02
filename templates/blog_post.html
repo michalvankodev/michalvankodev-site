@@ -3,7 +3,7 @@
 {% block og_meta %}
 <meta property="og:title" content="{{title}}" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://michalvanko.dev/blog/{{slug}}" />
+<meta property="og:url" content="https://michalvanko.dev/{{segment}}/{{slug}}" />
 {% match thumbnail %}
 {% when Some with (img) %}
 {% let src = crate::picture_generator::image_src_generator::generate_image_with_src(img, 1200, 630, "_og", true).unwrap_or("thumbnail not found".to_string())|safe %}

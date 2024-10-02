@@ -41,12 +41,13 @@
   </section>
 
   <section id="blog" class="lg:col-span-2 lg:row-start-2 xl:col-auto xl:row-start-auto xl:row-span-2">
+    {% let segment = "blog".to_string() %}
     <h2 class="text-blue-950 font-bold text-2xl md:text-4xl m-5"><a href="/blog" class="text-blue-950 no-underline">Blog</a></h2>
     <section id="blog-tags">
       <ul class="mx-5">
        {% for tag in blog_tags %}
         <li class="inline-block mx-0.5 p-0.5 md:text-xl">
-          <a href="/blog/tags/{{tag}}" class="text-pink-950">#{{tag|capitalize}}</a>
+          <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950">#{{tag|capitalize}}</a>
         </li>
         {% endfor %}
       </ul>

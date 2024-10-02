@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Egg fetcher showcase{% endblock %}
+
+{% block og_meta %}
+<meta property="og:title" content="Egg fetcher showcase" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://michalvanko.dev/showcase/egg-fetcher" />
+<meta property="og:image" content="https://michalvanko.dev/images/m-logo.svg" />
+{% endblock %}
+
+{% block content %}
+<article class="article-body">
+{% include "showcase/egg-fetcher.html" %}
+</article>
+{% endblock %}

@@ -49,5 +49,5 @@ pub async fn render_rss_feed() -> Result<impl IntoResponse, StatusCode> {
         .build();
 
     let response = feed_builder.to_string();
-    return Ok(([(header::CONTENT_TYPE, "application/xml")], response));
+    Ok(([(header::CONTENT_TYPE, "application/xml")], response))
 }

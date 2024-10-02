@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 
 {% block og_meta %}
-<meta property="og:title" content="{{title}} @michalvankodev" />
+<meta property="og:title" content="{{og_title}} @michalvankodev" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://michalvanko.dev{{current_url}}" />
 <meta property="og:image" content="https://michalvanko.dev/images/m-logo.svg" />
@@ -10,24 +10,20 @@
 
 {% block content %}
 
-<section id="blog-container" class="lg:grid lg:grid-cols-[2fr_1fr] lg:grid-rows-[min-content_1fr] lg:gap-x-32 max-w-maxindex mx-auto">
+<section id="blog-container" class="lg:grid lg:grid-cols-[2fr_1fr] lg:grid-rows-[min-content_1fr] xl:gap-x-32 max-w-maxindex mx-auto">
   <section id="blog-list" class="lg:row-span-2">
     {% if posts.len() == 0 %}
     <p class="no-posts">You've found void in the space.</p>
     {% else %}
     <h1 class="m-5 text-4xl text-blue-950 font-extrabold md:text-6xl">
-    {% if let Some(t) = tag %}
-    #{{t}} 
-    {% else %}
-     Blog posts
-    {% endif %}
+      {{title}}
     </h1>
 
     <section id="blog-tags">
       <ul class="mx-5">
-       {% for tag in blog_tags %}
+       {% for tag in tags %}
         <li class="inline-block mx-0.5 p-0.5 md:text-xl">
-          <a href="/blog/tags/{{tag}}" class="text-pink-950">#{{tag|capitalize}}</a>
+          <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950">#{{tag|capitalize}}</a>
         </li>
         {% endfor %}
       </ul>

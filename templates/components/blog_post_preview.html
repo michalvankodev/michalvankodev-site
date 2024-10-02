@@ -11,7 +11,7 @@
 	</aside>
 	<header>
 		<h3 class="text-lg font-bold mb-1 md:text-3xl">
-		  <a rel="prefetch" href="/blog/{{post.slug}}" class="text-blue-950 visited:text-purple-700 no-underline">{{post.metadata.title}}</a>
+		  <a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="text-blue-950 visited:text-purple-700 no-underline">{{post.metadata.title}}</a>
 		</h3>
 	</header>
 	<section class="text-base leading-5 text-slate-800 md:text-xl text-justify">{{post.body|description_filter|safe}}</section>
@@ -19,7 +19,7 @@
     <ul class="inline-block">
      {% for tag in post.metadata.tags %}
       <li class="inline-block">
-        <a href="/blog/tags/{{tag}}" class="text-pink-950 no-underline">#{{tag|capitalize}}</a>
+        <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline">#{{tag|capitalize}}</a>
       </li>
       {% endfor %}
     </ul>

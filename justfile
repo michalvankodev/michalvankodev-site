@@ -30,7 +30,7 @@ test_watch:
 	cargo watch -x test
 
 # Run server in production mode
-prod $TARGET="PROD":
+prod $TARGET="PROD" $RUST_LOG="info":
     cargo run --release
 
 # Wait for port to listen to connections

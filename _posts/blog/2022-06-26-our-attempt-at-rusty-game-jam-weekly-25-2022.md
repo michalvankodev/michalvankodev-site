@@ -28,7 +28,7 @@ This week I've attended a [Rusty game jam #2](https://itch.io/jam/rusty-jam-2). 
 
 ![Egg fetcher game preview](/images/uploads/screenshot-from-2022-06-26-22-37-16.png "Egg fetcher game preview")
 
-[You can check the result built with WASM here.](/showcase/egg-fetcher/)
+[You can check the result built with WASM here.](/showcase/egg-fetcher)
 
 ## What's up with the weeklys
 

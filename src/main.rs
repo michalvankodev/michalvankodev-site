@@ -1,4 +1,5 @@
-use axum::{self};
+use askama_axum::IntoResponse;
+use axum::{self, extract::OriginalUri, http::StatusCode};
 use tower_http::services::ServeDir;
 use tower_livereload::LiveReloadLayer;
 use tracing::info;
@@ -33,9 +34,14 @@ async fn main() {
         .nest_service("/styles", ServeDir::new("styles"))
         .nest_service("/images", ServeDir::new("static/images"))
         .nest_service("/fonts", ServeDir::new("static/fonts"))
+        .nest_service("/files", ServeDir::new("static/files"))
         .nest_service("/generated_images", ServeDir::new("generated_images"))
+        .nest_service("/egg-fetcher", ServeDir::new("static/egg-fetcher"))
         .nest_service("/svg", ServeDir::new("static/svg"))
-        .nest_service("/config.yml", ServeDir::new("static/resources/config.yml")); // Decap CMS config
+        .nest_service("/config.yml", ServeDir::new("static/resources/config.yml")) // Decap CMS config
+        .nest_service("/robots.txt", ServeDir::new("robots.txt"));
+
+    let app = app.fallback(handler_404);
 
     #[cfg(debug_assertions)]
     let app = app.layer(LiveReloadLayer::new());
@@ -48,6 +54,11 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
+async fn handler_404(OriginalUri(original_uri): OriginalUri) -> impl IntoResponse {
+    info!("{original_uri} not found");
+    (StatusCode::NOT_FOUND, "nothing to see here")
+}
+
 // TODO Socials
 // - fotos
 // background gradient color
@@ -56,3 +67,8 @@ async fn main() {
 // TODO after release
 // OG tags
 // - projects page
+// TODO broken links
+// showcase/eggfetcher
+// broadcasts/
+// manifest.json
+//

@@ -5,7 +5,7 @@ use tokio::try_join;
 use crate::{
     blog_posts::{
         blog_post_model::BlogPostMetadata, featured_blog_posts::get_featured_blog_posts,
-        tag_list::get_popular_blog_tags,
+        tag_list::get_popular_tags,
     },
     components::site_header::HeaderProps,
     filters,
@@ -24,7 +24,7 @@ pub struct IndexTemplate {
 
 pub async fn render_index() -> Result<IndexTemplate, StatusCode> {
     let (blog_tags, featured_blog_posts, featured_projects) = try_join!(
-        get_popular_blog_tags(),
+        get_popular_tags(Some("blog".to_string())),
         get_featured_blog_posts(),
         get_featured_projects()
     )?;
