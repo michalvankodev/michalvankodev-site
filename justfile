@@ -52,6 +52,7 @@ clean:
 # SSG
 ssg:
 	- wget --no-convert-links -r -p -E -P dist --no-host-directories 127.0.0.1:{{port}}
+	find generated_images/ -name "*_og*" -exec cp --parents {} dist/ \;
   
 # Preview server
 preview:

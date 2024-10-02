@@ -23,5 +23,6 @@ It should be used from the templates as well
 
 pub mod export_format;
 pub mod image_generator;
+pub mod image_src_generator;
 pub mod picture_markup_generator;
 pub mod resolutions;

@@ -6,7 +6,8 @@
 <meta property="og:url" content="https://michalvanko.dev/blog/{{slug}}" />
 {% match thumbnail %}
 {% when Some with (img) %}
-<meta property="og:image" content="https://michalvanko.dev{{img}}" />
+{% let src = crate::picture_generator::image_src_generator::generate_image_with_src(img, 1200, 630, "_og", true).unwrap_or("thumbnail not found".to_string())|safe %}
+<meta property="og:image" content="https://michalvanko.dev{{src}}" />
 {% when None %}
 <meta property="og:image" content="https://michalvanko.dev/images/m-logo.svg" />
 {% endmatch %}

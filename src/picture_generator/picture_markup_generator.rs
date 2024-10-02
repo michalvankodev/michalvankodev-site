@@ -119,7 +119,7 @@ pub fn generate_picture_markup(
     Ok(result)
 }
 
-fn get_image_path(path: &Path, resolution: &(u32, u32, f32), format: &ExportFormat) -> String {
+pub fn get_image_path(path: &Path, resolution: &(u32, u32, f32), format: &ExportFormat) -> String {
     let path_name = path.to_str().expect("Image has to have a valid path");
     let (width, height, _) = resolution;
     let extension = format.get_extension();
@@ -197,7 +197,7 @@ fn strip_prefixes(path: &Path) -> &Path {
     parent_path
 }
 
-fn get_generated_file_name(orig_img_path: &str) -> PathBuf {
+pub fn get_generated_file_name(orig_img_path: &str) -> PathBuf {
     let path = Path::new(&orig_img_path);
     // let parent = path
     //     .parent()
@@ -247,7 +247,7 @@ fn generate_srcset(path: &Path, format: &ExportFormat, resolutions: &[(u32, u32,
         .join(", ")
 }
 
-fn get_export_formats(orig_img_path: &str) -> Vec<ExportFormat> {
+pub fn get_export_formats(orig_img_path: &str) -> Vec<ExportFormat> {
     let path = Path::new(&orig_img_path)
         .extension()
         .and_then(|ext| ext.to_str());
