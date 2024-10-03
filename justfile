@@ -56,7 +56,7 @@ ssg:
   
 # Preview server
 preview:
-  npx http-server dist
+  caddy run --config Caddyfile-preview
 
 # SSG export of production server
 export: clean
