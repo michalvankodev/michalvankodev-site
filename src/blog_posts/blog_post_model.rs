@@ -5,7 +5,7 @@ use crate::post_utils::post_parser::deserialize_date;
 
 pub const BLOG_POST_PATH: &str = "_posts/blog";
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 pub struct BlogPostMetadata {
     pub title: String,
     pub segments: Vec<String>,

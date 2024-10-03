@@ -32,6 +32,7 @@ where
     }
 }
 
+#[derive(Clone)]
 pub struct ParseResult<Metadata> {
     pub body: String,
     pub metadata: Metadata,

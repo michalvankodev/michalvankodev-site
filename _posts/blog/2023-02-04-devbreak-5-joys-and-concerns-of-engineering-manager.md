@@ -3,6 +3,7 @@ layout: blog
 title: "DevBreak #5 Joys and concerns of Engineering manager with Pavol Dudrík"
 segments:
   - broadcasts
+  - featured
 published: true
 date: 2023-02-04T20:22:21.191Z
 thumbnail: /images/uploads/devbreak.jpeg
