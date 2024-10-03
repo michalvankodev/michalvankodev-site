@@ -3,13 +3,10 @@ use axum::http::StatusCode;
 use tokio::try_join;
 
 use crate::{
-    blog_posts::{
-        blog_post_model::BlogPostMetadata, featured_blog_posts::get_featured_blog_posts,
-        tag_list::get_popular_tags,
-    },
+    blog_posts::{blog_post_model::BlogPostMetadata, featured_blog_posts::get_featured_blog_posts},
     components::site_header::HeaderProps,
     filters,
-    post_utils::post_parser::ParseResult,
+    post_utils::{post_parser::ParseResult, tags::get_popular_tags},
     projects::{featured_projects::get_featured_projects, project_model::ProjectMetadata},
 };
 

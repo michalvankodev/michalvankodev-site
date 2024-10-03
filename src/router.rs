@@ -3,8 +3,8 @@ use crate::{
     pages::{
         admin::render_admin, blog_post_list::render_blog_post_list,
         blog_post_page::render_blog_post, broadcast_list::render_broadcast_post_list,
-        contact::render_contact, index::render_index, project_list::render_projects_list,
-        showcase::egg_fetcher::render_egg_fetcher,
+        contact::render_contact, index::render_index, not_found::render_not_found,
+        project_list::render_projects_list, showcase::egg_fetcher::render_egg_fetcher,
     },
 };
 use axum::{extract::MatchedPath, http::Request, routing::get, Router};
@@ -42,4 +42,5 @@ pub fn get_router() -> Router {
                 )
             }),
         )
+        .fallback(render_not_found)
 }

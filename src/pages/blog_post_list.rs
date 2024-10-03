@@ -1,4 +1,3 @@
-use askama::Template;
 use axum::{
     extract::{OriginalUri, Path},
     http::StatusCode,
@@ -7,28 +6,16 @@ use tokio::try_join;
 use tracing::debug;
 
 use crate::{
-    blog_posts::{
-        blog_post_model::{BlogPostMetadata, BLOG_POST_PATH},
-        tag_list::{get_popular_tags, get_posts_by_tag},
-    },
+    blog_posts::blog_post_model::{BlogPostMetadata, BLOG_POST_PATH},
     components::site_header::{HeaderProps, Link},
-    filters,
-    post_utils::{post_listing::get_post_list, post_parser::ParseResult},
-    projects::{featured_projects::get_featured_projects, project_model::ProjectMetadata},
+    post_utils::{
+        post_listing::get_post_list,
+        tags::{get_popular_tags, get_posts_by_tag},
+    },
+    projects::featured_projects::get_featured_projects,
 };
 
-#[derive(Template)]
-#[template(path = "blog_post_list.html")]
-pub struct PostListTemplate {
-    pub title: String,
-    pub og_title: String,
-    pub segment: String,
-    pub posts: Vec<ParseResult<BlogPostMetadata>>,
-    pub header_props: HeaderProps,
-    pub tags: Vec<String>,
-    pub featured_projects: Vec<ParseResult<ProjectMetadata>>,
-    pub current_url: String,
-}
+use super::post_list::PostListTemplate;
 
 pub async fn render_blog_post_list(
     tag: Option<Path<String>>,

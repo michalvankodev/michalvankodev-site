@@ -10,7 +10,7 @@ use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 use serde::{de::DeserializeOwned, Deserialize, Deserializer};
 use syntect::{highlighting::ThemeSet, html::highlighted_html_for_string, parsing::SyntaxSet};
 use tokio::fs;
-use tracing::{debug, error, info};
+use tracing::{debug, error};
 
 use crate::picture_generator::{
     picture_markup_generator::generate_picture_markup, resolutions::get_max_resolution,

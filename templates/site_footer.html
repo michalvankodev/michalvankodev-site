@@ -1,7 +1,8 @@
 <footer class="my-4">
   <hr class="mb-4 border-slate-300 mx-5">
+  <section class="flex justify-around">
   <p
-    class="text-center"
+    class="text-center flex-1"
     xmlns:cc="http://creativecommons.org/ns#"
     xmlns:dct="http://purl.org/dc/terms/"
   >
@@ -46,7 +47,12 @@
         height="24"
         width="24"
       /></a>
-      <!-- TODO Display link to feed with icon -->
-      <a href="/feed.xml" class="hidden">RSS feed</a>
   </p>
+  <aside class="mx-3">
+    <a href="/feed.xml">
+   	  <svg role="img" aria-hidden="true" aria-label="RSS feed" class="fill-blue-950 h-6 w-6">
+  	    <use href="#rss" />
+  	  </svg>
+    </a>
+  </aside>
 </footer>

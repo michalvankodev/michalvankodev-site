@@ -4,5 +4,7 @@ pub mod blog_post_page;
 pub mod broadcast_list;
 pub mod contact;
 pub mod index;
+pub mod not_found;
+pub mod post_list;
 pub mod project_list;
 pub mod showcase;

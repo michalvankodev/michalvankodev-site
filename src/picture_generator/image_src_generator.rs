@@ -2,7 +2,6 @@ use std::{path::Path, sync::Arc};
 
 use anyhow::Context;
 use image::ImageReader;
-use tracing::debug;
 
 use super::{
     image_generator::generate_images,

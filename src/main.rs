@@ -41,8 +41,6 @@ async fn main() {
         .nest_service("/config.yml", ServeDir::new("static/resources/config.yml")) // Decap CMS config
         .nest_service("/robots.txt", ServeDir::new("robots.txt"));
 
-    let app = app.fallback(handler_404);
-
     #[cfg(debug_assertions)]
     let app = app.layer(LiveReloadLayer::new());
 
@@ -54,21 +52,8 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
-async fn handler_404(OriginalUri(original_uri): OriginalUri) -> impl IntoResponse {
-    info!("{original_uri} not found");
-    (StatusCode::NOT_FOUND, "nothing to see here")
-}
-
 // TODO Socials
 // - fotos
-// background gradient color
-// TODO Change DNS system
 // THINK deploy to alula? rather then katelyn? can be change whenever
-// TODO after release
-// OG tags
-// - projects page
-// TODO broken links
-// showcase/eggfetcher
-// broadcasts/
-// manifest.json
 //
+// TODO 404 page

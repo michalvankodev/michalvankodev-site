@@ -6,16 +6,16 @@ use tokio::try_join;
 use tracing::debug;
 
 use crate::{
-    blog_posts::{
-        blog_post_model::{BlogPostMetadata, BLOG_POST_PATH},
-        tag_list::{get_popular_tags, get_posts_by_tag},
-    },
+    blog_posts::blog_post_model::{BlogPostMetadata, BLOG_POST_PATH},
     components::site_header::{HeaderProps, Link},
-    post_utils::post_listing::get_post_list,
+    post_utils::{
+        post_listing::get_post_list,
+        tags::{get_popular_tags, get_posts_by_tag},
+    },
     projects::featured_projects::get_featured_projects,
 };
 
-use super::blog_post_list::PostListTemplate;
+use super::post_list::PostListTemplate;
 
 pub async fn render_broadcast_post_list(
     tag: Option<Path<String>>,
