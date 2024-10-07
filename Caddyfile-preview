@@ -24,7 +24,7 @@
 		@404 {
 			expression {http.error.status_code} == 404
 		}
-		rewrite @404 /404.html
+		rewrite @404 /not-found.html
 		file_server
 	}
 }
