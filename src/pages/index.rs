@@ -5,7 +5,7 @@ use axum::http::StatusCode;
 use tokio::try_join;
 
 use crate::{
-    blog_posts::blog_post_model::{BlogPostMetadata, BLOG_POST_PATH},
+    blog_posts::blog_post_model::{BlogPostMetadata, Segment, BLOG_POST_PATH},
     components::site_header::HeaderProps,
     filters,
     post_utils::{
@@ -28,8 +28,8 @@ pub struct IndexTemplate {
 
 pub async fn render_index() -> Result<IndexTemplate, StatusCode> {
     let (blog_tags, broadcasts_tags, all_posts, featured_projects) = try_join!(
-        get_popular_tags(Some("blog".to_string())),
-        get_popular_tags(Some("broadcasts".to_string())),
+        get_popular_tags(Some(Segment::Blog)),
+        get_popular_tags(Some(Segment::Broadcasts)),
         get_post_list::<BlogPostMetadata>(BLOG_POST_PATH),
         get_featured_projects()
     )?;
@@ -39,12 +39,10 @@ pub async fn render_index() -> Result<IndexTemplate, StatusCode> {
         all_posts.into_iter().map(Rc::new).collect();
 
     let featured_blog_posts =
-        ref_get_posts_by_segment(&all_posts_rc, &["blog".to_string(), "featured".to_string()]);
+        ref_get_posts_by_segment(&all_posts_rc, &[Segment::Blog, Segment::Featured]);
 
-    let featured_broadcasts = ref_get_posts_by_segment(
-        &all_posts_rc,
-        &["broadcasts".to_string(), "featured".to_string()],
-    );
+    let featured_broadcasts =
+        ref_get_posts_by_segment(&all_posts_rc, &[Segment::Broadcasts, Segment::Featured]);
 
     Ok(IndexTemplate {
         header_props: HeaderProps::default(),

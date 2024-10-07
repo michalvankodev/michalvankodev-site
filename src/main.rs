@@ -1,5 +1,4 @@
-use askama_axum::IntoResponse;
-use axum::{self, extract::OriginalUri, http::StatusCode};
+use axum::{self};
 use tower_http::services::ServeDir;
 use tower_livereload::LiveReloadLayer;
 use tracing::info;
@@ -57,3 +56,5 @@ async fn main() {
 // THINK deploy to alula? rather then katelyn? can be change whenever
 //
 // TODO 404 page
+// TODO view page transitions
+// TODO cookbook

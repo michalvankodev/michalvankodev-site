@@ -2,11 +2,11 @@ use axum::http::StatusCode;
 use std::collections::HashMap;
 use tracing::debug;
 
-use crate::blog_posts::blog_post_model::{BlogPostMetadata, BLOG_POST_PATH};
+use crate::blog_posts::blog_post_model::{BlogPostMetadata, Segment, BLOG_POST_PATH};
 
 use super::{post_listing::get_post_list, post_parser::ParseResult};
 
-pub async fn get_popular_tags(segment: Option<String>) -> Result<Vec<String>, StatusCode> {
+pub async fn get_popular_tags(segment: Option<Segment>) -> Result<Vec<String>, StatusCode> {
     const TAGS_LENGTH: usize = 7;
 
     let mut post_list = get_post_list::<BlogPostMetadata>(BLOG_POST_PATH).await?;

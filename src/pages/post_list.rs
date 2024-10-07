@@ -1,8 +1,11 @@
 use askama::Template;
 
 use crate::{
-    blog_posts::blog_post_model::BlogPostMetadata, components::site_header::HeaderProps, filters,
-    post_utils::post_parser::ParseResult, projects::project_model::ProjectMetadata,
+    blog_posts::blog_post_model::{BlogPostMetadata, Segment},
+    components::site_header::HeaderProps,
+    filters,
+    post_utils::post_parser::ParseResult,
+    projects::project_model::ProjectMetadata,
 };
 
 #[derive(Template)]
@@ -10,7 +13,7 @@ use crate::{
 pub struct PostListTemplate {
     pub title: String,
     pub og_title: String,
-    pub segment: String,
+    pub segment: Segment,
     pub posts: Vec<ParseResult<BlogPostMetadata>>,
     pub header_props: HeaderProps,
     pub tags: Vec<String>,

@@ -6,10 +6,11 @@ use tokio::try_join;
 use tracing::debug;
 
 use crate::{
-    blog_posts::blog_post_model::{BlogPostMetadata, BLOG_POST_PATH},
+    blog_posts::blog_post_model::{BlogPostMetadata, Segment, BLOG_POST_PATH},
     components::site_header::{HeaderProps, Link},
     post_utils::{
         post_listing::get_post_list,
+        segments::get_posts_by_segment,
         tags::{get_popular_tags, get_posts_by_tag},
     },
     projects::featured_projects::get_featured_projects,
@@ -24,18 +25,14 @@ pub async fn render_broadcast_post_list(
     // I will forget what happens here in a week. But essentially it's pattern matching and shadowing
     let tag = tag.map(|Path(tag)| tag);
 
-    let (popular_tags, featured_projects, mut post_list) = try_join!(
-        get_popular_tags(Some("broadcasts".to_string())),
+    let (popular_tags, featured_projects, post_list) = try_join!(
+        get_popular_tags(Some(Segment::Broadcasts)),
         get_featured_projects(),
         get_post_list::<BlogPostMetadata>(BLOG_POST_PATH)
     )?;
 
-    post_list.sort_by_key(|post| post.metadata.date);
-    post_list.retain(|post| post.metadata.published);
-    post_list.retain(|post| post.metadata.segments.contains(&"broadcasts".to_string()));
-    post_list.reverse();
-
-    let posts = get_posts_by_tag(post_list, &tag);
+    let posts = get_posts_by_segment(post_list, &[Segment::Broadcasts]);
+    let posts = get_posts_by_tag(posts, &tag);
 
     let header_props = match tag {
         Some(_) => HeaderProps::with_back_link(Link {
@@ -56,7 +53,7 @@ pub async fn render_broadcast_post_list(
     Ok(PostListTemplate {
         title: title.clone(),
         og_title: title,
-        segment: "broadcasts".to_string(),
+        segment: Segment::Broadcasts,
         posts,
         header_props,
         tags: popular_tags,
