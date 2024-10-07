@@ -69,17 +69,18 @@ pub fn parse_markdown(markdown: &str) -> ::askama::Result<String> {
             );
 
             // Place image into the content with scaled reso to a boundary
-            let picture_markup =
-                generate_picture_markup(&dest_url, max_width, max_height, &title, None, true)
-                    .unwrap_or(formatdoc!(
-                        r#"
+            let picture_markup = generate_picture_markup(
+                &dest_url, max_width, max_height, &title, None,
+            )
+            .unwrap_or(formatdoc!(
+                r#"
                         <img
                           alt="{alt}"
                           src="{src}"
                         />"#,
-                        alt = title,
-                        src = dest_url,
-                    ));
+                alt = title,
+                src = dest_url,
+            ));
             Event::Html(
                 formatdoc!(
                     r#"<figure>
@@ -165,8 +166,5 @@ pub fn parse_markdown(markdown: &str) -> ::askama::Result<String> {
     // Write to String buffer
     let mut html = String::new();
     pulldown_cmark::html::push_html(&mut html, parser);
-    // filters::safe(Html, html)
-    // filters::escape(Text, html)
-    // Ok(html)
     Ok(html)
 }

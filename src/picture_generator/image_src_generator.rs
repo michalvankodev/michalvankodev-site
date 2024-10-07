@@ -13,7 +13,6 @@ pub fn generate_image_with_src(
     width: u32,
     height: u32,
     suffix: &str,
-    generate_image: bool,
 ) -> Result<String, anyhow::Error> {
     let path_to_generated = get_generated_file_name(orig_img_path);
     let file_stem = path_to_generated.file_stem().unwrap().to_str().unwrap();
@@ -29,27 +28,26 @@ pub fn generate_image_with_src(
     let path_to_generated_arc = Arc::new(path_to_generated);
     let path_to_generated_clone = Arc::clone(&path_to_generated_arc);
 
-    if generate_image {
-        rayon::spawn(move || {
-            let orig_img = ImageReader::open(&disk_img_path)
-                .with_context(|| format!("Failed to read instrs from {:?}", &disk_img_path))
-                .unwrap()
-                .decode()
-                .unwrap();
-            let path_to_generated = path_to_generated_clone.as_ref();
+    rayon::spawn(move || {
+        let orig_img = ImageReader::open(&disk_img_path)
+            .with_context(|| format!("Failed to read instrs from {:?}", &disk_img_path))
+            .unwrap()
+            .decode()
+            .unwrap();
+        let path_to_generated = path_to_generated_clone.as_ref();
 
-            let result = generate_images(
-                &orig_img,
-                path_to_generated,
-                &resolutions,
-                &[exported_format],
-            )
-            .with_context(|| "Failed to generate images".to_string());
-            if let Err(e) = result {
-                tracing::error!("Error: {}", e);
-            }
-        });
-    }
+        let result = generate_images(
+            &orig_img,
+            path_to_generated,
+            &resolutions,
+            &[exported_format],
+        )
+        .with_context(|| "Failed to generate images".to_string());
+        if let Err(e) = result {
+            tracing::error!("Error: {}", e);
+        }
+    });
+
     let path_to_generated = Arc::clone(&path_to_generated_arc);
 
     let image_path = get_image_path(

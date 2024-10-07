@@ -20,7 +20,6 @@ pub fn generate_picture_markup(
     height: u32,
     alt_text: &str,
     class_name: Option<&str>,
-    generate_image: bool,
 ) -> Result<String, anyhow::Error> {
     let exported_formats = get_export_formats(orig_img_path);
     let class_attr = if let Some(class) = class_name {
@@ -55,25 +54,22 @@ pub fn generate_picture_markup(
     let exported_formats_arc = Arc::new(exported_formats);
     let exported_formats_clone = Arc::clone(&exported_formats_arc);
 
-    if generate_image {
-        rayon::spawn(move || {
-            let orig_img = ImageReader::open(&disk_img_path)
-                .with_context(|| format!("Failed to read instrs from {:?}", &disk_img_path))
-                .unwrap()
-                .decode()
-                .unwrap();
-            let path_to_generated = path_to_generated_clone.as_ref();
-            let resolutions = resolutions_clone.as_ref();
-            let exported_formats = exported_formats_clone.as_ref();
+    rayon::spawn(move || {
+        let orig_img = ImageReader::open(&disk_img_path)
+            .with_context(|| format!("Failed to read instrs from {:?}", &disk_img_path))
+            .unwrap()
+            .decode()
+            .unwrap();
+        let path_to_generated = path_to_generated_clone.as_ref();
+        let resolutions = resolutions_clone.as_ref();
+        let exported_formats = exported_formats_clone.as_ref();
 
-            let result =
-                generate_images(&orig_img, path_to_generated, resolutions, exported_formats)
-                    .with_context(|| "Failed to generate images".to_string());
-            if let Err(e) = result {
-                tracing::error!("Error: {}", e);
-            }
-        });
-    }
+        let result = generate_images(&orig_img, path_to_generated, resolutions, exported_formats)
+            .with_context(|| "Failed to generate images".to_string());
+        if let Err(e) = result {
+            tracing::error!("Error: {}", e);
+        }
+    });
 
     let exported_formats = Arc::clone(&exported_formats_arc);
     let path_to_generated = Arc::clone(&path_to_generated_arc);
@@ -314,15 +310,8 @@ fn test_generate_picture_markup() {
         </picture>"#,
     };
     assert_eq!(
-        generate_picture_markup(
-            orig_img_path,
-            width,
-            height,
-            "Testing image alt",
-            None,
-            false
-        )
-        .expect("picture markup has to be generated"),
+        generate_picture_markup(orig_img_path, width, height, "Testing image alt", None,)
+            .expect("picture markup has to be generated"),
         result
     );
 }
