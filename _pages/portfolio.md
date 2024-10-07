@@ -1,10 +1,5 @@
 ---
 title: Portfolio - Michal Vanko
-work_history_prelude: >-
-  I've started learning web development when I was 14 years old. My very first
-  website was a presentation site for my own _Counter-Strike_ clan.
-
-  Then I had an opportunity to create a registration system for marathon runners for Europe's oldest marathon event. That basically started off my career as a web developer. I've worked on some projects while I was studying in high school and university. After that, I've started to work full-time as a web developer and gained more experience in developing real-time web applications.
 work_history:
   - description: >-
       _sudolabs_ is a company focused on building products and software

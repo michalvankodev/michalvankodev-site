@@ -11,7 +11,7 @@
       {% endmatch %}
     </h2>
     <section class="description text-slate-800 my-2 md:text-xl text-justify">
-      {{project.body|safe}}
+      {{project.body|parse_markdown|escape("none")}}
     </section>
   </header>
   <!-- <hr class="border-blue-950 my-5"> -->

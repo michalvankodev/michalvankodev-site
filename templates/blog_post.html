@@ -28,7 +28,7 @@
 </header>
 
   <section class="article-body">
-    {{body|escape("none")}}
+    {{body|parse_markdown|escape("none")}}
   </section>
 </article>
 

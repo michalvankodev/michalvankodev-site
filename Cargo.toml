@@ -25,6 +25,7 @@ anyhow = "1.0.86"
 rayon = "1.10.0"
 syntect = "5.2.0"
 indoc = "2.0.5"
+askama_escape = "0.10.3"
 
 [build]
 rustflags = ["-Z", "threads=8"]

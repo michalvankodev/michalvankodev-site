@@ -14,7 +14,7 @@
 		  <a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="text-blue-950 visited:text-purple-700 no-underline">{{post.metadata.title}}</a>
 		</h3>
 	</header>
-	<section class="text-base leading-5 text-slate-800 md:text-xl text-justify">{{post.body|description_filter|safe}}</section>
+	<section class="text-base leading-5 text-slate-800 md:text-xl text-justify">{{post.body|truncate_md(2)|parse_markdown|escape("none")}}</section>
 	<footer class="text-sm md:text-base lg:text-lg mt-3 sm:mt-0 clear-both sm:clear-none">
     <ul class="inline-block">
      {% for tag in post.metadata.tags %}

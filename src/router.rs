@@ -4,7 +4,8 @@ use crate::{
         admin::render_admin, blog_post_list::render_blog_post_list,
         blog_post_page::render_blog_post, broadcast_list::render_broadcast_post_list,
         contact::render_contact, index::render_index, not_found::render_not_found,
-        project_list::render_projects_list, showcase::egg_fetcher::render_egg_fetcher,
+        portfolio::render_portfolio, project_list::render_projects_list,
+        showcase::egg_fetcher::render_egg_fetcher,
     },
 };
 use axum::{extract::MatchedPath, http::Request, routing::get, Router};
@@ -23,6 +24,7 @@ pub fn get_router() -> Router {
         .route("/contact", get(render_contact))
         .route("/showcase", get(render_projects_list))
         .route("/showcase/:project_slug", get(render_egg_fetcher))
+        .route("/portfolio", get(render_portfolio))
         .route("/admin", get(render_admin))
         .route("/feed.xml", get(render_rss_feed))
         .layer(

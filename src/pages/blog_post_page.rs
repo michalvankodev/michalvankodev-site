@@ -29,7 +29,7 @@ pub async fn render_blog_post(
     OriginalUri(original_uri): OriginalUri,
 ) -> Result<BlogPostTemplate, StatusCode> {
     let path = format!("{}/{}.md", BLOG_POST_PATH, post_id);
-    let parse_post = parse_post::<BlogPostMetadata>(&path, true);
+    let parse_post = parse_post::<BlogPostMetadata>(&path);
     let parsed = parse_post.await?;
     let segment = if original_uri.to_string().starts_with("/blog") {
         "blog"

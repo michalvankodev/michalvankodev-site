@@ -55,6 +55,5 @@ async fn main() {
 // - fotos
 // THINK deploy to alula? rather then katelyn? can be change whenever
 //
-// TODO 404 page
 // TODO view page transitions
 // TODO cookbook
