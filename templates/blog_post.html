@@ -17,12 +17,12 @@
 {% block content %}
 <article class="mb-6">
   <header class="px-4 max-w-read mx-auto">
-  <h1 class="text-3xl md:text-4xl lg:text-6xl lg:mt-20 text-blue-900 mb-3 font-bold">{{title}}</h1>
+  <h1 class="text-3xl md:text-4xl lg:text-6xl lg:mt-20 text-blue-900 mb-3 font-bold" style="view-transition-name: post_title_{{slug}};">{{title}}</h1>
   <aside class="flex justify-between flex-row">
     {% include "post_tag_list.html" %}
     <section class="created-at m-1 text-right text-sm text-slate-600 md:text-lg">
       <span>Published on</span>
-      <time datetime="{date}"> {{date|pretty_date}} </time>
+      <time datetime="{date}" style="view-transition-name: post_date_{{slug}}"> {{date|pretty_date}} </time>
     </section>
   </aside>
 </header>

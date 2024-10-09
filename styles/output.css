@@ -1908,6 +1908,28 @@ article a:visited {
   }
 }
 
+@view-transition {
+  navigation: auto;
+}
+
+/* Define the animation for persistent elements (like the header and title) */
+
+/* ::view-transition-group(*) { */
+
+/* transition: transform 3.4s ease-in-out; */
+
+/* } */
+
+/* ::view-transition-group(blog_post_preview) { */
+
+/* animation-duration: 5.5s; */
+
+/* transition: transform 5.4s ease-in-out; */
+
+/* opacity: 1; */
+
+/* } */
+
 .visited\:text-blue-950:visited {
   color: rgb(11 39 70 );
 }

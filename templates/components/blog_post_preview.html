@@ -1,4 +1,7 @@
-<article class="sm:grid sm:grid-cols-[max-content_1fr] sm:grid-rows-[max-content_1fr_max-content] sm:grid-flow-col sm:gap-4 md:gap-x-8 break-inside-avoid clear-both sm:clear-none">
+<article
+	class="sm:grid sm:grid-cols-[max-content_1fr] sm:grid-rows-[max-content_1fr_max-content] sm:grid-flow-col sm:gap-4 md:gap-x-8 break-inside-avoid clear-both sm:clear-none"
+	style="view-transition-name:blog_post_preview_{{post.slug}};"
+>
 	<aside class="row-span-3 self-center float-start sm:float-none mr-3 mb-3 sm:ml-0 sm:mb-0">
 		{% match post.metadata.thumbnail %}
 		{% when Some with (orig_path) %}
@@ -10,13 +13,13 @@
 		{% endmatch %}
 	</aside>
 	<header>
-		<h3 class="text-lg font-bold mb-1 md:text-3xl">
+		<h3 class="text-lg font-bold mb-1 md:text-3xl" style="view-transition-name: post_title_{{post.slug}}">
 		  <a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="text-blue-950 visited:text-purple-700 no-underline">{{post.metadata.title}}</a>
 		</h3>
 	</header>
 	<section class="text-base leading-5 text-slate-800 md:text-xl text-justify">{{post.body|truncate_md(2)|parse_markdown|safe}}</section>
 	<footer class="text-sm md:text-base lg:text-lg mt-3 sm:mt-0 clear-both sm:clear-none">
-    <ul class="inline-block">
+    <ul class="inline-block" style="view-transition-name: post_tags_{{post.slug}}">
      {% for tag in post.metadata.tags %}
       <li class="inline-block">
         <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline">#{{tag|capitalize}}</a>
@@ -24,7 +27,7 @@
       {% endfor %}
     </ul>
 		|
-    <time datetime="{{post.metadata.date}}" class="text-pink-950"> {{post.metadata.date|pretty_date}} </time>
+    <time datetime="{{post.metadata.date}}" class="text-pink-950" style="view-transition-name: post_date_{{post.slug}}" > {{post.metadata.date|pretty_date}} </time>
 	</footer>
 </article>
 
