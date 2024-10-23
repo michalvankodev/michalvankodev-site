@@ -6,7 +6,7 @@ tailwind:
 
 # svg sprite creation
 svgstore:
-   npx svgstore -o templates/icons/sprite.svg src/svg/**.svg
+	npx svgstore -o templates/icons/sprite.svg static/svg/input/*.svg
 
 server_dev: 
 	cargo watch -x run

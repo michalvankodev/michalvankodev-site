@@ -1,0 +1,19 @@
+<section class="flex border rounded bg-white p-3">
+	<aside class="flex justify-center items-center pr-3 shrink-0">
+  {% match skill.thumbnail %}
+  {% when Some with (source) %}
+	{% let skill_name = skill.name.clone() %}
+  {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 64, 64, format!("{skill_name} cover"), Some("h-12 w-12 md:h-16 md:w-16")).unwrap_or("cover not found".to_string()) %}
+  <figure class="mx-4 my-2">
+     {{picture|safe}}
+  </figure>
+  {% when None %}
+  {% endmatch %}
+	</aside>
+	<section>
+		<header>
+			<h3 class="text-lg font-medium mb-1 md:text-2xl">{{skill.name}}</h3>
+		</header>
+		<section class="text-sm leading-tight text-slate-800 md:text-lg md:leading-tight">{{skill.description|parse_markdown|safe}}</section>
+	</section>
+</section>

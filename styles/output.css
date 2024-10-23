@@ -107,7 +107,7 @@
 }
 
 /*
-! tailwindcss v3.4.13 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.14 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -550,7 +550,7 @@ video {
 
 /* Make elements with the HTML hidden attribute stay hidden by default */
 
-[hidden] {
+[hidden]:where(:not([hidden="until-found"])) {
   display: none;
 }
 
@@ -624,6 +624,10 @@ video {
   grid-column: span 2 / span 2;
 }
 
+.col-auto {
+  grid-column: auto;
+}
+
 .row-span-3 {
   grid-row: span 3 / span 3;
 }
@@ -650,6 +654,10 @@ video {
 
 .m-6 {
   margin: 1.5rem;
+}
+
+.m-3 {
+  margin: 0.75rem;
 }
 
 .mx-0\.5 {
@@ -707,6 +715,11 @@ video {
   margin-bottom: 1.25rem;
 }
 
+.my-1 {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -737,6 +750,10 @@ video {
 
 .mt-3 {
   margin-top: 0.75rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
 }
 
 .block {
@@ -823,8 +840,36 @@ video {
   max-width: 64rem;
 }
 
+.max-w-20 {
+  max-width: 5rem;
+}
+
+.max-w-60 {
+  max-width: 15rem;
+}
+
+.max-w-\[16rem\] {
+  max-width: 16rem;
+}
+
+.max-w-\[20rem\] {
+  max-width: 20rem;
+}
+
+.max-w-\[24rem\] {
+  max-width: 24rem;
+}
+
+.max-w-\[36rem\] {
+  max-width: 36rem;
+}
+
 .flex-1 {
   flex: 1 1 0%;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
 }
 
 .flex-grow {
@@ -851,6 +896,14 @@ video {
 
 .flex-col {
   flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
 }
 
 .place-content-center {
@@ -887,6 +940,10 @@ video {
 
 .gap-6 {
   gap: 1.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
 }
 
 .self-start {
@@ -936,6 +993,11 @@ video {
   border-color: rgb(203 213 225 / var(--tw-border-opacity));
 }
 
+.border-blue-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(130 195 247 / var(--tw-border-opacity));
+}
+
 .bg-blue-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(225 239 253 / var(--tw-bg-opacity));
@@ -976,6 +1038,10 @@ video {
   padding: 1rem;
 }
 
+.p-2 {
+  padding: 0.5rem;
+}
+
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -1005,6 +1071,10 @@ video {
 
 .text-justify {
   text-align: justify;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 .text-2xl {
@@ -1080,6 +1150,10 @@ video {
   line-height: 1.25rem;
 }
 
+.leading-tight {
+  line-height: 1.25;
+}
+
 .text-blue-500 {
   --tw-text-opacity: 1;
   color: rgb(23 137 224 / var(--tw-text-opacity));
@@ -1113,6 +1187,16 @@ video {
 .text-slate-800 {
   --tw-text-opacity: 1;
   color: rgb(30 41 59 / var(--tw-text-opacity));
+}
+
+.text-blue-800 {
+  --tw-text-opacity: 1;
+  color: rgb(12 73 128 / var(--tw-text-opacity));
+}
+
+.text-pink-900 {
+  --tw-text-opacity: 1;
+  color: rgb(119 24 89 / var(--tw-text-opacity));
 }
 
 .no-underline {
@@ -2005,6 +2089,16 @@ article a:visited {
     margin-bottom: 2rem;
   }
 
+  .md\:mx-0 {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  .md\:mx-6 {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+  }
+
   .md\:h-16 {
     height: 4rem;
   }
@@ -2067,6 +2161,15 @@ article a:visited {
   .md\:text-xl {
     font-size: 1.25rem;
     line-height: 1.75rem;
+  }
+
+  .md\:text-5xl {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .md\:leading-tight {
+    line-height: 1.25;
   }
 }
 
@@ -2146,6 +2249,10 @@ article a:visited {
     grid-column: auto;
   }
 
+  .xl\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+
   .xl\:row-span-2 {
     grid-row: span 2 / span 2;
   }
@@ -2154,8 +2261,33 @@ article a:visited {
     grid-row-start: auto;
   }
 
+  .xl\:my-4 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .xl\:mb-4 {
+    margin-bottom: 1rem;
+  }
+
+  .xl\:mt-6 {
+    margin-top: 1.5rem;
+  }
+
+  .xl\:mt-10 {
+    margin-top: 2.5rem;
+  }
+
   .xl\:block {
     display: block;
+  }
+
+  .xl\:grid {
+    display: grid;
+  }
+
+  .xl\:grid-flow-row {
+    grid-auto-flow: row;
   }
 
   .xl\:grid-cols-3 {
@@ -2166,13 +2298,45 @@ article a:visited {
     grid-template-columns: 1fr 2fr;
   }
 
+  .xl\:gap-8 {
+    gap: 2rem;
+  }
+
   .xl\:gap-x-32 {
     -moz-column-gap: 8rem;
          column-gap: 8rem;
   }
+
+  .xl\:text-6xl {
+    font-size: 3.75rem;
+    line-height: 1;
+  }
+
+  .xl\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
+  .xl\:text-7xl {
+    font-size: 4.5rem;
+    line-height: 1;
+  }
+
+  .xl\:text-9xl {
+    font-size: 8rem;
+    line-height: 1;
+  }
+
+  .xl\:font-medium {
+    font-weight: 500;
+  }
 }
 
 @media print {
+  .print\:inline {
+    display: inline;
+  }
+
   .print\:hidden {
     display: none;
   }

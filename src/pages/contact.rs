@@ -21,7 +21,7 @@ pub struct ContactPageTemplate {
 pub async fn render_contact() -> Result<ContactPageTemplate, StatusCode> {
     let links = vec![
         ContactLink {
-            href: "mailto: michalvankosk@gmail.com".to_string(),
+            href: "mailto:michalvankosk@gmail.com".to_string(),
             label: "michalvankosk@gmail.com".to_string(),
             title: "E-mail address".to_string(),
             svg: "mail".to_string(),
@@ -51,7 +51,7 @@ pub async fn render_contact() -> Result<ContactPageTemplate, StatusCode> {
             svg: "instagram".to_string(),
         },
         ContactLink {
-            href: "https://instagram.com/michalvankodev".to_string(),
+            href: "https://github.com/michalvankodev".to_string(),
             label: "GitHub".to_string(),
             title: "Github profile".to_string(),
             svg: "github".to_string(),

@@ -1,3 +1,4 @@
+{%- import "components/talent_card.html" as tc -%}
 {% extends "base.html" %}
 
 {% block og_meta %}
@@ -9,10 +10,83 @@
 
 {% block content %}
 
-<section id="portfolio-body">
+<header class="max-w-read mx-auto">
+  <h1 class="px-4 my-2 text-4xl text-blue-950 font-extrabold md:text-6xl xl:text-7xl xl:mb-4 xl:mt-10">Michal Vanko</h1>
+  <h3 class="px-4 my-1 text-2xl text-blue-900 font-bold italic md:text-3xl xl:text-4xl">Software Architect by passion</h3>
+  <section id="contact" class="mt-4">
+    <ul class="max-w-[24rem] mx-auto md:mx-6">
+      {% for link in contact_links %}
+      <li class="my-2">
+        <a
+          class="flex border-2 place-content-center items-center rounded-full text-blue-900 border-blue-500 py-2 hover:bg-pink-200 fill-blue-900 hover:fill-blue-400 transition-colors no-underline"
+          href="{{link.href}}"
+          title="{{link.title}}"
+        >
+          <svg aria-hidden="true" class="h-6 w-6 mx-2 self-start">
+            <use xlink:href="#{{link.svg}}" />
+          </svg>
+          <span class="text-lg font-semibold print:hidden">{{link.label}}</span>
+          <span class="hidden print:inline text-sm">{{link.href}}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+</header>
 
-{{ body }}
+<section id="portfolio-body" class="article-body">
+  {{ body|parse_markdown|safe }}
+</section>
 
+<section id="skillsets" class="max-w-maxindex mx-auto xl:grid xl:gap-8 xl:grid-cols-3">
+  <section id="work-history" class="max-w-read mx-auto xl:row-span-2">
+    <h2 class="m-5 text-3xl text-blue-950 font-extrabold md:text-4xl xl:font-medium">Work experience</h2>
+    <ul class="m-6 grid grid-flow-row gap-6">
+      {% for skill in workplace_list %}
+      <li>
+        {% include "components/skill_card.html" %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section id="education" class="max-w-read mx-auto">
+    <h2 class="m-5 text-3xl text-blue-950 font-extrabold md:text-4xl xl:font-medium">Education</h2>
+    <ul class="m-6 grid grid-flow-row gap-6">
+      {% for skill in education_list %}
+      <li>
+        {% include "components/skill_card.html" %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section id="skills" class="max-w-read mx-auto">
+    <h2 class="m-5 text-3xl text-blue-950 font-extrabold md:text-4xl xl:font-medium">Skills</h2>
+    <ul class="m-6 grid grid-flow-row gap-6">
+      <li>
+        {% call tc::talent_card("code", "Web development", "Extensive expertise in creating performant, live web applications and websites.",) %}
+      </li>
+      <li>
+        {% call tc::talent_card("gamepad", "Game development", "Creating games with passion. Capable of producing each aspect of a good game with profesional sound and creative mechanics. I consider games as multidisciplinary art.") %}
+      </li>
+      <li>
+        {% call tc::talent_card("person-chalkboard", "Mentoring & Consulting", "I offer consulting sessions to assist you in developing <strong>higher-quality software</strong> and share insights from crafting robust, professional web applications. <a href=\"https://calendly.com/michalvankosk/30min\">Schedule a session with me</a> and elevate your projects together.") %}
+      </li>
+    </ul>
+  </section>
+
+  <section id="technologies" class="max-w-read mx-auto xl:col-span-2">
+    <h2 class="m-5 text-3xl text-blue-950 font-extrabold md:text-4xl xl:font-medium">Technologies</h2>
+
+    <ul class="m-6 flex gap-2 flex-wrap justify-center">
+      {% for technology in technology_list %}
+      <li class="p-2 text-pink-900 bg-blue-100 text-sm border rounded border-blue-300 font-mono">
+        {{technology}}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
 </section>
 
 <section id="project-list-container" class="max-w-maxindex mx-auto">
@@ -20,7 +94,7 @@
     {% if project_list.len() == 0 %}
     <p class="no-posts">You've found void in the space.</p>
     {% else %}
-    <h1 class="m-5 text-4xl text-blue-950 font-extrabold md:text-6xl">
+    <h2 class="m-5 text-3xl text-blue-950 font-extrabold md:text-5xl">
      Showcase
     </h1>
 
