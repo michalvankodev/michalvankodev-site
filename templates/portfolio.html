@@ -10,28 +10,86 @@
 
 {% block content %}
 
-<header class="max-w-read mx-auto">
-  <h1 class="px-4 my-2 text-4xl text-blue-950 font-extrabold md:text-6xl xl:text-7xl xl:mb-4 xl:mt-10">Michal Vanko</h1>
-  <h3 class="px-4 my-1 text-2xl text-blue-900 font-bold italic md:text-3xl xl:text-4xl">Software Architect by passion</h3>
-  <section id="contact" class="mt-4">
-    <ul class="max-w-[24rem] mx-auto md:mx-6">
-      {% for link in contact_links %}
-      <li class="my-2">
-        <a
-          class="flex border-2 place-content-center items-center rounded-full text-blue-900 border-blue-500 py-2 hover:bg-pink-200 fill-blue-900 hover:fill-blue-400 transition-colors no-underline"
-          href="{{link.href}}"
-          title="{{link.title}}"
-        >
-          <svg aria-hidden="true" class="h-6 w-6 mx-2 self-start">
-            <use xlink:href="#{{link.svg}}" />
-          </svg>
-          <span class="text-lg font-semibold print:hidden">{{link.label}}</span>
-          <span class="hidden print:inline text-sm">{{link.href}}</span>
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
+<header class="max-w-read mx-auto md:grid md:grid-cols-[1fr_auto]">
+  <div>
+    <h1 class="px-4 my-2 text-4xl text-blue-950 font-extrabold md:text-6xl xl:text-7xl xl:mb-4 xl:mt-10">Michal Vanko</h1>
+    <h3 class="px-4 my-1 text-2xl text-blue-900 font-bold italic md:text-3xl xl:text-4xl">Software Architect by passion</h3>
+    <section id="contact" class="mt-4">
+      <ul class="max-w-[24rem] mx-auto md:mx-6">
+        {% for link in contact_links %}
+        <li class="my-2">
+          <a
+            class="flex border-2 place-content-center items-center rounded-full text-blue-900 border-blue-500 py-2 hover:bg-pink-200 fill-blue-900 hover:fill-blue-400 transition-colors no-underline"
+            href="{{link.href}}"
+            title="{{link.title}}"
+          >
+            <svg aria-hidden="true" class="h-6 w-6 mx-2 self-start">
+              <use xlink:href="#{{link.svg}}" />
+            </svg>
+            <span class="text-lg font-semibold print:hidden">{{link.label}}</span>
+            <span class="hidden print:inline text-sm">{{link.href}}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
+  <aside id="logo-container" class="hidden md:block h-[320px] w-[320px] m-10">
+    <style>
+      #logo-container svg {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+    {% include "icons/m-logo-animated.svg" %}
+    <script src="/resources/anime.min.js"></script>
+    <script>
+      var borderTimeline = anime.timeline({
+        duration: 2000,
+        easing: 'easeInOutSine',
+      })
+      
+    /* borderTimeline.add({
+      targets: '#m-logo #border-start',
+      strokeDashoffset: [anime.setDashoffset, 0],
+      duration: 300,
+      //loop: true
+    });*/
+    borderTimeline.add({
+      targets: '#m-logo #border-start',
+      strokeDashoffset: [anime.setDashoffset, -310],
+      duration: 2000,
+      easing: 'easeOutExpo'
+      //loop: true
+    }, 0); 
+    borderTimeline.add({
+      targets: '#m-logo #border',
+      strokeDashoffset: [anime.setDashoffset, 0],
+      easing: 'easeInOutSine',
+      duration: 2000,
+      //direction: 'alternate',
+      //loop: true
+     }, 160)
+    borderTimeline.add({
+      targets: '#m-logo #m-letter',
+      strokeDashoffset: [anime.setDashoffset, 0],
+      easing: 'easeInOutSine',
+      duration: 2000,
+      //direction: 'alternate',
+      //loop: true
+     }, 160)
+    borderTimeline.add({
+      targets: '#m-logo #m-letter',
+      easing: 'easeInOutSine',
+      duration: 1200,
+      fill: "#32a8eb",
+      strokeWidth: "0",
+      //direction: 'alternate',
+      //loop: true
+     })
+    // TODO Let's start from bottom right. 
+   </script>
+  </aside>
 </header>
 
 <section id="portfolio-body" class="article-body">

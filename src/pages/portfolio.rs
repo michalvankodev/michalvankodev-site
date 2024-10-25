@@ -80,12 +80,12 @@ pub async fn render_portfolio() -> Result<PortfolioTemplate, StatusCode> {
             title: "E-mail address".to_string(),
             svg: "mail".to_string(),
         },
-        ContactLink {
-            href: "tel:+421-905-372-947".to_string(),
-            label: "+421 905 372 947".to_string(),
-            title: "Phone".to_string(),
-            svg: "phone".to_string(),
-        },
+        // ContactLink {
+        //     href: "tel:+421-905-372-947".to_string(),
+        //     label: "+421 905 372 947".to_string(),
+        //     title: "Phone".to_string(),
+        //     svg: "phone".to_string(),
+        // },
         ContactLink {
             href: "https://github.com/michalvankodev".to_string(),
             label: "GitHub".to_string(),

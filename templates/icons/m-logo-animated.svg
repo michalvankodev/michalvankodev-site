@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="m-logo"
+   width="512"
+   height="512"
+   viewBox="0 0 512 512"
+   fill="none"
+   version="1.1"
+   sodipodi:docname="m-logo-animated.svg"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="2.2753906"
+     inkscape:cx="161.29099"
+     inkscape:cy="375.10043"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     inkscape:window-x="26"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="m-logo" />
+  <path
+     id="border"
+     d="m 256,477 c -56.348,0 -98.269,-0.006 -129.636,-3.491 C 94.967,470.02 75.025,463.118 61.953,450.047 48.882,436.975 41.98,417.033 38.491,385.636 35.006,354.269 35,312.348 35,256 35,199.652 35.006,157.731 38.491,126.364 41.98,94.9671 48.882,75.0246 61.953,61.9534 75.025,48.8822 94.967,41.9797 126.364,38.4912 157.731,35.0059 199.652,35 256,35 c 56.348,0 98.269,0.006 129.636,3.4912 31.3969,3.4885 51.3394,10.391 64.4106,23.4622 13.0712,13.0712 19.9737,33.0137 23.4622,64.4106 C 476.9941,157.731 477,199.652 477,256 c 0,56.348 -0.006,98.269 -3.4912,129.636 -3.4885,31.397 -10.391,51.339 -23.4622,64.411 -13.0712,13.071 -33.0137,19.973 -64.4106,23.462 C 354.269,476.994 312.348,477 256,477 Z"
+     fill="#d8f6ff"
+     stroke="#32a8eb"
+     stroke-width="8"
+     stroke-linejoin="round" />
+  <path
+     d="M347.694 326.566H360V235.186C360 203.566 340.791 185 310.176 185C290.066 185 270.257 193.413 256.15 208.208C248.046 193.123 232.739 185 212.629 185C194.62 185 177.212 191.382 163.405 202.696L161.004 187.031H152V326.566H164.306V212.269C176.912 201.535 193.12 195.153 209.628 195.153C234.84 195.153 249.847 210.528 249.847 236.927V326.566H262.153V235.186C262.153 227.934 261.253 221.262 259.152 215.46C272.058 202.696 289.466 195.153 307.175 195.153C332.687 195.153 347.694 210.528 347.694 236.927V326.566Z"
+     stroke="#32a8eb"
+     fill="#d8f6ff"
+     stroke-width="2"
+     id="m-letter" />
+  <path
+     id="border-start"
+     d="m 509.27383,509.07982 c -13.78829,-18.55493 -32.05408,-24.58114 -81.31406,-26.9168 -101.10905,-4.7941 -48.5241,-5.4316 -220.91427,-5.25658"
+     stroke="#32a8eb"
+     stroke-width="8"
+     stroke-linejoin="round"
+     sodipodi:nodetypes="csc" />
+</svg>

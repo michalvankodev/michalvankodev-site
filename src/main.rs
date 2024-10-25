@@ -38,6 +38,7 @@ async fn main() {
         .nest_service("/egg-fetcher", ServeDir::new("static/egg-fetcher"))
         .nest_service("/svg", ServeDir::new("static/svg"))
         .nest_service("/config.yml", ServeDir::new("static/resources/config.yml")) // Decap CMS config
+        .nest_service("/resources", ServeDir::new("static/resources"))
         .nest_service("/robots.txt", ServeDir::new("robots.txt"));
 
     #[cfg(debug_assertions)]
