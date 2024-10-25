@@ -49,45 +49,70 @@
         easing: 'easeInOutSine',
       })
       
-    /* borderTimeline.add({
-      targets: '#m-logo #border-start',
-      strokeDashoffset: [anime.setDashoffset, 0],
-      duration: 300,
-      //loop: true
-    });*/
-    borderTimeline.add({
-      targets: '#m-logo #border-start',
-      strokeDashoffset: [anime.setDashoffset, -310],
-      duration: 2000,
-      easing: 'easeOutExpo'
-      //loop: true
-    }, 0); 
-    borderTimeline.add({
-      targets: '#m-logo #border',
-      strokeDashoffset: [anime.setDashoffset, 0],
-      easing: 'easeInOutSine',
-      duration: 2000,
-      //direction: 'alternate',
-      //loop: true
-     }, 160)
-    borderTimeline.add({
-      targets: '#m-logo #m-letter',
-      strokeDashoffset: [anime.setDashoffset, 0],
-      easing: 'easeInOutSine',
-      duration: 2000,
-      //direction: 'alternate',
-      //loop: true
-     }, 160)
-    borderTimeline.add({
-      targets: '#m-logo #m-letter',
-      easing: 'easeInOutSine',
-      duration: 1200,
-      fill: "#32a8eb",
-      strokeWidth: "0",
-      //direction: 'alternate',
-      //loop: true
-     })
-    // TODO Let's start from bottom right. 
+      borderTimeline.add({
+        targets: '#m-logo #border-start',
+        strokeDashoffset: [anime.setDashoffset, -310],
+        duration: 2000,
+        easing: 'easeOutExpo'
+      }, 0)
+      borderTimeline.add({
+        targets: '#m-logo #m-letter-start',
+        strokeDashoffset: [anime.setDashoffset, -447.4],
+        easing: 'easeOutExpo',
+        duration: 2000,
+       }, 0)
+      borderTimeline.add({
+        targets: '#m-logo #border',
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutSine',
+        duration: 2000,
+        complete: (animation) => {
+          //debugger;
+          const target = animation.animatables[0].target
+          target.setAttribute("fill", "url('#bg-gradient')")
+          var bgAnimationTimeline = anime.timeline()
+          bgAnimationTimeline.add({
+            targets: '#m-logo #bg-gradient #bg-stop',
+            offset: "0%",
+            stopColor: "rgba(216, 246, 255, 1)",
+            easing: 'easeInQuint',
+            duration: 123,
+           }) 
+          bgAnimationTimeline.add({
+            targets: '#m-logo #bg-gradient #bg-stop',
+            offset: "100%",
+            easing: 'easeOutExpo',
+            duration: 333,
+           }) 
+        }
+       }, 160)
+      borderTimeline.add({
+        targets: '#m-logo #m-letter',
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutSine',
+        duration: 1800,
+       }, 160)
+      borderTimeline.add({
+        targets: '#m-logo #m-letter',
+        easing: 'easeInOutSine',
+        duration: 333,
+        fill: "#32a8eb",
+        strokeWidth: "0",
+       })
+      // background
+      /*borderTimeline.add({
+        targets: '#m-logo #border',
+        easing: 'easeInCirc',
+        fill: ["rgba(216, 246, 255, 0)", "rgba(216, 246, 255, 1)"],
+        duration: 1500,
+       }, 160)
+      borderTimeline.add({
+        targets: '#m-logo #border',
+        easing: 'easeInCirc',
+        fill: ["rgba(216, 246, 255, 0)", "rgba(216, 246, 255, 1)"],
+        duration: 1500,
+       }, 160) */
+
    </script>
   </aside>
 </header>
