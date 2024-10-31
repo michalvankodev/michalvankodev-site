@@ -10,7 +10,7 @@ askama = { version = "0.12", features = ["with-axum", "mime", "mime_guess"] }
 askama_axum = "0.4.0"
 axum = "0.7.3"
 chrono = { version = "0.4.31", features = ["serde"] }
-pulldown-cmark = { version = "0.10" }
+pulldown-cmark = { version = "0.12" }
 gray_matter = "0.2.6"
 rss = "2.0.7"
 serde = "1.0.195"
