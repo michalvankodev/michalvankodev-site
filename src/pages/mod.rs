@@ -1,4 +1,5 @@
 pub mod admin;
+pub mod animated_logo;
 pub mod blog_post_list;
 pub mod blog_post_page;
 pub mod broadcast_list;
