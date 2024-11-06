@@ -23,6 +23,11 @@ pub fn generate_image_with_src(
     let resolutions = [(width, height, 1.)];
 
     let exported_formats = get_export_formats(orig_img_path);
+
+    if exported_formats.is_empty() {
+        return Ok(orig_img_path.to_string());
+    }
+
     let exported_format = *exported_formats.first().unwrap();
 
     let path_to_generated_arc = Arc::new(path_to_generated);
