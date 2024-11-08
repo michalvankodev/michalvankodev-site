@@ -1,88 +1,44 @@
-# sapper-template
+# michalvanko.dev site
 
-The default [Sapper](https://github.com/sveltejs/sapper) template, with branches for Rollup and webpack. To clone it and get started:
+This is the repository for my own site hosted at https://michalvanko.dev
 
-```bash
-# for Rollup
-npx degit "sveltejs/sapper-template#rollup" my-app
-# for webpack
-npx degit "sveltejs/sapper-template#webpack" my-app
-cd my-app
-npm install # or yarn!
-npm run dev
-```
+Feel free to use and ammend to code to your needs.
+Respect the [Creative Commons BY-NC-ND 4.0 License](https://creativecommons.org/licenses/by-nc-nd/4.0/?ref=chooser-v1) for the content of the site.
 
-Open up [localhost:3000](http://localhost:3000) and start clicking around.
+## Architecture
 
-Consult [sapper.svelte.dev](https://sapper.svelte.dev) for help getting started.
+The site is hosted as a static generated HTML files on the server via [Caddy](https://caddyserver.com/) reverse proxy. There is an [example Caddyfile](./Caddyfile-preview) that can be used for deployment on server.
+During development the axum web framework serves content as a HTTP server in a classic SSR HTML.
 
+### Development
 
-## Structure
+Look at the [justfile](./justfile) for the available commands that are being used for development and deployment.
 
-Sapper expects to find two directories in the root of your project —  `src` and `static`.
+Use `just server_dev` or `just dev` for running the server for development purpose.
 
+### Tools and libraries used for generating the content
 
-### src
+- [Decap CMS](https://decapcms.org/)
+- [Rust](https://www.rust-lang.org/)
+- [axum web framework](https://github.com/tokio-rs/axum)
+- [tailwind](https://tailwindcss.com/)
+- [wget](https://www.gnu.org/software/wget/) for SSG
 
-The [src](src) directory contains the entry points for your app — `client.js`, `server.js` and (optionally) a `service-worker.js` — along with a `template.html` file and a `routes` directory.
+### Deployment
 
+Deployment requires these steps:
 
-#### src/routes
+1. Ensure all images are generated
+  1.1 Run server in either `dev` or `production` mode `just prod` 
+  1.2 Crawl the site with `just ssg` command to ensure all routes are being hit to indicate that all images have to be generated.
+  1.3 Wait till the server stops generating images. Monitor the CPU load until it drops. Takes few minutes.
+2. `just export` will start the server in `production` mode and use `wget` to recursively crawl the site. Remember, content has to be linked somewhere on the site to be discovered by `wget`.
+3. `just deploy` will synchronise the `/dist` folder with the server with `rsync`
 
-This is the heart of your Sapper app. There are two kinds of routes — *pages*, and *server routes*.
+### Image generation
 
-**Pages** are Svelte components written in `.svelte` files. When a user first visits the application, they will be served a server-rendered version of the route in question, plus some JavaScript that 'hydrates' the page and initialises a client-side router. From that point forward, navigating to other pages is handled entirely on the client for a fast, app-like feel. (Sapper will preload and cache the code for these subsequent pages, so that navigation is instantaneous.)
+I want all images to be served to users optimally. 
+All images that are used are generated in several sizes so they are optimized for different displays sizes.
+Browsers will pick and download the appropriate size.
 
-**Server routes** are modules written in `.js` files, that export functions corresponding to HTTP methods. Each function receives Express `request` and `response` objects as arguments, plus a `next` function. This is useful for creating a JSON API, for example.
-
-There are three simple rules for naming the files that define your routes:
-
-* A file called `src/routes/about.svelte` corresponds to the `/about` route. A file called `src/routes/blog/[slug].svelte` corresponds to the `/blog/:slug` route, in which case `params.slug` is available to the route
-* The file `src/routes/index.svelte` (or `src/routes/index.js`) corresponds to the root of your app. `src/routes/about/index.svelte` is treated the same as `src/routes/about.svelte`.
-* Files and directories with a leading underscore do *not* create routes. This allows you to colocate helper modules and components with the routes that depend on them — for example you could have a file called `src/routes/_helpers/datetime.js` and it would *not* create a `/_helpers/datetime` route
-
-
-### static
-
-The [static](static) directory contains any static assets that should be available. These are served using [sirv](https://github.com/lukeed/sirv).
-
-In your [service-worker.js](app/service-worker.js) file, you can import these as `files` from the generated manifest...
-
-```js
-import { files } from '@sapper/service-worker';
-```
-
-...so that you can cache them (though you can choose not to, for example if you don't want to cache very large files).
-
-
-## Bundler config
-
-Sapper uses Rollup or webpack to provide code-splitting and dynamic imports, as well as compiling your Svelte components. With webpack, it also provides hot module reloading. As long as you don't do anything daft, you can edit the configuration files to add whatever plugins you'd like.
-
-
-## Production mode and deployment
-
-To start a production version of your app, run `npm run build && npm start`. This will disable live reloading, and activate the appropriate bundler plugins.
-
-You can deploy your application to any environment that supports Node 8 or above. As an example, to deploy to [Now](https://zeit.co/now), run these commands:
-
-```bash
-npm install -g now
-now
-```
-
-
-## Using external components
-
-When using Svelte components installed from npm, such as [@sveltejs/svelte-virtual-list](https://github.com/sveltejs/svelte-virtual-list), Svelte needs the original component source (rather than any precompiled JavaScript that ships with the component). This allows the component to be rendered server-side, and also keeps your client-side app smaller.
-
-Because of that, it's essential that the bundler doesn't treat the package as an *external dependency*. You can either modify the `external` option under `server` in [rollup.config.js](rollup.config.js) or the `externals` option in [webpack.config.js](webpack.config.js), or simply install the package to `devDependencies` rather than `dependencies`, which will cause it to get bundled (and therefore compiled) with your app:
-
-```bash
-npm install -D @sveltejs/svelte-virtual-list
-```
-
-
-## Bugs and feedback
-
-Sapper is in early development, and may have the odd rough edge here and there. Please be vocal over on the [Sapper issue tracker](https://github.com/sveltejs/sapper/issues).
+I'd love to link some references for this problem, but I haven't found the exact use case that I was trying to solve.
