@@ -1,0 +1,69 @@
+    {% include "icons/m-logo-animated.svg" %}
+    <script src="/resources/anime.min.js"></script>
+    <script>
+      var svg = document.getElementById("m-logo")
+      svg.setAttribute("visibility", "visible");
+      var borderTimeline = anime.timeline({
+        duration: 2000,
+        easing: 'easeInOutSine',
+      })
+      
+      borderTimeline.add({
+        targets: '#m-logo #border-start',
+        strokeDashoffset: [anime.setDashoffset, -310],
+        duration: 2000,
+        easing: 'easeOutExpo',
+        begin: (animation) => {
+          const target = animation.animatables[0].target
+          target.setAttribute("visibility", "visible")
+        }
+      }, 0)
+      borderTimeline.add({
+        targets: '#m-logo #m-letter-start',
+        strokeDashoffset: [anime.setDashoffset, -447.4],
+        easing: 'easeOutExpo',
+        duration: 2000,
+        begin: (animation) => {
+          const target = animation.animatables[0].target
+          target.setAttribute("visibility", "visible")
+        }
+       }, 0)
+      borderTimeline.add({
+        targets: '#m-logo #border',
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutSine',
+        duration: 2000,
+        complete: (animation) => {
+          //debugger;
+          const target = animation.animatables[0].target
+          target.setAttribute("fill", "url('#bg-gradient')")
+          var bgAnimationTimeline = anime.timeline()
+          bgAnimationTimeline.add({
+            targets: '#m-logo #bg-gradient #bg-stop',
+            offset: "0%",
+            stopColor: "rgba(216, 246, 255, 1)",
+            easing: 'easeInQuint',
+            duration: 123,
+           }) 
+          bgAnimationTimeline.add({
+            targets: '#m-logo #bg-gradient #bg-stop',
+            offset: "100%",
+            easing: 'easeOutExpo',
+            duration: 333,
+           }) 
+        }
+       }, 160)
+      borderTimeline.add({
+        targets: '#m-logo #m-letter',
+        strokeDashoffset: [anime.setDashoffset, 0],
+        easing: 'easeInOutSine',
+        duration: 1800,
+       }, 160)
+      borderTimeline.add({
+        targets: '#m-logo #m-letter',
+        easing: 'easeInOutSine',
+        duration: 333,
+        fill: "#32a8eb",
+        strokeWidth: "0",
+       })
+   </script>

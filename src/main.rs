@@ -58,3 +58,4 @@ async fn main() {
 //
 // TODO view page transitions
 // TODO cookbook
+// TODO remove m-logo-svg from justfile and mention it in some article!!! WRITE SOME NEW ARTICLES

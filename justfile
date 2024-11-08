@@ -53,6 +53,7 @@ clean:
 ssg:
 	- wget --no-convert-links -r -p -E -P dist --no-host-directories 127.0.0.1:{{port}}
 	- wget --no-convert-links --content-on-error -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/not-found
+	- wget --no-convert-links -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/showcase/m-logo-svg
 	find generated_images/ -name "*_og*" -exec cp --parents {} dist/ \;
   
 # Preview server

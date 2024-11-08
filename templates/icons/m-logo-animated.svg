@@ -11,6 +11,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
+   visibility="hidden"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
      id="defs1" />
@@ -57,11 +58,13 @@
      stroke="#32a8eb"
      stroke-width="8"
      stroke-linejoin="round"
+     visibility="hidden"
      sodipodi:nodetypes="csc" />
   <path
      d="M 507.76664,507.59022 C 453.73997,452.69049 121.4145,522.45057 289.19959,354.47858 c 10.11721,-10.12848 19.63171,-17.88383 30.25282,-22.95349 6.77433,-3.23351 15.74106,-4.08485 28.19639,-5.03375"
      id="m-letter-start"
      stroke="#32a8eb"
      stroke-width="2"
+     visibility="hidden"
      sodipodi:nodetypes="cssc" />
 </svg>

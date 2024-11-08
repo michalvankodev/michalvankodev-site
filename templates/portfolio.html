@@ -44,6 +44,8 @@
     {% include "icons/m-logo-animated.svg" %}
     <script src="/resources/anime.min.js"></script>
     <script>
+      var svg = document.getElementById("m-logo")
+      svg.setAttribute("visibility", "visible");
       var borderTimeline = anime.timeline({
         duration: 2000,
         easing: 'easeInOutSine',
@@ -53,13 +55,21 @@
         targets: '#m-logo #border-start',
         strokeDashoffset: [anime.setDashoffset, -310],
         duration: 2000,
-        easing: 'easeOutExpo'
+        easing: 'easeOutExpo',
+        begin: (animation) => {
+          const target = animation.animatables[0].target
+          target.setAttribute("visibility", "visible")
+        }
       }, 0)
       borderTimeline.add({
         targets: '#m-logo #m-letter-start',
         strokeDashoffset: [anime.setDashoffset, -447.4],
         easing: 'easeOutExpo',
         duration: 2000,
+        begin: (animation) => {
+          const target = animation.animatables[0].target
+          target.setAttribute("visibility", "visible")
+        }
        }, 0)
       borderTimeline.add({
         targets: '#m-logo #border',
