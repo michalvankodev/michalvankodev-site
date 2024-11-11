@@ -1,7 +1,6 @@
 ---
 segments:
   - blog
-  - featured
 notes: ""
 layout: blog
 title: "Our attempt at Rusty game jam - Weekly #25-2022"

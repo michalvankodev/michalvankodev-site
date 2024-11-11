@@ -2,6 +2,7 @@
 title: My first published Cargo crate
 segments:
   - blog
+  - featured
 published: true
 date: 2024-11-08T17:09:00.000Z
 thumbnail: /images/uploads/aperture-icon.svg
@@ -30,4 +31,4 @@ This week, I've **automatized the [release process](https://github.com/michalvan
 
 ## On to the next one
 
-I can't wait to use [\`metaframer\`](https://github.com/michalvankodev/metaframer) in my new videos. I've already **ordered my first mirrorless camera** and it is on the way. **Be ready for new content**. What should be my next project?
+I can't wait to use [`metaframer`](https://github.com/michalvankodev/metaframer) in my new videos. I've already **ordered my first mirrorless camera** and it is on the way. **Be ready for new content**. What should be my next project?
