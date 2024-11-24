@@ -1,7 +1,7 @@
 use axum::http::{header, StatusCode};
 use axum::response::IntoResponse;
 use chrono::Utc;
-use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
+use rss::{ChannelBuilder, EnclosureBuilder, GuidBuilder, Item, ItemBuilder};
 
 use crate::blog_posts::blog_post_model::{BlogPostMetadata, BLOG_POST_PATH};
 use crate::filters::{parse_markdown, truncate_md};
@@ -26,13 +26,29 @@ pub async fn render_rss_feed() -> Result<impl IntoResponse, StatusCode> {
             ItemBuilder::default()
                 .title(Some(post.metadata.title))
                 .link(Some(format!("https://michalvanko.dev/blog/{}", post.slug)))
-                // TODO Description should be just a preview
                 .description({
                     let truncated =
                         truncate_md(&post.body, 2).unwrap_or("Can't parse post body".to_string());
                     let parsed_md = parse_markdown(&truncated)
                         .unwrap_or("Can't process truncated post body".to_string());
                     Some(parsed_md)
+                })
+                .content({
+                    let parsed_md = parse_markdown(&post.body)
+                        .unwrap_or("Can't process full post body".to_string());
+                    Some(parsed_md)
+                })
+                .enclosure({
+                    post.metadata.thumbnail.map(|src| {
+                        let mime_type = mime_guess::from_path(&src)
+                            .first()
+                            .map(|mime| mime.to_string())
+                            .unwrap_or("image".to_string());
+                        EnclosureBuilder::default()
+                            .url(src)
+                            .mime_type(mime_type)
+                            .build()
+                    })
                 })
                 .guid(Some(
                     GuidBuilder::default()
