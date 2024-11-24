@@ -756,6 +756,10 @@ video {
   margin-top: 1rem;
 }
 
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
 .block {
   display: block;
 }
@@ -804,6 +808,10 @@ video {
   height: auto;
 }
 
+.h-full {
+  height: 100%;
+}
+
 .max-h-\[236px\] {
   max-height: 236px;
 }
@@ -830,6 +838,10 @@ video {
 
 .w-\[320px\] {
   width: 320px;
+}
+
+.w-0 {
+  width: 0px;
 }
 
 .max-w-\[24rem\] {
@@ -962,6 +974,10 @@ video {
   border-width: 2px;
 }
 
+.border-l {
+  border-left-width: 1px;
+}
+
 .border-blue-300 {
   --tw-border-opacity: 1;
   border-color: rgb(130 195 247 / var(--tw-border-opacity, 1));
@@ -980,6 +996,11 @@ video {
 .border-slate-300 {
   --tw-border-opacity: 1;
   border-color: rgb(203 213 225 / var(--tw-border-opacity, 1));
+}
+
+.border-l-slate-300 {
+  --tw-border-opacity: 1;
+  border-left-color: rgb(203 213 225 / var(--tw-border-opacity, 1));
 }
 
 .bg-blue-100 {
@@ -1993,6 +2014,10 @@ article a:visited {
 
 /* } */
 
+.first\:border-l-0:first-child {
+  border-left-width: 0px;
+}
+
 .visited\:text-blue-950:visited {
   color: rgb(11 39 70 );
 }
@@ -2186,6 +2211,14 @@ article a:visited {
     margin-top: 5rem;
   }
 
+  .lg\:mt-8 {
+    margin-top: 2rem;
+  }
+
+  .lg\:mb-10 {
+    margin-bottom: 2.5rem;
+  }
+
   .lg\:block {
     display: block;
   }
@@ -2228,6 +2261,11 @@ article a:visited {
     font-size: 1.125rem;
     line-height: 1.75rem;
   }
+
+  .lg\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
 }
 
 @media (min-width: 1280px) {
@@ -2259,8 +2297,28 @@ article a:visited {
     display: block;
   }
 
+  .xl\:flex {
+    display: flex;
+  }
+
   .xl\:grid {
     display: grid;
+  }
+
+  .xl\:hidden {
+    display: none;
+  }
+
+  .xl\:auto-cols-auto {
+    grid-auto-columns: auto;
+  }
+
+  .xl\:auto-cols-fr {
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+  .xl\:grid-flow-col {
+    grid-auto-flow: column;
   }
 
   .xl\:grid-cols-3 {
@@ -2271,13 +2329,34 @@ article a:visited {
     grid-template-columns: 1fr 2fr;
   }
 
+  .xl\:justify-start {
+    justify-content: flex-start;
+  }
+
   .xl\:gap-8 {
     gap: 2rem;
+  }
+
+  .xl\:gap-5 {
+    gap: 1.25rem;
+  }
+
+  .xl\:gap-10 {
+    gap: 2.5rem;
   }
 
   .xl\:gap-x-32 {
     -moz-column-gap: 8rem;
          column-gap: 8rem;
+  }
+
+  .xl\:border-l {
+    border-left-width: 1px;
+  }
+
+  .xl\:border-slate-300 {
+    --tw-border-opacity: 1;
+    border-color: rgb(203 213 225 / var(--tw-border-opacity, 1));
   }
 
   .xl\:text-4xl {
@@ -2292,6 +2371,10 @@ article a:visited {
 
   .xl\:font-medium {
     font-weight: 500;
+  }
+
+  .xl\:first\:border-l-0:first-child {
+    border-left-width: 0px;
   }
 }
 

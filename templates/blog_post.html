@@ -35,18 +35,30 @@
 <!-- TODO: Next recommendations for reading -->
 <!-- TODO: Back to all posts -->
 
-{# footer #}
-<footer>
-    <hr class="border-slate-300 m-5 md:my-8">
+<footer class="max-w-maxindex mx-auto">
 
-    <ul class="mx-5">
-      {% for post in recommended_posts %}
-      <li>
-        {% include "components/blog_post_preview.html" %}
-        <!-- TODO hidden block media -->
-        <hr class="border-slate-300 my-5 md:my-8 hidden lg:block">
-      </li>
-      {% endfor %}
-    </ul>
+{% if recommended_posts.len() > 0 %}
+<section id="recommended-articles">
+  <hr class="border-slate-300 m-5 md:my-8">
+
+  <h2 class="m-5 text-2xl md:text-2xl lg:text-4xl lg:mt-8 text-blue-900 lg:mb-10 font-bold">Further reading</h2>
+  <ul class="mx-5 xl:flex xl:justify-start xl:gap-10">
+    {% for post in recommended_posts %}
+    <li class="flex-1">
+      {% include "components/blog_post_preview.html" %}
+      <hr class="border-slate-300 my-5 md:my-8 xl:hidden">
+    </li>
+    {% if !loop.last %}
+      <div class="h-auto w-0 border-l border-slate-300 hidden xl:block"></div>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="text-center my-3 md:text-lg">
+ <a href="/blog">see all blog posts</a> 
+</section>
 </footer>
 {% endblock %}
+ <!-- xl:border-l xl:border-slate-300 xl:first:border-l-0 xl: -->
