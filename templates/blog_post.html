@@ -33,7 +33,20 @@
 </article>
 
 <!-- TODO: Next recommendations for reading -->
-<!-- TODO: Bact to all posts -->
+<!-- TODO: Back to all posts -->
 
 {# footer #}
+<footer>
+    <hr class="border-slate-300 m-5 md:my-8">
+
+    <ul class="mx-5">
+      {% for post in recommended_posts %}
+      <li>
+        {% include "components/blog_post_preview.html" %}
+        <!-- TODO hidden block media -->
+        <hr class="border-slate-300 my-5 md:my-8 hidden lg:block">
+      </li>
+      {% endfor %}
+    </ul>
+</footer>
 {% endblock %}
