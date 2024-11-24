@@ -56,6 +56,5 @@ async fn main() {
 // - fotos
 // THINK deploy to alula? rather then katelyn? can be change whenever
 //
-// TODO view page transitions
 // TODO cookbook
-// TODO remove m-logo-svg from justfile and mention it in some article!!! WRITE SOME NEW ARTICLES
+// TODO remove m-logo-svg from justfile and mention it in some article!!!

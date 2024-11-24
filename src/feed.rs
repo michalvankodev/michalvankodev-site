@@ -4,6 +4,7 @@ use chrono::Utc;
 use rss::{ChannelBuilder, GuidBuilder, Item, ItemBuilder};
 
 use crate::blog_posts::blog_post_model::{BlogPostMetadata, BLOG_POST_PATH};
+use crate::filters::{parse_markdown, truncate_md};
 use crate::post_utils::post_listing::get_post_list;
 
 pub async fn render_rss_feed() -> Result<impl IntoResponse, StatusCode> {
@@ -26,7 +27,13 @@ pub async fn render_rss_feed() -> Result<impl IntoResponse, StatusCode> {
                 .title(Some(post.metadata.title))
                 .link(Some(format!("https://michalvanko.dev/blog/{}", post.slug)))
                 // TODO Description should be just a preview
-                .description(None)
+                .description({
+                    let truncated =
+                        truncate_md(&post.body, 2).unwrap_or("Can't parse post body".to_string());
+                    let parsed_md = parse_markdown(&truncated)
+                        .unwrap_or("Can't process truncated post body".to_string());
+                    Some(parsed_md)
+                })
                 .guid(Some(
                     GuidBuilder::default()
                         .value(format!("https://michalvanko.dev/blog/{}", post.slug))
