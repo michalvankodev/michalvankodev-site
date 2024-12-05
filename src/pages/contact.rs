@@ -45,6 +45,12 @@ pub async fn render_contact() -> Result<ContactPageTemplate, StatusCode> {
             svg: "youtube".to_string(),
         },
         ContactLink {
+            href: "https://mastodon.online/@michalvankodev".to_string(),
+            label: "Mastodon".to_string(),
+            title: "Mastodon profile".to_string(),
+            svg: "mastodon".to_string(),
+        },
+        ContactLink {
             href: "https://instagram.com/michalvankodev".to_string(),
             label: "Instagram".to_string(),
             title: "Instagram profile".to_string(),
