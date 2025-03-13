@@ -41,7 +41,7 @@
           bgAnimationTimeline.add({
             targets: '#m-logo #bg-gradient #bg-stop',
             offset: "0%",
-            stopColor: "rgba(216, 246, 255, 1)",
+            stopColor: "rgba(216, 246, 255, 0.8)",
             easing: 'easeInQuint',
             duration: 123,
            }) 
@@ -50,6 +50,18 @@
             offset: "100%",
             easing: 'easeOutExpo',
             duration: 333,
+            complete: (animation) => {
+              const target = animation.animatables[0].target
+              target.setAttribute("stop-color", "rgba(216, 246, 255, 0.8)")
+              anime({
+                targets: '#m-logo #bg-gradient #bg-stop',
+                stopColor: "rgba(216, 246, 255, 0.3)",
+                easing: 'easeOutQuad',
+                duration: 3333,
+                direction: 'alternate',
+                loop: true,
+              });
+            }
            }) 
         }
        }, 160)
