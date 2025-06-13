@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 askama = { version = "0.12", features = ["with-axum", "mime", "mime_guess"] }
-askama_axum = "0.4.0"
+askama_axum = "0.5.0"
 axum = "0.7.3"
 chrono = { version = "0.4.31", features = ["serde"] }
 pulldown-cmark = { version = "0.13" }
