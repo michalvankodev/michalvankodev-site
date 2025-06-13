@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-askama = { version = "0.12", features = ["with-axum", "mime", "mime_guess"] }
+askama = { version = "0.14", features = ["with-axum", "mime", "mime_guess"] }
 askama_axum = "0.5.0"
 axum = "0.7.3"
 chrono = { version = "0.4.31", features = ["serde"] }
