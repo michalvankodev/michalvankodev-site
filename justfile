@@ -2,7 +2,7 @@ port := env_var_or_default('PORT', '3080')
 
 # Tailwind in watch mode
 tailwind:
-	npx tailwindcss -i ./styles/input.css -o ./styles/output.css --watch
+	npx @tailwindcss/cli -i ./styles/input.css -o ./styles/output.css --watch
 
 # svg sprite creation
 svgstore:
