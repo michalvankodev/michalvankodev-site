@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer base {
   @font-face {
@@ -11,6 +10,7 @@
       local('Baloo2'),
       url(/fonts/baloo2/Baloo2-Latin-Variable-wght.woff2) format('woff2');
   }
+
   /* latin-ext */
   @font-face {
     font-family: 'Baloo 2';
@@ -58,6 +58,7 @@ strong {
   h1 {
     @apply px-4 text-2xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-4xl lg:text-5xl;
   }
+
   h2 {
     @apply px-4 text-xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-2xl md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-4xl;
   }
@@ -82,15 +83,16 @@ strong {
     @apply p-4;
 
     img {
-      @apply rounded shadow-md mx-auto lg:max-w-image;
+      @apply rounded-sm shadow-md mx-auto lg:max-w-image;
     }
   }
+
   figcaption {
     @apply mt-2 text-center text-sm italic text-blue-800 md:text-base lg:text-lg;
   }
 
   table {
-    @apply text-sm mx-auto my-4 max-w-image table-auto border-collapse border-spacing-12 border border-slate-200 rounded md:text-base lg:text-xl lg:my-8;
+    @apply text-sm mx-auto my-4 max-w-image table-auto border-collapse border-spacing-12 border border-slate-200 rounded-sm md:text-base lg:text-xl lg:my-8;
   }
 
   thead {
@@ -119,11 +121,11 @@ strong {
   }
 
   :not(pre) code {
-    @apply text-pink-900 rounded border border-blue-300 px-1 py-0.5 bg-blue-100 text-sm md:text-base lg:text-xl;
+    @apply text-pink-900 rounded-sm border border-blue-300 px-1 py-0.5 bg-blue-100 text-sm md:text-base lg:text-xl;
   }
 
   pre code pre {
-    @apply mx-2 rounded lg:mx-auto lg:text-lg shadow-sm lg:max-w-note;
+    @apply mx-2 rounded-sm lg:mx-auto lg:text-lg shadow-xs lg:max-w-note;
   }
 
   ul,
@@ -138,12 +140,13 @@ strong {
   ul {
     @apply list-disc;
   }
+
   ol {
     @apply list-decimal;
   }
 
   iframe {
-    @apply rounded shadow-md mx-auto lg:max-w-image;
+    @apply rounded-sm shadow-md mx-auto lg:max-w-image;
   }
 }
 

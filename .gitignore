@@ -23,3 +23,6 @@ Cargo.lock
 
 # Image generator
 generated_images/
+
+node_modules/
+package-lock.json
