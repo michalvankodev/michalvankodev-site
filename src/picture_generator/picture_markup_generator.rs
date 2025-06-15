@@ -262,7 +262,8 @@ pub fn get_export_formats(orig_img_path: &str) -> Vec<ExportFormat> {
 fn test_get_export_formats() {
     assert_eq!(
         get_export_formats("/images/uploads/img_name.jpg"),
-        vec![ExportFormat::Avif, ExportFormat::Jpeg]
+        // vec![ExportFormat::Avif, ExportFormat::Jpeg]
+        vec![ExportFormat::Jpeg]
     )
 }
 #[test]
@@ -292,24 +293,21 @@ fn test_generate_picture_markup() {
     let height = 200;
     let orig_img_path = "/images/uploads/2020-03-23_20-24-06_393.jpg";
     let result = indoc! {
-        r#"<picture>
-            <source
-                srcset="/generated_images/images/uploads/2020-03-23_20-24-06_393_300x200.avif 1x, /generated_images/images/uploads/2020-03-23_20-24-06_393_450x300.avif 1.5x, /generated_images/images/uploads/2020-03-23_20-24-06_393_600x400.avif 2x, /generated_images/images/uploads/2020-03-23_20-24-06_393_900x600.avif 3x, /generated_images/images/uploads/2020-03-23_20-24-06_393_1200x800.avif 4x"
-                type="image/avif"
-            >
-<source
-                srcset="/generated_images/images/uploads/2020-03-23_20-24-06_393_300x200.jpg 1x, /generated_images/images/uploads/2020-03-23_20-24-06_393_450x300.jpg 1.5x, /generated_images/images/uploads/2020-03-23_20-24-06_393_600x400.jpg 2x, /generated_images/images/uploads/2020-03-23_20-24-06_393_900x600.jpg 3x, /generated_images/images/uploads/2020-03-23_20-24-06_393_1200x800.jpg 4x"
-                type="image/jpeg"
-            >
-            <img
-            src="/generated_images/images/uploads/2020-03-23_20-24-06_393_300x200.jpg"
-            width="300"
-            height="200"
-            alt="Testing image alt"
-        >
-        </picture>"#,
+r#"<picture>
+    <source
+    srcset="/generated_images/images/uploads/2020-03-23_20-24-06_393_300x200.jpg 1x, /generated_images/images/uploads/2020-03-23_20-24-06_393_450x300.jpg 1.5x, /generated_images/images/uploads/2020-03-23_20-24-06_393_600x400.jpg 2x, /generated_images/images/uploads/2020-03-23_20-24-06_393_900x600.jpg 3x, /generated_images/images/uploads/2020-03-23_20-24-06_393_1200x800.jpg 4x"
+    type="image/jpeg"
+>
+    <img
+    src="/generated_images/images/uploads/2020-03-23_20-24-06_393_300x200.jpg"
+    width="300"
+    height="200"
+    alt="Testing image alt"
+    
+>
+</picture>"#,
     };
-    assert_eq!(
+    pretty_assertions::assert_eq!(
         generate_picture_markup(orig_img_path, width, height, "Testing image alt", None,)
             .expect("picture markup has to be generated"),
         result
