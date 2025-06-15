@@ -93,12 +93,14 @@
   size-adjust: 92%;
 }
 
-a {
-  @apply text-pink-800 underline underline-offset-2 hover:transition hover:text-blue-500;
-}
+@layer base {
+  a {
+    @apply text-pink-800 underline underline-offset-2 hover:transition hover:text-blue-500;
+  }
 
-strong {
-  @apply font-medium;
+  strong {
+    @apply font-medium;
+  }
 }
 
 .article-body {

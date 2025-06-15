@@ -1,29 +1,26 @@
 layout {
-    pane split_direction="vertical" focus=true {
-        pane edit="src/main.rs"
-        pane split_direction="horizontal" size=60 {
-            just { args "server_dev"; }
-            just { args "test"; }
+    default_tab_template {
+        children
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
         }
     }
     pane_template name="just" {
         command "just"
-        start_suspended true
     }
-	floating_panes {
-		pane {
-            command "just"
-            args "tailwind"
+
+    tab split_direction="vertical" focus=true {
+        pane  {
+                just { args "server_dev"; }
+                just { args "test"; }
         }
-		pane {
-            command "just"
-            args "decap_server"
+    	pane {
+             just { args "tailwind"; }
+             just { args "decap_server"; }
         }
-	}
-    pane size=2 borderless=true {
-        plugin location="zellij:status-bar"
     }
-    pane size=1 borderless=true {
-        plugin location="zellij:tab-bar"
-    }
+    tab
 }
