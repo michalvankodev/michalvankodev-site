@@ -30,25 +30,3 @@ mime_guess = "2.0.5"
 
 [dev-dependencies]
 pretty_assertions = "1"
-
-[build]
-rustflags = ["-Z", "threads=8"]
-
-# [target.x86_64-unknown-linux-gnu]
-# rustflags = [
-#     "-C", "link-arg=-fuse-ld=lld"
-# ]
-
-[profile.dev]
-debug = true
-opt-level = 0
-# codegen-units = 16
-# lto = "thin"
-panic = "unwind"
-strip = false
-incremental = true
-
-[profile.dev.package.askama_derive]
-opt-level = 3
-
-
