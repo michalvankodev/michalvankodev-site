@@ -28,6 +28,9 @@ indoc = "2.0.5"
 askama_escape = "0.13.0"
 mime_guess = "2.0.5"
 
+[dev-dependencies]
+pretty_assertions = "1"
+
 [build]
 rustflags = ["-Z", "threads=8"]
 
@@ -47,3 +50,5 @@ incremental = true
 
 [profile.dev.package.askama_derive]
 opt-level = 3
+
+
