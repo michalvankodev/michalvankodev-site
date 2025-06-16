@@ -1,5 +1,6 @@
 use askama::Template;
 use axum::extract::OriginalUri;
+use axum::response::{Html, IntoResponse};
 use axum::{extract::Path, http::StatusCode};
 use chrono::{DateTime, Utc};
 
@@ -30,7 +31,7 @@ pub struct BlogPostTemplate {
 pub async fn render_blog_post(
     Path(post_id): Path<String>,
     OriginalUri(original_uri): OriginalUri,
-) -> Result<BlogPostTemplate, StatusCode> {
+) -> Result<impl IntoResponse, StatusCode> {
     let path = format!("{}/{}.md", BLOG_POST_PATH, post_id);
     let post = parse_post::<BlogPostMetadata>(&path).await?;
     let segment = if original_uri.to_string().starts_with("/blog") {
@@ -59,17 +60,21 @@ pub async fn render_blog_post(
         _ => HeaderProps::default(),
     };
 
-    Ok(BlogPostTemplate {
-        title: post.metadata.title,
-        date: post.metadata.date,
-        tags: post.metadata.tags,
-        body: post.body,
-        slug: post.slug,
-        segment,
-        thumbnail: post.metadata.thumbnail,
-        header_props,
-        recommended_posts,
-    })
+    Ok(Html(
+        BlogPostTemplate {
+            title: post.metadata.title,
+            date: post.metadata.date,
+            tags: post.metadata.tags,
+            body: post.body,
+            slug: post.slug,
+            segment,
+            thumbnail: post.metadata.thumbnail,
+            header_props,
+            recommended_posts,
+        }
+        .render()
+        .unwrap(),
+    ))
 }
 
 async fn get_recommended_posts(

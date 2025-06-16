@@ -1,5 +1,8 @@
 use askama::Template;
-use axum::http::StatusCode;
+use axum::{
+    http::StatusCode,
+    response::{Html, IntoResponse},
+};
 
 use crate::components::site_header::HeaderProps;
 
@@ -18,7 +21,7 @@ pub struct ContactPageTemplate {
     pub links: Vec<ContactLink>,
 }
 
-pub async fn render_contact() -> Result<ContactPageTemplate, StatusCode> {
+pub async fn render_contact() -> Result<impl IntoResponse, StatusCode> {
     let links = vec![
         ContactLink {
             href: "mailto:michalvankosk@gmail.com".to_string(),
@@ -76,9 +79,13 @@ pub async fn render_contact() -> Result<ContactPageTemplate, StatusCode> {
         },
     ];
 
-    Ok(ContactPageTemplate {
-        title: "Contact".to_owned(),
-        header_props: HeaderProps::default(),
-        links,
-    })
+    Ok(Html(
+        ContactPageTemplate {
+            title: "Contact".to_owned(),
+            header_props: HeaderProps::default(),
+            links,
+        }
+        .render()
+        .unwrap(),
+    ))
 }

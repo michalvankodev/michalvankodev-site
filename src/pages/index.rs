@@ -1,7 +1,10 @@
 use std::rc::Rc;
 
 use askama::Template;
-use axum::http::StatusCode;
+use axum::{
+    http::StatusCode,
+    response::{Html, IntoResponse},
+};
 use tokio::try_join;
 
 use crate::{
@@ -26,7 +29,7 @@ pub struct IndexTemplate {
     featured_broadcasts: Vec<Rc<ParseResult<BlogPostMetadata>>>,
 }
 
-pub async fn render_index() -> Result<IndexTemplate, StatusCode> {
+pub async fn render_index() -> Result<impl IntoResponse, StatusCode> {
     let (blog_tags, broadcasts_tags, all_posts, featured_projects) = try_join!(
         get_popular_tags(Some(Segment::Blog)),
         get_popular_tags(Some(Segment::Broadcasts)),
@@ -44,12 +47,16 @@ pub async fn render_index() -> Result<IndexTemplate, StatusCode> {
     let featured_broadcasts =
         ref_get_posts_by_segment(&all_posts_rc, &[Segment::Broadcasts, Segment::Featured]);
 
-    Ok(IndexTemplate {
-        header_props: HeaderProps::default(),
-        blog_tags,
-        broadcasts_tags,
-        featured_blog_posts,
-        featured_projects,
-        featured_broadcasts,
-    })
+    Ok(Html(
+        IndexTemplate {
+            header_props: HeaderProps::default(),
+            blog_tags,
+            broadcasts_tags,
+            featured_blog_posts,
+            featured_projects,
+            featured_broadcasts,
+        }
+        .render()
+        .unwrap(),
+    ))
 }

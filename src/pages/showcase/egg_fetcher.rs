@@ -1,5 +1,8 @@
 use askama::Template;
-use axum::http::StatusCode;
+use axum::{
+    http::StatusCode,
+    response::{Html, IntoResponse},
+};
 
 use crate::components::site_header::HeaderProps;
 
@@ -9,8 +12,12 @@ pub struct EggFetcherShowcaseTemplate {
     header_props: HeaderProps,
 }
 
-pub async fn render_egg_fetcher() -> Result<EggFetcherShowcaseTemplate, StatusCode> {
-    Ok(EggFetcherShowcaseTemplate {
-        header_props: HeaderProps::default(),
-    })
+pub async fn render_egg_fetcher() -> Result<impl IntoResponse, StatusCode> {
+    Ok(Html(
+        EggFetcherShowcaseTemplate {
+            header_props: HeaderProps::default(),
+        }
+        .render()
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR),
+    ))
 }

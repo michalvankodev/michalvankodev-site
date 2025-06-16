@@ -1,6 +1,8 @@
+use askama::Template;
 use axum::{
     extract::{OriginalUri, Path},
     http::StatusCode,
+    response::{Html, IntoResponse},
 };
 use tokio::try_join;
 use tracing::debug;
@@ -21,7 +23,7 @@ use super::post_list::PostListTemplate;
 pub async fn render_broadcast_post_list(
     tag: Option<Path<String>>,
     OriginalUri(original_uri): OriginalUri,
-) -> Result<PostListTemplate, StatusCode> {
+) -> Result<impl IntoResponse, StatusCode> {
     // I will forget what happens here in a week. But essentially it's pattern matching and shadowing
     let tag = tag.map(|Path(tag)| tag);
 
@@ -50,14 +52,18 @@ pub async fn render_broadcast_post_list(
         "Broadcasts".to_string()
     };
 
-    Ok(PostListTemplate {
-        title: title.clone(),
-        og_title: title,
-        segment: Segment::Broadcasts,
-        posts,
-        header_props,
-        tags: popular_tags,
-        featured_projects,
-        current_url: original_uri.to_string(),
-    })
+    Ok(Html(
+        PostListTemplate {
+            title: title.clone(),
+            og_title: title,
+            segment: Segment::Broadcasts,
+            posts,
+            header_props,
+            tags: popular_tags,
+            featured_projects,
+            current_url: original_uri.to_string(),
+        }
+        .render()
+        .unwrap(),
+    ))
 }

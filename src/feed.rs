@@ -1,3 +1,4 @@
+use askama::Values;
 use axum::http::{header, StatusCode};
 use axum::response::IntoResponse;
 use chrono::Utc;
@@ -6,6 +7,14 @@ use rss::{ChannelBuilder, EnclosureBuilder, GuidBuilder, Item, ItemBuilder};
 use crate::blog_posts::blog_post_model::{BlogPostMetadata, BLOG_POST_PATH};
 use crate::filters::{parse_markdown, truncate_md};
 use crate::post_utils::post_listing::get_post_list;
+
+struct EmptyValues;
+
+impl Values for EmptyValues {
+    fn get_value<'a>(&'a self, _key: &str) -> Option<&'a dyn std::any::Any> {
+        return None;
+    }
+}
 
 pub async fn render_rss_feed() -> Result<impl IntoResponse, StatusCode> {
     let mut post_list = get_post_list::<BlogPostMetadata>(BLOG_POST_PATH)
@@ -27,14 +36,14 @@ pub async fn render_rss_feed() -> Result<impl IntoResponse, StatusCode> {
                 .title(Some(post.metadata.title))
                 .link(Some(format!("https://michalvanko.dev/blog/{}", post.slug)))
                 .description({
-                    let truncated =
-                        truncate_md(&post.body, 2).unwrap_or("Can't parse post body".to_string());
-                    let parsed_md = parse_markdown(&truncated)
+                    let truncated = truncate_md(&post.body, &EmptyValues, 2)
+                        .unwrap_or("Can't parse post body".to_string());
+                    let parsed_md = parse_markdown(&truncated, &EmptyValues)
                         .unwrap_or("Can't process truncated post body".to_string());
                     Some(parsed_md)
                 })
                 .content({
-                    let parsed_md = parse_markdown(&post.body)
+                    let parsed_md = parse_markdown(&post.body, &EmptyValues)
                         .unwrap_or("Can't process full post body".to_string());
                     Some(parsed_md)
                 })

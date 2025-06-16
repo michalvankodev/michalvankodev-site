@@ -1,5 +1,8 @@
 use askama::Template;
-use axum::http::StatusCode;
+use axum::{
+    http::StatusCode,
+    response::{Html, IntoResponse},
+};
 
 use crate::{
     components::site_header::HeaderProps,
@@ -16,16 +19,20 @@ pub struct ProjectListTemplate {
     pub header_props: HeaderProps,
 }
 
-pub async fn render_projects_list() -> Result<ProjectListTemplate, StatusCode> {
+pub async fn render_projects_list() -> Result<impl IntoResponse, StatusCode> {
     let mut project_list = get_post_list::<ProjectMetadata>("_projects").await?;
 
     project_list.sort_by_key(|post| post.slug.to_string());
     project_list.retain(|project| project.metadata.displayed);
     project_list.reverse();
 
-    Ok(ProjectListTemplate {
-        title: "Showcase".to_owned(),
-        header_props: HeaderProps::default(),
-        project_list,
-    })
+    Ok(Html(
+        ProjectListTemplate {
+            title: "Showcase".to_owned(),
+            header_props: HeaderProps::default(),
+            project_list,
+        }
+        .render()
+        .unwrap(),
+    ))
 }
