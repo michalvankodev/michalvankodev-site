@@ -1,5 +1,8 @@
 use askama::Template;
-use axum::http::StatusCode;
+use axum::{
+    http::StatusCode,
+    response::{Html, IntoResponse},
+};
 use serde::Deserialize;
 
 use crate::{
@@ -50,7 +53,7 @@ pub struct PortfolioTemplate {
     pub technology_list: Vec<String>,
 }
 
-pub async fn render_portfolio() -> Result<PortfolioTemplate, StatusCode> {
+pub async fn render_portfolio() -> Result<impl IntoResponse, StatusCode> {
     let portfolio = parse_post::<PortfolioPageModel>("_pages/portfolio.md").await?;
 
     let mut project_list = get_post_list::<ProjectMetadata>("_projects").await?;
@@ -126,14 +129,18 @@ pub async fn render_portfolio() -> Result<PortfolioTemplate, StatusCode> {
     .map(|str| str.to_owned())
     .collect();
 
-    Ok(PortfolioTemplate {
-        title: "Portfolio".to_owned(),
-        body: portfolio.body,
-        header_props: HeaderProps::default(),
-        project_list,
-        workplace_list,
-        education_list,
-        contact_links,
-        technology_list,
-    })
+    Ok(Html(
+        PortfolioTemplate {
+            title: "Portfolio".to_owned(),
+            body: portfolio.body,
+            header_props: HeaderProps::default(),
+            project_list,
+            workplace_list,
+            education_list,
+            contact_links,
+            technology_list,
+        }
+        .render()
+        .unwrap(),
+    ))
 }

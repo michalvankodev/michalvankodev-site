@@ -6,8 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-askama = { version = "0.14", features = ["with-axum", "mime", "mime_guess"] }
-askama_axum = "0.5.0"
+askama = { version = "0.14" }
 axum = "0.8.0"
 chrono = { version = "0.4.31", features = ["serde"] }
 pulldown-cmark = { version = "0.13" }
@@ -28,22 +27,5 @@ indoc = "2.0.5"
 askama_escape = "0.13.0"
 mime_guess = "2.0.5"
 
-[build]
-rustflags = ["-Z", "threads=8"]
-
-# [target.x86_64-unknown-linux-gnu]
-# rustflags = [
-#     "-C", "link-arg=-fuse-ld=lld"
-# ]
-
-[profile.dev]
-debug = true
-opt-level = 0
-# codegen-units = 16
-# lto = "thin"
-panic = "unwind"
-strip = false
-incremental = true
-
-[profile.dev.package.askama_derive]
-opt-level = 3
+[dev-dependencies]
+pretty_assertions = "1"

@@ -8,7 +8,14 @@ use crate::{
         project_list::render_projects_list, showcase::egg_fetcher::render_egg_fetcher,
     },
 };
-use axum::{extract::MatchedPath, http::Request, routing::get, Router};
+use askama::Template;
+use axum::{
+    extract::MatchedPath,
+    http::{Request, StatusCode},
+    response::IntoResponse,
+    routing::get,
+    Router,
+};
 use tower_http::trace::TraceLayer;
 use tracing::info_span;
 
@@ -16,15 +23,15 @@ pub fn get_router() -> Router {
     Router::new()
         .route("/", get(render_index))
         .route("/blog", get(render_blog_post_list))
-        .route("/blog/tags/:tag", get(render_blog_post_list))
-        .route("/blog/:post_id", get(render_blog_post))
+        .route("/blog/tags/{tag}", get(render_blog_post_list))
+        .route("/blog/{post_id}", get(render_blog_post))
         .route("/broadcasts", get(render_broadcast_post_list))
-        .route("/broadcasts/tags/:tag", get(render_broadcast_post_list))
-        .route("/broadcasts/:post_id", get(render_blog_post))
+        .route("/broadcasts/tags/{tag}", get(render_broadcast_post_list))
+        .route("/broadcasts/{post_id}", get(render_blog_post))
         .route("/contact", get(render_contact))
         .route("/showcase", get(render_projects_list))
         .route("/showcase/m-logo-svg", get(render_animated_logo))
-        .route("/showcase/:project_slug", get(render_egg_fetcher))
+        .route("/showcase/{project_slug}", get(render_egg_fetcher))
         .route("/portfolio", get(render_portfolio))
         .route("/admin", get(render_admin))
         .route("/feed.xml", get(render_rss_feed))

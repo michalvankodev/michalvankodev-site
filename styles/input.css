@@ -1,63 +1,113 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Baloo2", "Baloo2 Noto Fallback", "Baloo2 Fallback", "ui-sans-serif", "system-ui", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --text-readxl: 1.75rem;
+  --text-readxl--line-height: 2.25rem;
+  --text-readxl--letter-spacing: -0.015rem;
+  --text-readxl--font-weight: 400;
+
+  --spacing-note: 60rem;
+  --spacing-read: 64rem;
+  --spacing-image: min(70rem, 95vw);
+  --spacing-maxindex: 100rem;
+
+  --color-blue-50: #f1f7fe;
+  --color-blue-100: #e1effd;
+  --color-blue-200: #bddefa;
+  --color-blue-300: #82c3f7;
+  --color-blue-400: #42a6f0;
+  --color-blue-500: #1789e0;
+  --color-blue-600: #0a6cbf;
+  --color-blue-700: #0a569a;
+  --color-blue-800: #0c4980;
+  --color-blue-900: #103e6a;
+  --color-blue-950: #0b2746;
+
+  --color-pink-50: #fff4fd;
+  --color-pink-100: #ffe7fb;
+  --color-pink-200: #ffcff7;
+  --color-pink-300: #fea6eb;
+  --color-pink-400: #fc76dd;
+  --color-pink-500: #f342ca;
+  --color-pink-600: #d722a9;
+  --color-pink-700: #b31889;
+  --color-pink-800: #92166e;
+  --color-pink-900: #771859;
+  --color-pink-950: #500238;
+
+  --color-purple-50: #F8F5FC;
+  --color-purple-100: #D5C2ED;
+  --color-purple-200: #B28EDE;
+  --color-purple-300: #8F5BCF;
+  --color-purple-400: #6D30B9;
+  --color-purple-500: #5F2AA2;
+  --color-purple-600: #52248A;
+  --color-purple-700: #441E73;
+  --color-purple-800: #36185C;
+  --color-purple-900: #281244;
+  --color-purple-950: #1A0C2D;
+}
+
+@font-face {
+  font-family: 'Baloo2';
+  font-style: normal;
+  font-display: swap;
+  src:
+    local('Baloo2'),
+    url(/fonts/baloo2/Baloo2-Latin-Variable-wght.woff2) format('woff2');
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(/fonts/baloo2/Baloo2-Latin-Variable-ext-wght.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Baloo2 Fallback';
+  font-style: normal;
+  font-weight: 400;
+  src: local('BlinkMacSystemFont'), local('Segoe UI'), local('Helvetica Neue'),
+    local('Arial');
+  ascent-override: 111.2%;
+  descent-override: 54.05%;
+  line-gap-override: 0%;
+  size-adjust: 96.95%;
+}
+
+@font-face {
+  font-family: 'Baloo2 Noto Fallback';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Noto Sans');
+  ascent-override: 88%;
+  descent-override: none;
+  line-gap-override: 0%;
+  size-adjust: 92%;
+}
 
 @layer base {
-  @font-face {
-    font-family: 'Baloo2';
-    font-style: normal;
-    font-display: swap;
-    src:
-      local('Baloo2'),
-      url(/fonts/baloo2/Baloo2-Latin-Variable-wght.woff2) format('woff2');
-  }
-  /* latin-ext */
-  @font-face {
-    font-family: 'Baloo 2';
-    font-style: normal;
-    font-weight: 400 800;
-    font-display: swap;
-    src: url(/fonts/baloo2/Baloo2-Latin-Variable-ext-wght.woff2) format('woff2');
-    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF,
-      U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  a {
+    @apply text-pink-800 underline underline-offset-2 hover:transition hover:text-blue-500;
   }
 
-  @font-face {
-    font-family: 'Baloo2 Fallback';
-    font-style: normal;
-    font-weight: 400;
-    src: local('BlinkMacSystemFont'), local('Segoe UI'), local('Helvetica Neue'),
-      local('Arial');
-    ascent-override: 111.2%;
-    descent-override: 54.05%;
-    line-gap-override: 0%;
-    size-adjust: 96.95%;
+  strong {
+    @apply font-medium;
   }
-
-  @font-face {
-    font-family: 'Baloo2 Noto Fallback';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Noto Sans');
-    ascent-override: 88%;
-    descent-override: none;
-    line-gap-override: 0%;
-    size-adjust: 92%;
-  }
-}
-
-a {
-  @apply text-pink-800 underline underline-offset-2 hover:transition hover:text-blue-500;
-}
-
-strong {
-  @apply font-medium;
 }
 
 .article-body {
   h1 {
     @apply px-4 text-2xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-4xl lg:text-5xl;
   }
+
   h2 {
     @apply px-4 text-xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-2xl md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-4xl;
   }
@@ -82,15 +132,16 @@ strong {
     @apply p-4;
 
     img {
-      @apply rounded shadow-md mx-auto lg:max-w-image;
+      @apply rounded-sm shadow-md mx-auto lg:max-w-image;
     }
   }
+
   figcaption {
     @apply mt-2 text-center text-sm italic text-blue-800 md:text-base lg:text-lg;
   }
 
   table {
-    @apply text-sm mx-auto my-4 max-w-image table-auto border-collapse border-spacing-12 border border-slate-200 rounded md:text-base lg:text-xl lg:my-8;
+    @apply text-sm mx-auto my-4 max-w-image table-auto border-collapse border-spacing-12 border border-slate-200 rounded-sm md:text-base lg:text-xl lg:my-8;
   }
 
   thead {
@@ -119,11 +170,11 @@ strong {
   }
 
   :not(pre) code {
-    @apply text-pink-900 rounded border border-blue-300 px-1 py-0.5 bg-blue-100 text-sm md:text-base lg:text-xl;
+    @apply text-pink-900 rounded-sm border border-blue-300 px-1 py-0.5 bg-blue-100 text-sm md:text-base lg:text-xl;
   }
 
   pre code pre {
-    @apply mx-2 rounded lg:mx-auto lg:text-lg shadow-sm lg:max-w-note;
+    @apply mx-2 rounded-sm lg:mx-auto lg:text-lg shadow-xs lg:max-w-note;
   }
 
   ul,
@@ -138,12 +189,13 @@ strong {
   ul {
     @apply list-disc;
   }
+
   ol {
     @apply list-decimal;
   }
 
   iframe {
-    @apply rounded shadow-md mx-auto lg:max-w-image;
+    @apply rounded-sm shadow-md mx-auto lg:max-w-image;
   }
 }
 

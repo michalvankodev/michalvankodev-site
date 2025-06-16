@@ -1,3 +1,4 @@
+use core::fmt;
 use std::path::Path;
 
 use image::image_dimensions;
@@ -19,7 +20,10 @@ enum TextKind {
 }
 
 // pub fn parse_markdown(markdown: &str) -> ::askama::Result<String>
-pub fn parse_markdown(markdown: &str) -> ::askama::Result<String> {
+pub fn parse_markdown<T: fmt::Display>(
+    markdown: T,
+    _: &dyn askama::Values,
+) -> ::askama::Result<String> {
     let mut options = Options::empty();
     options.insert(Options::ENABLE_TABLES);
     options.insert(Options::ENABLE_FOOTNOTES);
@@ -34,7 +38,8 @@ pub fn parse_markdown(markdown: &str) -> ::askama::Result<String> {
     let theme = theme_set.themes.get("InspiredGitHub").unwrap();
     let mut heading_ended: Option<bool> = None;
 
-    let parser = Parser::new_ext(markdown, options).map(|event| match event {
+    let mds = markdown.to_string();
+    let parser = Parser::new_ext(&mds, options).map(|event| match event {
         /*
         Parsing images considers `alt` attribute as inner `Text` event
         Therefore the `[alt]` is rendered in html as subtitle

@@ -2,7 +2,7 @@
 
 const FORBIDDEN_LINES: [&str; 5] = [" ", "#", "-", "!", "<"];
 
-pub fn truncate_md(body: &str, rows: usize) -> ::askama::Result<String> {
+pub fn truncate_md(body: &str, _: &dyn askama::Values, rows: usize) -> ::askama::Result<String> {
     let description = body
         .lines()
         .filter(|line| {

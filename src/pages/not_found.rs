@@ -1,5 +1,9 @@
 use askama::Template;
-use axum::{extract::OriginalUri, http::StatusCode};
+use axum::{
+    extract::OriginalUri,
+    http::StatusCode,
+    response::{Html, IntoResponse},
+};
 use tracing::info;
 
 use crate::components::site_header::HeaderProps;
@@ -13,13 +17,17 @@ pub struct NotFoundPage {
 
 pub async fn render_not_found(
     OriginalUri(original_uri): OriginalUri,
-) -> Result<(StatusCode, NotFoundPage), StatusCode> {
+) -> Result<(StatusCode, impl IntoResponse), StatusCode> {
     info!("{original_uri} not found");
     Ok((
         StatusCode::NOT_FOUND,
-        NotFoundPage {
-            title: "This page does not exists".to_owned(),
-            header_props: HeaderProps::default(),
-        },
+        Html(
+            NotFoundPage {
+                title: "This page does not exists".to_owned(),
+                header_props: HeaderProps::default(),
+            }
+            .render()
+            .unwrap(),
+        ),
     ))
 }
