@@ -14,7 +14,8 @@ pub fn generate_image_with_src(
     height: u32,
     suffix: &str,
 ) -> Result<String, anyhow::Error> {
-    let path_to_generated = get_generated_file_name(orig_img_path);
+    let orig_path = Path::new(orig_img_path);
+    let path_to_generated = get_generated_file_name(&orig_path);
     let file_stem = path_to_generated.file_stem().unwrap().to_str().unwrap();
     let path_to_generated = path_to_generated.with_file_name(format!("{file_stem}{suffix}"));
 
@@ -30,6 +31,7 @@ pub fn generate_image_with_src(
 
     let exported_format = *exported_formats.first().unwrap();
 
+    let orig_path_clone = orig_path.clone();
     let path_to_generated_arc = Arc::new(path_to_generated);
     let path_to_generated_clone = Arc::clone(&path_to_generated_arc);
 
@@ -39,11 +41,11 @@ pub fn generate_image_with_src(
             .unwrap()
             .decode()
             .unwrap();
-        let path_to_generated = path_to_generated_clone.as_ref();
 
         let result = generate_images(
             &orig_img,
-            path_to_generated,
+            orig_path_clone,
+            &path_to_generated_clone.as_ref(),
             &resolutions,
             &[exported_format],
         )
