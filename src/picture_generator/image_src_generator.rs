@@ -31,7 +31,7 @@ pub fn generate_image_with_src(
 
     let exported_format = *exported_formats.first().unwrap();
 
-    let orig_path_clone = orig_path.clone();
+    let orig_path_clone = orig_path.to_path_buf();
     let path_to_generated_arc = Arc::new(path_to_generated);
     let path_to_generated_clone = Arc::clone(&path_to_generated_arc);
 
@@ -44,7 +44,7 @@ pub fn generate_image_with_src(
 
         let result = generate_images(
             &orig_img,
-            orig_path_clone,
+            &orig_path_clone,
             &path_to_generated_clone.as_ref(),
             &resolutions,
             &[exported_format],
