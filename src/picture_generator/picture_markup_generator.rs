@@ -21,7 +21,8 @@ pub fn generate_picture_markup(
     alt_text: &str,
     class_name: Option<&str>,
 ) -> Result<String, anyhow::Error> {
-    let exported_formats = get_export_formats(orig_img_path);
+    let orig_path = Path::new(orig_img_path);
+    let exported_formats = get_export_formats(orig_path);
     let class_attr = if let Some(class) = class_name {
         format!(r#"class="{class}""#)
     } else {
@@ -39,14 +40,13 @@ pub fn generate_picture_markup(
         >"#
         ));
     }
-    let path_to_generated = get_generated_file_name(orig_img_path);
+    let path_to_generated = get_generated_file_name(orig_path);
 
     let disk_img_path =
         Path::new("static/").join(orig_img_path.strip_prefix("/").unwrap_or(orig_img_path));
 
     let orig_img_dimensions = image_dimensions(&disk_img_path)?;
     let resolutions = get_resolutions(orig_img_dimensions, width, height);
-
     let path_to_generated_arc = Arc::new(path_to_generated);
     let path_to_generated_clone = Arc::clone(&path_to_generated_arc);
     let resolutions_arc = Arc::new(resolutions);
@@ -54,6 +54,7 @@ pub fn generate_picture_markup(
     let exported_formats_arc = Arc::new(exported_formats);
     let exported_formats_clone = Arc::clone(&exported_formats_arc);
 
+    // AI? Which data escapes?
     rayon::spawn(move || {
         let orig_img = ImageReader::open(&disk_img_path)
             .with_context(|| format!("Failed to read instrs from {:?}", &disk_img_path))
@@ -64,8 +65,14 @@ pub fn generate_picture_markup(
         let resolutions = resolutions_clone.as_ref();
         let exported_formats = exported_formats_clone.as_ref();
 
-        let result = generate_images(&orig_img, path_to_generated, resolutions, exported_formats)
-            .with_context(|| "Failed to generate images".to_string());
+        let result = generate_images(
+            &orig_img,
+            &disk_img_path,
+            path_to_generated,
+            resolutions,
+            exported_formats,
+        )
+        .with_context(|| "Failed to generate images".to_string());
         if let Err(e) = result {
             tracing::error!("Error: {}", e);
         }
@@ -193,15 +200,9 @@ fn strip_prefixes(path: &Path) -> &Path {
     parent_path
 }
 
-pub fn get_generated_file_name(orig_img_path: &str) -> PathBuf {
-    let path = Path::new(&orig_img_path);
-    // let parent = path
-    //     .parent()
-    //     .expect("There should be a parent route to an image")
-    //     .strip_prefix(".")
-    //     .unwrap();
-    let parent = strip_prefixes(path);
-    let file_name = path
+pub fn get_generated_file_name(orig_img_path: &Path) -> PathBuf {
+    let parent = strip_prefixes(orig_img_path);
+    let file_name = orig_img_path
         .file_stem()
         .expect("There should be a name for every img");
     let result = Path::new("/generated_images/")
@@ -216,7 +217,7 @@ pub fn get_generated_file_name(orig_img_path: &str) -> PathBuf {
 
 #[test]
 fn test_get_generated_paths() {
-    let orig_img_path = "/images/uploads/img_name.jpg";
+    let orig_img_path = Path::new("/images/uploads/img_name.jpg");
     assert_eq!(
         get_generated_file_name(orig_img_path)
             .to_str()
@@ -233,9 +234,9 @@ fn generate_srcset(path: &Path, format: &ExportFormat, resolutions: &[(u32, u32,
             let (width, height, density) = resolution;
             let path_name = path.to_str().expect("Path to an image has to be valid");
             let formatted_density = if density.fract() == 0.0 {
-                format!("{}", density) // Convert to integer if there is no decimal part
+                format!("{density}") // Convert to integer if there is no decimal part
             } else {
-                format!("{:.1}", density) // Format to 1 decimal place if there is a fractional part
+                format!("{density:.1}") // Format to 1 decimal place if there is a fractional part
             };
             format!("{path_name}_{width}x{height}.{extension} {formatted_density}x")
         })
@@ -243,10 +244,8 @@ fn generate_srcset(path: &Path, format: &ExportFormat, resolutions: &[(u32, u32,
         .join(", ")
 }
 
-pub fn get_export_formats(orig_img_path: &str) -> Vec<ExportFormat> {
-    let path = Path::new(&orig_img_path)
-        .extension()
-        .and_then(|ext| ext.to_str());
+pub fn get_export_formats(orig_img_path: &Path) -> Vec<ExportFormat> {
+    let path = orig_img_path.extension().and_then(|ext| ext.to_str());
 
     match path {
         // THINK: Do we want to enable avif? It's very expensive to encode
@@ -261,7 +260,7 @@ pub fn get_export_formats(orig_img_path: &str) -> Vec<ExportFormat> {
 #[test]
 fn test_get_export_formats() {
     assert_eq!(
-        get_export_formats("/images/uploads/img_name.jpg"),
+        get_export_formats(Path::new("/images/uploads/img_name.jpg")),
         // vec![ExportFormat::Avif, ExportFormat::Jpeg]
         vec![ExportFormat::Jpeg]
     )

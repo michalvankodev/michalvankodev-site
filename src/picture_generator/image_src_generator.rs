@@ -15,7 +15,7 @@ pub fn generate_image_with_src(
     suffix: &str,
 ) -> Result<String, anyhow::Error> {
     let orig_path = Path::new(orig_img_path);
-    let path_to_generated = get_generated_file_name(&orig_path);
+    let path_to_generated = get_generated_file_name(orig_path);
     let file_stem = path_to_generated.file_stem().unwrap().to_str().unwrap();
     let path_to_generated = path_to_generated.with_file_name(format!("{file_stem}{suffix}"));
 
@@ -23,7 +23,7 @@ pub fn generate_image_with_src(
         Path::new("static/").join(orig_img_path.strip_prefix("/").unwrap_or(orig_img_path));
     let resolutions = [(width, height, 1.)];
 
-    let exported_formats = get_export_formats(orig_img_path);
+    let exported_formats = get_export_formats(orig_path);
 
     if exported_formats.is_empty() {
         return Ok(orig_img_path.to_string());
@@ -31,7 +31,6 @@ pub fn generate_image_with_src(
 
     let exported_format = *exported_formats.first().unwrap();
 
-    let orig_path_clone = orig_path.to_path_buf();
     let path_to_generated_arc = Arc::new(path_to_generated);
     let path_to_generated_clone = Arc::clone(&path_to_generated_arc);
 
@@ -44,8 +43,8 @@ pub fn generate_image_with_src(
 
         let result = generate_images(
             &orig_img,
-            &orig_path_clone,
-            &path_to_generated_clone.as_ref(),
+            &disk_img_path,
+            path_to_generated_clone.as_ref(),
             &resolutions,
             &[exported_format],
         )

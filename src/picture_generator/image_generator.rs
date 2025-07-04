@@ -8,6 +8,7 @@ use super::export_format::ExportFormat;
 
 pub fn generate_images(
     image: &DynamicImage,
+    disk_image_path: &Path,
     path_to_generated: &Path,
     resolutions: &[(u32, u32, f32)],
     formats: &[ExportFormat],
@@ -38,12 +39,32 @@ pub fn generate_images(
                 Err(err) => {
                     error!("Failed to generate {:?} - {:?}", &save_path, err);
                 }
-                _ => {
+                Ok(_) => {
                     debug!("Generated image {:?}", &save_path);
+                    let _ = copy_exif(disk_image_path, &save_path);
                 }
             }
         });
     });
 
+    Ok(())
+}
+
+pub fn copy_exif(orig_path: &Path, save_path: &Path) -> Result<(), anyhow::Error> {
+    let status = std::process::Command::new("exiftool")
+        .args([
+            "-TagsFromFile",
+            orig_path.to_str().expect("Orig path should exist"),
+            "-exif:all",
+            "-overwrite_original",
+            save_path.to_str().expect("Save path of image should exist"),
+        ])
+        .status()?;
+
+    if status.success() {
+        debug!("EXIF copied successfully.");
+    } else {
+        error!("Failed to copy EXIF.");
+    }
     Ok(())
 }
