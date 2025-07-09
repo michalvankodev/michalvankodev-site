@@ -1,14 +1,15 @@
 use core::fmt;
 use std::path::Path;
 
-use image::image_dimensions;
+use image::{image_dimensions, ImageReader};
 use indoc::formatdoc;
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 use syntect::{highlighting::ThemeSet, html::highlighted_html_for_string, parsing::SyntaxSet};
 use tracing::{debug, error};
 
 use crate::picture_generator::{
-    picture_markup_generator::generate_picture_markup, resolutions::get_max_resolution,
+    picture_markup_generator::{generate_picture_markup, should_swap_dimensions},
+    resolutions::get_max_resolution,
 };
 
 pub const MAX_BLOG_IMAGE_RESOLUTION: (u32, u32) = (1280, 860);
@@ -65,8 +66,16 @@ pub fn parse_markdown<T: fmt::Display>(
 
             let dev_only_img_path =
                 Path::new("static/").join(dest_url.strip_prefix("/").unwrap_or(&dest_url));
-            let img_dimensions = image_dimensions(&dev_only_img_path).unwrap();
 
+            // We need to take the exif rotation into consideration here
+            let img_dimensions = {
+                let orig_img_dimensions = image_dimensions(&dev_only_img_path).unwrap();
+                if should_swap_dimensions(&dev_only_img_path) {
+                    (orig_img_dimensions.1, orig_img_dimensions.0)
+                } else {
+                    orig_img_dimensions
+                }
+            };
             let (max_width, max_height) = get_max_resolution(
                 img_dimensions,
                 MAX_BLOG_IMAGE_RESOLUTION.0,

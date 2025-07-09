@@ -4,7 +4,7 @@ use std::{
 };
 
 use anyhow::Context;
-use image::{image_dimensions, ImageReader};
+use image::{image_dimensions, ImageDecoder, ImageReader};
 use indoc::formatdoc;
 
 use super::{
@@ -14,6 +14,7 @@ use super::{
 
 pub const PIXEL_DENSITIES: [f32; 5] = [1., 1.5, 2., 3., 4.];
 
+/// Used by markdown generator
 pub fn generate_picture_markup(
     orig_img_path: &str,
     width: u32,
@@ -29,6 +30,7 @@ pub fn generate_picture_markup(
         "".to_string()
     };
 
+    // Here the resolution is already correct
     if exported_formats.is_empty() {
         return Ok(formatdoc!(
             r#"<img
@@ -45,8 +47,14 @@ pub fn generate_picture_markup(
     let disk_img_path =
         Path::new("static/").join(orig_img_path.strip_prefix("/").unwrap_or(orig_img_path));
 
+    // Here we have a problem. The resolution is swapped but we want to generate images with original dimensions which are not here.
     let orig_img_dimensions = image_dimensions(&disk_img_path)?;
-    let resolutions = get_resolutions(orig_img_dimensions, width, height);
+    let resolutions = get_resolutions(
+        orig_img_dimensions,
+        width,
+        height,
+        should_swap_dimensions(&disk_img_path),
+    );
     let path_to_generated_arc = Arc::new(path_to_generated);
     let path_to_generated_clone = Arc::clone(&path_to_generated_arc);
     let resolutions_arc = Arc::new(resolutions);
@@ -54,23 +62,19 @@ pub fn generate_picture_markup(
     let exported_formats_arc = Arc::new(exported_formats);
     let exported_formats_clone = Arc::clone(&exported_formats_arc);
 
-    // AI? Which data escapes?
     rayon::spawn(move || {
         let orig_img = ImageReader::open(&disk_img_path)
             .with_context(|| format!("Failed to read instrs from {:?}", &disk_img_path))
             .unwrap()
             .decode()
             .unwrap();
-        let path_to_generated = path_to_generated_clone.as_ref();
-        let resolutions = resolutions_clone.as_ref();
-        let exported_formats = exported_formats_clone.as_ref();
 
         let result = generate_images(
             &orig_img,
             &disk_img_path,
-            path_to_generated,
-            resolutions,
-            exported_formats,
+            &path_to_generated_clone,
+            &resolutions_clone,
+            &exported_formats_clone,
         )
         .with_context(|| "Failed to generate images".to_string());
         if let Err(e) = result {
@@ -130,11 +134,19 @@ pub fn get_image_path(path: &Path, resolution: &(u32, u32, f32), format: &Export
     format!("{path_name}_{width}x{height}.{extension}")
 }
 
+/// Take original resolution of photo and
+/// exif data is not taken into consideration therefore we don't need to do anything here regarding to swapping width-height
 fn get_resolutions(
     (orig_width, orig_height): (u32, u32),
     width: u32,
     height: u32,
+    swap_dimensions: bool,
 ) -> Vec<(u32, u32, f32)> {
+    let (width, height) = if swap_dimensions {
+        (height, width)
+    } else {
+        (width, height)
+    };
     let mut resolutions: Vec<(u32, u32, f32)> = vec![];
     for pixel_density in PIXEL_DENSITIES {
         let (density_width, density_height) = (
@@ -159,22 +171,22 @@ fn get_resolutions(
 #[test]
 fn test_get_resolutions() {
     assert_eq!(
-        get_resolutions((320, 200), 320, 200),
+        get_resolutions((320, 200), 320, 200, false),
         vec![(320, 200, 1.)],
         "Only original size fits"
     );
     assert_eq!(
-        get_resolutions((500, 400), 320, 200),
+        get_resolutions((500, 400), 320, 200, false),
         vec![(320, 200, 1.), (480, 300, 1.5), (500, 312, 2.)],
         "Should only create sizes that fits and fill the max possible for the last one - width"
     );
     assert_eq!(
-        get_resolutions((400, 600), 300, 200),
+        get_resolutions((400, 600), 300, 200, false),
         vec![(300, 200, 1.), (400, 266, 1.5)],
         "Should only create sizes that fits and fill the max possible for the last one - height"
     );
     assert_eq!(
-        get_resolutions((1200, 900), 320, 200),
+        get_resolutions((1200, 900), 320, 200, false),
         vec![
             (320, 200, 1.),
             (480, 300, 1.5),
@@ -184,6 +196,7 @@ fn test_get_resolutions() {
         ],
         "Should create all possible sizes, with the last one maxed"
     );
+    // TODO add test for swapping
 }
 
 fn strip_prefixes(path: &Path) -> &Path {
@@ -255,6 +268,23 @@ pub fn get_export_formats(orig_img_path: &Path) -> Vec<ExportFormat> {
         Some("png") => vec![ExportFormat::Png],
         Some(_) | None => vec![],
     }
+}
+
+pub fn should_swap_dimensions(img_path: &Path) -> bool {
+    let orientation = ImageReader::open(img_path)
+        .unwrap()
+        .into_decoder()
+        .unwrap()
+        .orientation()
+        .unwrap();
+
+    matches!(
+        orientation,
+        image::metadata::Orientation::Rotate90
+            | image::metadata::Orientation::Rotate270
+            | image::metadata::Orientation::Rotate90FlipH
+            | image::metadata::Orientation::Rotate270FlipH
+    )
 }
 
 #[test]

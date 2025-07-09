@@ -16,7 +16,6 @@ pub fn generate_images(
     formats.par_iter().for_each(|format| {
         resolutions.par_iter().for_each(|resolution| {
             let (width, height, _) = *resolution;
-            // let image = image.clone();
             let resized = image.resize_to_fill(width, height, FilterType::Triangle);
             let file_name = path_to_generated.file_name().unwrap().to_str().unwrap();
             let save_path = Path::new("./")

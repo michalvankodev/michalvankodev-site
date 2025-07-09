@@ -8,6 +8,7 @@ use super::{
     picture_markup_generator::{get_export_formats, get_generated_file_name, get_image_path},
 };
 
+/// Used directly in templates
 pub fn generate_image_with_src(
     orig_img_path: &str,
     width: u32,
