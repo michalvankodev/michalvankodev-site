@@ -1,7 +1,7 @@
 use core::fmt;
 use std::path::Path;
 
-use image::{image_dimensions, ImageReader};
+use image::image_dimensions;
 use indoc::formatdoc;
 use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, Tag, TagEnd};
 use syntect::{highlighting::ThemeSet, html::highlighted_html_for_string, parsing::SyntaxSet};

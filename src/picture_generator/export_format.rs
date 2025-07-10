@@ -1,5 +1,4 @@
-use image::ImageFormat;
-
+#[allow(dead_code)]
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum ExportFormat {
     Jpeg,
@@ -23,14 +22,6 @@ impl ExportFormat {
             ExportFormat::Avif => "image/avif",
             ExportFormat::Svg => "image/svg+xml",
             ExportFormat::Png => "image/png",
-        }
-    }
-    pub fn get_image_format(&self) -> ImageFormat {
-        match self {
-            ExportFormat::Jpeg => ImageFormat::Jpeg,
-            ExportFormat::Avif => ImageFormat::Avif,
-            ExportFormat::Svg => ImageFormat::Jpeg, // TODO what now?
-            ExportFormat::Png => ImageFormat::Png,
         }
     }
 }

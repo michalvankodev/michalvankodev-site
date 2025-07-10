@@ -1,6 +1,14 @@
-use std::{fs::create_dir_all, path::Path};
+use std::{
+    fs::{create_dir_all, File},
+    io::BufWriter,
+    path::Path,
+};
 
-use image::{imageops::FilterType, DynamicImage};
+use image::{
+    codecs::{jpeg::JpegEncoder, png::PngEncoder},
+    imageops::FilterType,
+    DynamicImage,
+};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use tracing::{debug, error};
 
@@ -33,8 +41,26 @@ pub fn generate_images(
                 create_dir_all(parent_dir).unwrap();
             }
 
-            let result = resized.save_with_format(&save_path, format.get_image_format());
-            match result {
+            let encode = {
+                let buffered_file_write = &mut BufWriter::new(File::create(&save_path).unwrap()); // always seekable
+                match format {
+                    ExportFormat::Jpeg => {
+                        let encoder = JpegEncoder::new_with_quality(buffered_file_write, 87);
+                        resized.write_with_encoder(encoder)
+                    }
+                    ExportFormat::Avif => todo!(),
+                    ExportFormat::Svg => todo!(),
+                    ExportFormat::Png => {
+                        let encoder = PngEncoder::new_with_quality(
+                            buffered_file_write,
+                            image::codecs::png::CompressionType::Best,
+                            image::codecs::png::FilterType::Adaptive,
+                        );
+                        resized.write_with_encoder(encoder)
+                    }
+                }
+            };
+            match encode {
                 Err(err) => {
                     error!("Failed to generate {:?} - {:?}", &save_path, err);
                 }
