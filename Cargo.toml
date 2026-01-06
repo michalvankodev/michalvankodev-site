@@ -24,7 +24,7 @@ anyhow = "1.0.86"
 rayon = "1.10.0"
 syntect = "5.2.0"
 indoc = "2.0.5"
-askama_escape = "0.14.0"
+askama_escape = "0.15.0"
 mime_guess = "2.0.5"
 
 [dev-dependencies]
