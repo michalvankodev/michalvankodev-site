@@ -47,7 +47,7 @@ jobs:
         working-directory: axum_server
       - name: Server log
         run: cat axum_server/server.log
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: dist
           path: axum_server/dist/
