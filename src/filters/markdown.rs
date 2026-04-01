@@ -64,6 +64,19 @@ pub fn parse_markdown<T: fmt::Display>(
                 );
             }
 
+            // Handle SVG files - don't try to get dimensions (image crate doesn't support SVG)
+            if dest_url.to_lowercase().ends_with(".svg") {
+                return Event::Html(
+                    formatdoc!(
+                        r#"<figure>
+                            <img src="{dest_url}" alt="{title}">
+                            <figcaption>
+                        "#
+                    )
+                    .into(),
+                );
+            }
+
             let dev_only_img_path =
                 Path::new("static/").join(dest_url.strip_prefix("/").unwrap_or(&dest_url));
 

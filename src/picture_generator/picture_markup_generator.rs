@@ -23,12 +23,26 @@ pub fn generate_picture_markup(
     class_name: Option<&str>,
 ) -> Result<String, anyhow::Error> {
     let orig_path = Path::new(orig_img_path);
-    let exported_formats = get_export_formats(orig_path);
     let class_attr = if let Some(class) = class_name {
         format!(r#"class="{class}""#)
     } else {
         "".to_string()
     };
+
+    // Handle SVG files - return simple img tag with provided dimensions for display sizing
+    if orig_img_path.to_lowercase().ends_with(".svg") {
+        return Ok(formatdoc!(
+            r#"<img
+            src="{orig_img_path}"
+            width="{width}"
+            height="{height}"
+            {class_attr}
+            alt="{alt_text}"
+        >"#
+        ));
+    }
+
+    let exported_formats = get_export_formats(orig_path);
 
     // Here the resolution is already correct
     if exported_formats.is_empty() {
