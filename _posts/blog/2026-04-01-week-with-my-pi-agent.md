@@ -83,9 +83,9 @@ There's still more to learn. This is just the experience I've had with Pi during
 
 For front-end task I'd choose a different workflow. I'd incorporate `agent-browser` into the loop. Having constant feedback loop is very powerful and allows the agent to run for longer time (do more without constant supervision)
 
-Another very good use experience I had was with debugging memory issues. This is a task that if you don't do very often during development, but from time to time it happens that unexpected errors happen due to different resource availability on production systems. I've said to the agent what happens and what I think was the issue (I was way way off).
+Another pleasant use experience I had was with **debugging memory issues**. This is a task that if you don't do very often during development, but from time to time it happens that unexpected errors happen due to different resource availability on production systems. I've said to the agent what happens and what I think was the issue (I was way way off).
 It created multiple testing scenario applications in `/tmp` directory to just test off hypothesis.
 He dug out every single call and investigated deep hierarchy of code deep down to every single dependency in the chain.
 We haven't been able to find the issue there. So I've used [`heaptrack`](https://github.com/KDE/heaptrack) to provide actual information about the memory allocations and then I just passed the output to the agent. It just came out with the actual issue and provided fix in few seconds.  
 
-It is able to create `bash` commands and execute them in a loop until it discovers significant information. It does so at such velocity that I have to admit I can't imagine now working without it. Once you experience this kind of boost it's unthinkable to go back.
+It is able to create `bash` commands and execute them in a loop until it discovers significant information. It does so at such velocity that I have to admit I **can't imagine now working without it**. Once you experience this kind of boost **it's unthinkable to go back**.
