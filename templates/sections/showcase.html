@@ -1,9 +1,6 @@
-<section id="showcase-section" class="max-w-image mx-auto px-5 pt-12">
-  <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
-    <span class="font-mono text-sm text-pink-700">03</span>
-    <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase"><a href="/showcase" class="text-blue-950 no-underline">selected work</a></h2>
-    <a href="/showcase" class="ml-auto font-mono text-sm">all&nbsp;→</a>
-  </header>
+{%- import "components/section_header.html" as sh -%}
+<section id="showcase-section" class="max-w-image mx-auto px-5 pt-14">
+  {% call sh::section_header("03", "selected work", "/showcase") %}{% endcall %}
 
   <ul class="mt-8 grid grid-flow-row gap-8 md:grid-cols-2 xl:grid-cols-3 items-start">
    {% for project in featured_projects %}

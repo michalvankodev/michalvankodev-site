@@ -372,3 +372,14 @@ article a {
 @view-transition {
   navigation: auto;
 }
+
+/* Anchor navigation */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+.article-body :is(h1, h2, h3, h4) {
+  scroll-margin-top: 2.5rem;
+}

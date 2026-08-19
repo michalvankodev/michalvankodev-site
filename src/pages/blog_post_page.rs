@@ -5,6 +5,7 @@ use axum::{extract::Path, http::StatusCode};
 use chrono::{DateTime, Utc};
 
 use crate::blog_posts::blog_post_model::{Segment, BLOG_POST_PATH};
+use crate::filters::HeadingToc;
 use crate::post_utils::post_listing::get_post_list;
 use crate::post_utils::post_parser::ParseResult;
 use crate::{
@@ -25,6 +26,10 @@ pub struct BlogPostTemplate {
     pub header_props: HeaderProps,
     pub slug: String,
     pub thumbnail: Option<String>,
+    pub toc: Vec<HeadingToc>,
+    pub reading_time: u32,
+    pub newer_post: Option<ParseResult<BlogPostMetadata>>,
+    pub older_post: Option<ParseResult<BlogPostMetadata>>,
     pub recommended_posts: Vec<ParseResult<BlogPostMetadata>>,
 }
 
@@ -48,6 +53,10 @@ pub async fn render_blog_post(
     recommended_posts.reverse();
     let recommended_posts = recommended_posts.into_iter().take(2).collect::<Vec<_>>();
 
+    let toc = filters::extract_headings(&post.body);
+    let reading_time = (post.body.split_whitespace().count() as u32 / 220).max(1);
+    let (newer_post, older_post) = get_post_neighbors(&segment, &post_id).await?;
+
     let header_props = match segment {
         Segment::Blog => HeaderProps::with_back_link(Link {
             href: "/blog".to_string(),
@@ -69,12 +78,55 @@ pub async fn render_blog_post(
             slug: post.slug,
             segment,
             thumbnail: post.metadata.thumbnail,
+            toc,
+            reading_time,
+            newer_post,
+            older_post,
             header_props,
             recommended_posts,
         }
         .render()
         .unwrap(),
     ))
+}
+
+/// Return the (newer, older) neighbors of a post within its segment,
+/// ordered by date descending.
+async fn get_post_neighbors(
+    segment: &Segment,
+    current_slug: &str,
+) -> Result<
+    (
+        Option<ParseResult<BlogPostMetadata>>,
+        Option<ParseResult<BlogPostMetadata>>,
+    ),
+    StatusCode,
+> {
+    let posts = get_post_list::<BlogPostMetadata>(BLOG_POST_PATH).await?;
+    let mut posts: Vec<_> = posts
+        .into_iter()
+        .filter(|post| {
+            post.metadata
+                .segments
+                .iter()
+                .any(|post_segment| post_segment == segment)
+        })
+        .collect();
+    posts.sort_by(|a, b| b.metadata.date.cmp(&a.metadata.date));
+
+    let index = posts.iter().position(|post| post.slug == current_slug);
+    let mut posts = posts.into_iter();
+    let (newer, older) = match index {
+        Some(i) => {
+            let newer = if i > 0 { posts.nth(i - 1) } else { None };
+            // after `newer` was taken, the iterator sits on the current post;
+            // skipping it yields the next older one
+            let older = posts.nth(1);
+            (newer, older)
+        }
+        None => (None, None),
+    };
+    Ok((newer, older))
 }
 
 async fn get_recommended_posts(

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {%- import "components/talent_card.html" as tc -%}
+{%- import "components/section_header.html" as sh -%}
 
 {% block title %}Introduction{% endblock %}
 
@@ -23,29 +24,52 @@
   </section>
 </section>
 
-<!-- 01 · writing -->
+<!-- Lead story: the latest post -->
 {% let segment = "blog".to_string() %}
-<section id="blog" class="max-w-read mx-auto px-5 pt-12">
-  <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
-    <span class="font-mono text-sm text-pink-700">01</span>
-    <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase"><a href="/blog" class="text-blue-950 no-underline">writing</a></h2>
-    <a href="/blog" class="ml-auto font-mono text-sm">all&nbsp;→</a>
-  </header>
+{% for latest in featured_blog_posts %}
+{% if loop.first %}
+<section id="lead-story" class="max-w-image mx-auto px-5 pt-14">
+  {% call sh::section_header("", "latest writing", "/blog") %}{% endcall %}
+  <article class="mt-8 md:flex md:items-start md:gap-10">
+    {% match latest.metadata.thumbnail %}
+    {% when Some with (orig_path) %}
+    <a href="/blog/{{latest.slug}}" class="block no-underline md:w-72 shrink-0">
+      {{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 560, 315, "Article cover", Some("w-full h-auto border border-slate-200")).unwrap_or("".to_string())|safe }}
+    </a>
+    {% when None %}
+    {% endmatch %}
+    <div class="mt-4 md:mt-0">
+      <p class="font-mono text-xs md:text-sm text-slate-500">
+        <time datetime="{{latest.metadata.date}}">{{latest.metadata.date|pretty_date}}</time>
+      </p>
+      <h3 class="font-sans text-2xl md:text-3xl font-bold leading-tight mt-1">
+        <a href="/blog/{{latest.slug}}" class="text-blue-950 no-underline hover:text-blue-500">{{latest.metadata.title}}</a>
+      </h3>
+      <div class="font-tech text-base md:text-lg text-slate-700 leading-relaxed mt-2 line-clamp-3">{{latest.body|truncate_md(3)|parse_markdown|safe}}</div>
+      <p class="mt-3"><a href="/blog/{{latest.slug}}" class="font-mono text-sm">read&nbsp;→</a></p>
+    </div>
+  </article>
+</section>
+{% endif %}
+{% endfor %}
+
+<!-- 01 · writing (archive of featured posts) -->
+{% let segment = "blog".to_string() %}
+<section id="blog" class="max-w-read mx-auto px-5 pt-14">
+  {% call sh::section_header("01", "more writing", "/blog") %}{% endcall %}
   <ul class="mt-1">
    {% for post in featured_blog_posts %}
+   {% if !loop.first %}
     <li>{% include "components/blog_post_preview.html" %}</li>
+   {% endif %}
    {% endfor %}
   </ul>
 </section>
 
 <!-- 02 · broadcasts -->
 {% let segment = "broadcasts".to_string() %}
-<section id="broadcasts" class="max-w-read mx-auto px-5 pt-12">
-  <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
-    <span class="font-mono text-sm text-pink-700">02</span>
-    <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase"><a href="/broadcasts" class="text-blue-950 no-underline">broadcasts</a></h2>
-    <a href="/broadcasts" class="ml-auto font-mono text-sm">all&nbsp;→</a>
-  </header>
+<section id="broadcasts" class="max-w-read mx-auto px-5 pt-14">
+  {% call sh::section_header("02", "broadcasts", "/broadcasts") %}{% endcall %}
   <ul class="mt-1">
    {% for post in featured_broadcasts %}
     <li>{% include "components/blog_post_preview.html" %}</li>
@@ -57,11 +81,8 @@
 {% include "sections/showcase.html" %}
 
 <!-- 04 · elsewhere -->
-<section id="socials" class="max-w-image mx-auto px-5 pt-12 pb-4">
-  <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
-    <span class="font-mono text-sm text-pink-700">04</span>
-    <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase">elsewhere</h2>
-  </header>
+<section id="socials" class="max-w-image mx-auto px-5 pt-14 pb-4">
+  {% call sh::section_header("04", "elsewhere", "") %}{% endcall %}
   <div class="mt-6">
     {% include "sections/social.html" %}
   </div>

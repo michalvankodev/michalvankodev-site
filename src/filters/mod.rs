@@ -1,5 +1,5 @@
 mod markdown;
-pub use markdown::parse_markdown;
+pub use markdown::{extract_headings, parse_markdown, HeadingToc};
 
 use chrono::{DateTime, Utc};
 

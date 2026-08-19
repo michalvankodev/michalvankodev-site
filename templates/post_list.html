@@ -27,18 +27,24 @@
       </ul>
     </section>
     {% endif %}
-
-    <div class="border-b-2 border-blue-950 mt-6"></div>
   </header>
 
-  {% if posts.len() == 0 %}
+  {% if grouped_posts.is_empty() %}
   <p class="font-tech text-read text-slate-700 py-10">You've found void in the space.</p>
   {% else %}
-  <ul class="mt-1">
-   {% for post in posts %}
-    <li>{% include "components/blog_post_preview.html" %}</li>
-   {% endfor %}
-  </ul>
+  {% for group in grouped_posts %}
+  <section class="year-group">
+    <h2 class="sticky top-0 bg-blue-50 z-10 font-sans text-2xl font-bold text-blue-950 border-b-2 border-blue-950 py-3 mt-8">
+      {{group.year}}
+      <span class="font-mono text-sm font-medium text-slate-400 ml-2">{{group.posts.len()}}</span>
+    </h2>
+    <ul>
+     {% for post in group.posts %}
+      <li>{% include "components/blog_post_preview.html" %}</li>
+     {% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
   {% endif %}
 </section>
 

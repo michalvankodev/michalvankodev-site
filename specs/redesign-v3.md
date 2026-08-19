@@ -60,7 +60,31 @@ Syntax highlighting uses syntect's **InspiredGitHub** theme with inline-styled s
 9. **Dark code blocks** — worth the Rust-side highlighting change? (See constraint above.)
 10. **Measure 42rem** — sans at 20px ≈ 66 chars. Comfortable, or go wider (44–46rem) like some technical blogs?
 
-## Verified
+## Round 2 — structural upgrades (v3.1)
+
+Higher-scale changes to page structure and the rendering pipeline:
+
+1. **Sticky "on this page" TOC** (articles, xl+) — headings already receive slug ids in `parse_markdown`; new `extract_headings()` in `src/filters/markdown.rs` mirrors that slug logic (first raw text event, verbatim) so TOC anchors always match. TOC is a mono rail on the right with IntersectionObserver scroll-spy (vanilla, ~20 lines, highlights current section in pink).
+2. **Reading time** — words/220, shown in the article kicker (`~/blog · 8 November 2024 · 2 min read`).
+3. **Prev/next post navigation** — `get_post_neighbors()` finds date-order neighbors within the same segment; boxed newer/older links under the article (grid, right-aligned older).
+4. **Archive-style list pages** — posts grouped by year (`group_posts_by_year`), sticky year headers with mono post counts (`2026 1 · 2025 1 · 2024 3 · … · 2019 2`), still sticky through scroll. Applies to /blog, /broadcasts, and tag filters.
+5. **Homepage lead story** — latest post promoted to a hero (kicker + date + 3xl title + clamped excerpt + cover at 560px, "read →" link); the "more writing" chapter lists the rest. Verified: hero = newest post, list starts at #2.
+6. **`section_header` macro** (`templates/components/section_header.html`) — the repeated chapter-header pattern (number + lowercase title + all-link) is now one macro used by index and showcase sections.
+7. **Anchor UX** — `scroll-behavior: smooth` behind `prefers-reduced-motion`, `scroll-margin-top` on article headings.
+
+### Structural notes
+- `PostListTemplate.posts` was replaced by `grouped_posts: Vec<PostYearGroup>` — both list handlers (blog + broadcasts) updated.
+- Askama gotcha hit twice: `match` cannot take a `.first()` method-call expression (use `for` + `loop.first`), and `{% call %}` requires `{% endcall %}` even with no body.
+- `ParseResult<BlogPostMetadata>` is not `Clone`; neighbor lookup consumes the iterator (`nth`) instead.
+- The slugifier slugs the heading's *first text event* verbatim, so "Hello …" → `hello-` (trailing hyphen). TOC matches body ids exactly, which is the contract that matters.
+
+### Verified (round 2)
+
+- TOC anchors == rendered heading ids; scroll-spy activates after jump (`#on-to-the-next-one` highlighted).
+- Kicker reading time; prev/next cards with real neighbors.
+- `/blog`: 8 year groups, 34 rows, sticky year headers.
+- Homepage: lead story hero (288px cover at md), writing chapter starts at post #2.
+- 14/14 tests, `cargo check` clean.
 
 - `cargo check` clean, 14/14 tests, `just tailwind_build` rebuilt.
 - Live: article (mono kicker, Baloo2 48px h1, system-ui 20px/35px ragged body, 47px mono cursor-block drop cap, mono tags, hairline cover), home (mono navy `/blog` nav, mono chapter numbers, sans bio), `/blog` list (mono dates, thumbs, sans excerpts, hover flash), portfolio, contact, 404 (`$ GET /definitely-not-here` → `404: page not found` with real path).

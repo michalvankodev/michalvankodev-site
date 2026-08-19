@@ -1,0 +1,9 @@
+{% macro section_header(num, title, href) %}
+<header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
+  {% if !num.is_empty() %}<span class="font-mono text-sm text-pink-700">{{num}}</span>{% endif %}
+  <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase">
+    {% if !href.is_empty() %}<a href="{{href}}" class="text-blue-950 no-underline">{{title}}</a>{% else %}{{title}}{% endif %}
+  </h2>
+  {% if !href.is_empty() %}<a href="{{href}}" class="ml-auto font-mono text-sm">all&nbsp;→</a>{% endif %}
+</header>
+{% endmacro %}

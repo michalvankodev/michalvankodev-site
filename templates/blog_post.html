@@ -18,7 +18,7 @@
 <article class="mb-6">
   <header class="px-5 max-w-read mx-auto pt-12">
     <p class="kicker">
-      ~/{{segment}} · <time datetime="{{date}}" style="view-transition-name: post_date_{{slug}}">{{date|pretty_date}}</time>
+      ~/{{segment}} · <time datetime="{{date}}" style="view-transition-name: post_date_{{slug}}">{{date|pretty_date}}</time> · {{reading_time}} min read
     </p>
     <h1 class="font-sans text-3xl md:text-4xl lg:text-5xl font-bold text-blue-950 mt-2 mb-4 leading-tight" style="view-transition-name: post_title_{{slug}};">{{title}}</h1>
     {% include "post_tag_list.html" %}
@@ -33,12 +33,51 @@
   {% when None %}
   {% endmatch %}
 
-  <section class="article-body">
-    {{body|parse_markdown|safe}}
-  </section>
+  <div class="max-w-image mx-auto px-5 xl:grid xl:grid-cols-[minmax(0,42rem)_14rem] xl:gap-12 xl:justify-center">
+    <section class="article-body">
+      {{body|parse_markdown|safe}}
+    </section>
+
+    {% if !toc.is_empty() %}
+    <aside class="hidden xl:block">
+      <nav id="toc" class="sticky top-8 border-l-2 border-slate-200 pl-4" aria-label="Table of contents">
+        <p class="font-mono text-xs text-slate-500 lowercase mb-2">on this page</p>
+        <ul class="space-y-1.5">
+          {% for heading in toc %}
+          <li class="{% if heading.level == 3 %}pl-3{% endif %}">
+            <a href="#{{heading.id}}" class="block font-mono text-xs leading-snug text-blue-950 no-underline hover:text-pink-700">{{heading.text}}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </aside>
+    {% endif %}
+  </div>
 </article>
 
 <footer class="max-w-read mx-auto px-5 pb-4">
+
+{% if newer_post.is_some() || older_post.is_some() %}
+<section id="post-nav" class="mt-12 grid gap-4 sm:grid-cols-2 font-sans">
+  {% match newer_post %}
+  {% when Some with (post) %}
+  <a href="/{{segment}}/{{post.slug}}" class="no-underline border border-slate-200 p-4 hover:border-blue-400 transition-colors group">
+    <span class="font-mono text-xs text-slate-500">← newer</span>
+    <span class="block text-base font-semibold text-blue-950 group-hover:text-blue-500 mt-1">{{post.metadata.title}}</span>
+  </a>
+  {% when None %}
+  <span></span>
+  {% endmatch %}
+  {% match older_post %}
+  {% when Some with (post) %}
+  <a href="/{{segment}}/{{post.slug}}" class="no-underline border border-slate-200 p-4 hover:border-blue-400 transition-colors group text-right">
+    <span class="font-mono text-xs text-slate-500">older →</span>
+    <span class="block text-base font-semibold text-blue-950 group-hover:text-blue-500 mt-1">{{post.metadata.title}}</span>
+  </a>
+  {% when None %}
+  {% endmatch %}
+</section>
+{% endif %}
 
 {% if recommended_posts.len() > 0 %}
 <section id="recommended-articles" class="mt-12">
@@ -58,4 +97,26 @@
     <a href="/{{segment}}">← ./{{segment}}</a>
   </p>
 </footer>
+
+<script>
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('#toc a'));
+    if (links.length === 0) return;
+    var byId = {};
+    links.forEach(function (a) { byId[a.hash.slice(1)] = a; });
+    var headings = Array.prototype.slice.call(
+      document.querySelectorAll('.article-body h2[id], .article-body h3[id]')
+    );
+    var activate = function (id) {
+      links.forEach(function (l) { l.classList.remove('text-pink-700'); });
+      if (byId[id]) byId[id].classList.add('text-pink-700');
+    };
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) activate(entry.target.id);
+      });
+    }, { rootMargin: '0px 0px -80% 0px' });
+    headings.forEach(function (h) { observer.observe(h); });
+  })();
+</script>
 {% endblock %}
