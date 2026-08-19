@@ -1,25 +1,13 @@
 # CI/CD Pipeline
 
-Gitea server for production.
+Superseded by the specification in [`specs/CI-deploy.md`](../specs/CI-deploy.md),
+which documents the deployed Forgejo CI pipeline (test → build → SSG export →
+rsync deploy) including the generated-images caching strategy.
 
-Github actions for build and release.
-Release -> Publish.
+Historical notes from the original sketch:
 
-## Build step
-
-1. Compile project
-2. Run in production mode
-3. wget command to download and create a static site.
-  a) ensure every image is downloaded and created / we can create a cache mechanism to download images from previous build / save a ton of time
-4. Backup old version
-5. Publish new version
-
-
-## Development
-
-1. Build the project
-2. Wget cannot be run on dev server due to tower reload
-
-## TODO
-
-- Some weird links (Colemak)
+- Build: compile, run in prod mode, wget crawl to static site
+- Cache generated images from previous builds (implemented: restore from
+  production `dist/` — see spec D1)
+- Backup old version, publish new version (implemented: `rsync --delete`)
+- Dev server cannot be crawled due to livereload (still true)

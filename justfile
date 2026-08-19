@@ -4,6 +4,10 @@ port := env_var_or_default('PORT', '3080')
 tailwind:
 	npx @tailwindcss/cli -i ./styles/input.css -o ./styles/output.css --watch
 
+# Tailwind one-shot build (used in CI)
+tailwind_build:
+	npx @tailwindcss/cli -i ./styles/input.css -o ./styles/output.css
+
 # svg sprite creation
 svgstore:
 	npx svgstore -o templates/icons/sprite.svg static/svg/input/*.svg
