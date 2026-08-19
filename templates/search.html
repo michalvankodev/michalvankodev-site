@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block og_meta %}
+<meta property="og:title" content="Search @michalvankodev" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://michalvanko.dev/search" />
+<meta property="og:image" content="https://michalvanko.dev/images/m-logo.svg" />
+{% endblock %}
+
+{% block content %}
+
+<section id="search-page" class="max-w-read mx-auto px-5">
+  <header class="pt-12 pb-2">
+    <p class="kicker">~/search</p>
+    <h1 class="font-sans text-3xl md:text-4xl font-bold text-blue-950 mt-2 lowercase">
+      search
+    </h1>
+    <div class="border-b-2 border-blue-950 mt-6"></div>
+  </header>
+
+  <div class="mt-8">
+    <div class="flex items-center gap-3 border border-slate-300 bg-white px-4 py-3 focus-within:border-blue-500">
+      <span class="font-mono text-sm text-pink-700 select-none">$</span>
+      <input
+        id="search-input"
+        type="search"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="grep -i …"
+        aria-label="Search posts"
+        class="w-full bg-transparent font-mono text-base md:text-lg text-blue-950 outline-none placeholder:text-slate-400"
+      />
+    </div>
+    <p id="search-status" class="font-mono text-xs text-slate-500 mt-3">loading index…</p>
+    <ul id="search-results" class="mt-4"></ul>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var input = document.getElementById('search-input');
+    var status = document.getElementById('search-status');
+    var results = document.getElementById('search-results');
+    var index = [];
+
+    function render(query) {
+      results.innerHTML = '';
+      if (!query) {
+        status.textContent = index.length + ' posts indexed — type to filter';
+        return;
+      }
+      var tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+      var scored = [];
+      index.forEach(function (post) {
+        var title = post.title.toLowerCase();
+        var tags = post.tags.join(' ').toLowerCase();
+        var excerpt = post.excerpt.toLowerCase();
+        var score = 0;
+        var matches = tokens.every(function (token) {
+          var inTitle = title.indexOf(token) !== -1;
+          var inTags = tags.indexOf(token) !== -1;
+          var inExcerpt = excerpt.indexOf(token) !== -1;
+          if (inTitle) score += 3;
+          if (inTags) score += 2;
+          if (inExcerpt) score += 1;
+          return inTitle || inTags || inExcerpt;
+        });
+        if (matches) scored.push({ post: post, score: score });
+      });
+      scored.sort(function (a, b) {
+        return b.score - a.score || (a.post.date < b.post.date ? 1 : -1);
+      });
+
+      status.textContent = scored.length === 1
+        ? '1 match'
+        : scored.length + ' matches';
+
+      scored.forEach(function (item) {
+        var post = item.post;
+        var li = document.createElement('li');
+        li.className = 'py-5 border-b border-slate-200';
+        var row = document.createElement('div');
+        row.className = 'grid grid-cols-[4.5rem_1fr] md:grid-cols-[7.5rem_1fr] gap-x-4';
+        var date = document.createElement('time');
+        date.className = 'font-mono text-xs md:text-sm text-slate-500 md:text-right tabular-nums md:pt-1';
+        date.setAttribute('datetime', post.date);
+        date.textContent = post.date;
+        var main = document.createElement('div');
+        main.className = 'md:pt-1';
+        var h3 = document.createElement('h3');
+        h3.className = 'font-sans text-lg font-semibold leading-snug';
+        var a = document.createElement('a');
+        a.href = '/' + post.segment + '/' + post.slug;
+        a.className = 'text-blue-950 no-underline hover:text-blue-500';
+        a.textContent = post.title;
+        h3.appendChild(a);
+        var p = document.createElement('p');
+        p.className = 'font-tech text-base text-slate-700 leading-relaxed mt-1.5 line-clamp-2';
+        p.textContent = post.excerpt;
+        var ul = document.createElement('ul');
+        ul.className = 'mt-2 flex flex-wrap gap-x-3 font-mono text-xs';
+        post.tags.forEach(function (tag) {
+          var tagLi = document.createElement('li');
+          var tagA = document.createElement('a');
+          tagA.href = '/' + post.segment + '/tags/' + tag;
+          tagA.className = 'text-pink-950 no-underline hover:text-blue-500';
+          tagA.textContent = '#' + tag;
+          tagLi.appendChild(tagA);
+          ul.appendChild(tagLi);
+        });
+        main.appendChild(h3);
+        main.appendChild(p);
+        main.appendChild(ul);
+        row.appendChild(date);
+        row.appendChild(main);
+        li.appendChild(row);
+        results.appendChild(li);
+      });
+
+      if (scored.length === 0) {
+        status.textContent = 'no matches for "' + query + '"';
+      }
+    }
+
+    fetch('/search.json')
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        index = data;
+        var params = new URLSearchParams(window.location.search);
+        var query = params.get('q') || '';
+        if (query) input.value = query;
+        render(query);
+        input.focus();
+      })
+      .catch(function () { status.textContent = 'failed to load search index'; });
+
+    var debounce = null;
+    input.addEventListener('input', function () {
+      clearTimeout(debounce);
+      debounce = setTimeout(function () { render(input.value.trim()); }, 120);
+    });
+  })();
+</script>
+
+{% endblock %}

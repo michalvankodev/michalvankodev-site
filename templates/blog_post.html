@@ -15,6 +15,7 @@
 {% endblock %}
 
 {% block content %}
+<div id="read-progress" class="fixed top-0 left-0 h-0.5 bg-pink-600 z-50" style="width:0%" aria-hidden="true"></div>
 <article class="mb-6">
   <header class="px-5 max-w-read mx-auto pt-12">
     <p class="kicker">
@@ -39,7 +40,7 @@
     </section>
 
     {% if !toc.is_empty() %}
-    <aside class="hidden xl:block">
+    <aside class="hidden xl:block print:hidden">
       <nav id="toc" class="sticky top-8 border-l-2 border-slate-200 pl-4" aria-label="Table of contents">
         <p class="font-mono text-xs text-slate-500 lowercase mb-2">on this page</p>
         <ul class="space-y-1.5">
@@ -58,10 +59,10 @@
 <footer class="max-w-read mx-auto px-5 pb-4">
 
 {% if newer_post.is_some() || older_post.is_some() %}
-<section id="post-nav" class="mt-12 grid gap-4 sm:grid-cols-2 font-sans">
+<section id="post-nav" class="print:hidden mt-12 grid gap-4 sm:grid-cols-2 font-sans">
   {% match newer_post %}
   {% when Some with (post) %}
-  <a href="/{{segment}}/{{post.slug}}" class="no-underline border border-slate-200 p-4 hover:border-blue-400 transition-colors group">
+  <a href="/{{segment}}/{{post.slug}}" data-dir="newer" class="no-underline border border-slate-200 p-4 hover:border-blue-400 transition-colors group">
     <span class="font-mono text-xs text-slate-500">← newer</span>
     <span class="block text-base font-semibold text-blue-950 group-hover:text-blue-500 mt-1">{{post.metadata.title}}</span>
   </a>
@@ -70,7 +71,7 @@
   {% endmatch %}
   {% match older_post %}
   {% when Some with (post) %}
-  <a href="/{{segment}}/{{post.slug}}" class="no-underline border border-slate-200 p-4 hover:border-blue-400 transition-colors group text-right">
+  <a href="/{{segment}}/{{post.slug}}" data-dir="older" class="no-underline border border-slate-200 p-4 hover:border-blue-400 transition-colors group text-right">
     <span class="font-mono text-xs text-slate-500">older →</span>
     <span class="block text-base font-semibold text-blue-950 group-hover:text-blue-500 mt-1">{{post.metadata.title}}</span>
   </a>
@@ -80,7 +81,7 @@
 {% endif %}
 
 {% if recommended_posts.len() > 0 %}
-<section id="recommended-articles" class="mt-12">
+<section id="recommended-articles" class="print:hidden mt-12">
   <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
     <span class="font-mono text-sm text-pink-700">↩</span>
     <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase">further reading</h2>
@@ -93,30 +94,56 @@
 </section>
 {% endif %}
 
-  <p class="text-center my-10 font-mono text-sm">
+  <p class="text-center my-10 font-mono text-sm print:hidden">
     <a href="/{{segment}}">← ./{{segment}}</a>
+    <span class="text-slate-400 mx-2">·</span>
+    <span class="text-slate-400">←/→ keys browse</span>
   </p>
 </footer>
 
 <script>
   (function () {
+    // Scroll-spy for the table of contents
     var links = Array.prototype.slice.call(document.querySelectorAll('#toc a'));
-    if (links.length === 0) return;
-    var byId = {};
-    links.forEach(function (a) { byId[a.hash.slice(1)] = a; });
-    var headings = Array.prototype.slice.call(
-      document.querySelectorAll('.article-body h2[id], .article-body h3[id]')
-    );
-    var activate = function (id) {
-      links.forEach(function (l) { l.classList.remove('text-pink-700'); });
-      if (byId[id]) byId[id].classList.add('text-pink-700');
+    if (links.length > 0) {
+      var byId = {};
+      links.forEach(function (a) { byId[a.hash.slice(1)] = a; });
+      var headings = Array.prototype.slice.call(
+        document.querySelectorAll('.article-body h2[id], .article-body h3[id]')
+      );
+      var activate = function (id) {
+        links.forEach(function (l) { l.classList.remove('text-pink-700'); });
+        if (byId[id]) byId[id].classList.add('text-pink-700');
+      };
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) activate(entry.target.id);
+        });
+      }, { rootMargin: '0px 0px -80% 0px' });
+      headings.forEach(function (h) { observer.observe(h); });
+    }
+
+    // Reading progress hairline
+    var bar = document.getElementById('read-progress');
+    var updateProgress = function () {
+      var doc = document.documentElement;
+      var total = doc.scrollHeight - window.innerHeight;
+      var progress = total > 0 ? (window.scrollY / total) * 100 : 0;
+      bar.style.width = progress + '%';
     };
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) activate(entry.target.id);
-      });
-    }, { rootMargin: '0px 0px -80% 0px' });
-    headings.forEach(function (h) { observer.observe(h); });
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    // Keyboard navigation: ← newer, → older
+    document.addEventListener('keydown', function (event) {
+      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+      var tag = (event.target && event.target.tagName) || '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      var dir = event.key === 'ArrowLeft' ? 'newer' : event.key === 'ArrowRight' ? 'older' : null;
+      if (!dir) return;
+      var link = document.querySelector('#post-nav a[data-dir="' + dir + '"]');
+      if (link) window.location.href = link.href;
+    });
   })();
 </script>
 {% endblock %}

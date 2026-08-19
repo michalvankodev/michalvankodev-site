@@ -162,7 +162,18 @@
   }
 
   pre {
-    @apply p-4 my-6 mx-auto max-w-read overflow-auto font-mono text-sm leading-relaxed text-slate-800 bg-white border border-slate-200;
+    @apply p-4 my-6 mx-auto max-w-read overflow-auto font-mono text-sm leading-relaxed border border-slate-800 bg-blue-950;
+  }
+
+  /* syntect emits its own nested <pre> with inline colors; keep layout on the outer pre only */
+  pre pre {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    color: #c0c5ce; /* base16-ocean.dark foreground fallback */
+    background: transparent !important;
+    overflow: visible;
   }
 
   figure {
@@ -382,4 +393,15 @@ article a {
 
 .article-body :is(h1, h2, h3, h4) {
   scroll-margin-top: 2.5rem;
+}
+
+/* Print: articles read like a book on paper */
+@media print {
+  body {
+    background: #fff;
+  }
+
+  #read-progress {
+    display: none;
+  }
 }

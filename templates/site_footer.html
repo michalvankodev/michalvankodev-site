@@ -1,4 +1,4 @@
-<footer class="mt-16" view-transition-name="site_footer">
+<footer class="mt-16 print:hidden" view-transition-name="site_footer">
   <hr class="border-slate-300">
   <section class="max-w-image mx-auto px-5 py-6 flex flex-wrap items-center justify-between gap-4">
     <p
@@ -48,7 +48,8 @@
         width="16"
       /></a>
     </p>
-    <aside>
+    <aside class="flex items-center gap-4">
+      <a href="/search.json" title="Search index (JSON)" class="font-mono text-xs text-slate-500 no-underline hover:text-blue-500">index.json</a>
       <a href="/feed.xml" title="RSS feed" class="no-underline">
         <svg role="img" aria-hidden="true" aria-label="RSS feed" class="fill-blue-950 h-5 w-5 hover:fill-blue-500">
           <use href="#rss" />

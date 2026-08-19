@@ -6,6 +6,7 @@ use crate::{
         broadcast_list::render_broadcast_post_list, contact::render_contact,
         export_wait::export_wait, index::render_index, not_found::render_not_found,
         portfolio::render_portfolio, project_list::render_projects_list,
+        search::{render_search, search_index},
         showcase::egg_fetcher::render_egg_fetcher,
     },
 };
@@ -28,6 +29,8 @@ pub fn get_router() -> Router {
         .route("/broadcasts/tags/{tag}", get(render_broadcast_post_list))
         .route("/broadcasts/{post_id}", get(render_blog_post))
         .route("/contact", get(render_contact))
+        .route("/search", get(render_search))
+        .route("/search.json", get(search_index))
         .route("/showcase", get(render_projects_list))
         .route("/showcase/m-logo-svg", get(render_animated_logo))
         .route("/showcase/{project_slug}", get(render_egg_fetcher))

@@ -10,4 +10,5 @@ pub mod not_found;
 pub mod portfolio;
 pub mod post_list;
 pub mod project_list;
+pub mod search;
 pub mod showcase;

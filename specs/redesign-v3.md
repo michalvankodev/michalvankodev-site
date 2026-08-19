@@ -86,5 +86,20 @@ Higher-scale changes to page structure and the rendering pipeline:
 - Homepage: lead story hero (288px cover at md), writing chapter starts at post #2.
 - 14/14 tests, `cargo check` clean.
 
+## Round 3 — reader tooling (v3.2)
+
+1. **Dark terminal code blocks** — swapped the syntect theme from `InspiredGitHub` to `base16-ocean.dark`. The "impossible" from the v3 constraint turned out to be a one-line theme swap: syntect bakes span colors inline, and the nested-`pre` seam is handled with `pre pre { background: transparent !important }` (CSS `!important` beats the inline style) so the block is uniformly `blue-950` with hairline `slate-800` border. Verified: `wget --no-convert-links…` renders on navy with ocean palette spans.
+2. **Client-side search** (`/search`) — new `src/pages/search.rs` serves a `/search.json` index (title, segment, slug, ISO date, tags, 220-char plain-text excerpt via pulldown-cmark) and a page with a `$ grep -i …` prompt. Vanilla JS: token matching across title(×3)/tags(×2)/excerpt(×1), score-sorted, 120ms debounce, `?q=` prefill + autofocus. Verified: `?q=keyboard` → 4 matches; `rust cargo` → 1 match (the crate post). Nav gains `/search`; footer links `index.json` for SSG discoverability.
+3. **Keyboard navigation** — ←/→ jump to newer/older posts (guards for inputs and modifier keys; hint under the article footer). Verified: dispatching ArrowRight navigated to the predicted older post.
+4. **Reading progress hairline** — 2px pink-600 bar fixed at the top of articles. Verified: 0% → 54% mid-scroll.
+5. **Print styles** — `print:hidden` on header, footer, TOC, post-nav, further reading, progress bar, year headers, back-to-top; white page background in print. Articles print as clean text.
+6. **Back-to-top** — `↑ top` mono link at the end of archive lists; `id="top"` anchor on the header.
+
+### Verified (round 3)
+
+- `/search.json` returns the full index; search page prefills, filters, scores, renders.
+- Code blocks: outer `rgb(11,39,70)`, inner transparent, spans colored.
+- Progress 0→54%; ArrowRight navigates; 14/14 tests, `cargo check` clean.
+
 - `cargo check` clean, 14/14 tests, `just tailwind_build` rebuilt.
 - Live: article (mono kicker, Baloo2 48px h1, system-ui 20px/35px ragged body, 47px mono cursor-block drop cap, mono tags, hairline cover), home (mono navy `/blog` nav, mono chapter numbers, sans bio), `/blog` list (mono dates, thumbs, sans excerpts, hover flash), portfolio, contact, 404 (`$ GET /definitely-not-here` → `404: page not found` with real path).
