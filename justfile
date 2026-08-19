@@ -53,8 +53,21 @@ kill:
 clean:
 	rm -rf dist
 
+# Warm up the SSG export: crawl all pages once (pages only — image requests are
+# skipped) so every image generation job gets enqueued, then wait for the queue
+# to drain before the real crawl. Guarantees complete generated images in dist/.
+ssg_prewarm:
+	#!/usr/bin/env bash
+	set -euxo pipefail
+	rm -rf dist_warmup
+	# 404s are tolerated: generated images may not exist yet — that is the point
+	# of the warmup; the queue drains before the real crawl starts.
+	wget --no-convert-links -r --reject jpg,jpeg,png,avif,gif,webp,svg -P dist_warmup --no-host-directories 127.0.0.1:{{port}} || true
+	curl --fail --silent --show-error --max-time 900 http://127.0.0.1:{{port}}/export-wait
+	rm -rf dist_warmup
+
 # SSG
-ssg:
+ssg: ssg_prewarm
 	- wget --no-convert-links -r -p -E -P dist --no-host-directories 127.0.0.1:{{port}}
 	- wget --no-convert-links --content-on-error -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/not-found
 	- wget --no-convert-links -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/showcase/m-logo-svg

@@ -28,6 +28,10 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
+    // Eagerly start the image generation queue so the worker count is visible
+    // at startup. Lazy init would also work (first `enqueue_image_job` call).
+    picture_generator::image_jobs::init();
+
     // build our application with a single route
     let app = router::get_router()
         .nest_service("/styles", ServeDir::new("styles"))

@@ -1,14 +1,10 @@
-use std::{
-    path::{Path, PathBuf},
-    sync::Arc,
-};
+use std::path::{Path, PathBuf};
 
-use anyhow::Context;
 use image::{image_dimensions, ImageDecoder, ImageReader};
 use indoc::formatdoc;
 
 use super::{
-    export_format::ExportFormat, image_generator::generate_images,
+    export_format::ExportFormat, image_jobs::{enqueue_image_job, ImageJob},
     resolutions::get_max_resolution_with_crop,
 };
 
@@ -69,36 +65,15 @@ pub fn generate_picture_markup(
         height,
         should_swap_dimensions(&disk_img_path),
     );
-    let path_to_generated_arc = Arc::new(path_to_generated);
-    let path_to_generated_clone = Arc::clone(&path_to_generated_arc);
-    let resolutions_arc = Arc::new(resolutions);
-    let resolutions_clone = Arc::clone(&resolutions_arc);
-    let exported_formats_arc = Arc::new(exported_formats);
-    let exported_formats_clone = Arc::clone(&exported_formats_arc);
 
-    rayon::spawn(move || {
-        let orig_img = ImageReader::open(&disk_img_path)
-            .with_context(|| format!("Failed to read instrs from {:?}", &disk_img_path))
-            .unwrap()
-            .decode()
-            .unwrap();
-
-        let result = generate_images(
-            &orig_img,
-            &disk_img_path,
-            &path_to_generated_clone,
-            &resolutions_clone,
-            &exported_formats_clone,
-        )
-        .with_context(|| "Failed to generate images".to_string());
-        if let Err(e) = result {
-            tracing::error!("Error: {}", e);
-        }
+    // Fire-and-forget: the queue deduplicates jobs, skips fully generated
+    // images, and bounds CPU usage (see `image_jobs`).
+    enqueue_image_job(ImageJob {
+        disk_image_path: disk_img_path,
+        generated_base_path: path_to_generated.clone(),
+        resolutions: resolutions.clone(),
+        formats: exported_formats.clone(),
     });
-
-    let exported_formats = Arc::clone(&exported_formats_arc);
-    let path_to_generated = Arc::clone(&path_to_generated_arc);
-    let resolutions = Arc::clone(&resolutions_arc);
 
     let source_tags = exported_formats
         .iter()

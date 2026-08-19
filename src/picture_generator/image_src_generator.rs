@@ -1,10 +1,7 @@
-use std::{path::Path, sync::Arc};
-
-use anyhow::Context;
-use image::ImageReader;
+use std::path::Path;
 
 use super::{
-    image_generator::generate_images,
+    image_jobs::{enqueue_image_job, ImageJob},
     picture_markup_generator::{get_export_formats, get_generated_file_name, get_image_path},
 };
 
@@ -22,7 +19,7 @@ pub fn generate_image_with_src(
 
     let disk_img_path =
         Path::new("static/").join(orig_img_path.strip_prefix("/").unwrap_or(orig_img_path));
-    let resolutions = [(width, height, 1.)];
+    let resolutions = vec![(width, height, 1.)];
 
     let exported_formats = get_export_formats(orig_path);
 
@@ -32,36 +29,16 @@ pub fn generate_image_with_src(
 
     let exported_format = *exported_formats.first().unwrap();
 
-    let path_to_generated_arc = Arc::new(path_to_generated);
-    let path_to_generated_clone = Arc::clone(&path_to_generated_arc);
-
-    rayon::spawn(move || {
-        let orig_img = ImageReader::open(&disk_img_path)
-            .with_context(|| format!("Failed to read instrs from {:?}", &disk_img_path))
-            .unwrap()
-            .decode()
-            .unwrap();
-
-        let result = generate_images(
-            &orig_img,
-            &disk_img_path,
-            path_to_generated_clone.as_ref(),
-            &resolutions,
-            &[exported_format],
-        )
-        .with_context(|| "Failed to generate images".to_string());
-        if let Err(e) = result {
-            tracing::error!("Error: {}", e);
-        }
+    // Fire-and-forget: the queue deduplicates jobs, skips fully generated
+    // images, and bounds CPU usage (see `image_jobs`).
+    enqueue_image_job(ImageJob {
+        disk_image_path: disk_img_path,
+        generated_base_path: path_to_generated.clone(),
+        resolutions,
+        formats: exported_formats,
     });
 
-    let path_to_generated = Arc::clone(&path_to_generated_arc);
-
-    let image_path = get_image_path(
-        &path_to_generated,
-        resolutions.first().expect("Should this error ever happen?"),
-        &exported_format,
-    );
+    let image_path = get_image_path(&path_to_generated, &(width, height, 1.), &exported_format);
 
     Ok(image_path)
 }
