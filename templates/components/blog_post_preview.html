@@ -1,23 +1,35 @@
 <article
-	class="grid md:grid-cols-[7.5rem_1fr] gap-x-6 py-7 border-b border-slate-200"
+	class="grid grid-cols-[4.5rem_1fr] gap-x-4 gap-y-0 py-7 border-b border-slate-200 md:grid-cols-[7.5rem_6rem_1fr] md:gap-x-6"
 	style="view-transition-name:blog_post_preview_{{post.slug}};"
 >
 	<time
 		datetime="{{post.metadata.date}}"
-		class="font-sans text-xs md:text-sm text-slate-500 md:text-right tabular-nums md:pt-1.5"
+		class="col-span-2 md:col-span-1 font-sans text-xs md:text-sm text-slate-500 md:text-right tabular-nums md:pt-1.5"
 		style="view-transition-name: post_date_{{post.slug}}"
 	>{{post.metadata.date|pretty_date}}</time>
-	<div>
+
+	<a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="no-underline self-start mt-3 md:mt-0">
+		{% match post.metadata.thumbnail %}
+		{% when Some with (orig_path) %}
+		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", Some("w-full h-auto rounded-sm shadow-xs block")).unwrap_or("thumbnail not found".to_string())|safe }}
+		{% when None %}
+		<div class="w-full">
+			{% include "components/blog_post_default_thumbnail.html" %}
+		</div>
+		{% endmatch %}
+	</a>
+
+	<div class="mt-3 md:mt-0 md:pt-1 self-start">
 		<h3 class="font-sans text-lg md:text-xl font-semibold leading-snug">
 		  <a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="text-blue-950 no-underline hover:text-blue-500" style="view-transition-name: post_title_{{post.slug}}">{{post.metadata.title}}</a>
 		</h3>
 		<div class="font-serif text-read text-slate-700 leading-relaxed mt-1.5 line-clamp-2 text-left">{{post.body|truncate_md(2)|parse_markdown|safe}}</div>
 		<ul class="mt-2 flex flex-wrap gap-x-3 font-sans text-xs md:text-sm" style="view-transition-name: post_tags_{{post.slug}}">
-     {% for tag in post.metadata.tags %}
-      <li>
-        <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline hover:text-blue-500">#{{tag|capitalize}}</a>
-      </li>
-      {% endfor %}
+			{% for tag in post.metadata.tags %}
+			<li>
+				<a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline hover:text-blue-500">#{{tag|capitalize}}</a>
+			</li>
+			{% endfor %}
 		</ul>
 	</div>
 </article>

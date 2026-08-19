@@ -62,7 +62,17 @@ Branch: `redesign/from-scratch` (stacked on `redesign/draft`). This is a ground-
 9. **Skill/talent rows have no icons on portfolio Experience** — company thumbnails show when the model has them; otherwise rows are text-only. Fine?
 10. **`line-clamp-2` on excerpts** — two lines max. Want three for longer summaries?
 
-## Verified
+## Round 2 — feedback adjustments (v2.1)
+
+- **Drop cap: kept** — loved. 🎉
+- **Thumbnails restored to list rows** — grid is now `date | thumbnail | content` on md+ (7.5rem / 6rem / 1fr); on mobile the date spans the top and thumb sits left of the text at 4.5rem. Thumbnails are click-through links to the post; the default letter-tile is now responsive (`aspect-[3/4]` instead of fixed 180×240).
+- **Reading size bumped** 19px → **20px** (`--text-read: 1.25rem`, line-height 1.7 → 34px). Applies to article body, excerpts, and the homepage bio.
+- **Hyphenation removed** — words stay whole (`hyphens-auto` dropped from article paragraphs and the bio). Text remains justified; at this measure (~64 chars at 20px) justification without hyphens is acceptable, but if word-spacing rivers start bothering you, say so and we flip to ragged-right (`text-left`).
+
+## Verified (round 2)
+
+- Article body: 20px/34px, `hyphens: manual`, justified, 640px measure.
+- List rows (34 posts on `/blog`): 3-column grid (`120px 96px …`), date right-aligned, thumbnail loading and aspect-preserved.
 
 - `cargo check` clean, 14/14 tests pass, `just tailwind_build` regenerated `output.css`.
 - Live walkthrough (fresh browser session): homepage (nav 6 links, serif bio 19px, chapter numbers), article (drop cap 62.7px, justified+hyphenated 19px/32.3 body at 640px measure, 1080px cover plate), `/blog` list, `/portfolio` (serif italic tagline, mono chips), `/contact`, 404.

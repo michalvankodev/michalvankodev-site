@@ -10,7 +10,6 @@
     --color-blue-50: #f1f7fe;
     --color-blue-100: #e1effd;
     --color-blue-300: #82c3f7;
-    --color-blue-400: #42a6f0;
     --color-blue-500: #1789e0;
     --color-blue-800: #0c4980;
     --color-blue-900: #103e6a;
@@ -57,10 +56,10 @@
     --text-5xl--line-height: 1;
     --text-6xl: 3.75rem;
     --text-6xl--line-height: 1;
+    --text-7xl: 4.5rem;
+    --text-7xl--line-height: 1;
     --text-8xl: 6rem;
     --text-8xl--line-height: 1;
-    --text-9xl: 8rem;
-    --text-9xl--line-height: 1;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
@@ -78,7 +77,7 @@
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
-    --text-read: 1.1875rem;
+    --text-read: 1.25rem;
     --text-read--line-height: 1.7;
     --spacing-note: 36rem;
     --spacing-read: 40rem;
@@ -256,6 +255,9 @@
   .isolate {
     isolation: isolate;
   }
+  .col-span-2 {
+    grid-column: span 2 / span 2;
+  }
   .row-span-3 {
     grid-row: span 3 / span 3;
   }
@@ -388,6 +390,9 @@
   .hidden {
     display: none;
   }
+  .inline {
+    display: inline;
+  }
   .inline-block {
     display: inline-block;
   }
@@ -396,6 +401,9 @@
   }
   .table {
     display: table;
+  }
+  .aspect-\[3\/4\] {
+    aspect-ratio: 3/4;
   }
   .aspect-video {
     aspect-ratio: var(--aspect-video);
@@ -420,9 +428,6 @@
   }
   .h-14 {
     height: calc(var(--spacing) * 14);
-  }
-  .h-\[240px\] {
-    height: 240px;
   }
   .h-\[280px\] {
     height: 280px;
@@ -450,9 +455,6 @@
   }
   .w-14 {
     width: calc(var(--spacing) * 14);
-  }
-  .w-\[180px\] {
-    width: 180px;
   }
   .w-full {
     width: 100%;
@@ -506,6 +508,9 @@
   .grid-flow-row {
     grid-auto-flow: row;
   }
+  .grid-cols-\[4\.5rem_1fr\] {
+    grid-template-columns: 4.5rem 1fr;
+  }
   .flex-wrap {
     flex-wrap: wrap;
   }
@@ -548,6 +553,9 @@
   .gap-x-3 {
     column-gap: calc(var(--spacing) * 3);
   }
+  .gap-x-4 {
+    column-gap: calc(var(--spacing) * 4);
+  }
   .gap-x-6 {
     column-gap: calc(var(--spacing) * 6);
   }
@@ -557,6 +565,9 @@
   .gap-x-32 {
     column-gap: calc(var(--spacing) * 32);
   }
+  .gap-y-0 {
+    row-gap: 0px;
+  }
   .gap-y-1 {
     row-gap: var(--spacing);
   }
@@ -565,6 +576,9 @@
   }
   .self-center {
     align-self: center;
+  }
+  .self-start {
+    align-self: flex-start;
   }
   .overflow-auto {
     overflow: auto;
@@ -742,9 +756,9 @@
     font-size: var(--text-4xl);
     line-height: var(--tw-leading, var(--text-4xl--line-height));
   }
-  .text-8xl {
-    font-size: var(--text-8xl);
-    line-height: var(--tw-leading, var(--text-8xl--line-height));
+  .text-6xl {
+    font-size: var(--text-6xl);
+    line-height: var(--tw-leading, var(--text-6xl--line-height));
   }
   .text-base {
     font-size: var(--text-base);
@@ -950,8 +964,14 @@
     }
   }
   @media (width >= 48rem) {
+    .md\:col-span-1 {
+      grid-column: span 1 / span 1;
+    }
     .md\:my-8 {
       margin-block: calc(var(--spacing) * 8);
+    }
+    .md\:mt-0 {
+      margin-top: 0px;
     }
     .md\:h-10 {
       height: calc(var(--spacing) * 10);
@@ -968,8 +988,8 @@
     .md\:grid-cols-2 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .md\:grid-cols-\[7\.5rem_1fr\] {
-      grid-template-columns: 7.5rem 1fr;
+    .md\:grid-cols-\[7\.5rem_6rem_1fr\] {
+      grid-template-columns: 7.5rem 6rem 1fr;
     }
     .md\:grid-rows-\[masonry\] {
       grid-template-rows: masonry;
@@ -980,6 +1000,9 @@
     .md\:justify-stretch {
       justify-content: stretch;
     }
+    .md\:gap-x-6 {
+      column-gap: calc(var(--spacing) * 6);
+    }
     .md\:gap-x-8 {
       column-gap: calc(var(--spacing) * 8);
     }
@@ -988,6 +1011,9 @@
     }
     .md\:py-2 {
       padding-block: calc(var(--spacing) * 2);
+    }
+    .md\:pt-1 {
+      padding-top: var(--spacing);
     }
     .md\:pt-1\.5 {
       padding-top: calc(var(--spacing) * 1.5);
@@ -1014,6 +1040,10 @@
     .md\:text-6xl {
       font-size: var(--text-6xl);
       line-height: var(--tw-leading, var(--text-6xl--line-height));
+    }
+    .md\:text-7xl {
+      font-size: var(--text-7xl);
+      line-height: var(--tw-leading, var(--text-7xl--line-height));
     }
     .md\:text-base {
       font-size: var(--text-base);
@@ -1239,8 +1269,6 @@
     text-align: justify;
     font-size: var(--text-read);
     line-height: var(--tw-leading, var(--text-read--line-height));
-    -webkit-hyphens: auto;
-    hyphens: auto;
     color: var(--color-slate-950);
   }
   > p:first-of-type::first-letter {
