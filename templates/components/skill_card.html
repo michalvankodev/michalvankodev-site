@@ -1,4 +1,4 @@
-<section class="flex border border-slate-200 rounded bg-white p-3">
+<section class="flex border border-slate-200 rounded-md bg-white p-3">
 	<aside class="flex justify-center items-center pr-3 shrink-0">
   {% match skill.thumbnail %}
   {% when Some with (source) %}
@@ -11,8 +11,8 @@
 	</aside>
 	<section>
 		<header>
-			<h3 class="text-lg font-medium mb-1 md:text-2xl">{{skill.name}}</h3>
+			<h3 class="text-lg font-semibold mb-1 md:text-xl">{{skill.name}}</h3>
 		</header>
-		<section class="text-sm leading-tight text-slate-800 md:text-lg md:leading-tight">{{skill.description|parse_markdown|safe}}</section>
+		<section class="text-sm leading-normal text-slate-800 md:text-lg">{{skill.description|parse_markdown|safe}}</section>
 	</section>
 </section>

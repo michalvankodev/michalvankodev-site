@@ -17,10 +17,10 @@
 {% block content %}
 <article class="mb-6">
   <header class="px-4 max-w-read mx-auto">
-  <h1 class="text-3xl md:text-4xl lg:text-6xl lg:mt-20 text-blue-900 mb-3 font-bold" style="view-transition-name: post_title_{{slug}};">{{title}}</h1>
+  <h1 class="text-3xl md:text-4xl lg:text-5xl lg:mt-12 text-blue-950 mb-3 font-bold" style="view-transition-name: post_title_{{slug}};">{{title}}</h1>
   <aside class="flex justify-between flex-row">
     {% include "post_tag_list.html" %}
-    <section class="created-at m-1 text-right text-sm text-slate-600 md:text-lg">
+    <section class="created-at m-1 text-right text-sm text-slate-600 md:text-base">
       <span>Published on</span>
       <time datetime="{date}" style="view-transition-name: post_date_{{slug}}"> {{date|pretty_date}} </time>
     </section>
@@ -41,7 +41,7 @@
 <section id="recommended-articles">
   <hr class="border-slate-300 m-5 md:my-8">
 
-  <h2 class="m-5 mt-8 text-2xl md:text-2xl lg:text-4xl lg:mt-10 text-blue-900 lg:mb-10 font-bold">Further reading</h2>
+  <h2 class="m-5 mt-8 mb-6 text-2xl md:text-3xl text-blue-950 font-bold">Further reading</h2>
   <ul class="mx-5 xl:flex xl:justify-start xl:gap-10">
     {% for post in recommended_posts %}
     <li class="flex-1">

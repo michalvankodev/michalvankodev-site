@@ -3,13 +3,11 @@
 @theme {
   --font-sans: "Baloo2", "Baloo2 Noto Fallback", "Baloo2 Fallback", "ui-sans-serif", "system-ui", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-  --text-readxl: 1.75rem;
-  --text-readxl--line-height: 2.25rem;
-  --text-readxl--letter-spacing: -0.015rem;
-  --text-readxl--font-weight: 400;
+  --text-readxl: 1.25rem;
+  --text-readxl--line-height: 2rem;
 
-  --spacing-note: 60rem;
-  --spacing-read: 64rem;
+  --spacing-note: 40rem;
+  --spacing-read: 44rem;
   --spacing-image: min(70rem, 95vw);
   --spacing-maxindex: 100rem;
 
@@ -101,47 +99,55 @@
   strong {
     @apply font-medium;
   }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-blue-500;
+  }
+
+  ::selection {
+    @apply bg-pink-200 text-blue-950;
+  }
 }
 
 .article-body {
   h1 {
-    @apply px-4 text-2xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-4xl lg:text-5xl;
+    @apply px-4 text-2xl font-bold text-blue-950 mb-3 mt-6 max-w-read mx-auto md:text-3xl md:mt-8 lg:text-4xl;
   }
 
   h2 {
-    @apply px-4 text-xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-2xl md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-4xl;
+    @apply px-4 text-xl font-semibold text-blue-950 mb-3 mt-6 max-w-read mx-auto md:text-2xl md:mb-4 md:mt-10 lg:text-3xl;
   }
 
   h3 {
-    @apply px-4 text-lg font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-xl md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-3xl;
+    @apply px-4 text-lg font-semibold text-blue-950 mb-2 mt-5 max-w-read mx-auto md:text-xl md:mb-3 md:mt-8 lg:text-2xl;
   }
 
   h4 {
-    @apply px-4 text-lg font-medium text-blue-900 mb-2 mt-3 max-w-read mx-auto md:text-lg md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-3xl;
+    @apply px-4 text-lg font-medium text-blue-950 mb-2 mt-4 max-w-read mx-auto md:text-xl;
   }
 
   p {
-    @apply px-4 my-2 text-slate-950 text-justify mx-auto max-w-read md:text-lg md:my-8 lg:text-readxl;
+    @apply px-4 my-2 text-slate-950 text-justify hyphens-auto mx-auto max-w-read md:text-lg md:my-6 lg:text-readxl;
   }
 
   pre {
-    @apply p-4 my-1 overflow-auto text-sm mx-auto max-w-read;
+    @apply p-4 my-6 overflow-auto text-sm mx-auto max-w-read;
   }
 
   figure {
     @apply p-4;
 
     img {
-      @apply rounded-sm shadow-md mx-auto lg:max-w-image;
+      @apply rounded-md shadow-md mx-auto lg:max-w-image;
     }
   }
 
   figcaption {
-    @apply mt-2 text-center text-sm italic text-blue-800 md:text-base lg:text-lg;
+    @apply mt-2 text-center text-sm italic text-blue-800 md:text-base;
   }
 
   table {
-    @apply text-sm mx-auto my-4 max-w-image table-auto border-collapse border-spacing-12 border border-slate-200 rounded-sm md:text-base lg:text-xl lg:my-8;
+    @apply text-sm mx-auto my-6 max-w-image table-auto border-collapse border-spacing-12 border border-slate-200 rounded-sm md:text-base md:my-8;
   }
 
   thead {
@@ -170,16 +176,16 @@
   }
 
   :not(pre) code {
-    @apply text-pink-900 rounded-sm border border-blue-300 px-1 py-0.5 bg-blue-100 text-sm md:text-base lg:text-xl;
+    @apply text-pink-900 rounded-sm border border-blue-300 px-1 py-0.5 bg-blue-100 text-sm md:text-base;
   }
 
   pre code pre {
-    @apply mx-2 rounded-sm lg:mx-auto lg:text-lg shadow-xs lg:max-w-note;
+    @apply mx-2 rounded-sm lg:mx-auto shadow-xs;
   }
 
   ul,
   ol {
-    @apply pl-10 pr-6 my-2 text-slate-950 mx-auto max-w-read md:text-lg md:my-8 lg:text-readxl lg:pl-14;
+    @apply pl-10 pr-6 my-2 text-slate-950 mx-auto max-w-read md:text-lg md:my-6 lg:text-readxl lg:pl-12;
 
     & p {
       @apply px-2;
@@ -195,7 +201,7 @@
   }
 
   iframe {
-    @apply rounded-sm shadow-md mx-auto lg:max-w-image;
+    @apply rounded-md shadow-md mx-auto lg:max-w-image;
   }
 }
 

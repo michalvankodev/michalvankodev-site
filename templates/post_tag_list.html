@@ -1,9 +1,9 @@
-<section class="article-tags text-base">
+<section class="article-tags text-sm md:text-base">
   {% if tags.len() > 0 %}
   <ul class="inline" style="view-transition-name: post_tags_{{slug}}">
     {% for tag in tags %}
-    <li class="inline italic text-blue-700 md:text-lg">
-      <a href="/{{segment}}/tags/{{tag}}">#{{tag}}</a>
+    <li class="inline">
+      <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline">#{{tag}}</a>
     </li>
     {% endfor %}
   </ul>

@@ -12,8 +12,8 @@
 
 <header class="max-w-read mx-auto md:grid md:grid-cols-[1fr_auto]">
   <div>
-    <h1 class="px-4 my-2 text-4xl text-blue-950 font-extrabold md:text-6xl xl:text-7xl xl:mb-4 xl:mt-10">Michal Vanko</h1>
-    <h3 class="px-4 my-1 text-2xl text-blue-900 font-bold italic md:text-3xl xl:text-4xl">Software Architect by passion</h3>
+    <h1 class="px-4 my-2 text-3xl text-blue-950 font-bold md:text-4xl xl:text-5xl xl:mb-4 xl:mt-10">Michal Vanko</h1>
+    <h3 class="px-4 my-1 text-xl text-blue-900 font-medium italic md:text-2xl">Software Architect by passion</h3>
     <section id="contact" class="mt-4">
       <ul class="max-w-[24rem] mx-auto md:mx-6">
         {% for link in contact_links %}
@@ -133,7 +133,7 @@
 
 <section id="skillsets" class="max-w-maxindex mx-auto xl:grid xl:gap-8 xl:grid-cols-3">
   <section id="work-history" class="max-w-read mx-auto xl:row-span-2">
-    <h2 class="m-5 text-3xl text-blue-950 font-extrabold md:text-4xl xl:font-medium">Work experience</h2>
+    <h2 class="m-5 text-2xl text-blue-950 font-bold md:text-3xl">Work experience</h2>
     <ul class="m-6 grid grid-flow-row gap-6">
       {% for skill in workplace_list %}
       <li>
@@ -144,7 +144,7 @@
   </section>
 
   <section id="education" class="max-w-read mx-auto">
-    <h2 class="m-5 text-3xl text-blue-950 font-extrabold md:text-4xl xl:font-medium">Education</h2>
+    <h2 class="m-5 text-2xl text-blue-950 font-bold md:text-3xl">Education</h2>
     <ul class="m-6 grid grid-flow-row gap-6">
       {% for skill in education_list %}
       <li>
@@ -155,7 +155,7 @@
   </section>
 
   <section id="skills" class="max-w-read mx-auto">
-    <h2 class="m-5 text-3xl text-blue-950 font-extrabold md:text-4xl xl:font-medium">Skills</h2>
+    <h2 class="m-5 text-2xl text-blue-950 font-bold md:text-3xl">Skills</h2>
     <ul class="m-6 grid grid-flow-row gap-6">
       <li>
         {% call tc::talent_card("code", "Web development", "Extensive expertise in creating performant, live web applications and websites.",) %}{% endcall %}
@@ -187,9 +187,9 @@
     {% if project_list.len() == 0 %}
     <p class="no-posts">You've found void in the space.</p>
     {% else %}
-    <h2 class="m-5 text-3xl text-blue-950 font-extrabold md:text-5xl">
+    <h2 class="m-5 text-2xl text-blue-950 font-bold md:text-3xl">
      Showcase
-    </h1>
+    </h2>
 
     <ul class="m-6 grid grid-flow-row gap-6 md:grid-cols-2 md:grid-rows-[masonry] md:justify-stretch md:items-stretch xl:grid-cols-3">
       {% for project in project_list %}
