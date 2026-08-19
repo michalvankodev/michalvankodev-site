@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-askama = { version = "0.15" }
+askama = { version = "0.16" }
 axum = "0.8.0"
 chrono = { version = "0.4.31", features = ["serde"] }
 pulldown-cmark = { version = "0.13" }
@@ -23,7 +23,6 @@ image = "0.25.6"
 anyhow = "1.0.86"
 syntect = { version = "5.3.0", default-features = false, features = ["default-fancy"] }
 indoc = "2.0.5"
-askama_escape = "0.15.0"
 mime_guess = "2.0.5"
 
 [dev-dependencies]

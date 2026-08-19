@@ -21,6 +21,7 @@ use crate::{
 #[derive(Template)]
 #[template(path = "index.html")]
 pub struct IndexTemplate {
+    title: String,
     header_props: HeaderProps,
     blog_tags: Vec<String>,
     broadcasts_tags: Vec<String>,
@@ -49,6 +50,7 @@ pub async fn render_index() -> Result<impl IntoResponse, StatusCode> {
 
     Ok(Html(
         IndexTemplate {
+            title: "Introduction".to_string(),
             header_props: HeaderProps::default(),
             blog_tags,
             broadcasts_tags,

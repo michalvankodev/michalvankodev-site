@@ -104,9 +104,8 @@ The tree did not compile before this refactor (untracked `Cargo.lock` had drifte
    askama to 0.15 (commit 2cbe8b8, 2025-12-22) but the templates were never migrated —
    0.15 requires `{% extends %}` as the very first tag and `{% call %}` to be closed
    with `{% endcall %}`. The site's templates (and filter signatures in
-   `src/filters/markdown.rs`) are written for 0.14. **Follow-up**: either migrate
-   templates to 0.15 (move `extends` first, close `call` blocks, re-check filter
-   resolution) or pin `askama = "=0.14"` and configure renovate to hold it.
+   `src/filters/markdown.rs`) are written for 0.14. **Follow-up**: done — upgraded to
+   askama 0.16 in a separate commit (`feat(deps): upgrade askama from 0.14 to 0.16`).
 2. **gray_matter 0.3 API** (`src/post_utils/post_parser.rs`): `parse_with_struct` →
    `parse::<T>()` + `.data` is now `Option<T>`.
 3. **Template order** (`templates/index.html`, `portfolio.html`, `post_list.html`):
