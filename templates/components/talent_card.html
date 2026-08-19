@@ -1,16 +1,11 @@
 {% macro talent_card(svg, heading, description) %}
-<section class="flex border border-slate-200 rounded-md bg-white p-3">
-	<aside class="flex justify-center items-center pr-3">
-	  <svg role="img" aria-label="{{svg}} icon" aria-hidden="true" class="fill-blue-950 h-12 w-12 md:h-16 md:w-16">
-	    <use href="#{{svg}}" />
-	  </svg>
-	</aside>
-	<section>
-		<header>
-			<h3 class="text-lg font-semibold mb-1 md:text-xl">{{heading}}</h3>
-		</header>
-		<p class="text-sm leading-normal text-slate-800 md:text-lg">{{description|safe}}</p>
-	</section>
+<section class="flex gap-4 py-5 border-b border-slate-200">
+  <svg role="img" aria-label="{{svg}} icon" aria-hidden="true" class="fill-blue-950 h-8 w-8 md:h-10 md:w-10 shrink-0 mt-1">
+    <use href="#{{svg}}" />
+  </svg>
+  <div>
+		<h3 class="font-sans text-lg font-semibold text-blue-950">{{heading}}</h3>
+		<p class="font-serif text-base md:text-lg text-slate-700 leading-relaxed mt-1">{{description|safe}}</p>
+	</div>
 </section>
 {% endmacro %}
-

@@ -1,27 +1,34 @@
 {% extends "base.html" %}
 {% block content %} 
 
-<section id="contact-page">
-  <h1 class="mx-6 mt-3 text-3xl md:text-4xl text-blue-950 font-bold lg:mx-auto max-w-read">
-    Contact
-  </h1>
+<section id="contact-page" class="max-w-read mx-auto px-5">
+  <header class="pt-12 pb-2">
+    <p class="kicker">Say hello</p>
+    <h1 class="font-sans text-3xl md:text-4xl font-bold text-blue-950 mt-2">
+      Contact
+    </h1>
+    <div class="border-b-2 border-blue-950 mt-6"></div>
+  </header>
 
-  <ul class="mx-6">
+  <ul>
     {% for link in links %}
-    <li class="my-2 sm:my-4 lg:my-6 max-w-[32rem] mx-auto">
+    <li class="flex items-center gap-4 py-5 border-b border-slate-200">
+      <svg aria-hidden="true" class="h-6 w-6 fill-blue-950 shrink-0">
+        <use xlink:href="#{{link.svg}}" />
+      </svg>
       <a
-        class="flex border-2 place-content-center items-center rounded-full text-blue-900 border-blue-500 py-2 sm:py-4 hover:bg-pink-200 fill-blue-900 hover:fill-blue-400 transition-colors no-underline"
+        class="font-sans text-lg font-semibold text-blue-950 no-underline hover:text-blue-500"
         href="{{link.href}}"
         title="{{link.title}}"
-      >
-        <svg aria-hidden="true" class="h-6 w-6 mx-2 self-start">
-          <use xlink:href="#{{link.svg}}" />
-        </svg>
-        <span class="text-lg font-semibold">{{link.label}}</span>
-      </a>
+      >{{link.label}}</a>
     </li>
     {% endfor %}
   </ul>
+
+  <p class="font-serif text-read text-slate-700 mt-8">
+    The fastest way to reach me is <a href="mailto:michalvankosk@gmail.com">email</a>.
+    I usually reply within a couple of days.
+  </p>
 </section>
 
 {% endblock %}

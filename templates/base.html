@@ -16,7 +16,7 @@
       href="/feed.xml"
     />
 
-    <!-- Mastodon --> 
+    <!-- Mastodon -->
     <link rel="me" href="https://mastodon.online/@michalvankodev" />
     <meta name="fediverse:creator" content="@michalvankodev@mastodon.online">
 
@@ -33,12 +33,14 @@
     <link rel="icon" type="image/svg+xml" href="/images/m-logo.svg" />
     <link rel="icon" type="image/png" href="/images/m-logo-192.png" />
   </head>
-  <body class="bg-blue-50">
+  <body class="bg-blue-50 text-slate-950">
     <div class="preload-assets" style="display: none">
         {% include "icons/sprite.svg" %}
     </div>
     {% include "site_header.html" %}
-    {% block content %} Placeholder {% endblock %}
+    <main>
+      {% block content %} Placeholder {% endblock %}
+    </main>
     {% include "site_footer.html" %}
   </body>
 </html>

@@ -1,13 +1,15 @@
-<h2 class="text-blue-950 font-bold text-2xl m-5 md:text-3xl"><a href="/showcase" class="text-blue-950 no-underline">Showcase</a></h2>
+<section id="showcase-section" class="max-w-image mx-auto px-5 pt-12">
+  <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
+    <span class="font-serif italic text-sm text-pink-700">03</span>
+    <h2 class="font-sans text-2xl font-bold text-blue-950"><a href="/showcase" class="text-blue-950 no-underline">Selected work</a></h2>
+    <a href="/showcase" class="ml-auto font-sans text-sm">all projects&nbsp;→</a>
+  </header>
 
-<ul class="mx-6 grid grid-flow-row gap-6 md:grid-cols-2 md:grid-rows-[masonry] md:justify-stretch md:items-stretch xl:grid-cols-3">
- {% for project in featured_projects %}
-  <li>
-    {% include "components/project_preview_card.html" %}
-  </li>
- {% endfor %}
-</ul>
-
-<section class="text-center my-3 md:text-lg">
- <a href="/showcase">check out more projects</a> 
+  <ul class="mt-8 grid grid-flow-row gap-8 md:grid-cols-2 xl:grid-cols-3 items-start">
+   {% for project in featured_projects %}
+    <li>
+      {% include "components/project_preview_card.html" %}
+    </li>
+   {% endfor %}
+  </ul>
 </section>

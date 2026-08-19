@@ -1,205 +1,95 @@
 {% extends "base.html" %}
-{%- import "components/talent_card.html" as tc -%}
 
 {% block og_meta %}
 <meta property="og:title" content="{{title}} @michalvankodev" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://michalvanko.dev/showcase" />
+<meta property="og:url" content="https://michalvanko.dev/portfolio" />
 <meta property="og:image" content="https://michalvanko.dev/images/m-logo.svg" />
 {% endblock %}
 
 {% block content %}
 
-<header class="max-w-read mx-auto md:grid md:grid-cols-[1fr_auto]">
-  <div>
-    <h1 class="px-4 my-2 text-3xl text-blue-950 font-bold md:text-4xl xl:text-5xl xl:mb-4 xl:mt-10">Michal Vanko</h1>
-    <h3 class="px-4 my-1 text-xl text-blue-900 font-medium italic md:text-2xl">Software Architect by passion</h3>
-    <section id="contact" class="mt-4">
-      <ul class="max-w-[24rem] mx-auto md:mx-6">
-        {% for link in contact_links %}
-        <li class="my-2">
-          <a
-            class="flex border-2 place-content-center items-center rounded-full text-blue-900 border-blue-500 py-2 hover:bg-pink-200 fill-blue-900 hover:fill-blue-400 transition-colors no-underline"
-            href="{{link.href}}"
-            title="{{link.title}}"
-          >
-            <svg aria-hidden="true" class="h-6 w-6 mx-2 self-start">
-              <use xlink:href="#{{link.svg}}" />
-            </svg>
-            <span class="text-lg font-semibold print:hidden">{{link.label}}</span>
-            <span class="hidden print:inline text-sm">{{link.href}}</span>
-          </a>
-        </li>
-        {% endfor %}
-      </ul>
-    </section>
-  </div>
-  <aside id="logo-container" class="hidden md:block h-[320px] w-[320px] m-10">
-    <style>
-      #logo-container svg {
-        height: 100%;
-        width: 100%;
-      }
-    </style>
-    {% include "icons/m-logo-animated.svg" %}
-    <script src="/resources/anime.min.js"></script>
-    <script>
-      var svg = document.getElementById("m-logo")
-      svg.setAttribute("visibility", "visible");
-      var borderTimeline = anime.timeline({
-        duration: 2000,
-        easing: 'easeInOutSine',
-      })
-      
-      borderTimeline.add({
-        targets: '#m-logo #border-start',
-        strokeDashoffset: [anime.setDashoffset, -310],
-        duration: 2000,
-        easing: 'easeOutExpo',
-        begin: (animation) => {
-          const target = animation.animatables[0].target
-          target.setAttribute("visibility", "visible")
-        }
-      }, 0)
-      borderTimeline.add({
-        targets: '#m-logo #m-letter-start',
-        strokeDashoffset: [anime.setDashoffset, -447.4],
-        easing: 'easeOutExpo',
-        duration: 2000,
-        begin: (animation) => {
-          const target = animation.animatables[0].target
-          target.setAttribute("visibility", "visible")
-        }
-       }, 0)
-      borderTimeline.add({
-        targets: '#m-logo #border',
-        strokeDashoffset: [anime.setDashoffset, 0],
-        easing: 'easeInOutSine',
-        duration: 2000,
-        complete: (animation) => {
-          //debugger;
-          const target = animation.animatables[0].target
-          target.setAttribute("fill", "url('#bg-gradient')")
-          var bgAnimationTimeline = anime.timeline()
-          bgAnimationTimeline.add({
-            targets: '#m-logo #bg-gradient #bg-stop',
-            offset: "0%",
-            stopColor: "rgba(216, 246, 255, 1)",
-            easing: 'easeInQuint',
-            duration: 123,
-           }) 
-          bgAnimationTimeline.add({
-            targets: '#m-logo #bg-gradient #bg-stop',
-            offset: "100%",
-            easing: 'easeOutExpo',
-            duration: 333,
-           }) 
-        }
-       }, 160)
-      borderTimeline.add({
-        targets: '#m-logo #m-letter',
-        strokeDashoffset: [anime.setDashoffset, 0],
-        easing: 'easeInOutSine',
-        duration: 1800,
-       }, 160)
-      borderTimeline.add({
-        targets: '#m-logo #m-letter',
-        easing: 'easeInOutSine',
-        duration: 333,
-        fill: "#32a8eb",
-        strokeWidth: "0",
-       })
-      // background
-      /*borderTimeline.add({
-        targets: '#m-logo #border',
-        easing: 'easeInCirc',
-        fill: ["rgba(216, 246, 255, 0)", "rgba(216, 246, 255, 1)"],
-        duration: 1500,
-       }, 160)
-      borderTimeline.add({
-        targets: '#m-logo #border',
-        easing: 'easeInCirc',
-        fill: ["rgba(216, 246, 255, 0)", "rgba(216, 246, 255, 1)"],
-        duration: 1500,
-       }, 160) */
+<!-- Front matter -->
+<section class="max-w-read mx-auto px-5 pt-12">
+  <p class="kicker">Curriculum vitæ</p>
+  <h1 class="font-sans text-4xl md:text-5xl font-bold text-blue-950 mt-2">Michal Vanko</h1>
+  <p class="font-serif italic text-xl md:text-2xl text-blue-900 mt-3">Software Architect by passion</p>
 
-   </script>
-  </aside>
-</header>
+  <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+    {% for link in contact_links %}
+    <li>
+      <a
+        class="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-blue-950 no-underline hover:text-blue-500"
+        href="{{link.href}}"
+        title="{{link.title}}"
+      >
+        <svg aria-hidden="true" class="h-4 w-4 fill-blue-950">
+          <use xlink:href="#{{link.svg}}" />
+        </svg>
+        <span class="print:hidden">{{link.label}}</span>
+        <span class="hidden print:inline">{{link.href}}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
 
-<section id="portfolio-body" class="article-body">
+<section id="portfolio-body" class="article-body mt-12">
   {{ body|parse_markdown|safe }}
 </section>
 
-<section id="skillsets" class="max-w-maxindex mx-auto xl:grid xl:gap-8 xl:grid-cols-3">
-  <section id="work-history" class="max-w-read mx-auto xl:row-span-2">
-    <h2 class="m-5 text-2xl text-blue-950 font-bold md:text-3xl">Work experience</h2>
-    <ul class="m-6 grid grid-flow-row gap-6">
-      {% for skill in workplace_list %}
-      <li>
-        {% include "components/skill_card.html" %}
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-
-  <section id="education" class="max-w-read mx-auto">
-    <h2 class="m-5 text-2xl text-blue-950 font-bold md:text-3xl">Education</h2>
-    <ul class="m-6 grid grid-flow-row gap-6">
-      {% for skill in education_list %}
-      <li>
-        {% include "components/skill_card.html" %}
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-
-  <section id="skills" class="max-w-read mx-auto">
-    <h2 class="m-5 text-2xl text-blue-950 font-bold md:text-3xl">Skills</h2>
-    <ul class="m-6 grid grid-flow-row gap-6">
-      <li>
-        {% call tc::talent_card("code", "Web development", "Extensive expertise in creating performant, live web applications and websites.",) %}{% endcall %}
-      </li>
-      <li>
-        {% call tc::talent_card("gamepad", "Game development", "Creating games with passion. Capable of producing each aspect of a good game with profesional sound and creative mechanics. I consider games as multidisciplinary art.") %}{% endcall %}
-      </li>
-      <li>
-        {% call tc::talent_card("person-chalkboard", "Mentoring & Consulting", "I offer consulting sessions to assist you in developing <strong>higher-quality software</strong> and share insights from crafting robust, professional web applications. <a href=\"https://calendly.com/michalvankosk/30min\">Schedule a session with me</a> and elevate your projects together.") %}{% endcall %}
-      </li>
-    </ul>
-  </section>
-
-  <section id="technologies" class="max-w-read mx-auto xl:col-span-2">
-    <h2 class="m-5 text-3xl text-blue-950 font-extrabold md:text-4xl xl:font-medium">Technologies</h2>
-
-    <ul class="m-6 flex gap-2 flex-wrap justify-center">
-      {% for technology in technology_list %}
-      <li class="p-2 text-pink-900 bg-blue-100 text-sm border rounded-sm border-blue-300 font-mono">
-        {{technology}}
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
+<!-- Experience -->
+<section id="work-history" class="max-w-read mx-auto px-5 pt-12">
+  <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
+    <h2 class="font-sans text-2xl font-bold text-blue-950">Experience</h2>
+  </header>
+  <ul class="mt-1">
+    {% for skill in workplace_list %}
+    <li>{% include "components/skill_card.html" %}</li>
+    {% endfor %}
+  </ul>
 </section>
 
-<section id="project-list-container" class="max-w-maxindex mx-auto">
-  <section id="project-list">
-    {% if project_list.len() == 0 %}
-    <p class="no-posts">You've found void in the space.</p>
-    {% else %}
-    <h2 class="m-5 text-2xl text-blue-950 font-bold md:text-3xl">
-     Showcase
-    </h2>
+<!-- Education -->
+<section id="education" class="max-w-read mx-auto px-5 pt-12">
+  <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
+    <h2 class="font-sans text-2xl font-bold text-blue-950">Education</h2>
+  </header>
+  <ul class="mt-1">
+    {% for skill in education_list %}
+    <li>{% include "components/skill_card.html" %}</li>
+    {% endfor %}
+  </ul>
+</section>
 
-    <ul class="m-6 grid grid-flow-row gap-6 md:grid-cols-2 md:grid-rows-[masonry] md:justify-stretch md:items-stretch xl:grid-cols-3">
-      {% for project in project_list %}
-      <li>
-        {% include "components/project_preview_card.html" %}
-      </li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-  </section> <!-- /#project-list -->
- 
-</section> <!-- /#project-list-container -->
+<!-- Technologies -->
+<section id="technologies" class="max-w-read mx-auto px-5 pt-12">
+  <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
+    <h2 class="font-sans text-2xl font-bold text-blue-950">Technologies</h2>
+  </header>
+  <ul class="mt-6 flex gap-2 flex-wrap">
+    {% for technology in technology_list %}
+    <li class="font-mono text-xs text-pink-900 bg-blue-100 border border-blue-300 rounded-full px-3 py-1">
+      {{technology}}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<!-- Showcase -->
+<section id="project-list-container" class="max-w-image mx-auto px-5 pt-12 pb-4">
+  {% if project_list.len() == 0 %}
+  <p class="max-w-read mx-auto font-serif text-read text-slate-700 py-10">You've found void in the space.</p>
+  {% else %}
+  <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
+    <h2 class="font-sans text-2xl font-bold text-blue-950"><a href="/showcase" class="text-blue-950 no-underline">Showcase</a></h2>
+  </header>
+  <ul class="mt-8 grid grid-flow-row gap-8 md:grid-cols-2 xl:grid-cols-3 items-start">
+    {% for project in project_list %}
+    <li>{% include "components/project_preview_card.html" %}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+
 {% endblock %}

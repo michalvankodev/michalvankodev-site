@@ -2,12 +2,14 @@
 
 @theme {
   --font-sans: "Baloo2", "Baloo2 Noto Fallback", "Baloo2 Fallback", "ui-sans-serif", "system-ui", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, "Times New Roman", serif;
 
-  --text-readxl: 1.25rem;
-  --text-readxl--line-height: 2rem;
+  /* Reading text: one size, all viewports — like a printed page */
+  --text-read: 1.1875rem;
+  --text-read--line-height: 1.7;
 
-  --spacing-note: 40rem;
-  --spacing-read: 44rem;
+  --spacing-note: 36rem;
+  --spacing-read: 40rem;
   --spacing-image: min(70rem, 95vw);
   --spacing-maxindex: 100rem;
 
@@ -93,7 +95,7 @@
 
 @layer base {
   a {
-    @apply text-pink-800 underline underline-offset-2 hover:transition hover:text-blue-500;
+    @apply text-pink-800 underline underline-offset-2 hover:transition-colors hover:text-blue-500;
   }
 
   strong {
@@ -101,7 +103,7 @@
   }
 
   :focus-visible {
-    @apply outline outline-2 outline-offset-2 outline-blue-500;
+    @apply outline-2 outline-offset-2 outline-blue-500;
   }
 
   ::selection {
@@ -109,99 +111,137 @@
   }
 }
 
+/* Small-caps eyebrow label above headings */
+.kicker {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-pink-700);
+}
+
+/* ————— Article body: the reading experience ————— */
+
 .article-body {
+  font-family: var(--font-serif);
+
   h1 {
-    @apply px-4 text-2xl font-bold text-blue-950 mb-3 mt-6 max-w-read mx-auto md:text-3xl md:mt-8 lg:text-4xl;
+    @apply px-5 font-sans text-2xl font-bold text-blue-950 mb-3 mt-8 max-w-read mx-auto md:text-3xl;
   }
 
   h2 {
-    @apply px-4 text-xl font-semibold text-blue-950 mb-3 mt-6 max-w-read mx-auto md:text-2xl md:mb-4 md:mt-10 lg:text-3xl;
+    @apply px-5 font-sans text-2xl font-bold text-blue-950 mb-3 mt-12 max-w-read mx-auto md:text-3xl;
   }
 
   h3 {
-    @apply px-4 text-lg font-semibold text-blue-950 mb-2 mt-5 max-w-read mx-auto md:text-xl md:mb-3 md:mt-8 lg:text-2xl;
+    @apply px-5 font-sans text-xl font-semibold text-blue-950 mb-2 mt-8 max-w-read mx-auto md:text-2xl;
   }
 
   h4 {
-    @apply px-4 text-lg font-medium text-blue-950 mb-2 mt-4 max-w-read mx-auto md:text-xl;
+    @apply px-5 font-sans text-lg font-semibold text-blue-950 mb-2 mt-6 max-w-read mx-auto;
   }
 
   p {
-    @apply px-4 my-2 text-slate-950 text-justify hyphens-auto mx-auto max-w-read md:text-lg md:my-6 lg:text-readxl;
+    @apply px-5 my-6 text-read text-slate-950 text-justify hyphens-auto mx-auto max-w-read;
+  }
+
+  /* Chapter opening: drop cap on the first paragraph */
+  > p:first-of-type::first-letter {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 3.3em;
+    line-height: 0.8;
+    float: left;
+    padding-right: 0.14em;
+    padding-top: 0.08em;
+    color: var(--color-blue-950);
   }
 
   pre {
-    @apply p-4 my-6 overflow-auto text-sm mx-auto max-w-read;
+    @apply p-4 my-6 mx-auto max-w-read overflow-auto font-mono text-sm leading-relaxed text-slate-800 bg-white border border-slate-200 rounded-md;
   }
 
   figure {
-    @apply p-4;
+    @apply px-5 py-2;
 
     img {
-      @apply rounded-md shadow-md mx-auto lg:max-w-image;
+      @apply rounded-md shadow-xs mx-auto lg:max-w-image;
     }
   }
 
   figcaption {
-    @apply mt-2 text-center text-sm italic text-blue-800 md:text-base;
+    @apply mt-3 text-center font-serif italic text-sm text-slate-600 md:text-base;
   }
 
   table {
-    @apply text-sm mx-auto my-6 max-w-image table-auto border-collapse border-spacing-12 border border-slate-200 rounded-sm md:text-base md:my-8;
+    @apply text-sm mx-auto my-8 max-w-image table-auto border-collapse border border-slate-300 md:text-base;
   }
 
   thead {
-    @apply bg-blue-100;
+    th {
+      @apply font-sans text-xs font-bold uppercase tracking-widest text-blue-950 border-b-2 border-blue-950;
+    }
   }
 
   tbody {
-    @apply bg-slate-50;
+    @apply bg-white;
   }
 
   td,
   th {
-    @apply py-0.5 px-2 border-b md:py-2 md:px-5;
+    @apply py-2 px-3 text-left border-b border-slate-200;
   }
 
   tr {
-    @apply even:bg-slate-100;
+    @apply even:bg-blue-50;
   }
 
   blockquote {
-    @apply mx-6 py-1 px-2 bg-pink-50 lg:mx-auto max-w-note border-l-4 border-pink-600;
+    @apply max-w-read mx-auto my-8 border-l-[3px] border-pink-500 pl-5 pr-3 text-slate-700 italic;
 
     p {
-      @apply my-2 md:my-4 text-slate-600 max-w-note;
+      @apply my-3;
     }
   }
 
   :not(pre) code {
-    @apply text-pink-900 rounded-sm border border-blue-300 px-1 py-0.5 bg-blue-100 text-sm md:text-base;
+    @apply font-mono text-[0.85em] text-pink-900 rounded border border-blue-300 px-1.5 py-0.5 bg-blue-100;
   }
 
   pre code pre {
-    @apply mx-2 rounded-sm lg:mx-auto shadow-xs;
+    @apply rounded-sm;
+  }
+
+  hr {
+    @apply max-w-read mx-auto my-10 border-slate-300;
   }
 
   ul,
   ol {
-    @apply pl-10 pr-6 my-2 text-slate-950 mx-auto max-w-read md:text-lg md:my-6 lg:text-readxl lg:pl-12;
+    @apply max-w-read mx-auto px-5 my-6 text-read text-slate-950 pl-10 list-none;
 
     & p {
-      @apply px-2;
+      @apply px-0;
     }
   }
 
-  ul {
+  li {
+    &::marker {
+      color: var(--color-pink-700);
+    }
+  }
+
+  ul li {
     @apply list-disc;
   }
 
-  ol {
+  ol li {
     @apply list-decimal;
   }
 
   iframe {
-    @apply rounded-md shadow-md mx-auto lg:max-w-image;
+    @apply rounded-md shadow-xs mx-auto lg:max-w-image;
   }
 }
 
@@ -212,6 +252,8 @@ article a {
 .video-embed {
   @apply m-4 mx-auto max-w-image aspect-video;
 }
+
+/* ————— Social card brand hovers (intentional, hover-only) ————— */
 
 .social-card-twitch:hover {
   transform: translate3d(0.6rem, -0.6rem, 0px);
@@ -328,14 +370,3 @@ article a {
 @view-transition {
   navigation: auto;
 }
-
-/* Define the animation for persistent elements (like the header and title) */
-/* ::view-transition-group(*) { */
-/* transition: transform 3.4s ease-in-out; */
-/* } */
-
-/* ::view-transition-group(blog_post_preview) { */
-/* animation-duration: 5.5s; */
-/* transition: transform 5.4s ease-in-out; */
-/* opacity: 1; */
-/* } */

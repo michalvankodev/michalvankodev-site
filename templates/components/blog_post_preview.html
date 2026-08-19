@@ -1,33 +1,23 @@
 <article
-	class="sm:grid sm:grid-cols-[max-content_1fr] sm:grid-rows-[max-content_1fr_max-content] sm:grid-flow-col sm:gap-4 md:gap-x-8 break-inside-avoid clear-both sm:clear-none"
+	class="grid md:grid-cols-[7.5rem_1fr] gap-x-6 py-7 border-b border-slate-200"
 	style="view-transition-name:blog_post_preview_{{post.slug}};"
 >
-	<aside class="row-span-3 self-center float-start sm:float-none mr-3 mb-3 sm:ml-0 sm:mb-0">
-		{% match post.metadata.thumbnail %}
-		{% when Some with (orig_path) %}
-		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", None).unwrap_or("thumbnail not found".to_string())|safe }}
-		{% when None %}
-		<div> 
-			{% include "components/blog_post_default_thumbnail.html" %}
-		</div>
-		{% endmatch %}
-	</aside>
-	<header>
-		<h3 class="text-lg font-bold mb-1 md:text-xl" style="view-transition-name: post_title_{{post.slug}}">
-		  <a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="text-blue-950 visited:text-purple-700 no-underline">{{post.metadata.title}}</a>
+	<time
+		datetime="{{post.metadata.date}}"
+		class="font-sans text-xs md:text-sm text-slate-500 md:text-right tabular-nums md:pt-1.5"
+		style="view-transition-name: post_date_{{post.slug}}"
+	>{{post.metadata.date|pretty_date}}</time>
+	<div>
+		<h3 class="font-sans text-lg md:text-xl font-semibold leading-snug">
+		  <a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="text-blue-950 no-underline hover:text-blue-500" style="view-transition-name: post_title_{{post.slug}}">{{post.metadata.title}}</a>
 		</h3>
-	</header>
-	<section class="text-base leading-relaxed text-slate-800 md:text-lg">{{post.body|truncate_md(2)|parse_markdown|safe}}</section>
-	<footer class="text-sm md:text-base mt-3 sm:mt-0 clear-both sm:clear-none">
-    <ul class="inline-block" style="view-transition-name: post_tags_{{post.slug}}">
+		<div class="font-serif text-read text-slate-700 leading-relaxed mt-1.5 line-clamp-2 text-left">{{post.body|truncate_md(2)|parse_markdown|safe}}</div>
+		<ul class="mt-2 flex flex-wrap gap-x-3 font-sans text-xs md:text-sm" style="view-transition-name: post_tags_{{post.slug}}">
      {% for tag in post.metadata.tags %}
-      <li class="inline-block">
-        <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline">#{{tag|capitalize}}</a>
+      <li>
+        <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline hover:text-blue-500">#{{tag|capitalize}}</a>
       </li>
       {% endfor %}
-    </ul>
-		·
-    <time datetime="{{post.metadata.date}}" class="text-pink-950" style="view-transition-name: post_date_{{post.slug}}" > {{post.metadata.date|pretty_date}} </time>
-	</footer>
+		</ul>
+	</div>
 </article>
-
