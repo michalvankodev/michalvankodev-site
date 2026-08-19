@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section id="not-found-page" class="max-w-read mx-auto px-5 py-24 text-center">
-  <p class="kicker">Error 404</p>
-  <p class="font-serif text-4xl md:text-5xl text-blue-950 mt-6">This page doesn't exist.</p>
-  <p class="font-serif text-read text-slate-700 mt-6">
-    Try the <a href="/">introduction page</a>, browse the <a href="/blog">writing</a>,
-    or <a href="/contact">get in touch</a>.
+<section id="not-found-page" class="max-w-read mx-auto px-5 py-24">
+  <p class="font-mono text-sm text-slate-500">
+    <span class="text-pink-700">$</span> GET {{url}}
+  </p>
+  <p class="font-mono text-lg md:text-xl text-blue-950 mt-3">
+    <span class="text-pink-700">404</span>: page not found
+  </p>
+  <p class="font-tech text-read text-slate-700 mt-8">
+    Nothing lives here. Try the <a href="/">introduction page</a>, browse the
+    <a href="/blog">writing</a>, or <a href="/contact">get in touch</a>.
   </p>
 </section>
 

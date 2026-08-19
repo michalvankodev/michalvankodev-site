@@ -1,6 +1,6 @@
 <section class="article-tags">
   {% if tags.len() > 0 %}
-  <ul class="flex flex-wrap gap-x-3 font-sans text-sm" style="view-transition-name: post_tags_{{slug}}">
+  <ul class="flex flex-wrap gap-x-3 font-mono text-sm" style="view-transition-name: post_tags_{{slug}}">
     {% for tag in tags %}
     <li>
       <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline hover:text-blue-500">#{{tag}}</a>

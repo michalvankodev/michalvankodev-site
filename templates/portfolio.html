@@ -11,15 +11,15 @@
 
 <!-- Front matter -->
 <section class="max-w-read mx-auto px-5 pt-12">
-  <p class="kicker">Curriculum vitæ</p>
+  <p class="kicker">~/portfolio — curriculum vitæ</p>
   <h1 class="font-sans text-4xl md:text-5xl font-bold text-blue-950 mt-2">Michal Vanko</h1>
-  <p class="font-serif italic text-xl md:text-2xl text-blue-900 mt-3">Software Architect by passion</p>
+  <p class="font-tech text-xl md:text-2xl text-blue-900 mt-3">Software Architect by passion</p>
 
   <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-2">
     {% for link in contact_links %}
     <li>
       <a
-        class="inline-flex items-center gap-1.5 font-sans text-sm font-medium text-blue-950 no-underline hover:text-blue-500"
+        class="inline-flex items-center gap-1.5 font-mono text-sm text-blue-950 no-underline hover:text-blue-500"
         href="{{link.href}}"
         title="{{link.title}}"
       >
@@ -41,7 +41,7 @@
 <!-- Experience -->
 <section id="work-history" class="max-w-read mx-auto px-5 pt-12">
   <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
-    <h2 class="font-sans text-2xl font-bold text-blue-950">Experience</h2>
+    <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase">experience</h2>
   </header>
   <ul class="mt-1">
     {% for skill in workplace_list %}
@@ -53,7 +53,7 @@
 <!-- Education -->
 <section id="education" class="max-w-read mx-auto px-5 pt-12">
   <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
-    <h2 class="font-sans text-2xl font-bold text-blue-950">Education</h2>
+    <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase">education</h2>
   </header>
   <ul class="mt-1">
     {% for skill in education_list %}
@@ -65,11 +65,11 @@
 <!-- Technologies -->
 <section id="technologies" class="max-w-read mx-auto px-5 pt-12">
   <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
-    <h2 class="font-sans text-2xl font-bold text-blue-950">Technologies</h2>
+    <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase">technologies</h2>
   </header>
   <ul class="mt-6 flex gap-2 flex-wrap">
     {% for technology in technology_list %}
-    <li class="font-mono text-xs text-pink-900 bg-blue-100 border border-blue-300 rounded-full px-3 py-1">
+    <li class="font-mono text-xs text-pink-900 bg-blue-100 border border-blue-300 px-3 py-1">
       {{technology}}
     </li>
     {% endfor %}
@@ -79,10 +79,10 @@
 <!-- Showcase -->
 <section id="project-list-container" class="max-w-image mx-auto px-5 pt-12 pb-4">
   {% if project_list.len() == 0 %}
-  <p class="max-w-read mx-auto font-serif text-read text-slate-700 py-10">You've found void in the space.</p>
+  <p class="max-w-read mx-auto font-tech text-read text-slate-700 py-10">You've found void in the space.</p>
   {% else %}
   <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
-    <h2 class="font-sans text-2xl font-bold text-blue-950"><a href="/showcase" class="text-blue-950 no-underline">Showcase</a></h2>
+    <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase"><a href="/showcase" class="text-blue-950 no-underline">showcase</a></h2>
   </header>
   <ul class="mt-8 grid grid-flow-row gap-8 md:grid-cols-2 xl:grid-cols-3 items-start">
     {% for project in project_list %}

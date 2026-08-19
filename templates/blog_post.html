@@ -18,7 +18,7 @@
 <article class="mb-6">
   <header class="px-5 max-w-read mx-auto pt-12">
     <p class="kicker">
-      <time datetime="{{date}}" style="view-transition-name: post_date_{{slug}}">{{date|pretty_date}}</time>
+      ~/{{segment}} · <time datetime="{{date}}" style="view-transition-name: post_date_{{slug}}">{{date|pretty_date}}</time>
     </p>
     <h1 class="font-sans text-3xl md:text-4xl lg:text-5xl font-bold text-blue-950 mt-2 mb-4 leading-tight" style="view-transition-name: post_title_{{slug}};">{{title}}</h1>
     {% include "post_tag_list.html" %}
@@ -26,7 +26,7 @@
 
   {% match thumbnail %}
   {% when Some with (img) %}
-  {% let hero = crate::picture_generator::picture_markup_generator::generate_picture_markup(img, 1200, 630, "Article cover", Some("rounded-md shadow-xs mx-auto w-full")).unwrap_or("".to_string())|safe %}
+  {% let hero = crate::picture_generator::picture_markup_generator::generate_picture_markup(img, 1200, 630, "Article cover", Some("border border-slate-200 mx-auto w-full")).unwrap_or("".to_string())|safe %}
   <figure class="px-5 my-10 max-w-image mx-auto">
     {{hero|safe}}
   </figure>
@@ -43,8 +43,8 @@
 {% if recommended_posts.len() > 0 %}
 <section id="recommended-articles" class="mt-12">
   <header class="flex items-baseline gap-3 border-b-2 border-blue-950 pb-2">
-    <span class="font-serif italic text-sm text-pink-700">↩</span>
-    <h2 class="font-sans text-2xl font-bold text-blue-950">Further reading</h2>
+    <span class="font-mono text-sm text-pink-700">↩</span>
+    <h2 class="font-sans text-2xl font-bold text-blue-950 lowercase">further reading</h2>
   </header>
   <ul class="mt-1">
    {% for post in recommended_posts %}
@@ -54,8 +54,8 @@
 </section>
 {% endif %}
 
-  <p class="text-center my-10 font-sans">
-    <a href="/{{segment}}">← all {{segment}} posts</a>
+  <p class="text-center my-10 font-mono text-sm">
+    <a href="/{{segment}}">← ./{{segment}}</a>
   </p>
 </footer>
 {% endblock %}

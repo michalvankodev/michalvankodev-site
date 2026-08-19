@@ -2,7 +2,7 @@
 	<aside class="shrink-0">
   {% match skill.thumbnail %}
   {% when Some with (source) %}
-  {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 64, 64, &format!("{} cover", skill.name), Some("h-14 w-14 md:h-16 md:w-16 rounded-md object-cover")).unwrap_or("cover not found".to_string())|safe %}
+  {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 64, 64, &format!("{} cover", skill.name), Some("h-14 w-14 md:h-16 md:w-16 border border-slate-200 object-cover")).unwrap_or("cover not found".to_string())|safe %}
   <figure>
      {{picture|safe}}
   </figure>
@@ -11,6 +11,6 @@
 	</aside>
 	<div>
 		<h3 class="font-sans text-lg font-semibold text-blue-950">{{skill.name}}</h3>
-		<div class="font-serif text-base md:text-lg text-slate-700 leading-relaxed mt-1">{{skill.description|parse_markdown|safe}}</div>
+		<div class="font-tech text-base md:text-lg text-slate-700 leading-relaxed mt-1">{{skill.description|parse_markdown|safe}}</div>
 	</div>
 </section>

@@ -3,21 +3,21 @@
 
 <section id="contact-page" class="max-w-read mx-auto px-5">
   <header class="pt-12 pb-2">
-    <p class="kicker">Say hello</p>
-    <h1 class="font-sans text-3xl md:text-4xl font-bold text-blue-950 mt-2">
-      Contact
+    <p class="kicker">~/contact</p>
+    <h1 class="font-sans text-3xl md:text-4xl font-bold text-blue-950 mt-2 lowercase">
+      contact
     </h1>
     <div class="border-b-2 border-blue-950 mt-6"></div>
   </header>
 
   <ul>
     {% for link in links %}
-    <li class="flex items-center gap-4 py-5 border-b border-slate-200">
-      <svg aria-hidden="true" class="h-6 w-6 fill-blue-950 shrink-0">
+    <li class="flex items-center gap-4 py-5 border-b border-slate-200 hover:bg-white transition-colors">
+      <svg aria-hidden="true" class="h-5 w-5 fill-blue-950 shrink-0">
         <use xlink:href="#{{link.svg}}" />
       </svg>
       <a
-        class="font-sans text-lg font-semibold text-blue-950 no-underline hover:text-blue-500"
+        class="font-mono text-base md:text-lg text-blue-950 no-underline hover:text-blue-500"
         href="{{link.href}}"
         title="{{link.title}}"
       >{{link.label}}</a>
@@ -25,7 +25,7 @@
     {% endfor %}
   </ul>
 
-  <p class="font-serif text-read text-slate-700 mt-8">
+  <p class="font-tech text-read text-slate-700 mt-8">
     The fastest way to reach me is <a href="mailto:michalvankosk@gmail.com">email</a>.
     I usually reply within a couple of days.
   </p>

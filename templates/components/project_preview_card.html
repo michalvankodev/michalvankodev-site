@@ -1,7 +1,7 @@
 <section class="break-inside-avoid" style="view-transition-name: project_preview_{{project.slug}};">
   {% match project.metadata.cover_image %}
   {% when Some with (source) %}
-  {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 420, 236, "Project cover", Some("rounded-md shadow-xs")).unwrap_or("cover not found".to_string())|safe %}
+  {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 420, 236, "Project cover", Some("border border-slate-200")).unwrap_or("cover not found".to_string())|safe %}
   <figure>
     {% match project.metadata.link %}
     {% when Some with (href) %}
@@ -26,12 +26,12 @@
     </h3>
   </header>
 
-  <section class="description font-serif text-base text-slate-700 leading-relaxed mt-1 text-left">
+  <section class="description font-tech text-base text-slate-700 leading-relaxed mt-1 text-left">
     {{project.body|parse_markdown|safe}}
   </section>
 
-	<footer class="mt-3 font-sans text-xs md:text-sm">
-    <span class="uppercase tracking-widest text-slate-500">
+	<footer class="mt-3 font-mono text-xs md:text-sm">
+    <span class="text-slate-500 lowercase">
       {{crate::projects::project_model::translate_classification(project.metadata.classification)}}
     </span>
     <ul class="inline-flex flex-wrap gap-x-3 ml-3 align-baseline">

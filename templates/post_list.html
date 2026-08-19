@@ -11,17 +11,17 @@
 
 <section id="post-container" class="max-w-read mx-auto px-5">
   <header class="pt-12 pb-2">
-    <p class="kicker">Index</p>
-    <h1 class="font-sans text-3xl md:text-4xl font-bold text-blue-950 mt-2">
+    <p class="kicker">~/{{segment}}</p>
+    <h1 class="font-sans text-3xl md:text-4xl font-bold text-blue-950 mt-2 lowercase">
       {{title}}
     </h1>
 
     {% if tags.len() > 0 %}
     <section id="tags-list" class="mt-4">
-      <ul class="flex flex-wrap gap-x-3 gap-y-1 font-sans text-sm">
+      <ul class="flex flex-wrap gap-x-3 gap-y-1 font-mono text-sm">
        {% for tag in tags %}
         <li>
-          <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline hover:text-blue-500">#{{tag|capitalize}}</a>
+          <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline hover:text-blue-500">#{{tag}}</a>
         </li>
         {% endfor %}
       </ul>
@@ -32,7 +32,7 @@
   </header>
 
   {% if posts.len() == 0 %}
-  <p class="font-serif text-read text-slate-700 py-10">You've found void in the space.</p>
+  <p class="font-tech text-read text-slate-700 py-10">You've found void in the space.</p>
   {% else %}
   <ul class="mt-1">
    {% for post in posts %}
