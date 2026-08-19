@@ -49,7 +49,9 @@ async fn main() {
     let app = app.layer(LiveReloadLayer::new());
 
     // run our app with hyper, listening globally on port 3080
-    let port = std::option_env!("PORT").unwrap_or("3080");
+    // Read PORT at runtime so a prebuilt binary can be started on any port
+    // (option_env! would silently bake in the port from build time).
+    let port = std::env::var("PORT").unwrap_or_else(|_| "3080".to_string());
     let addr = format!("0.0.0.0:{}", port);
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
     info!("axum_server listening on http://{}", &addr);
