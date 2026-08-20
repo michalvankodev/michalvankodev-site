@@ -742,8 +742,13 @@ Development is postponed until the on-LAN items are done.
    --name katelyn-host --instance https://forgejo.katelyn.michalvanko.dev
    --labels host:host` (run from `~/.config/forgejo-runner`), then
    `systemctl --user enable --now forgejo-runner`.
-10. **Trigger verification** — ⏳ pending push (workflows moved to
-    `.forgejo/workflows/`; runs must appear in "waiting" state).
+10. **Trigger verification** — ✅ **confirmed 2026-08-20**: branch pushed
+    to the Forgejo remote (`katelyn-gitea`, via tunnel SSH :3222 — the
+    `katelyn` alias is stale until katelyn reboots onto `.181`); run #4
+    created server-side for the host-mode commit, job in **Waiting/
+    Blocked** state (no runner yet). Note: `origin` is GitHub — the
+    Forgejo remote is named `katelyn`; `actions/tasks` API shows 0
+    until a runner exists, but `/actions/runs/<n>` pages are public.
 11. **Preview infra (when implementing previews):** alula Caddy gains the
     `*.dev` on-demand block + `on_demand_tls { ask http://127.0.0.1:9123 }`;
     add a rathole service entry alula-loopback `127.0.0.1:9123` ⇄
@@ -798,7 +803,7 @@ Blocked on pre-flight (on-LAN):
       6, 7, 10 pending first run / admin check
 - [x] **Workflows moved to `.forgejo/workflows/`** (D7) + host-mode
       rewrite of deploy.yaml (D6/D8) + test.yaml fixes — 2026-08-20;
-      push + "waiting" runs still to confirm (item 10)
+      push confirmed: run #4 waiting (item 10 ✅)
 - [x] forgejo-runner **installed** (v13.0.0, user service, host label)
       — registration pending token (pre-flight item 9)
 - [ ] Runner registered + service started (needs registration token)
