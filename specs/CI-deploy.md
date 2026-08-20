@@ -136,7 +136,7 @@ Step-by-step contract — the workflow YAML must implement exactly this:
 | Var | Value | Notes |
 |---|---|---|
 | `PORT` | `3081` | must match what `just ssg` crawls |
-| `DEPLOY_HOST` | `192.168.0.181` | ⚠️ **stale** — katelyn now `192.168.0.156` and the LAN IP drifts; D8's local-rsync design removes IP pinning entirely. See [Host addressing](#forgejo-actions-status-verified-2026-08-19) |
+| `DEPLOY_HOST` | `192.168.0.181` | katelyn's canonical LAN address — router DHCP static lease pins `.181`; katelyn currently answers on `.156` **only until its next restart** (lease not yet applied). D8's local-rsync removes IP pinning regardless. See [Host addressing](#forgejo-actions-status-verified-2026-08-19) |
 | `DEPLOY_SSH_PORT` | `22` | |
 | `DEPLOY_USER` | `michalvanko` | |
 | `DEPLOY_DIR` | `.config/containers/systemd/michalvankodev-site/dist` | relative to home |
@@ -249,9 +249,12 @@ verify triggering **before** installing the runner.
 
 - `katelyn` SSH alias → LAN IP `192.168.0.181:22` — only reachable from LAN/VPN
   (agent had "No route to host" while off-LAN).
-- **2026-08-20:** katelyn drifted to `192.168.0.156` — LAN IPs are **not
-  stable**. Treat any pinned IP (incl. `DEPLOY_HOST` above and in the draft
-  workflow) as stale; D8's local-rsync design removes IP pinning entirely.
+- **2026-08-20:** katelyn temporarily answers on `192.168.0.156` —
+  the router has a **DHCP static lease pinning it to `192.168.0.181`**,
+  taking effect on katelyn's next restart (not yet applied). Do **not**
+  migrate references away from `.181`; the `.156` anomaly is transient.
+  (D8's local-rsync design remains preferable on its own merits — it
+  removes IP pinning entirely — but is no longer *forced* by drift.)
 - Public IP `176.102.65.48:22` is open but **rejects all our keys — it is not
   katelyn's sshd** (likely the router; forgejo SSH lives on `:3222`).
 - Therefore: the runner executes **on katelyn** and deploys to
@@ -409,7 +412,8 @@ the previews root: found → path rewritten → `respond 200`; missing →
   ends + service restart; alula's global option becomes
   `ask http://127.0.0.1:9123`. Bind the alula side to **loopback** so
   the check is never internet-reachable. Bonus: rathole reconnects on
-  IP drift automatically — the katelyn 181 → 156 LAN drift never
+  IP drift automatically — even the transient katelyn `181 → 156`
+  anomaly never
   touches the serving path (it only ever affected our off-LAN SSH).
 - **B (zero rathole changes):** an `/__ask` route inside katelyn's
   *already-tunneled* static listener; alula's ask URL becomes
@@ -778,8 +782,9 @@ Done:
 - [x] Preview deployment design (2026-08-20): D10 on-demand TLS on alula,
       D11 PR-driven lifecycle, D12 hardlink overlays — see
       [Preview deployments](#preview-deployments). Topology corrected:
-      TLS front door is alula, katelyn = static serving only; katelyn IP
-      drifted to `192.168.0.156`.
+      TLS front door is alula, katelyn = static serving only (reachable
+      only via rathole); katelyn transiently on `192.168.0.156` until
+      its DHCP lease (pins `.181`) applies on next restart.
 
 Blocked on pre-flight (on-LAN):
 - [ ] Pre-flight verification checklist complete (10 items above)
