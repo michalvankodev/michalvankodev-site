@@ -306,8 +306,8 @@ anymore.
 | `.forgejo/workflows/test.yaml` | Branch tests; push-only (no `pull_request`, per D6); skips `main`; fixed stale `cd axum_server` |
 | `.gitea/workflows/release.yaml` | **Deleted** (stale: referenced nonexistent `axum_server/` dir, no LFS, never deployed; artifact upload absorbed into deploy.yaml) — moved to `.forgejo/workflows/` with the others (D7) |
 | `justfile` | Added `tailwind_build` (one-shot CSS build) |
-| `.forgejo/workflows/preview.yaml` *(to create)* | PR preview deploy/teardown — see [Preview deployments](#preview-deployments) |
-| `~/previews/<hostname>/` on katelyn *(to create)* | Preview roots (dirs named by full hostname, e.g. `foo.dev.michalvanko.dev`) — hardlink overlays over prod `dist/` (D12) |
+| `.forgejo/workflows/preview.yaml` | PR preview deploy/teardown — **live 2026-08-20**, see [Preview deployments](#preview-deployments) |
+| `~/previews/<hostname>/` on katelyn | Preview roots (dirs named by full hostname, e.g. `foo.dev.michalvanko.dev`) — hardlink overlays over prod `dist/` (D12) |
 | `docs/cicd_pipeline.md` | Points here |
 
 ## Operational runbook
@@ -391,8 +391,9 @@ ssh katelyn 'rm .config/containers/systemd/michalvankodev-site/dist/generated_im
 ## Preview deployments
 
 Specified 2026-08-20 (decided: PR-driven lifecycle, on-demand TLS,
-hardlink storage). Implementation pending — blocked on the same
-pre-flight checklist as the main pipeline.
+hardlink storage). **Implemented 2026-08-20** — see the
+[implementation record](#implementation-record-2026-08-20) at the end of
+this section.
 
 Every open PR gets a live preview at `https://<label>.dev.michalvanko.dev/`,
 where `<label>` is the sanitized PR head-branch name (lowercase,
@@ -672,6 +673,63 @@ jobs:
 (Sketch — the real file inherits all host-mode adaptations of
 `deploy.yaml` per D6/D8, e.g. persistent `CARGO_TARGET_DIR`, no SSH
 steps, local paths only.)
+
+### Implementation record (2026-08-20)
+
+Deployed and verified live the same evening. The sketch above is now
+`.forgejo/workflows/preview.yaml` (plus the host-mode steps it predicted:
+single-step SSG export per D8, explicit `rsync` of `generated_images/`
+into `dist/`, `lfs: true`, server-log step). First user: the redesign PR,
+live at `https://redesign-modern-technical.dev.michalvanko.dev/`.
+
+Deviations from the original spec text, all deliberate:
+
+- **ask endpoint = python fallback, not the pure-Caddy `try_files` form.**
+  Query-placeholder support in `try_files` stayed unverified and the
+  ~20-line service gives free logging. Runs as `preview-ask.service`
+  (systemd user unit) + `~/.local/bin/preview-ask.py` on katelyn,
+  bound to `127.0.0.1:9123`.
+- **Preview serving rides the existing `michalvankodev-caddy` quadlet**
+  (no new container): `~/previews` mounted at `/usr/share/caddy-previews`,
+  plus a host-routed block appended to its Caddyfile:
+
+  ```caddyfile
+  http://*.dev.michalvanko.dev:3080 {
+      root * /usr/share/caddy-previews/{http.request.host}
+      try_files {path}.html {path}/index.html {path}
+      header X-Robots-Tag "noindex, nofollow"
+      file_server
+      encode zstd gzip
+  }
+  ```
+
+  Two hard-won details: the `http://` prefix (a bare `*.dev…` site label
+  would trip Caddy auto-HTTPS *inside* the container — TLS terminates at
+  alula) and the explicit `:3080` (`http://host` alone defaults to :80,
+  which the container does not publish; the symptom was preview hosts
+  silently falling through to the prod catch-all and serving prod HTML).
+- **Transport A as recommended:** rathole server entry `preview-ask`
+  (`bind_addr = 127.0.0.1:9123`) on alula, matching client entry on
+  katelyn. Loopback-only on both ends — the check is never
+  internet-reachable.
+- **alula system Caddy:** global `on_demand_tls { ask
+  http://127.0.0.1:9123 }` + a `*.dev.michalvanko.dev` vhost with
+  `tls { on_demand }` proxying to `127.0.0.1:3080` (the already-tunneled
+  `michalvankodev-site` rathole service — Host is preserved, so katelyn
+  routes previews and prod on the same listener; no stable katelyn
+  address needed anywhere).
+
+All host-side edits are idempotent scripts with `.bak-*` backups next to
+the originals (site quadlet dir, rathole config, alula `/etc/caddy`).
+
+**Verified live:** ask answers 404 for unknown names and 200 for live
+previews through the tunnel; first visit to a fresh preview hostname
+minted the cert (~5.6 s end-to-end including LE HTTP-01) and subsequent
+visits are ~0.1 s; `X-Robots-Tag` present on previews; prod serving
+unaffected throughout. **Not yet exercised:** the teardown path (no PR
+has closed since deployment) and the fork-PR approval gate (pre-flight
+item 11 — keep it enabled while `pull_request` triggers exist on this
+public repo with a host-mode runner).
 
 ## Appendix: Woodpecker CI vs Forgejo Actions / forgejo-runner
 

@@ -1,0 +1,119 @@
+name: preview
+# PR preview deployments (specs/CI-deploy.md "Preview deployments", D10-D12).
+# Every open PR gets a live preview at https://<label>.dev.michalvanko.dev/
+# where <label> is the sanitized head-branch name.
+#
+# Lifecycle (D11): opened/synchronize/reopened -> build + deploy;
+# closed (incl. merged) -> teardown. Preview builds use PORT=3082 so they
+# can never collide with a prod pipeline run on 3081.
+#
+# Storage (D12): previews are hardlink overlays over prod dist/ — a preview
+# costs only its delta on disk. Image cache is hardlink-restored from prod so
+# the generator only creates variants that don't exist yet.
+#
+# Security (D6, host mode): the runner executes on katelyn as michalvanko.
+# Same-repo PRs are trusted; fork PRs must pass Forgejo's approval gate for
+# pull_request workflows (repo setting — keep it enabled).
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+env:
+  PORT: "3082"
+  PROD_DIST: /home/michalvanko/.config/containers/systemd/michalvankodev-site/dist
+  PREVIEW_ROOT: /home/michalvanko/previews
+  CARGO_TARGET_DIR: /home/michalvanko/forgejo-runner-cache/target
+
+jobs:
+  meta:
+    name: preview hostname
+    runs-on: host
+    outputs:
+      hostname: ${{ steps.label.outputs.HOSTNAME }}
+    steps:
+      - id: label
+        run: |
+          LABEL=$(echo "${{ github.event.pull_request.head.ref }}" \
+            | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g' | cut -c1-63)
+          echo "HOSTNAME=${LABEL}.dev.michalvanko.dev" >> "$GITHUB_OUTPUT"
+          echo "Preview hostname: ${LABEL}.dev.michalvanko.dev"
+
+  deploy:
+    name: build + deploy preview
+    if: github.event.action != 'closed'
+    needs: meta
+    runs-on: host
+    env:
+      HOSTNAME_DIR: ${{ needs.meta.outputs.hostname }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          lfs: true   # source images live in LFS; the build decodes them
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Build CSS
+        run: just tailwind_build
+
+      - name: Build release binary
+        run: cargo build --release
+
+      - name: Restore generated images from production (hardlinks)
+        run: |
+          mkdir -p generated_images
+          if [ -d "$PROD_DIST/generated_images" ]; then
+            # cp -al: instant, 0 bytes — safe because the generator only
+            # creates missing files, never mutates existing ones (D12).
+            cp -al "$PROD_DIST/generated_images/." generated_images/
+          else
+            echo "::warning::No generated images on production — generating all image variants"
+          fi
+
+      - name: SSG export (server + crawl in one step)
+        # forgejo-runner kills the process group when a step ends, so the
+        # server, the wait loop and the crawl MUST share one step (D8).
+        run: |
+          nohup just prod > server.log 2>&1 &
+          for i in $(seq 1 100); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 2 "http://127.0.0.1:$PORT/" || true)
+            if [ -n "$code" ] && [ "$code" != "000" ]; then
+              echo "Server is up (HTTP $code)"
+              break
+            fi
+            sleep 2
+          done
+          if [ -z "${code:-}" ] || [ "$code" = "000" ]; then
+            echo "::error::Server did not come up"
+            tail -50 server.log || true
+            exit 1
+          fi
+          just ssg
+          just kill || pkill -f axum_server || true
+          # The crawler must not be trusted with dist completeness: wget may
+          # miss srcset variants and the lazy async image generation races the
+          # crawl. Sync all generated image variants into dist explicitly.
+          rsync -a generated_images/ dist/generated_images/
+
+      - name: Server log
+        if: always()
+        run: cat server.log || true
+
+      - name: Deploy preview (hardlink overlay over prod)
+        run: |
+          mkdir -p "$PREVIEW_ROOT"
+          # Files identical to prod become hardlinks; only the branch delta
+          # (new/changed HTML + new image variants) is written (D12).
+          rsync -a --delete --link-dest="$PROD_DIST/" ./dist/ "$PREVIEW_ROOT/$HOSTNAME_DIR/"
+          echo "Preview deployed: https://$HOSTNAME_DIR/"
+
+  teardown:
+    name: teardown preview
+    if: github.event.action == 'closed'
+    needs: meta
+    runs-on: host
+    steps:
+      - name: Remove preview directory
+        run: |
+          rm -rf "$PREVIEW_ROOT/${{ needs.meta.outputs.hostname }}"
+          echo "Preview ${{ needs.meta.outputs.hostname }} torn down"
