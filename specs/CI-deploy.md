@@ -294,9 +294,9 @@ anymore.
 
 | File | Role |
 |---|---|
-| `.gitea/workflows/deploy.yaml` | The pipeline (this spec's implementation) |
-| `.gitea/workflows/test.yaml` | Branch/PR tests; skips `main` |
-| `.gitea/workflows/release.yaml` | **Deleted** (stale: referenced nonexistent `axum_server/` dir, no LFS, never deployed; artifact upload absorbed into deploy.yaml) |
+| `.forgejo/workflows/deploy.yaml` | The pipeline — **rewritten for host mode** (2026-08-20): no container, `runs-on: host`, local-rsync deploy, persistent `CARGO_TARGET_DIR`, no SSH |
+| `.forgejo/workflows/test.yaml` | Branch tests; push-only (no `pull_request`, per D6); skips `main`; fixed stale `cd axum_server` |
+| `.gitea/workflows/release.yaml` | **Deleted** (stale: referenced nonexistent `axum_server/` dir, no LFS, never deployed; artifact upload absorbed into deploy.yaml) — moved to `.forgejo/workflows/` with the others (D7) |
 | `justfile` | Added `tailwind_build` (one-shot CSS build) |
 | `.forgejo/workflows/preview.yaml` *(to create)* | PR preview deploy/teardown — see [Preview deployments](#preview-deployments) |
 | `~/previews/<hostname>/` on katelyn *(to create)* | Preview roots (dirs named by full hostname, e.g. `foo.dev.michalvanko.dev`) — hardlink overlays over prod `dist/` (D12) |
@@ -708,39 +708,42 @@ Development is postponed until the on-LAN items are done.
       `actions/checkout` & co. fetch from there; katelyn has internet access
       (it hosts the public site), still verify reachability on-LAN
 
-### On-LAN checks (katelyn, as `michalvanko`)
+### On-LAN checks (katelyn, as `michalvanko`) — executed 2026-08-20
 
-1. **Toolchain inventory** (host mode runs on host tools — all required):
-   ```bash
-   rustc --version && cargo --version     # stable toolchain
-   node --version && npm --version        # also needed for JS actions
-   just --version                          # cargo install just if missing
-   git-lfs --version                       # LFS checkout (lfs: true)
-   rsync --version; curl --version; wget --version
-   exiftool -ver                           # perl-Image-ExifTool (Fedora)
-   pidof bash && echo procps-ok            # just kill uses pidof
-   ```
-2. **Port 3081 free**: `ss -tlnp | grep 3081` (CI server must not collide).
-3. **Disk space**: `df -h /home` — budget ~5–10 GB (persistent `target/`,
-   workspace, generated images, dist).
-4. **Runner identity (D9)**: confirm a systemd **user** service under
-   `michalvanko` is viable (lingering enabled if needed: `loginctl
-   enable-linger michalvanko`) — then D8 (local rsync, no SSH) applies.
-5. **Workspace persistence**: confirm forgejo-runner host mode keeps job
-   workspaces between runs (docs/`config.yml`) — determines whether
-   `CARGO_TARGET_DIR` trick is needed or workspace itself persists.
-6. **JS actions on host**: verify `actions/checkout@v6` executes in host mode
-   with system `node` (first test run) — fallback: plain shell `git clone`.
-7. **Fork-PR security setting**: repo Settings → Actions — check for
-   "require approval" option; regardless, drop `pull_request` trigger from
-   test.yaml per D6.
-8. **data.forgejo.org reachable** from katelyn: `curl -sI
-   https://data.forgejo.org` (action resolution; else pin absolute URLs or
-   mirror actions locally).
-9. **Registration token minted** and forgejo-runner binary downloaded
-   (latest stable from codeberg.org/forgejo/runner, compatible with v15).
-10. **Trigger verification** (no runner needed): after D7 move + push, runs
-    appear under `/actions` in "waiting" state → triggering confirmed.
+1. **Toolchain inventory** — ✅ **done**: rsync 3.4.4, curl 8.18.0,
+   **wget2 2.2.1** (srcset-capable — better than the CI-container
+   assumption), procps ok. Was missing and has been **installed**:
+   node v22.23.1 + npm 10.9.8, just 1.57.0, git-lfs 3.7.1 (dnf);
+   rustc/cargo 1.97.1 stable (rustup, `~/.cargo/bin` — the runner's
+   systemd unit sets PATH to include it); exiftool (perl-Image-ExifTool).
+2. **Port 3081 free** — ✅ 3081/3082/9123 all free.
+3. **Disk space** — ✅ 551 GB free on `/home`.
+4. **Runner identity (D9)** — ✅ linger already enabled for `michalvanko`;
+   passwordless sudo also available (not needed by the design).
+5. **Workspace persistence** — ⚠️ deferred to first run: host-mode
+   `workdir_parent` pinned to `~/forgejo-runner-work`; regardless,
+   `CARGO_TARGET_DIR=~/forgejo-runner-cache/target` (set in workflow env)
+   makes incremental builds independent of workspace lifetime.
+6. **JS actions on host** — ⏳ pending first run (node present ✓).
+7. **Fork-PR security setting** — ⏳ needs Forgejo admin/UI check; test.yaml
+   is push-only meanwhile (D6), so nothing untrusted can run.
+8. **data.forgejo.org reachable** — ✅ (307 → code.forgejo.org). **Note:**
+   runner release assets now live on `code.forgejo.org/forgejo/runner`
+   (codeberg.org 404s).
+9. **Registration token + runner binary** — 🔶 **binary staged**, token
+   still needed: `forgejo-runner` **v13.0.0** at `~/bin/forgejo-runner`
+   (sha256-verified), `config.yml` with `labels: ["host:host"]` + host
+   `workdir_parent: ~/forgejo-runner-work`, systemd **user** service
+   staged at `~/.config/systemd/user/forgejo-runner.service` (PATH
+   includes `~/.cargo/bin`; started only after registration). Token:
+   Forgejo UI → Site Administration → Actions → Runners → *Create new
+   runner token*, then on katelyn:
+   `~/bin/forgejo-runner register --no-interactive --token <TOKEN>
+   --name katelyn-host --instance https://forgejo.katelyn.michalvanko.dev
+   --labels host:host` (run from `~/.config/forgejo-runner`), then
+   `systemctl --user enable --now forgejo-runner`.
+10. **Trigger verification** — ⏳ pending push (workflows moved to
+    `.forgejo/workflows/`; runs must appear in "waiting" state).
 11. **Preview infra (when implementing previews):** alula Caddy gains the
     `*.dev` on-demand block + `on_demand_tls { ask http://127.0.0.1:9123 }`;
     add a rathole service entry alula-loopback `127.0.0.1:9123` ⇄
@@ -773,8 +776,12 @@ Done:
 - [x] `.gitea/workflows/deploy.yaml` written (⚠️ container-mode **draft** —
       to be adapted per D6: host mode, no `container:`, `runs-on: host`,
       local-rsync deploy per D8, `CARGO_TARGET_DIR` caching)
+  → **superseded 2026-08-20:** rewritten in place as
+      `.forgejo/workflows/deploy.yaml` (host mode, per D6/D8)
 - [x] `justfile`: `tailwind_build` recipe (verified locally)
 - [x] `test.yaml`: skip main pushes (⚠️ also drop `pull_request` per D6)
+  → **done 2026-08-20:** push-only, `runs-on: host`, stale
+      `cd axum_server` removed
 - [x] `release.yaml` deleted
 - [x] Investigation: Actions enabled, 0 runners, 0 runs ever, `.gitea/`
       workflows never triggered on v15 (D7)
@@ -787,10 +794,12 @@ Done:
       its DHCP lease (pins `.181`) applies on next restart.
 
 Blocked on pre-flight (on-LAN):
-- [ ] Pre-flight verification checklist complete (10 items above)
-- [ ] **Workflows moved to `.forgejo/workflows/`** (D7) — then push and
-      confirm runs appear in "waiting" state
-- [ ] forgejo-runner installed (user service, host label) and registered
-- [ ] `deploy.yaml` adapted for host mode + local rsync (D6/D8)
-- [ ] `pull_request` trigger dropped from test.yaml (D6)
+- [x] Pre-flight verification checklist — items 1–5, 8 ✅ (2026-08-20);
+      6, 7, 10 pending first run / admin check
+- [x] **Workflows moved to `.forgejo/workflows/`** (D7) + host-mode
+      rewrite of deploy.yaml (D6/D8) + test.yaml fixes — 2026-08-20;
+      push + "waiting" runs still to confirm (item 10)
+- [x] forgejo-runner **installed** (v13.0.0, user service, host label)
+      — registration pending token (pre-flight item 9)
+- [ ] Runner registered + service started (needs registration token)
 - [ ] First full pipeline run on main (seeds image cache)

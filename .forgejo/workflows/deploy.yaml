@@ -2,6 +2,12 @@ name: deploy
 # Builds the site, exports static HTML via SSG crawl and rsyncs it to production.
 # Generated images are restored from production before the build so they are
 # never regenerated unless they don't exist yet (image_generator skips existing files).
+#
+# Host mode (specs/CI-deploy.md D6/D8): the runner executes directly on katelyn
+# as user michalvanko. Tools come from the host (rustup, node, just, git-lfs,
+# rsync, exiftool); the deploy is a local rsync - no SSH, no pinned IP.
+# CARGO_TARGET_DIR persists outside the workspace so cargo builds stay
+# incremental across runs (replaces rust-cache).
 on:
   push:
     branches:
@@ -10,60 +16,29 @@ on:
 
 env:
   PORT: "3081"
-  # Runner containers execute on katelyn itself. The `katelyn` LAN alias may not
-  # resolve inside containers, and public-IP port 22 is NOT katelyn's sshd —
-  # use the LAN IP directly (always valid on-host).
-  DEPLOY_HOST: 192.168.0.181
-  DEPLOY_SSH_PORT: "22"
-  DEPLOY_USER: michalvanko
-  DEPLOY_DIR: .config/containers/systemd/michalvankodev-site/dist
+  DEPLOY_DIR: /home/michalvanko/.config/containers/systemd/michalvankodev-site/dist
+  CARGO_TARGET_DIR: /home/michalvanko/forgejo-runner-cache/target
 
 jobs:
   test:
     name: cargo test
-    runs-on: ubuntu-latest
-    container: node:24
+    runs-on: host
     steps:
       - uses: actions/checkout@v6
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
       - run: cargo test --all-features
 
   deploy:
     name: build, export, deploy
-    runs-on: ubuntu-latest
+    runs-on: host
     needs: test
-    container: node:24
     steps:
-      - name: Install CI tools
-        run: |
-          apt-get update
-          apt-get install -y --no-install-recommends \
-            git-lfs rsync curl wget procps libimage-exiftool-perl
-
       - name: Checkout with LFS images
         uses: actions/checkout@v6
         with:
           lfs: true
 
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
-      - uses: taiki-e/install-action@just
-
       - name: Install npm dependencies
         run: npm install
-
-      - name: Setup SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_deploy
-          chmod 600 ~/.ssh/id_deploy
-          ssh-keyscan -p "$DEPLOY_SSH_PORT" "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null
-          printf 'Host %s\n  HostName %s\n  Port %s\n  User %s\n  IdentityFile ~/.ssh/id_deploy\n' \
-            "$DEPLOY_HOST" "$DEPLOY_HOST" "$DEPLOY_SSH_PORT" "$DEPLOY_USER" > ~/.ssh/config
-          ssh -o BatchMode=yes "$DEPLOY_HOST" true
 
       - name: Build CSS
         run: just tailwind_build
@@ -74,7 +49,7 @@ jobs:
       - name: Restore generated images from production
         run: |
           mkdir -p generated_images
-          rsync -az "$DEPLOY_HOST:$DEPLOY_DIR/generated_images/" generated_images/ \
+          rsync -a "$DEPLOY_DIR/generated_images/" generated_images/ \
             || echo "::warning::No generated images on production yet - generating all images"
 
       - name: Run server in background
@@ -96,8 +71,9 @@ jobs:
       - name: SSG crawl
         run: |
           just ssg
-          # Ubuntu containers ship wget 1.x without reliable srcset support,
-          # so sync all generated image variants into dist explicitly.
+          # The crawler must not be trusted with dist completeness: wget may
+          # miss srcset variants and the lazy async image generation races the
+          # crawl. Sync all generated image variants into dist explicitly.
           rsync -a generated_images/ dist/generated_images/
 
       - name: Stop server
@@ -108,7 +84,7 @@ jobs:
         run: cat server.log || true
 
       - name: Deploy to production
-        run: rsync -az --delete ./dist/ "$DEPLOY_HOST:$DEPLOY_DIR/"
+        run: rsync -a --delete ./dist/ "$DEPLOY_DIR/"
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v6

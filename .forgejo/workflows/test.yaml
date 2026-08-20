@@ -1,0 +1,17 @@
+name: test
+# Deploy (deploy.yaml) runs its own test job on pushes to main;
+# this workflow covers feature-branch pushes.
+# push-only (no pull_request) per specs/CI-deploy.md D6: host-mode runner on a
+# public repo - fork PRs must not execute untrusted workflow code on katelyn.
+# Same-repo branches are tested via their push events; PRs from those branches
+# are therefore covered too.
+on: [push]
+
+jobs:
+  test:
+    name: cargo test
+    runs-on: host
+    if: github.ref != 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v6
+      - run: cargo test --all-features
