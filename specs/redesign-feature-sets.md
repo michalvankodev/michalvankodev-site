@@ -97,13 +97,91 @@ All features introduced across the redesign branches, grouped by area. Current t
 - [x] All `view-transition-name`s preserved through every refactor (header, footer, previews, titles/dates/tags morph between list and article)
 - [x] No new client-side dependencies: all JS is inline vanilla (~100 lines total: scroll-spy, progress, keys, search)
 
-## Not yet done (candidates)
+## Candidate features (for review)
 
-- [ ] Series/collections grouping — needs a front-matter field (content model change)
-- [ ] Tag pages as curated topic hubs (intro text per tag)
-- [ ] `prefers-color-scheme`-aware code blocks (render both syntect themes, CSS-switch)
-- [ ] DESIGN.md rewrite declaring the chosen direction as the new source of truth
-- [ ] Self-hosted reading font for cross-platform consistency (Inter or similar) — currently `system-ui`
-- [ ] Search: fuzzy matching / diacritics folding; possibly index portfolio projects too
-- [ ] RSS full-text vs summary review
-- [ ] Slug cleanup (`hello-` trailing hyphen) — requires touching `parse_markdown` slug logic + `extract_headings` in lockstep
+Menu for the next effort (fresh branch off `main`, clean implementation of only the selected subset). Mark items `[x]` to select. Effort: **S** ≤ half day · **M** ~a day · **L** multi-day. Deps: **FM** front-matter/content-model change · **Rust** handler/model code · **tpl** template-only · **JS** inline vanilla JS · **ext** external service. Where a reference implementation already exists on a redesign branch, it's noted — port it, don't re-derive.
+
+### Reading experience
+
+- [ ] **Copy button on code blocks** (+ optional language label in block header) — near-universal tech-blog affordance; ~15 lines JS + CSS. Effort S · JS+tpl · ref: none
+- [ ] **Heading anchor affordance** — `#` appears on heading hover, copies deep link (ids already exist server-side). Effort S · JS+tpl
+- [ ] **Resume reading** — persist scroll position per post in localStorage; offer "resume ↓" toast on return. Effort S · JS
+- [ ] **Footnotes as sidenotes** — `ENABLE_FOOTNOTES` is on but renders flat; upgrade to Tufte-style marginal notes on xl, fall back to bottom on narrow. Effort M · Rust+tpl
+- [ ] **Back-to-top on articles** — lists have it; articles currently don't (kbd nav covers it, but cheap completeness). Effort S · tpl
+- [ ] **Reader measure/size controls** (A−/A+, width toggle) — conflicts with "one size like print" philosophy; listed for completeness. Effort S · JS
+
+### Content model & editorial
+
+- [ ] **Series/collections** — `series:` + `series_order:` front matter; series box on article (part n of m, prev/next in series), series index pages. *Unlocks the strongest structural feature for long tutorials.* Effort M · FM+Rust+tpl
+- [ ] **Post subtitle/dek** — optional `subtitle:` under h1; improves scanning of list rows too. Effort S · FM+tpl
+- [ ] **Last-updated stamp** — `updated:` front matter shown as `updated 12 Mar 2025` beside date; feeds honest signal on evergreen posts. Effort S · FM+tpl
+- [ ] **Related posts by shared-tag score** — current Further Reading is any-tag-match sorted by slug (weird); rank by tag overlap count then date. Effort S · Rust · ref: v3.1 (rewrite `get_recommended_posts`)
+- [ ] **`/now` page** — nownownow.com convention; dated "what I'm working on" page, listed in nav/footer. Effort S · tpl (+Decap collection if CMS-managed)
+- [ ] **`/uses` page** — hardware/setup page, dev-site convention. Effort S · tpl
+- [ ] **Draft/hidden posts** — `published: false` exists in model; verify a draft never renders nor appears in lists/RSS/search/export, add a test. Effort S · Rust
+
+### Discovery & navigation
+
+- [ ] **Tag topic hubs** — `_tags/<tag>.md` intro text; tag pages render intro + featured-first + chronological. Effort M · FM+Rust+tpl
+- [ ] **Tag index page** (`/tags`) — all tags with counts, sized subtly; useful with 20+ tags. Effort S · Rust+tpl
+- [ ] **Search: `/` shortcut to focus search** (GitHub-style) + `Esc` back. Effort S · JS · ref: v3.2 page exists
+- [ ] **Search: match highlighting + fuzzy/diacritics folding** — bolder matched substrings; `normalize("NFD")` folding for Slovak/English mix. Effort M · JS
+- [ ] **Search: index projects + portfolio** — one box finds everything on the site. Effort M · Rust+JS
+- [ ] **404 search integration** — parse the dead path as a query, show top 3 matches on the 404 page. Effort S · JS · ref: v3 terminal 404 exists
+- [ ] **OpenSearch descriptor** (`opensearch.xml`) — browser-native site search registration. Effort S · tpl
+- [ ] **Combined timeline archive** — `/archive` merging blog + broadcasts + projects by year. Effort M · Rust+tpl
+
+### Syndication & metadata
+
+- [ ] **JSON Feed** (`/feed.json`) alongside RSS — trivial with serde, loved by feed nerds. Effort S · Rust
+- [ ] **RSS full-text audit** — feed already emits `content`; add a test asserting body presence and absolute URLs. Effort S · Rust
+- [ ] **OG/Twitter card completion** — `article:published_time`, `article:tag`, `twitter:card=summary_large_image` per post. Effort S · tpl
+- [ ] **Sitemap.xml + robots.txt** — generated from post/project lists at export time; SEO hygiene. Effort S · Rust
+- [ ] **h-entry/h-card microformats** — indieweb parsers pick up authorship/content for free. Effort S · tpl
+- [ ] **Webmentions display** — show mentions/likes from other sites (needs a webmention.io or self-hosted receiver). Effort L · ext+JS
+- [ ] **Comments via giscus/Forgejo discussions** — static-friendly comments; decide if wanted at all (against "no distraction"? zero-JS option: none). Effort M · ext+JS
+
+### Performance & assets
+
+- [ ] **Lazy-load content images** — `loading="lazy"` + `decoding="async"` in picture markup, except hero (`fetchpriority=high"`). Effort S · Rust · ref: generator in `picture_markup_generator.rs`
+- [ ] **Self-hosted reading font** (Inter/IBM Plex Sans, latin subset ~40–100KB) — pixel-identical reading across OSes; system-ui is free but inconsistent. Effort S · assets
+- [ ] **Font subsetting check** — Baloo2 variable woff2 already latin-scoped; verify no ttf fallbacks ship in HTML. Effort S · assets
+- [ ] **Cache headers** — `immutable` for hashed generated images, sane `Cache-Control` for css/fonts. Effort S · Rust
+- [ ] **`content-visibility: auto` on archive rows** — 34 rows × images; cheap render win. Effort S · tpl
+- [ ] **View-transition polish** — authored morphs for hero→article cover and list-row→title (names already wired). Effort M · tpl+CSS
+
+### Accessibility
+
+- [ ] **Skip-to-content link** — first tab stop jumps to `<main>`. Effort S · tpl
+- [ ] **`aria-current="page"` on active nav item** — needs current-path awareness in base/header. Effort S · Rust+tpl
+- [ ] **Contrast audit** — slate-500 metadata on blue-50 may sit near 4.5:1 boundary; bump to slate-600 where failing. Effort S · tpl
+- [ ] **Per-post `lang` attribute** — posts are EN+SK; set `lang` on `<article>` from front matter for correct screen-reader voice/hyphenation. Effort S · FM+tpl
+- [ ] **Reduced-motion audit** — ensure view transitions + social hovers honor `prefers-reduced-motion`. Effort S · CSS
+
+### Site structure
+
+- [ ] **Broadcasts as media hub** — episode-style pages with embedded players, duration, guest tags (posts already carry video embeds). Effort M · FM+tpl
+- [ ] **Projects: repo vs demo links + tech list per project** — model + card footer upgrade. Effort S · FM+tpl
+- [ ] **Homepage About vs `/portfolio` dedup** — short bio on home, full story on portfolio; decide what lives where. Effort S · tpl
+- [ ] **Edit-on-Forgejo link per post** — "found a typo? edit" footer link to repo source. Effort S · tpl
+- [ ] **Newsletter** — listmonk/Mailchimp embed or just RSS/JSON-feed promotion. Effort L · ext
+- [ ] **Privacy-friendly analytics** — goatcounter (self-host) or none; decide explicitly rather than by omission. Effort M · ext
+
+### Wildcards
+
+- [ ] **Adaptive code themes** — ship both syntect outputs (light+dark) per block, CSS-switch on `prefers-color-scheme`; keeps light-page/dark-block default. Effort M · Rust
+- [ ] **EPUB export per post/series** — "read like a book" literally; static file generation at export time. Effort L · Rust
+- [ ] **On-this-page TOC on archive pages** — year rail mirroring the article TOC. Effort S · tpl+JS
+- [ ] **`hello-` slug cleanup** — trailing-hyphen ids from first-text-event slugging; must change `parse_markdown` + `extract_headings` in lockstep. Effort S · Rust · ref: v3.1
+
+### Already on main or inherited (no action)
+
+- AVIF/WebP/JPG responsive pictures — `picture_generator` handles all formats
+- `published: bool` flag in `BlogPostMetadata`
+- RSS with `content` field
+- Mastodon/fediverse creator meta, OG basics, print rules, `rel=prefetch`
+
+### Process (not features)
+
+- [ ] **DESIGN.md rewrite** once the visual direction is chosen — the selected set + chosen branch become the new source of truth; keep specs/ files as history.
+- [ ] **Selection workflow** — mark `[x]` above (or just list numbers/names), then start `redesign/selected` off `main`; port reference implementations where noted, implement the rest fresh.
