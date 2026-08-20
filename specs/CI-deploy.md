@@ -26,7 +26,8 @@ exist.
 ## Non-goals
 
 - No rollback mechanism beyond re-running a previous commit's pipeline.
-- No preview/staging environment (local `just export` + `just preview` stays).
+- ~~No preview/staging environment~~ — **superseded 2026-08-20**: PR preview
+  deployments specified in [Preview deployments](#preview-deployments).
 - No change to how the server generates images at runtime.
 
 ## Background: how the pieces work
@@ -41,6 +42,23 @@ Production serves static files from
 `michalvanko@katelyn:.config/containers/systemd/michalvankodev-site/dist/`
 via a quadlet container. **No restart needed after rsync** — files are served
 directly.
+
+### The serving topology (verified 2026-08-20)
+
+Public traffic: DNS (wildcard `*.michalvanko.dev` → `176.102.65.48`,
+Namecheap) → **alula** (the only internet-exposed host), which runs the
+TLS-terminating Caddy (per-hostname Let's Encrypt certs, HTTP-01) and
+forwards to **katelyn's** Caddy — the quadlet serving the generated
+static files — **through a rathole tunnel**: rathole *server* on alula
+exposes tunneled TCP ports on alula's loopback; katelyn's rathole
+*client* dials outbound (katelyn is never directly addressable — not
+from the internet, not from alula). Confirmed remotely: responses
+carry `server: Caddy` **and** `via: 1.1 Caddy` (two Caddies in the
+chain); arbitrary subdomains resolve (wildcard record) but fail TLS
+(no cert for them). Implications: all cert/TLS work for anything new
+happens on **alula**; katelyn only ever serves static files; and
+**anything alula needs from katelyn — including the previews `ask`
+check — must ride the rathole tunnel**.
 
 ### Key facts that shaped this design
 
@@ -118,7 +136,7 @@ Step-by-step contract — the workflow YAML must implement exactly this:
 | Var | Value | Notes |
 |---|---|---|
 | `PORT` | `3081` | must match what `just ssg` crawls |
-| `DEPLOY_HOST` | `192.168.0.181` | katelyn's LAN IP — always valid on-host; the `katelyn` alias may not resolve in containers. See [Host addressing](#forgejo-actions-status-verified-2026-08-19) |
+| `DEPLOY_HOST` | `192.168.0.181` | ⚠️ **stale** — katelyn now `192.168.0.156` and the LAN IP drifts; D8's local-rsync design removes IP pinning entirely. See [Host addressing](#forgejo-actions-status-verified-2026-08-19) |
 | `DEPLOY_SSH_PORT` | `22` | |
 | `DEPLOY_USER` | `michalvanko` | |
 | `DEPLOY_DIR` | `.config/containers/systemd/michalvankodev-site/dist` | relative to home |
@@ -231,6 +249,9 @@ verify triggering **before** installing the runner.
 
 - `katelyn` SSH alias → LAN IP `192.168.0.181:22` — only reachable from LAN/VPN
   (agent had "No route to host" while off-LAN).
+- **2026-08-20:** katelyn drifted to `192.168.0.156` — LAN IPs are **not
+  stable**. Treat any pinned IP (incl. `DEPLOY_HOST` above and in the draft
+  workflow) as stale; D8's local-rsync design removes IP pinning entirely.
 - Public IP `176.102.65.48:22` is open but **rejects all our keys — it is not
   katelyn's sshd** (likely the router; forgejo SSH lives on `:3222`).
 - Therefore: the runner executes **on katelyn** and deploys to
@@ -274,6 +295,8 @@ anymore.
 | `.gitea/workflows/test.yaml` | Branch/PR tests; skips `main` |
 | `.gitea/workflows/release.yaml` | **Deleted** (stale: referenced nonexistent `axum_server/` dir, no LFS, never deployed; artifact upload absorbed into deploy.yaml) |
 | `justfile` | Added `tailwind_build` (one-shot CSS build) |
+| `.forgejo/workflows/preview.yaml` *(to create)* | PR preview deploy/teardown — see [Preview deployments](#preview-deployments) |
+| `~/previews/<hostname>/` on katelyn *(to create)* | Preview roots (dirs named by full hostname, e.g. `foo.dev.michalvanko.dev`) — hardlink overlays over prod `dist/` (D12) |
 | `docs/cicd_pipeline.md` | Points here |
 
 ## Operational runbook
@@ -308,6 +331,289 @@ ssh katelyn 'rm .config/containers/systemd/michalvankodev-site/dist/generated_im
 | Warm (rust-cache hit, images cached, rsync delta) | ~2–4 min |
 | New content with new images | warm + seconds per image |
 | Fully cold (no caches, all images generated) | ~8–15 min |
+
+## Preview deployments
+
+Specified 2026-08-20 (decided: PR-driven lifecycle, on-demand TLS,
+hardlink storage). Implementation pending — blocked on the same
+pre-flight checklist as the main pipeline.
+
+Every open PR gets a live preview at `https://<label>.dev.michalvanko.dev/`,
+where `<label>` is the sanitized PR head-branch name (lowercase,
+`[^a-z0-9-]` → `-`, truncated to 63 chars — one DNS label).
+
+### The `ask` endpoint
+
+Official contract (Caddyfile global-options docs, verified 2026-08-20):
+when alula receives a TLS handshake (SNI) for a name it has **no cert
+for yet**, it first makes `GET <ask-url>?domain=<hostname>`. HTTP
+**2xx → authorized** to obtain a cert; **any other response (or
+connection error) → issuance cancelled, handshake errors**. The
+endpoint must answer in milliseconds (constant-time local lookup; no
+DNS/network calls). It is a pure boolean — "is this hostname one of our
+live previews?" It never talks to LE, stores nothing, and is only
+consulted for *new* issuance; every later handshake uses the cached
+cert with zero ask traffic.
+
+First-visit timeline for `foo.dev.michalvanko.dev` (fresh preview):
+
+```
+1. PR opened → CI rsyncs ~/previews/foo.dev.michalvanko.dev/ (katelyn)
+2. Browser: wildcard DNS → alula:443 (SNI foo.dev...)
+3. alula has no cert → GET 127.0.0.1:9123/?domain=foo.dev.michalvanko.dev
+   (rathole: alula loopback ⇄ katelyn Caddy :9123 — Transport A below)
+4. katelyn: does previews/foo.dev.michalvanko.dev/index.html exist? → 200
+5. alula → LE HTTP-01 (LE dials foo.dev...:80 → alula answers)
+6. handshake completes (~1–3 s, this once), cert cached in alula storage
+7. request proxied (Host preserved) → katelyn static block → preview
+```
+
+Teardown: dir removed → ask now 404s for that name → no new issuance
+possible; the existing cert lingers (see D10 nuance) and requests 404
+at katelyn. If katelyn — or the tunnel — is down, *first* visits to
+previews without certs fail closed (previews with cached certs keep
+TLS; but the site itself is down anyway, since prod serving uses the
+same tunnel — ask-over-tunnel adds **no new failure coupling**).
+Acceptable.
+
+**Who serves it?** The truth (preview dirs) lives on katelyn, so the
+endpoint runs there. But alula cannot address katelyn directly — the
+only path is the existing **rathole tunnel**, so the ask request rides
+it (it reveals only hostname existence; no secrets, and the tunneled
+port never needs to be public).
+
+**Responder — no new service at all:** katelyn's existing Caddy
+quadlet serves the check on port 9123. Preview dirs are named by
+their **full hostname**, which makes both this check and the serving
+block trivial (no label parsing anywhere):
+
+```caddyfile
+# katelyn Caddy — ask endpoint for alula's on-demand TLS
+# (reached only via the rathole tunnel; never exposed publicly)
+http://:9123 {
+    root * /home/michalvanko/previews
+    try_files {http.request.uri.query.domain}/index.html =404
+    respond 200
+}
+```
+
+`try_files` expands the `?domain=` query placeholder to a path under
+the previews root: found → path rewritten → `respond 200`; missing →
+`=404` → handshake refused. Verify query-placeholder support in
+`try_files` at implementation time (fallback below).
+
+**Transport — how alula reaches the responder (pick one):**
+
+- **A (recommended): dedicated rathole service entry** — alula
+  `127.0.0.1:9123` ⇄ katelyn `:9123`. A few TOML lines on both rathole
+  ends + service restart; alula's global option becomes
+  `ask http://127.0.0.1:9123`. Bind the alula side to **loopback** so
+  the check is never internet-reachable. Bonus: rathole reconnects on
+  IP drift automatically — the katelyn 181 → 156 LAN drift never
+  touches the serving path (it only ever affected our off-LAN SSH).
+- **B (zero rathole changes):** an `/__ask` route inside katelyn's
+  *already-tunneled* static listener; alula's ask URL becomes
+  `http://127.0.0.1:<tunneled-static-port>/__ask`. No new tunnel entry,
+  but it entangles the check with prod vhost routing (Host-matching of
+  a `127.0.0.1`-Host request; accidental public exposure of `/__ask`
+  through alula's catch-all proxy) — only if adding a rathole entry is
+  somehow impossible.
+
+**Responder fallback — ~20-line dedicated service** (systemd user
+service or quadlet), if the pure-Caddy `try_files` form proves
+unsupported or we later want logging/metrics/auth:
+
+```python
+#!/usr/bin/env python3
+"""Caddy on-demand TLS ask endpoint: 2xx iff preview dir exists."""
+import http.server, urllib.parse, pathlib
+ROOT = pathlib.Path("/home/michalvanko/previews")
+SUFFIX = ".dev.michalvanko.dev"
+class H(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        q = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+        domain = q.get("domain", [""])[0].lower()
+        ok = domain.endswith(SUFFIX) and (ROOT / domain).is_dir()
+        self.send_response(200 if ok else 404)
+        self.end_headers()
+    do_POST = do_GET  # tolerate verb differences across Caddy versions
+http.server.ThreadingHTTPServer(("0.0.0.0", 9123), H).serve_forever()
+```
+
+(There is also a `permission <module>` extension point should custom
+logic ever be needed — `ask` is just the built-in `http` module.)
+
+### D10: TLS = on-demand per-branch certs on alula (no DNS-API integration)
+
+**Chosen:** `*.dev.michalvanko.dev` site block on **alula's** Caddy with
+`tls { on_demand }` + an `ask` gate.
+
+- Wildcard DNS already exists (verified: any `*.dev.michalvanko.dev` name
+  resolves to `176.102.65.48`). HTTP-01 keeps working because alula
+  already terminates ports 80/443 for that traffic.
+- Each branch cert is issued exactly like every cert we already run —
+  per-hostname Let's Encrypt via HTTP-01. **Zero third-party
+  integration.**
+- **Why not a wildcard certificate:** LE only issues `*.` names via
+  DNS-01 (a `_acme-challenge` TXT record per issuance *and* per ~60-day
+  renewal). Unattended renewal therefore requires the Namecheap API
+  (plus an xcaddy-built Caddy with `caddy-dns/namecheap`, plus IP
+  whitelisting) — exactly the integration we run without today. Manual
+  TXT pasting per renewal is the only other no-API path and is a standing
+  chore.
+- **The `ask` gate is a quota firewall, not an integration:** the repo is
+  public and wildcard DNS means internet scanners hitting random `*.dev`
+  names would make alula mint junk certs until LE's 50-certs-per-week-
+  per-registered-domain limit threatens renewal of the *real* domains.
+  See [The `ask` endpoint](#the-ask-endpoint) for exactly how it works.
+- **Cert lifecycle nuance:** `ask` gates *new* issuance (a handshake for
+  a name with no loaded cert). Background renewals of already-issued
+  certs are **not** ask-gated, so a torn-down preview's cert lingers in
+  alula's storage and keeps renewing — a few KB each, cosmetic. Requests
+  to it TLS-succeed but 404 at katelyn (dir gone). Optional low-priority
+  cleanup: periodically delete cert dirs in alula's Caddy storage whose
+  hostname has no preview dir. Verify with the LE **staging** endpoint
+  during implementation.
+- `interval`/`burst` options inside `on_demand_tls` are deprecated —
+  **do not add them** (official docs: "NOT recommended").
+
+### D11: Lifecycle = PR-driven only (decided 2026-08-20)
+
+| PR event | Preview action |
+|---|---|
+| `opened`, `synchronize`, `reopened` | build + deploy |
+| `closed` (covers **merged**) | `rm -rf ~/previews/<hostname>/` |
+
+- Forgejo Actions has **no branch-`delete` event**; the PR lifecycle is
+  the only trigger pair with symmetric create/teardown → no scheduled
+  sweep and no TTL needed.
+- A branch without an open PR gets no preview (open the PR to get one).
+- Security (D6, host mode): same-repo branches are trusted; fork PRs must
+  be caught by Forgejo's moderated approval gate for pull_request
+  workflows — verify the setting exists in v15 (pre-flight item 11).
+- Preview builds use `PORT=3082` — can never collide with a prod pipeline
+  run on 3081 (or with a concurrently running one).
+
+### D12: Storage = hardlink overlays — a preview costs only its delta
+
+The runner executes on katelyn, where prod `dist/` (~131 MB) lives, so
+previews share inodes with prod instead of copying it:
+
+```bash
+# Image-cache restore: instant, 0 bytes on disk. Safe because the
+# generator only creates missing files, never mutates existing ones.
+mkdir -p generated_images
+cp -al "$PROD_DIST/generated_images/." generated_images/
+
+# Preview deploy: files identical to prod become hardlinks; only the
+# branch delta (new/changed HTML + new image variants) is written.
+rsync -a --delete --link-dest="$PROD_DIST/" ./dist/ "$PREVIEW_ROOT/$HOSTNAME/"
+```
+
+- Per-preview disk cost = branch delta (typically single-digit MB), not
+  ~131 MB per branch.
+- Teardown (`rm -rf`) is inode-safe — deleting a hardlink never touches
+  prod's data; conversely a prod redeploy that replaces a file leaves old
+  preview links holding the old inode until that preview dies.
+- Previews **never write back** to prod's image cache. Branch-only image
+  variants die with the preview; on merge, the prod pipeline generates
+  them once (seconds per image).
+
+### Serving chain
+
+```
+*.dev.michalvanko.dev → wildcard DNS → alula (public host)
+alula Caddy:
+    on_demand_tls { ask http://127.0.0.1:9123 }  # via rathole — Transport A
+    *.dev.michalvanko.dev {
+        tls { on_demand }
+        reverse_proxy 127.0.0.1:<tunneled-static-port>  # existing rathole
+    }                                                   # service → katelyn
+alula rathole server: 127.0.0.1:9123 ⇄ katelyn:9123    # NEW service entry
+→ katelyn Caddy (static quadlet, reached only via tunnel, Host preserved):
+    # preview dirs named by FULL hostname (see ask section)
+    *.dev.michalvanko.dev {
+        root * /home/michalvanko/previews/{http.request.host}
+        try_files {path}.html {path}/index.html {path}
+        header X-Robots-Tag noindex
+        file_server
+        encode zstd gzip
+    }
+```
+
+Full-hostname dir naming (`previews/foo.dev.michalvanko.dev/`) removes
+all label math: katelyn's serving root is simply the request Host, and
+the ask check is a one-line `try_files` on the `?domain=` query.
+alula's `reverse_proxy` preserves the original Host by default, so
+katelyn can route on it. Because alula reaches katelyn only via the
+tunnel, **no stable katelyn address is needed anywhere** — rathole
+reconnects on IP drift by design.
+
+### Workflow sketch (`.forgejo/workflows/preview.yaml`)
+
+```yaml
+name: preview
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+env:
+  PORT: "3082"
+  PROD_DIST: /home/michalvanko/.config/containers/systemd/michalvankodev-site/dist
+  PREVIEW_ROOT: /home/michalvanko/previews
+
+jobs:
+  meta:
+    runs-on: host
+    outputs:
+      hostname: ${{ steps.label.outputs.HOSTNAME }}
+    steps:
+      - id: label
+        run: |
+          LABEL=$(echo "${{ github.event.pull_request.head.ref }}" \
+            | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g' | cut -c1-63)
+          echo "HOSTNAME=${LABEL}.dev.michalvanko.dev" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    if: github.event.action != 'closed'
+    needs: meta
+    runs-on: host
+    steps:
+      - uses: actions/checkout@v6
+        with: { lfs: true }
+      - run: npm install
+      - run: just tailwind_build
+      - run: cargo build --release      # CARGO_TARGET_DIR per D6 host mode
+      - run: |
+          mkdir -p generated_images
+          cp -al "$PROD_DIST/generated_images/." generated_images/
+      - run: nohup just prod > server.log 2>&1 &
+      - run: |                        # wait-loop, same contract as deploy.yaml
+          for i in $(seq 1 100); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 2 "http://127.0.0.1:$PORT/" || true)
+            [ -n "$code" ] && [ "$code" != "000" ] && exit 0
+            sleep 2
+          done
+          echo "::error::Server did not come up"; exit 1
+      - run: |
+          just ssg
+          rsync -a generated_images/ dist/generated_images/
+      - run: just kill || pkill -f axum_server || true
+      - if: always()
+        run: cat server.log || true
+      - run: rsync -a --delete --link-dest="$PROD_DIST/" ./dist/ "$PREVIEW_ROOT/${{ needs.meta.outputs.hostname }}/""
+
+  teardown:
+    if: github.event.action == 'closed'
+    needs: meta
+    runs-on: host
+    steps:
+      - run: rm -rf "$PREVIEW_ROOT/${{ needs.meta.outputs.hostname }}"
+```
+
+(Sketch — the real file inherits all host-mode adaptations of
+`deploy.yaml` per D6/D8, e.g. persistent `CARGO_TARGET_DIR`, no SSH
+steps, local paths only.)
 
 ## Appendix: Woodpecker CI vs Forgejo Actions / forgejo-runner
 
@@ -431,6 +737,15 @@ Development is postponed until the on-LAN items are done.
    (latest stable from codeberg.org/forgejo/runner, compatible with v15).
 10. **Trigger verification** (no runner needed): after D7 move + push, runs
     appear under `/actions` in "waiting" state → triggering confirmed.
+11. **Preview infra (when implementing previews):** alula Caddy gains the
+    `*.dev` on-demand block + `on_demand_tls { ask http://127.0.0.1:9123 }`;
+    add a rathole service entry alula-loopback `127.0.0.1:9123` ⇄
+    katelyn `:9123` (bind the alula side to loopback — never public);
+    katelyn's existing Caddy gains the `:9123` ask block (`try_files` on
+    the `?domain=` query — verify placeholder support, else the
+    ~20-line Python fallback) and the `*.dev` static site block with
+    `root previews/{http.request.host}`; verify the fork-PR moderation
+    setting ("approve pending runs") exists in v15 (D11).
 
 ## Future work / open items
 
@@ -460,6 +775,11 @@ Done:
 - [x] Investigation: Actions enabled, 0 runners, 0 runs ever, `.gitea/`
       workflows never triggered on v15 (D7)
 - [x] Comparison appendix: Woodpecker vs Forgejo Actions (decision record)
+- [x] Preview deployment design (2026-08-20): D10 on-demand TLS on alula,
+      D11 PR-driven lifecycle, D12 hardlink overlays — see
+      [Preview deployments](#preview-deployments). Topology corrected:
+      TLS front door is alula, katelyn = static serving only; katelyn IP
+      drifted to `192.168.0.156`.
 
 Blocked on pre-flight (on-LAN):
 - [ ] Pre-flight verification checklist complete (10 items above)
