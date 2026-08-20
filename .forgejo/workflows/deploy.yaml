@@ -89,7 +89,9 @@ jobs:
         run: rsync -a --delete ./dist/ "$DEPLOY_DIR/"
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v6
+        # v4+ of @actions/artifact hard-errors on Forgejo (GHES check);
+        # v3 is the newest major that works here.
+        uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist/
