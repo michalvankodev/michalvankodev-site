@@ -54,44 +54,30 @@ jobs:
           rsync -a "$DEPLOY_DIR/generated_images/" generated_images/ \
             || echo "::warning::No generated images on production yet - generating all images"
 
-      - name: Debug environment
-        run: |
-          echo "pwd: $(pwd)"
-          echo "PATH: $PATH"
-          command -v just cargo node npm exiftool
-          ls -la | head -8
-
-      - name: Run server in background
+      - name: SSG export (server + crawl in one step)
+        # forgejo-runner kills the process group when a step ends, so the
+        # server, the wait loop and the crawl MUST share one step.
         run: |
           nohup just prod > server.log 2>&1 &
-          echo "server launcher pid: $!"
-          sleep 5
-          ls -la server.log || echo "server.log MISSING after 5s"
-          cat server.log 2>/dev/null | tail -5 || true
-
-      - name: Wait for server
-        run: |
           for i in $(seq 1 100); do
             code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 2 "http://127.0.0.1:$PORT/" || true)
             if [ -n "$code" ] && [ "$code" != "000" ]; then
               echo "Server is up (HTTP $code)"
-              exit 0
+              break
             fi
             sleep 2
           done
-          echo "::error::Server did not come up"
-          exit 1
-
-      - name: SSG crawl
-        run: |
+          if [ -z "${code:-}" ] || [ "$code" = "000" ]; then
+            echo "::error::Server did not come up"
+            tail -50 server.log || true
+            exit 1
+          fi
           just ssg
+          just kill || pkill -f axum_server || true
           # The crawler must not be trusted with dist completeness: wget may
           # miss srcset variants and the lazy async image generation races the
           # crawl. Sync all generated image variants into dist explicitly.
           rsync -a generated_images/ dist/generated_images/
-
-      - name: Stop server
-        run: just kill || pkill -f axum_server || true
 
       - name: Server log
         if: always()
