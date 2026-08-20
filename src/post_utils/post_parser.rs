@@ -27,7 +27,7 @@ pub struct ParseResult<Metadata> {
     pub slug: String,
 }
 
-pub async fn parse_post<'de, Metadata: DeserializeOwned>(
+pub async fn parse_post<Metadata: DeserializeOwned>(
     path: &str,
 ) -> Result<ParseResult<Metadata>, StatusCode> {
     let file_contents = fs::read_to_string(path)
@@ -36,12 +36,16 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
         .map_err(|_| StatusCode::NOT_FOUND)?;
 
     let matter = Matter::<YAML>::new();
-    let metadata = matter
-        .parse_with_struct::<Metadata>(&file_contents)
-        .ok_or_else(|| {
-            tracing::error!("Failed to parse metadata");
+    let parsed = matter
+        .parse::<Metadata>(&file_contents)
+        .map_err(|err| {
+            tracing::error!("Failed to parse metadata: {err}");
             StatusCode::INTERNAL_SERVER_ERROR
         })?;
+    let metadata = parsed.data.ok_or_else(|| {
+        tracing::error!("Missing front matter in {path}");
+        StatusCode::INTERNAL_SERVER_ERROR
+    })?;
 
     let filename = Path::new(path)
         .file_stem()
@@ -51,8 +55,8 @@ pub async fn parse_post<'de, Metadata: DeserializeOwned>(
         .to_owned();
 
     Ok(ParseResult {
-        body: metadata.content,
-        metadata: metadata.data,
+        body: parsed.content,
+        metadata,
         slug: filename,
     })
 }
