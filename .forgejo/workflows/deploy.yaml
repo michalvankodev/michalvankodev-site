@@ -54,8 +54,20 @@ jobs:
           rsync -a "$DEPLOY_DIR/generated_images/" generated_images/ \
             || echo "::warning::No generated images on production yet - generating all images"
 
+      - name: Debug environment
+        run: |
+          echo "pwd: $(pwd)"
+          echo "PATH: $PATH"
+          command -v just cargo node npm exiftool
+          ls -la | head -8
+
       - name: Run server in background
-        run: nohup just prod > server.log 2>&1 &
+        run: |
+          nohup just prod > server.log 2>&1 &
+          echo "server launcher pid: $!"
+          sleep 5
+          ls -la server.log || echo "server.log MISSING after 5s"
+          cat server.log 2>/dev/null | tail -5 || true
 
       - name: Wait for server
         run: |
@@ -83,7 +95,9 @@ jobs:
 
       - name: Server log
         if: always()
-        run: cat server.log || true
+        run: |
+          pwd; ls -la | head -5
+          cat server.log || true
 
       - name: Deploy to production
         run: rsync -a --delete ./dist/ "$DEPLOY_DIR/"
