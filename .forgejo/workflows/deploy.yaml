@@ -25,6 +25,8 @@ jobs:
     runs-on: host
     steps:
       - uses: actions/checkout@v6
+        with:
+          lfs: true   # tests decode real image fixtures (LFS pointers break decoding)
       - run: cargo test --all-features
 
   deploy:
