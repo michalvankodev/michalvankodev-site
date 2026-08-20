@@ -37,14 +37,17 @@ Personal website and blog hosted at https://michalvanko.dev. A static site gener
 ├── styles/
 │   ├── input.css           # Tailwind source with custom theme
 │   └── output.css          # Generated CSS (gitignored)
+├── .forgejo/workflows/     # Forgejo Actions CI (test.yaml, deploy.yaml)
 ├── static/                 # Static assets served directly
-│   ├── images/             # Site images
+│   ├── images/             # Site images (git LFS)
 │   ├── fonts/              # Custom web fonts (Baloo2)
 │   ├── svg/                # SVG icons
 │   └── resources/          # Decap CMS config
 ├── _posts/blog/            # Blog posts (Markdown with front matter)
 ├── _projects/              # Showcase projects (Markdown with front matter)
 ├── _pages/                 # Static pages (portfolio.md)
+├── specs/                  # Decision records (CI-deploy.md = CI/CD design + runbook)
+├── docs/                   # Long-form docs
 ├── generated_images/       # Auto-generated responsive images (gitignored)
 ├── dist/                   # SSG output folder (gitignored)
 └── target/                 # Rust build artifacts (gitignored)
@@ -61,8 +64,9 @@ Personal website and blog hosted at https://michalvanko.dev. A static site gener
 1. **Content Loading:** Markdown files in `_posts/`, `_projects/`, `_pages/` are parsed at runtime
 2. **Front Matter:** YAML metadata extracted via `gray_matter` crate
 3. **Template Rendering:** Askama templates receive structs with data
-4. **Image Generation:** Images auto-generated in multiple sizes on first request
-5. **SSG Export:** `wget` crawls running server, saves HTML to `dist/`
+4. **Image Generation:** Tokio-based bounded queue (`src/picture_generator/image_jobs.rs`, default `cores - 2` workers, `IMAGE_WORKERS` env) generates missing variants lazily during rendering; `GET /export-wait` long-polls until the queue is idle
+5. **SSG Export:** `just ssg` = `ssg_prewarm` (pages-only crawl to enqueue image jobs, drain via `/export-wait`) + full wget crawl into `dist/`
+6. **Deploy:** CI rsyncs `dist/` into the quadlet dist dir on katelyn (no service restart needed)
 
 ## Code Conventions
 
@@ -76,9 +80,10 @@ Personal website and blog hosted at https://michalvanko.dev. A static site gener
 
 ### Template Patterns
 
-- **Inheritance:** Templates extend `base.html` using `{% block content %}`
+- **Inheritance:** Templates extend `base.html` using `{% block content %}` — the `{% extends %}` tag **must be the first tag** in the file (askama ≥0.15 hard error)
 - **Includes:** Reusable partials via `{% include "component.html" %}`
-- **Filters:** Custom filters in `src/filters/` (e.g., `{{ content|markdown }}`)
+- **Macro calls:** single-tag `{% call m(args) %}` no longer exists — use `{{ m(args) }}` (or `{% call %}…{% endcall %}` with a body)
+- **Filters:** Custom filters in `src/filters/` wrapped in `#[askama::filter_fn]` (askama 0.16), with plain `*_impl` functions for Rust callers (see `feed.rs`)
 - **Configuration:** `askama.toml` sets template directory and whitespace handling
 
 ### Naming Conventions
@@ -111,9 +116,10 @@ Personal website and blog hosted at https://michalvanko.dev. A static site gener
 
 ### Environment Variables
 
-- `PORT` - Server port (default: 3080)
+- `PORT` - Server port (default: 3080; read at **runtime**, not compile time)
 - `RUST_LOG` - Logging level (default: `axum_server=debug,tower_http=debug`)
-- `TARGET` - Build target mode (used in `just prod`)
+- `IMAGE_WORKERS` - Image-generation worker count (default: cores - 2)
+- `FORGEJO_TOKEN` / `FORGEJO_URL` - Forgejo API token + instance URL (fish universal vars on phoebe; scoped `write:repository,write:issue,read:user`; for API calls / `fj` CLI)
 
 ### Development Setup
 
@@ -138,8 +144,11 @@ just test          # Run Rust tests
 just test_watch    # Run tests with watch mode
 just prod          # Run server in release mode
 just export        # Generate static site to dist/
-just deploy        # rsync dist/ to remote server
+just ssg           # Prewarm + crawl a running server into dist/
+just deploy        # Manual rsync dist/ to prod (CI does this automatically on main)
 ```
+
+Pushes to `main` deploy automatically via Forgejo Actions — manual `just deploy` is only a fallback.
 
 ## Important Files
 
@@ -150,10 +159,47 @@ just deploy        # rsync dist/ to remote server
 - `static/resources/config.yml` - Decap CMS collections and fields
 - `styles/input.css` - Tailwind theme customization (colors, fonts, spacing)
 
-### CI/CD
+### CI/CD (Forgejo Actions)
 
-- `.gitea/workflows/test.yaml` - Runs `cargo test` on push/PR
-- `.gitea/workflows/release.yaml` - Builds release, runs SSG export, uploads `dist/` artifact
+Live since 2026-08-20 — full design record, decision log and runbook in [`specs/CI-deploy.md`](specs/CI-deploy.md) (read it before changing CI).
+
+- `.forgejo/workflows/test.yaml` — `cargo test --all-features` on non-main pushes (push-only trigger; v15 only reads `.forgejo/workflows/`, the old `.gitea/` dir is dead)
+- `.forgejo/workflows/deploy.yaml` — `main` pushes + `workflow_dispatch`: test → release build → SSG export (server + crawl in **one step**) → local rsync into the prod dist dir → artifact upload
+- **Runner:** `forgejo-runner` v13 in **host mode** (`runs-on: host`), systemd user service on katelyn (runs as the deploy user) — jobs execute directly on the deploy target; register/uuid+token live in `~/.config/forgejo-runner/config.yml` (`server.connections`, the legacy `register` subcommand is deprecated)
+- **Rust cache:** `CARGO_TARGET_DIR under the deploy user's home (`~/forgejo-runner-cache/target`)` persists across runs (registry at `~/.cargo`); warm release build ≈ 16 s
+- **Image cache:** `generated_images/` restored from production dist before each build (the generator skips existing files)
+
+**Host-mode CI quirks (hard-won):**
+- The runner **kills the process group when a step ends** — background server + wait loop + crawl + kill must share ONE workflow step (also applies to any future preview workflow)
+- `upload-artifact` must stay `@v3` — v4+ hard-errors on Forgejo (`GHESNotSupportedError`)
+- Every checkout that runs tests needs `lfs: true` — image-decoding tests fail on LFS pointer bytes
+- CI job logs are anonymously readable at `/actions/runs/<n>/jobs/<j>/attempt/1/logs`
+
+### Infrastructure
+
+```
+internet → alula (public entry host)
+             ├─ TLS-terminating Caddy (Let's Encrypt HTTP-01, per-hostname certs)
+             └─ rathole server (tunnel endpoints, loopback)
+           katelyn (LAN only — never directly addressable from the internet)
+             ├─ rathole client (outbound to alula; reconnects on address drift)
+             ├─ static-serving Caddy quadlet → michalvanko.dev
+             │    root: ~/.config/containers/systemd/michalvankodev-site/dist/
+             ├─ Forgejo (web via tunnel; git SSH on a nonstandard port)
+             └─ forgejo-runner (host mode)
+           phoebe — dev workstation (this repo)
+```
+
+- No addresses/ports are recorded here on purpose (public repo). Resolve
+  hosts via DNS / `/etc/hosts` on phoebe (`getent hosts katelyn`), and get
+  the exact Forgejo git URL from `git remote -v`
+- katelyn's LAN address is pinned by a router DHCP reservation but can
+  transiently differ until it reboots — the `katelyn` ssh alias (in
+  `~/.ssh/config` + `/etc/hosts`) may lag reality; connect with
+  `ssh katelyn (alias + key in ~/.ssh/config)`. Passwordless sudo available
+- Git remotes: `origin` = GitHub; `katelyn` = the self-hosted Forgejo
+  (exact URL: `git remote -v`; key `~/.ssh/forgejo_katelyn`)
+- **PR preview deployments** (`<label>.dev.michalvanko.dev`, on-demand TLS via alula + `ask` over the rathole tunnel, hardlink-overlay storage, PR-driven lifecycle) are fully specified in `specs/CI-deploy.md` § Preview deployments (D10–D12) but **not yet implemented**
 
 ### Content Structure
 
@@ -165,14 +211,13 @@ just deploy        # rsync dist/ to remote server
 
 **Rust:**
 - `axum` - Web framework
-- `askama` - Compile-time templates
+- `askama` 0.16 - Compile-time templates (`#[askama::filter_fn]` custom filters)
 - `pulldown-cmark` - Markdown parsing
-- `gray_matter` - YAML front matter extraction
-- `tokio` - Async runtime
+- `gray_matter` 0.3 - YAML front matter extraction (`Matter::parse::<D>()` → `Result<ParsedEntity<D>>`)
+- `tokio` - Async runtime (also drives the image-generation queue)
 - `tower-http` - HTTP middleware (tracing, static files)
 - `tower-livereload` - Development hot reload
-- `image` - Image processing for responsive images
-- `syntect` - Syntax highlighting
+- `image` + `syntect` - Image processing / syntax highlighting
 
 **Node.js:**
 - `tailwindcss` v4 - CSS framework
@@ -186,8 +231,14 @@ just deploy        # rsync dist/ to remote server
 
 3. **Content Model:** All content uses YAML front matter. See `static/resources/config.yml` for field definitions.
 
-4. **Image Handling:** Images are auto-generated in multiple sizes. The `picture_generator` module creates responsive `<picture>` elements.
+4. **Image Handling:** Images are auto-generated in multiple sizes via the bounded tokio queue (skips existing files — that's the build cache). The `picture_generator` module creates responsive `<picture>` elements. Exif is copied via `exiftool` — it must be installed for generation.
 
-5. **Debug vs Release:** Debug builds include livereload. Release builds are optimized for production.
+5. **Debug vs Release:** Debug builds include livereload. Release builds are optimized for production. `PORT` is read at runtime — a prebuilt binary honors it.
 
-6. **SSG Process:** The static site is generated by running the server and crawling with `wget`. All linked content must be discoverable from the homepage.
+6. **SSG Process:** `just ssg` prewarms (enqueue + drain) then crawls with wget2. All linked content must be discoverable from the homepage. The CI workflow also rsyncs `generated_images/` into `dist/` explicitly — never trust the crawler for dist completeness.
+
+7. **LFS:** Source images live in git LFS (~166 MB). Any checkout that decodes images (tests, builds) needs real LFS smudge — in CI always `lfs: true`. Symptom of pointers-instead-of-images: `Illegal start bytes:7665` ("ve"rsion of an LFS pointer).
+
+8. **Dependency bumps must compile:** askama 0.15/0.16 and gray_matter 0.3 have breaking API/template changes that previously landed unverified. The test workflow is the guard — never merge a dep bump that hasn't passed it.
+
+9. **CI/Forgejo work:** read `specs/CI-deploy.md` first; use `$FORGEJO_TOKEN`/`$FORGEJO_URL` for API calls (temp tokens can be minted via `podman exec forgejo gitea admin user generate-access-token` on katelyn). Job logs are readable anonymously (see CI/CD section).
