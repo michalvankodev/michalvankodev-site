@@ -196,6 +196,14 @@ workflow steps run directly on the host. The current `deploy.yaml`
   `CARGO_TARGET_DIR` to a fixed path outside the job workspace so `target/`
   persists → true incremental `cargo build` (seconds), outperforming
   rust-cache restore. `rust-cache` can then be dropped.
+  - **Implemented 2026-08-20:** `CARGO_TARGET_DIR=/home/michalvanko/
+    forgejo-runner-cache/target` in the `env` of **both** workflows (the
+    cargo registry at `~/.cargo` persists on the host anyway).
+    Rejected alternatives: `actions/cache` tarballs and `sccache` — both
+    exist for *ephemeral* builders; on a fixed host a bare persistent
+    directory is strictly simpler and faster (no pack/unpack, true
+    incremental). Cache prewarmed manually on katelyn (cargo test +
+    release build) so first CI runs start warm.
 - Rationale: avoids docker/podman socket friction entirely (the usual cause
   of act_runner pain); fastest path; zero extra containers.
 - **Security:** host mode executes workflow code as the runner user on
@@ -309,6 +317,24 @@ anymore.
 If prod `dist/generated_images/` is empty (or restore fails), the pipeline
 logs a `::warning::` and generates every variant — slower run (~10–15 min
 cold), still succeeds. The first successful deploy then seeds the cache.
+
+### Rust build cache
+
+`CARGO_TARGET_DIR=/home/michalvanko/forgejo-runner-cache/target` (workflow
+`env`) persists across runs — warm builds are incremental. Reset anytime:
+`rm -rf ~/forgejo-runner-cache/target` (next run cold-rebuilds; safe — prod
+serving never reads it). The dir only grows stale artifacts; prune when
+disk matters (551 GB free as of 2026-08-20).
+
+### Why the codebase had stopped compiling (2026-08-20)
+
+Renovate's askama 0.15 / gray_matter 0.3 bumps merged without compile
+verification — the legacy `.gitea` workflow was broken (`cd axum_server`),
+so no CI ever ran on them. Fixed in commit "fix(build): adapt to askama
+0.15 and gray_matter 0.3" (extends-first, `{% call %}` → `{{ }}`,
+`#[askama::filter_fn]` wrappers + `*_impl` split, gray_matter 0.3 parse
+API). Lesson absorbed: the new test job is exactly the guard that was
+missing.
 
 ### Force-regenerate an image
 
@@ -565,6 +591,7 @@ env:
   PORT: "3082"
   PROD_DIST: /home/michalvanko/.config/containers/systemd/michalvankodev-site/dist
   PREVIEW_ROOT: /home/michalvanko/previews
+  CARGO_TARGET_DIR: /home/michalvanko/forgejo-runner-cache/target
 
 jobs:
   meta:
@@ -587,7 +614,7 @@ jobs:
         with: { lfs: true }
       - run: npm install
       - run: just tailwind_build
-      - run: cargo build --release      # CARGO_TARGET_DIR per D6 host mode
+      - run: cargo build --release      # warm via CARGO_TARGET_DIR (env)
       - run: |
           mkdir -p generated_images
           cp -al "$PROD_DIST/generated_images/." generated_images/
@@ -787,6 +814,10 @@ Done:
 - [x] `test.yaml`: skip main pushes (⚠️ also drop `pull_request` per D6)
   → **done 2026-08-20:** push-only, `runs-on: host`, stale
       `cd axum_server` removed
+- [x] Rust build cache wired (2026-08-20): `CARGO_TARGET_DIR` in the
+      `env` of deploy.yaml **and test.yaml**; cache prewarmed on katelyn
+- [x] Codebase compile fixed for askama 0.15 / gray_matter 0.3
+      (renovate bumps had landed unverified; see runbook)
 - [x] `release.yaml` deleted
 - [x] Investigation: Actions enabled, 0 runners, 0 runs ever, `.gitea/`
       workflows never triggered on v15 (D7)

@@ -7,6 +7,13 @@ name: test
 # are therefore covered too.
 on: [push]
 
+# Shared persistent Rust build cache on the host (spec D6): the runner
+# always builds on this same machine, so a fixed CARGO_TARGET_DIR makes
+# every build incremental across runs (registry cache at ~/.cargo persists
+# the same way). Reset with rm -rf ~/forgejo-runner-cache/target.
+env:
+  CARGO_TARGET_DIR: /home/michalvanko/forgejo-runner-cache/target
+
 jobs:
   test:
     name: cargo test
