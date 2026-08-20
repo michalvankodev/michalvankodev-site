@@ -326,6 +326,33 @@ cold), still succeeds. The first successful deploy then seeds the cache.
 serving never reads it). The dir only grows stale artifacts; prune when
 disk matters (551 GB free as of 2026-08-20).
 
+### Host-mode runner quirks (learned 2026-08-20, first live runs)
+
+1. **Background processes are killed at step boundaries** — the runner
+   reaps the whole process group when a step ends (`just prod` died with
+   SIGHUP the moment its launcher step completed). Consequence: server +
+   wait-loop + crawl + kill MUST share **one workflow step** (deploy.yaml
+   "SSG export" step). **Applies to the preview.yaml sketch too** — its
+   server step must be merged the same way.
+2. **`upload-artifact@v4+` is unsupported on Forgejo** (its bundled
+   `@actions/artifact` hard-errors with `GHESNotSupportedError`). Use
+   `@v3` (deploy.yaml does) or drop the step.
+3. **Both** test jobs (test.yaml **and** deploy.yaml's embedded one) need
+   `lfs: true` on checkout — image-decoding tests get LFS pointer bytes
+   (`7665` = "ve"rsion…) otherwise.
+4. The job log endpoint is anonymously readable:
+   `/actions/runs/<n>/jobs/<j>/attempt/1/logs` — good enough for CI
+   debugging without UI login (the `actions/tasks` API shows nothing).
+
+### First live pipeline result (2026-08-20 18:14)
+
+Run #16 (deploy.yaml on main): test ✓ (warm cache, seconds), release
+build 2m29s (first) / 16s (second), SSG prewarm + crawl + image sync ✓,
+local rsync deploy ✓ — **production updated at 16:14:22 GMT** (verified
+via `last-modified` + dist mtimes). Job showed Failure only because of
+the artifact-upload issue above (fixed in the next commit; run #17+ is
+the fully green confirmation).
+
 ### Why the codebase had stopped compiling (2026-08-20)
 
 Renovate's askama 0.15 / gray_matter 0.3 bumps merged without compile
@@ -831,11 +858,15 @@ Done:
 
 Blocked on pre-flight (on-LAN):
 - [x] Pre-flight verification checklist — items 1–5, 8 ✅ (2026-08-20);
-      6, 7, 10 pending first run / admin check
+      6 ✅ (checkout@v6 works on host, run #9); 10 ✅ (run #4 waiting);
+      7 pending admin check (moot while test.yaml is push-only)
 - [x] **Workflows moved to `.forgejo/workflows/`** (D7) + host-mode
-      rewrite of deploy.yaml (D6/D8) + test.yaml fixes — 2026-08-20;
-      push confirmed: run #4 waiting (item 10 ✅)
-- [x] forgejo-runner **installed** (v13.0.0, user service, host label)
-      — registration pending token (pre-flight item 9)
-- [ ] Runner registered + service started (needs registration token)
-- [ ] First full pipeline run on main (seeds image cache)
+      rewrite of deploy.yaml (D6/D8) + test.yaml fixes — 2026-08-20
+- [x] forgejo-runner installed (v13.0.0) **and registered** (v15-style
+      pre-registration: uuid + token in `server.connections` of the
+      runner config; legacy `register` subcommand is deprecated) —
+      user systemd service, `host:host` label
+- [x] **First full pipeline run on main — production deployed**
+      (2026-08-20 18:14, run #16; artifact step fixed after)
+- [ ] Remaining: confirm a fully-green run end-to-end (post artifact
+      fix), optionally cancel stale Waiting runs #6/#7 in the UI
