@@ -176,6 +176,17 @@
   color: var(--color-pink-700);
 }
 
+/* Site-wide smooth anchor scrolling, gated by prefers-reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+.article-body :is(h1, h2, h3, h4) {
+  scroll-margin-top: 2.5rem;
+}
+
 .article-body {
   h1 {
     @apply px-4 text-display-3 mb-3 mt-6 max-w-read mx-auto;
@@ -196,6 +207,19 @@
   p {
     @apply px-4 my-2 text-slate-950 text-justify text-read mx-auto max-w-read md:my-4;
   }
+  /* Chapter opening: regular typographic drop cap (display voice) on the
+   * first paragraph — float-based, bulletproof everywhere */
+  > p:first-of-type::first-letter {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 3.4em;
+    line-height: 0.8;
+    float: left;
+    padding-right: 0.12em;
+    padding-top: 0.08em;
+    color: var(--color-blue-950);
+  }
+
 
   pre {
     @apply p-4 my-1 overflow-auto text-sm mx-auto max-w-read;

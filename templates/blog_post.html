@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{%- import "macros.html" as m -%}
 
 {% block og_meta %}
 <meta property="og:title" content="{{title}}" />
@@ -15,50 +16,106 @@
 {% endblock %}
 
 {% block content %}
+<div id="read-progress" class="fixed top-0 left-0 h-0.5 bg-pink-600 z-50 motion-reduce:hidden print:hidden" style="width:0%" aria-hidden="true"></div>
 <article class="mb-6">
-  <header class="px-4 max-w-read mx-auto">
-  <h1 class="text-display-1 lg:mt-20 mb-3" style="view-transition-name: post_title_{{slug}};">{{title}}</h1>
-  <aside class="flex justify-between flex-row">
+  <header class="px-5 max-w-read mx-auto pt-12">
+    <p class="kicker">
+      ~/{{segment}} · <time datetime="{{date}}" style="view-transition-name: post_date_{{slug}}">{{date|pretty_date}}</time> · {{reading_time}} min read
+    </p>
+    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mt-2 mb-4" style="view-transition-name: post_title_{{slug}};">{{title}}</h1>
     {% include "post_tag_list.html" %}
-    <section class="created-at m-1 text-right text-sm text-slate-600 md:text-lg">
-      <span>Published on</span>
-      <time datetime="{date}" style="view-transition-name: post_date_{{slug}}"> {{date|pretty_date}} </time>
-    </section>
-  </aside>
-</header>
+  </header>
 
-  <section class="article-body">
-    {{body|parse_markdown|safe}}
-  </section>
+  <div class="max-w-image mx-auto px-5 mt-8 2xl:grid 2xl:grid-cols-[minmax(0,42rem)_14rem] 2xl:gap-12 2xl:justify-center">
+    <div class="article-body-wrap flow-root">
+      {% match thumbnail %}
+      {% when Some with (img) %}
+      {% let cover = crate::picture_generator::picture_markup_generator::generate_picture_markup(img, 480, 480, "Article cover", Some("w-full h-auto rounded-xs border border-slate-200 shadow-md")).unwrap_or("".to_string())|safe %}
+      <figure class="article-cover float-right w-40 sm:w-64 md:w-72 my-2 ml-6 mb-6">
+        {{cover|safe}}
+      </figure>
+      {% when None %}
+      {% endmatch %}
+
+      <section class="article-body">
+        {{body|parse_markdown|safe}}
+      </section>
+    </div>
+
+    {% if !toc.is_empty() %}
+    <aside class="hidden 2xl:block print:hidden">
+      <nav id="toc" class="sticky top-8 border-l-2 border-slate-200 pl-4" aria-label="Table of contents">
+        <p class="font-mono text-xs text-slate-500 lowercase mb-2">on this page</p>
+        <ul class="space-y-1.5">
+          {% for heading in toc %}
+          <li class="{% if heading.level == 3 %}pl-3{% endif %}">
+            <a href="#{{heading.id}}" class="block font-mono text-xs leading-snug text-blue-950 no-underline hover:text-pink-700">{{heading.text}}</a>
+          </li>
+          {% endfor %}
+        </ul>
+        <p class="mt-4"><a href="#top" class="font-mono text-xs text-slate-500 no-underline hover:text-blue-500">↑ top</a></p>
+      </nav>
+    </aside>
+    {% endif %}
+  </div>
 </article>
 
-<!-- TODO: Next recommendations for reading -->
-<!-- TODO: Back to all posts -->
-
-<footer class="max-w-maxindex mx-auto">
+<footer class="max-w-read mx-auto px-5 pb-4">
 
 {% if recommended_posts.len() > 0 %}
-<section id="recommended-articles">
-  <hr class="border-slate-300 m-5 md:my-8">
-
-  <h2 class="m-5 mt-8 text-2xl lg:text-3xl lg:mt-10 lg:mb-10">Further reading</h2>
-  <ul class="mx-5 xl:flex xl:justify-start xl:gap-10">
-    {% for post in recommended_posts %}
-    <li class="flex-1">
-      {% include "components/blog_post_preview.html" %}
-      <hr class="border-slate-300 my-5 md:my-8 xl:hidden">
-    </li>
-    {% if !loop.last %}
-      <div class="h-auto w-0 border-l border-slate-300 hidden xl:block"></div>
-    {% endif %}
-    {% endfor %}
+<section id="recommended-articles" class="print:hidden mt-12">
+  {{ m::section_header("", "further reading", "") }}
+  <ul class="mt-1">
+   {% for post in recommended_posts %}
+    <li>{% include "components/blog_post_preview.html" %}</li>
+   {% endfor %}
   </ul>
 </section>
 {% endif %}
 
-<section class="text-center my-3 md:text-lg">
- <a href="/blog">see all blog posts</a> 
-</section>
+  <p class="text-center my-10 font-mono text-sm print:hidden">
+    <a href="/{{segment}}">← ./{{segment}}</a>
+  </p>
 </footer>
+
+<script>
+  (function () {
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Scroll-spy for the table of contents
+    var links = Array.prototype.slice.call(document.querySelectorAll('#toc a[href^="#"]:not([href="#top"])'));
+    if (links.length > 0) {
+      var byId = {};
+      links.forEach(function (a) { byId[a.hash.slice(1)] = a; });
+      var headings = Array.prototype.slice.call(
+        document.querySelectorAll('.article-body h2[id], .article-body h3[id]')
+      );
+      var activate = function (id) {
+        links.forEach(function (l) { l.classList.remove('text-pink-700'); });
+        if (byId[id]) byId[id].classList.add('text-pink-700');
+      };
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) activate(entry.target.id);
+        });
+      }, { rootMargin: '0px 0px -80% 0px' });
+      headings.forEach(function (h) { observer.observe(h); });
+    }
+
+    // Reading progress hairline (skipped for reduced-motion users)
+    var bar = document.getElementById('read-progress');
+    if (bar && !reduced) {
+      var updateProgress = function () {
+        var doc = document.documentElement;
+        var total = doc.scrollHeight - window.innerHeight;
+        var progress = total > 0 ? (window.scrollY / total) * 100 : 0;
+        bar.style.width = progress + '%';
+      };
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      updateProgress();
+    }
+
+
+  })();
+</script>
 {% endblock %}
- <!-- xl:border-l xl:border-slate-300 xl:first:border-l-0 xl: -->
