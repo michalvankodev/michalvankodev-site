@@ -18,7 +18,7 @@ use crate::{
     projects::featured_projects::get_featured_projects,
 };
 
-use super::post_list::PostListTemplate;
+use super::post_list::{group_posts_by_year, PostListTemplate};
 
 // TODO Refactor to render post list for the same broadcasts, blog and cookbook
 pub async fn render_blog_post_list(
@@ -36,6 +36,7 @@ pub async fn render_blog_post_list(
 
     let posts = get_posts_by_segment(post_list, &[Segment::Blog]);
     let posts = get_posts_by_tag(posts, &tag);
+    let grouped_posts = group_posts_by_year(posts);
     let header_props = match tag {
         Some(_) => HeaderProps::with_back_link(Link {
             href: "/blog".to_string(),
@@ -57,7 +58,7 @@ pub async fn render_blog_post_list(
             title,
             og_title,
             segment: Segment::Blog,
-            posts,
+            grouped_posts,
             header_props,
             tags: blog_tags,
             featured_projects,

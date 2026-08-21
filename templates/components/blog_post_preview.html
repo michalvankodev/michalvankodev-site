@@ -1,33 +1,37 @@
 <article
-	class="sm:grid sm:grid-cols-[max-content_1fr] sm:grid-rows-[max-content_1fr_max-content] sm:grid-flow-col sm:gap-4 md:gap-x-8 break-inside-avoid clear-both sm:clear-none"
+	class="group grid grid-cols-1 md:grid-cols-[4.5rem_1fr] gap-x-6 gap-y-2 py-6 border-b border-slate-200 hover:bg-blue-100/50 transition-colors"
 	style="view-transition-name:blog_post_preview_{{post.slug}};"
 >
-	<aside class="row-span-3 self-center float-start sm:float-none mr-3 mb-3 sm:ml-0 sm:mb-0">
-		{% match post.metadata.thumbnail %}
-		{% when Some with (orig_path) %}
-		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", None).unwrap_or("thumbnail not found".to_string())|safe }}
-		{% when None %}
-		<div> 
-			{% include "components/blog_post_default_thumbnail.html" %}
-		</div>
-		{% endmatch %}
-	</aside>
-	<header>
-		<h3 class="text-lg font-bold mb-1 md:text-3xl" style="view-transition-name: post_title_{{post.slug}}">
-		  <a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="text-blue-950 visited:text-purple-700 no-underline">{{post.metadata.title}}</a>
-		</h3>
-	</header>
-	<section class="text-base leading-7 text-slate-800 md:text-xl text-justify">{{post.body|truncate_md(2)|parse_markdown|safe}}</section>
-	<footer class="text-sm md:text-base lg:text-lg mt-3 sm:mt-0 clear-both sm:clear-none">
-    <ul class="inline-block" style="view-transition-name: post_tags_{{post.slug}}">
-     {% for tag in post.metadata.tags %}
-      <li class="inline-block">
-        <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline">#{{tag|capitalize}}</a>
-      </li>
-      {% endfor %}
-    </ul>
-		|
-    <time datetime="{{post.metadata.date}}" class="text-pink-950" style="view-transition-name: post_date_{{post.slug}}" > {{post.metadata.date|pretty_date}} </time>
-	</footer>
-</article>
+	<time
+		datetime="{{post.metadata.date}}"
+		class="font-mono text-xs md:text-sm text-slate-600 tabular-nums md:text-right md:pt-1"
+		style="view-transition-name: post_date_{{post.slug}}"
+	>{{post.metadata.date|pretty_date}}</time>
 
+	<div class="flex gap-4 items-start self-start">
+		<div class="min-w-0 flex-1">
+			<h3 class="text-lg md:text-xl font-semibold leading-snug">
+			  <a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="text-blue-950 visited:text-purple-700 no-underline group-hover:text-blue-500" style="view-transition-name: post_title_{{post.slug}}">{{post.metadata.title}}</a>
+			</h3>
+			<div class="text-base text-slate-700 leading-relaxed mt-1.5 line-clamp-2">{{post.body|truncate_md(2)|parse_markdown|safe}}</div>
+			<ul class="mt-2 flex flex-wrap gap-x-3 font-mono text-xs md:text-sm" style="view-transition-name: post_tags_{{post.slug}}">
+				{% for tag in post.metadata.tags %}
+				<li>
+					<a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline hover:text-blue-500">#{{tag}}</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="no-underline shrink-0 w-20 md:w-36">
+			{% match post.metadata.thumbnail %}
+			{% when Some with (orig_path) %}
+			{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", Some("w-full h-auto rounded-xs border border-slate-200 block")).unwrap_or("thumbnail not found".to_string())|safe }}
+			{% when None %}
+			<div class="w-full">
+				{% include "components/blog_post_default_thumbnail.html" %}
+			</div>
+			{% endmatch %}
+		</a>
+	</div>
+</article>
