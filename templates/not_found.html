@@ -1,14 +1,17 @@
 {% extends "base.html" %}
-{% block content %} 
 
-<section id="not-found-page">
-  <p class="mx-6 mt-3 text-4xl text-blue-950 text-center font-extrabold lg:mx-auto max-w-read">
-    This page doesn't exists 
+{% block content %}
+
+<section id="not-found-page" class="max-w-read mx-auto px-5 py-24">
+  <p class="font-mono text-sm text-slate-600">
+    <span class="text-pink-700">$</span> GET {{url}}
   </p>
-  <p class="m-6 text-9xl text-blue-950 text-center font-extrabold lg:mx-auto max-w-read">😓
+  <p class="font-mono text-lg md:text-xl mt-3">
+    <span class="text-pink-700">404</span>: page not found
   </p>
-  <p class="mx-6 mt-3 text-xl text-blue-950 text-center lg:mx-auto max-w-read">
-    check out <a href="/">introduction page</a> or <a href="/contact">contact page</a>
+  <p class="text-read text-slate-700 mt-8">
+    Nothing lives here. Try the <a href="/">introduction page</a>, browse the
+    <a href="/blog">writing</a>, or <a href="/contact">get in touch</a>.
   </p>
 </section>
 

@@ -1,28 +1,35 @@
 {% extends "base.html" %}
-{% block content %} 
+{% block content %}
 
-<section id="contact-page" class="max-w-read mx-auto px-5 pt-12">
-  <p class="kicker">~/contact</p>
-  <h1 class="text-display-2 lowercase mt-2 mb-6">
-    Contact
-  </h1>
+<section id="contact-page" class="max-w-read mx-auto px-5">
+  <header class="pt-12 pb-2">
+    <p class="kicker">~/contact</p>
+    <h1 class="text-display-2 lowercase mt-2">
+      Contact
+    </h1>
+  </header>
 
-  <ul class="mx-6">
+  <ul class="mt-6">
     {% for link in links %}
-    <li class="my-2 sm:my-4 lg:my-6 max-w-[32rem] mx-auto">
+    <li class="border-b border-slate-200">
       <a
-        class="flex border-2 place-content-center items-center rounded-full text-blue-900 border-blue-500 py-2 sm:py-4 hover:bg-pink-200 fill-blue-900 hover:fill-blue-400 transition-colors no-underline"
+        class="flex items-center gap-4 py-5 hover:text-blue-500 transition-colors no-underline"
         href="{{link.href}}"
         title="{{link.title}}"
       >
-        <svg aria-hidden="true" class="h-6 w-6 mx-2 self-start">
+        <svg aria-hidden="true" class="h-5 w-5 fill-blue-950 shrink-0">
           <use xlink:href="#{{link.svg}}" />
         </svg>
-        <span class="text-lg font-semibold">{{link.label}}</span>
+        <span class="text-base md:text-lg text-blue-950">{{link.label}}</span>
       </a>
     </li>
     {% endfor %}
   </ul>
+
+  <p class="text-read text-slate-700 mt-8">
+    The fastest way to reach me is <a href="mailto:michalvankosk@gmail.com">email</a>.
+    I usually reply within a couple of days.
+  </p>
 </section>
 
 {% endblock %}

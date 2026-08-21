@@ -35,7 +35,7 @@
       </ul>
     </section>
   </div>
-  <aside id="logo-container" class="hidden md:block h-[320px] w-[320px] m-10">
+  <aside id="logo-container" class="hidden md:block h-56 md:h-72 w-56 md:w-72 shrink-0 m-6" aria-label="Animated Michal Vanko logo">
     <style>
       #logo-container svg {
         height: 100%;
@@ -47,6 +47,21 @@
     <script>
       var svg = document.getElementById("m-logo")
       svg.setAttribute("visibility", "visible");
+      var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      if (reducedMotion) {
+        // Static final state — no animation for reduced-motion users
+        ["#border-start", "#m-letter-start"].forEach(function (sel) {
+          var el = svg.querySelector(sel)
+          if (el) el.setAttribute("visibility", "hidden")
+        })
+        var border = svg.querySelector("#border")
+        border.setAttribute("visibility", "visible")
+        border.setAttribute("fill", "url('#bg-gradient')")
+        var letter = svg.querySelector("#m-letter")
+        letter.setAttribute("visibility", "visible")
+        letter.setAttribute("fill", "#32a8eb")
+        letter.setAttribute("stroke-width", "0")
+      } else {
       var borderTimeline = anime.timeline({
         duration: 2000,
         easing: 'easeInOutSine',
@@ -110,6 +125,7 @@
         fill: "#32a8eb",
         strokeWidth: "0",
        })
+      } // end !reducedMotion
       // background
       /*borderTimeline.add({
         targets: '#m-logo #border',
