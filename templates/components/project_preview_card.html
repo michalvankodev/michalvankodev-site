@@ -1,9 +1,9 @@
 <section class="border border-slate-200 rounded-md bg-white p-4 break-inside-avoid" style="view-transition-name: project_preview_{{project.slug}};">
   <header class="px-4 mb-3"> 
-    <h2 class="text-xl font-semibold text-blue-900 md:text-2xl">
+    <h2 class="text-xl font-semibold md:text-2xl">
       {% match project.metadata.link %}
       {% when Some with (href) %}
-      <a href="{{href}}" class="text-blue-900 no-underline">
+      <a href="{{href}}" class="text-blue-950 no-underline">
         {{project.metadata.title}}
       </a>
       {% when None %}
@@ -34,7 +34,7 @@
 
 
 	<footer class="text-sm px-4 md:text-base">
-    <h3 class="text-xl font-semibold text-blue-900 my-2 md:text-2xl">
+    <h3 class="text-xl font-semibold my-2 md:text-2xl">
       {{crate::projects::project_model::translate_classification(project.metadata.classification)}}
     </h3>
     <ul class="inline-block">

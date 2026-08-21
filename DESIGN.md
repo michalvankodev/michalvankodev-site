@@ -23,7 +23,7 @@ lowercase headings), book-like comfort in the reading surface.
    tricks, no popups. The two JS affordances beyond scroll-spy are copy
    buttons; the one sanctioned animation exception is the hand-authored
    anime.js logo on `/portfolio`.
-2. **Three type voices, everywhere.** Display (Exo 2), reading (Noto Sans),
+2. **Three type voices, everywhere.** Display (Baloo 2), reading (Adwaita Sans),
    machine (Noto Sans Mono). Content speaks in reading voice; structure and
    metadata speak in machine voice; personality comes from display voice.
 3. **Calm and quiet.** Light only, no dark mode. Subtle hover tints, no
@@ -83,36 +83,44 @@ borders. White (`bg-white`) for card surfaces on the blue-50 page.
 
 | Voice | Family | Role |
 |---|---|---|
-| **Display** | **Exo 2** (variable, latin-ext) | headings, wordmark, chrome accents, drop cap glyph |
-| **Reading** | **Noto Sans** (variable, latin-ext) | body, article content, UI, captions |
+| **Display** | **Baloo 2** (variable 400–800, latin + latin-ext) | headings, wordmark, chrome accents, drop cap glyph |
+| **Reading** | **Adwaita Sans** (variable opsz+wght, self-subsetted latin+latin-ext) | body, article content, UI, captions |
 | **Machine** | **Noto Sans Mono** (variable, latin-ext) | dates, tags, kickers, nav paths, code, metadata |
 
-- All three self-hosted as variable woff2 (latin + latin-ext) under
-  `/fonts/{exo2,noto-sans,noto-sans-mono}/`, `font-display: swap`.
+- All three self-hosted as woff2 under
+  `/fonts/{baloo2,adwaita-sans,noto-sans-mono}/`, `font-display: swap`.
 - CSS variables `--font-display`, `--font-read`, `--font-mono`; Tailwind
   `font-display`, `font-read`, `font-mono` utilities. Fallbacks: `system
   sans` / `monospace` + `Noto Color Emoji`.
-- Noto Sans ↔ Noto Sans Mono share vertical metrics **by design** (one
-  `font-size` in code matches reading line boxes). Exo 2 gets explicit
-  `line-height`s at display sizes instead of metric patching.
-- No legacy font dirs (`baloo2`, `cantarell`, `comfortaa`, `orbitron`,
-  `sansation`, `ubuntu`), no `--font-tech`, no fallback-metric `@font-face`
-  hacks.
+- Adwaita Sans (GNOME's Inter derivative) is the reading voice: variable
+  opsz 14–32 + wght 100–900, subsetted from the upstream TTF to a single
+  170 KB woff2 covering latin + latin-ext — no unicode-range split needed.
+  Its vertical metrics differ from Noto Sans Mono's (code lines next to
+  prose keep their own rhythm; cosmetic at reading sizes). Baloo 2 gets
+  explicit `line-height`s at display sizes instead of metric patching.
+- **Slovak charset verified complete** in all three voices (Baloo 2 union:
+  `ľščťžŕĺďň` in latin-ext, `ôä „ “ … –` in latin; Adwaita Sans verified in
+  the single subset file; Noto by design). **Overlock and Cotham failed the
+  check** — any display or reading candidate must pass the full
+  `ľščťžôäŕĺďňĽŠČŤŽÔÄŔĹĎŇ„“…–` set before adoption.
+- No dead font dirs (`cantarell`, `comfortaa`, `orbitron`, `sansation`,
+  `ubuntu`), no `--font-tech`, no fallback-metric `@font-face` hacks.
 
 ### Reading size & scale
 
 | Role | Treatment |
 |---|---|
 | Article body | **fixed `1.25rem`, line-height 1.75** (`--text-read`), justified |
-| Display sizes | Exo 2, `clamp()` fluid ramp, explicit line-heights |
+| Display sizes | Baloo 2, `clamp()` fluid ramp, explicit line-heights |
 | Metadata/kickers | mono voice, small (`text-sm`-tier) |
 | Code | mono voice, reading-size relative |
 
 ### One heading rule
 
 - **All headings `text-blue-950`** — single heading color site-wide.
-- **Single weight ramp** (Exo 2): extrabold → bold → semibold mapped to size
-  tiers. Named size classes encode the ramp; templates cannot drift.
+- **Single weight ramp** (Baloo 2): extrabold (800) → bold (700) → semibold
+  (600) mapped to size tiers. Named size classes encode the ramp; templates
+  cannot drift.
 - `font-extrabold` at body sizes banned. `strong` = semibold.
 
 ### Lowercase headings, via CSS
@@ -125,7 +133,7 @@ authored.
 
 Every article's first paragraph opens with a **regular typographic drop cap**
 (~3-line, float-based, `initial-letter` where supported with float fallback),
-glyph in **Exo 2**. Never the terminal-cursor-block variant.
+glyph in **Baloo 2**. Never the terminal-cursor-block variant.
 
 ### Selection & focus
 
@@ -137,7 +145,7 @@ glyph in **Exo 2**. Never the terminal-cursor-block variant.
 ### Masthead nav — path links
 
 `/blog /broadcasts /showcase /contact` in **Noto Sans Mono** (machine voice),
-wordmark in Exo 2 left. `/portfolio` is rehomed (footer link — the page stays).
+wordmark in Baloo 2 left. `/portfolio` is rehomed (footer link — the page stays).
 No `/search` (postponed). Active item pairs `aria-current="page"` with active
 styling.
 
@@ -150,7 +158,7 @@ Every page type gets a mono kicker line (machine voice, pink or slate accent):
 - Articles: `~/blog · 8 November 2024 · 2 min read`
 - Static pages: `~/showcase`, `~/contact`, `~/portfolio`
 
-One macro (`section_header`) emits kicker + lowercase Exo 2 title + hairline
+One macro (`section_header`) emits kicker + lowercase Baloo 2 title + hairline
 rule for every page. Same discipline everywhere.
 
 ### Global chrome
@@ -214,7 +222,7 @@ rule for every page. Same discipline everywhere.
 - **Blockquote**: `border-l-2 border-blue-500` + indent + `text-slate-700`,
   **roman** (no italics, no pink card).
 - **Tables**: mono lowercase header row, 2px navy rule, zebra `blue-50` rows.
-- **Figure captions**: reading voice (Noto Sans), smaller + muted — book
+- **Figure captions**: reading voice (Adwaita Sans), smaller + muted — book
   subtitles, not paper labels.
 - **Lists**: blue markers; text blue-950 when highlighted, otherwise
   dark blue/slate. Never pink markers.
