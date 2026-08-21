@@ -712,6 +712,14 @@ Deviations from the original spec text, all deliberate:
   (`bind_addr = 127.0.0.1:9123`) on alula, matching client entry on
   katelyn. Loopback-only on both ends — the check is never
   internet-reachable.
+- **PR comments with the preview URL** (2026-08-21): the deploy job
+  upserts a marker comment (`<!-- preview-link -->`) on the PR via the
+  runner-provisioned `GITHUB_TOKEN` — POST on first deploy, PATCH on
+  every re-deploy (one comment per PR, no per-push spam). Teardown
+  PATCHes the same comment to "removed" so closed PRs carry no dead
+  link. Both steps are best-effort: an API failure logs a `::warning::`
+  but never fails the deploy/teardown. No secret was added — the
+  automatic token already covers `write:issue` for same-repo PRs.
 - **alula system Caddy:** global `on_demand_tls { ask
   http://127.0.0.1:9123 }` + a `*.dev.michalvanko.dev` vhost with
   `tls { on_demand }` proxying to `127.0.0.1:3080` (the already-tunneled

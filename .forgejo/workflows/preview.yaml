@@ -107,6 +107,39 @@ jobs:
           rsync -a --delete --link-dest="$PROD_DIST/" ./dist/ "$PREVIEW_ROOT/$HOSTNAME_DIR/"
           echo "Preview deployed: https://$HOSTNAME_DIR/"
 
+      - name: Comment preview URL on the PR
+        # Upsert a single marker comment instead of piling up a new one per
+        # push. Best-effort: a failed comment must not fail the deploy.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          URL="https://$HOSTNAME_DIR/"
+          MARKER='<!-- preview-link -->'
+          API="$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments"
+          body="$MARKER
+          🚀 **Live preview:** $URL
+
+          _updated for commit ${HEAD_SHA::7} — first visit can take a few seconds (on-demand TLS)_"
+
+          comment_id=$(curl -sSf -H "Authorization: token $GITHUB_TOKEN" "$API?per_page=100" \
+            | jq -r --arg m "$MARKER" '[.[] | select(.body | contains($m))][0].id // empty')
+          if [ -n "$comment_id" ]; then
+            method=PATCH
+            endpoint="$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/issues/comments/$comment_id"
+          else
+            method=POST
+            endpoint="$API"
+          fi
+          if curl -sSf -X "$method" -H "Authorization: token $GITHUB_TOKEN" \
+               -H 'Content-Type: application/json' \
+               -d "$(jq -n --arg b "$body" '{body: $b}')" "$endpoint" > /dev/null; then
+            echo "Preview URL commented on PR #$PR_NUMBER: $URL"
+          else
+            echo "::warning::Could not comment the preview URL on PR #$PR_NUMBER"
+          fi
+
   teardown:
     name: teardown preview
     if: github.event.action == 'closed'
@@ -117,3 +150,26 @@ jobs:
         run: |
           rm -rf "$PREVIEW_ROOT/${{ needs.meta.outputs.hostname }}"
           echo "Preview ${{ needs.meta.outputs.hostname }} torn down"
+
+      - name: Update the PR comment (preview removed)
+        # Edit the existing marker comment so the PR is not left with a dead
+        # link. Best-effort — teardown must not fail because of the API.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          MARKER='<!-- preview-link -->'
+          API="$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments"
+          comment_id=$(curl -sSf -H "Authorization: token $GITHUB_TOKEN" "$API?per_page=100" \
+            | jq -r --arg m "$MARKER" '[.[] | select(.body | contains($m))][0].id // empty')
+          [ -z "$comment_id" ] && { echo 'No preview comment to update'; exit 0; }
+          body="$MARKER
+          🪦 **Live preview:** removed (PR closed)"
+          if curl -sSf -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
+               -H 'Content-Type: application/json' \
+               -d "$(jq -n --arg b "$body" '{body: $b}')" \
+               "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/issues/comments/$comment_id" > /dev/null; then
+            echo "Preview comment marked as removed on PR #$PR_NUMBER"
+          else
+            echo "::warning::Could not update the preview comment on PR #$PR_NUMBER"
+          fi
