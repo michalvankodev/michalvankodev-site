@@ -1,109 +1,89 @@
 {% extends "base.html" %}
-{%- import "components/talent_card.html" as tc -%}
-{%- import "components/social_card.html" as sc -%}
+{%- import "macros.html" as m -%}
 
 {% block title %}Introduction{% endblock %}
 
 {% block content %}
-<section class="index-container lg:grid lg:grid-cols-2 xl:grid-cols-[1fr_2fr] lg:gap-y-8 lg:gap-x-32 max-w-maxindex mx-auto">
-  <section id="about-me">
-    <!-- <header class="index-header hidden"> -->
-      <!-- <figure class="profile-pic"> -->
-        <!-- <picture> -->
-          <!-- <img -->
-            <!-- alt="Portrait" -->
-            <!-- {# TODO Take a new photo #} -->
-            <!-- src="/images/profile-portugal-landscape.jpg" -->
-          <!-- /> -->
-        <!-- </picture> -->
-      <!-- </figure> -->
 
-      <!-- <p class="motto"> -->
-        <!-- <cite>“Let your ambition carry you.”</cite> -->
-        <!-- <span class="cite-owner">- La Flame</span> -->
-      <!-- </p> -->
-    <!-- </header> -->
+<section id="site-kicker" class="max-w-image mx-auto px-5 pt-12">
+  <p class="kicker">~michalvanko.dev</p>
+</section>
 
-    <h2 class="text-blue-950 font-bold text-2xl m-5 md:text-4xl">About me</h2>
+<!-- Lead story: the latest post -->
+{% let segment = "blog".to_string() %}
+{% for latest in featured_blog_posts %}
+{% if loop.first %}
+<section id="lead-story" class="max-w-image mx-auto px-5 pt-6">
+  <article class="mt-4 md:flex md:items-start md:gap-10">
+    {% match latest.metadata.thumbnail %}
+    {% when Some with (orig_path) %}
+    <a href="/blog/{{latest.slug}}" class="block no-underline md:w-[35rem] shrink-0">
+      {{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 560, 315, "Article cover", Some("w-full h-auto rounded-xs border border-slate-200")).unwrap_or("".to_string())|safe }}
+    </a>
+    {% when None %}
+    {% endmatch %}
+    <div class="mt-4 md:mt-0">
+      <p class="font-mono text-xs md:text-sm text-slate-500">
+        <time datetime="{{latest.metadata.date}}">{{latest.metadata.date|pretty_date}}</time>
+      </p>
+      <h2 class="text-3xl font-bold leading-tight mt-1">
+        <a href="/blog/{{latest.slug}}" class="text-blue-950 no-underline hover:text-blue-500" style="view-transition-name: post_title_{{latest.slug}};">{{latest.metadata.title}}</a>
+      </h2>
+      <div class="text-read text-slate-700 leading-relaxed mt-2 line-clamp-3">{{latest.body|truncate_md(3)|parse_markdown|safe}}</div>
+      <p class="mt-3"><a href="/blog/{{latest.slug}}" class="font-mono text-sm">read&nbsp;→</a></p>
+    </div>
+  </article>
+</section>
+{% endif %}
+{% endfor %}
 
-    <p class="mx-5 md:text-xl text-justify">
-      Welcome to my personal website. My name is
-      <strong>Michal&nbsp;Vanko</strong>
-      and I'm a
-      <em> <a href="https://en.wikipedia.org/wiki/Programmer">programmer</a> </em>
-      . I am developing software for more than half of my life and <strong>I love it!</strong> Sometimes I stream working on my side projects and building a <a href="https://discord.gg/2cGg7kwZEh">community of like minded people</a>. Here you can find blogs of my thoughts and journeys, as well as links to my socials where you can see other content.</p>
+<!-- ~/blog · the rest of the featured writing -->
+<section id="blog" class="max-w-read mx-auto px-5 pt-14">
+  {{ m::section_header("blog", "more writing", "/blog") }}
+  <ul class="mt-1">
+   {% for post in featured_blog_posts %}
+   {% if !loop.first %}
+    <li>
+      {% include "components/blog_post_preview.html" %}
+      <hr class="border-slate-300 my-5 md:my-8">
+    </li>
+   {% endif %}
+   {% endfor %}
+  </ul>
+</section>
 
-    <section id="talent-cards" class="my-4 mx-auto flex flex-col items-center gap-4 max-w-[32rem] px-4">
-      {% call tc::talent_card("code", "Web development", "Extensive expertise in creating performant, live web applications and websites.") %}{% endcall %}
-      {% call tc::talent_card("gamepad", "Game development", "Creating games with passion. Capable of producing each aspect of a good game with profesional sound and creative mechanics. I consider games as multidisciplinary art.") %}{% endcall %}
-      {% call tc::talent_card("person-chalkboard", "Mentoring & Consulting", "I offer consulting sessions to assist you in developing <strong>higher-quality software</strong> and share insights from crafting robust, professional web applications. <a href=\"https://calendly.com/michalvankosk/30min\">Schedule a session with me</a> and elevate your projects together.") %}{% endcall %}
-    </section>
-  </section>
+<!-- ~/broadcasts -->
+{% let segment = "broadcasts".to_string() %}
+<section id="broadcasts" class="max-w-read mx-auto px-5 pt-14">
+  {{ m::section_header("broadcasts", "broadcasts", "/broadcasts") }}
+  <ul class="mt-1">
+    {% for post in featured_broadcasts %}
+    <li>
+      {% include "components/blog_post_preview.html" %}
+      <hr class="border-slate-300 my-5 md:my-8">
+    </li>
+    {% endfor %}
+  </ul>
+</section>
 
-  <section id="blog" class="lg:col-span-2 lg:row-start-2 xl:col-auto xl:row-start-auto xl:row-span-2">
-    {% let segment = "blog".to_string() %}
-    <h2 class="text-blue-950 font-bold text-2xl md:text-4xl m-5"><a href="/blog" class="text-blue-950 no-underline">Blog</a></h2>
-    <section id="blog-tags">
-      <ul class="mx-5">
-       {% for tag in blog_tags %}
-        <li class="inline-block mx-0.5 p-0.5 md:text-xl">
-          <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950">#{{tag|capitalize}}</a>
-        </li>
-        {% endfor %}
-      </ul>
-    </section>
-    <hr class="border-slate-300 m-5">
+<!-- ~/showcase -->
+<section id="showcase-section" class="max-w-image mx-auto px-5 pt-14">
+  {{ m::section_header("showcase", "showcase", "/showcase") }}
+  <ul class="mt-8 grid grid-flow-row gap-8 md:grid-cols-2 xl:grid-cols-3 items-start">
+   {% for project in featured_projects %}
+    <li>
+      {% include "components/project_preview_card.html" %}
+    </li>
+   {% endfor %}
+  </ul>
+</section>
 
-    <ul class="mx-5">
-     {% for post in featured_blog_posts %}
-      <li>
-        {% include "components/blog_post_preview.html" %}
-        <hr class="border-slate-300 my-5 md:my-8">
-      </li>
-     {% endfor %}
-    </ul>
-    <section class="text-center my-3 md:text-lg">
-     <a href="/blog">see all blog posts</a> 
-    </section>
-  </section>
-
-  <section id="socials">
+<!-- elsewhere -->
+<section id="socials" class="max-w-image mx-auto px-5 pt-14 pb-4">
+  {{ m::section_header("", "elsewhere", "") }}
+  <div class="mt-6">
     {% include "sections/social.html" %}
-  </section>
-
-  <hr class="border-slate-300 m-5 lg:hidden">
-
-  <section id="showcase" class="col-span-2">
-    {% include "sections/showcase.html" %}
-  </section>
-
-  <section id="broadcasts" class="col-span-2">
-    {% let segment = "broadcasts".to_string() %}
-    <h2 class="text-blue-950 font-bold text-2xl md:text-4xl m-5"><a href="/broadcasts" class="text-blue-950 no-underline">Broadcasts</a></h2>
-    <section id="broadcast-tags">
-      <ul class="mx-5">
-       {% for tag in broadcasts_tags %}
-        <li class="inline-block mx-0.5 p-0.5 md:text-xl">
-          <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950">#{{tag|capitalize}}</a>
-        </li>
-        {% endfor %}
-      </ul>
-    </section>
-    <hr class="border-slate-300 m-5">
-
-    <ul class="mx-5">
-     {% for post in featured_broadcasts %}
-      <li>
-        {% include "components/blog_post_preview.html" %}
-        <hr class="border-slate-300 my-5 md:my-8">
-      </li>
-     {% endfor %}
-    </ul>
-    <section class="text-center my-3 md:text-lg">
-     <a href="/broadcasts">see all broadcasts</a> 
-    </section>
-  </section>
-</section> <!-- /.index-container -->
-
+  </div>
+</section>
 
 {% endblock %}
