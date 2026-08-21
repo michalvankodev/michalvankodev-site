@@ -166,7 +166,7 @@ pub fn parse_markdown<T: fmt::Display>(
 
             // Place image into the content with scaled reso to a boundary
             let picture_markup = generate_picture_markup(
-                &dest_url, max_width, max_height, &title, None,
+                &dest_url, max_width, max_height, &title, None, false,
             )
             .unwrap_or(formatdoc!(
                 r#"

@@ -11,3 +11,4 @@ pub mod portfolio;
 pub mod post_list;
 pub mod project_list;
 pub mod showcase;
+pub mod sitemap;

@@ -9,6 +9,6 @@
   </header>
   {% let alt_text = format!("{svg} thumbnail") %}
 
-  {{ crate::picture_generator::picture_markup_generator::generate_picture_markup(img, 360, 128, alt_text, Some("w-full h-auto rounded-xs border border-slate-200")).unwrap_or("thumbnail not found".to_string())|safe }}
+  {{ crate::picture_generator::picture_markup_generator::generate_picture_markup(img, 360, 128, alt_text, Some("w-full h-auto rounded-xs border border-slate-200"), false).unwrap_or("thumbnail not found".to_string())|safe }}
 </a>
 {% endmacro %}

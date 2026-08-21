@@ -18,7 +18,7 @@
     {% match latest.metadata.thumbnail %}
     {% when Some with (orig_path) %}
     <a href="/blog/{{latest.slug}}" class="block no-underline md:w-[35rem] shrink-0">
-      {{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 560, 315, "Article cover", Some("w-full h-auto rounded-xs border border-slate-200")).unwrap_or("".to_string())|safe }}
+      {{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 560, 315, "Article cover", Some("w-full h-auto rounded-xs border border-slate-200"), true).unwrap_or("".to_string())|safe }}
     </a>
     {% when None %}
     {% endmatch %}

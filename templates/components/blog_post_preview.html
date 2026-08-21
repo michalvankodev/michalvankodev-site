@@ -26,7 +26,7 @@
 		<a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="no-underline shrink-0 w-20 md:w-36">
 			{% match post.metadata.thumbnail %}
 			{% when Some with (orig_path) %}
-			{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", Some("w-full h-auto rounded-xs border border-slate-200 block")).unwrap_or("thumbnail not found".to_string())|safe }}
+			{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", Some("w-full h-auto rounded-xs border border-slate-200 block"), false).unwrap_or("thumbnail not found".to_string())|safe }}
 			{% when None %}
 			<div class="w-full">
 				{% include "components/blog_post_default_thumbnail.html" %}

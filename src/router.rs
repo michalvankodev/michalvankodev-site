@@ -1,12 +1,12 @@
 use crate::{
-    feed::render_rss_feed,
+    feed::{render_json_feed, render_rss_feed},
     pages::{
         admin::render_admin, animated_logo::render_animated_logo,
         blog_post_list::render_blog_post_list, blog_post_page::render_blog_post,
         broadcast_list::render_broadcast_post_list, contact::render_contact,
         export_wait::export_wait, index::render_index, not_found::render_not_found,
         portfolio::render_portfolio, project_list::render_projects_list,
-        showcase::egg_fetcher::render_egg_fetcher,
+        showcase::egg_fetcher::render_egg_fetcher, sitemap::render_sitemap,
     },
 };
 use axum::{
@@ -34,6 +34,8 @@ pub fn get_router() -> Router {
         .route("/portfolio", get(render_portfolio))
         .route("/admin", get(render_admin))
         .route("/feed.xml", get(render_rss_feed))
+        .route("/feed.json", get(render_json_feed))
+        .route("/sitemap.xml", get(render_sitemap))
         .route("/export-wait", get(export_wait))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
