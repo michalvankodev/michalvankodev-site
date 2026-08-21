@@ -105,7 +105,7 @@ pub fn parse_markdown<T: fmt::Display>(
     let mut text_kind = TextKind::Text;
     let syntax_set = SyntaxSet::load_defaults_newlines();
     let theme_set = ThemeSet::load_defaults();
-    let theme = theme_set.themes.get("base16-ocean.dark").unwrap();
+    let theme = theme_set.themes.get("InspiredGitHub").unwrap();
     let mut heading_ended: Option<bool> = None;
 
     let mds = markdown.to_string();
