@@ -23,4 +23,8 @@ pub struct BlogPostMetadata {
     pub date: DateTime<Utc>,
     pub thumbnail: Option<String>,
     pub tags: Vec<String>,
+    /// Content language ("en" | "sk") for the correct screen-reader voice.
+    /// Absent = English.
+    #[serde(default)]
+    pub lang: Option<String>,
 }

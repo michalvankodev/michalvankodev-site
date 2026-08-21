@@ -26,6 +26,8 @@ pub struct BlogPostTemplate {
     pub header_props: HeaderProps,
     pub slug: String,
     pub thumbnail: Option<String>,
+    /// Content language ("en" default) — emitted as lang= on <article>.
+    pub lang: String,
     pub toc: Vec<HeadingToc>,
     pub reading_time: u32,
     pub recommended_posts: Vec<ParseResult<BlogPostMetadata>>,
@@ -72,6 +74,7 @@ pub async fn render_blog_post(
             slug: post.slug,
             segment,
             thumbnail: post.metadata.thumbnail,
+            lang: post.metadata.lang.unwrap_or_else(|| "en".to_string()),
             toc,
             reading_time,
             header_props,

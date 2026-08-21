@@ -3,7 +3,7 @@
     <a class="font-display text-lg font-bold text-blue-950 no-underline hover:text-blue-500" href="/">
       @michalvankodev
     </a>
-    <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1 font-mono text-sm">
+    <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1 font-mono text-sm" id="site-nav">
       <a class="text-blue-950 no-underline hover:underline hover:text-blue-500" href="/blog">/blog</a>
       <a class="text-blue-950 no-underline hover:underline hover:text-blue-500" href="/broadcasts">/broadcasts</a>
       <a class="text-blue-950 no-underline hover:underline hover:text-blue-500" href="/showcase">/showcase</a>
@@ -11,4 +11,19 @@
     </div>
   </nav>
   <hr class="border-slate-300">
+  <script>
+    // Mark the active nav link with aria-current (pairs with its active styling)
+    (function () {
+      var here = location.pathname;
+      Array.prototype.slice
+        .call(document.querySelectorAll('#site-nav a'))
+        .forEach(function (a) {
+          var path = new URL(a.href).pathname;
+          if (here === path || here.startsWith(path + '/')) {
+            a.setAttribute('aria-current', 'page');
+            a.className += ' text-blue-500';
+          }
+        });
+    })();
+  </script>
 </header>

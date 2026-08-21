@@ -25,7 +25,7 @@
 
 {% block content %}
 <div id="read-progress" class="fixed top-0 left-0 h-0.5 bg-pink-600 z-50 motion-reduce:hidden print:hidden" style="width:0%" aria-hidden="true"></div>
-<article class="mb-6">
+<article class="mb-6" lang="{{lang}}">
   <header class="px-5 max-w-read mx-auto pt-12">
     <p class="kicker">
       ~/{{segment}} · <time datetime="{{date}}" style="view-transition-name: post_date_{{slug}}">{{date|pretty_date}}</time> · {{reading_time}} min read
@@ -39,7 +39,7 @@
       {% match thumbnail %}
       {% when Some with (img) %}
       {% let cover = crate::picture_generator::picture_markup_generator::generate_picture_markup(img, 480, 480, "Article cover", Some("w-full h-auto rounded-xs border border-slate-200 shadow-md"), false).unwrap_or("".to_string())|safe %}
-      <figure class="article-cover float-right w-40 sm:w-64 md:w-72 my-2 ml-6 mb-6">
+      <figure class="article-cover float-right w-40 sm:w-64 md:w-72 my-2 ml-6 mb-6" style="view-transition-name: post_cover_{{slug}};">
         {{cover|safe}}
       </figure>
       {% when None %}
@@ -53,7 +53,7 @@
     {% if !toc.is_empty() %}
     <aside class="hidden 2xl:block print:hidden">
       <nav id="toc" class="sticky top-8 border-l-2 border-slate-200 pl-4" aria-label="Table of contents">
-        <p class="font-mono text-xs text-slate-500 lowercase mb-2">on this page</p>
+        <p class="font-mono text-xs text-slate-600 lowercase mb-2">on this page</p>
         <ul class="space-y-1.5">
           {% for heading in toc %}
           <li class="{% if heading.level == 3 %}pl-3{% endif %}">
@@ -61,7 +61,7 @@
           </li>
           {% endfor %}
         </ul>
-        <p class="mt-4"><a href="#top" class="font-mono text-xs text-slate-500 no-underline hover:text-blue-500">↑ top</a></p>
+        <p class="mt-4"><a href="#top" class="font-mono text-xs text-slate-600 no-underline hover:text-blue-500">↑ top</a></p>
       </nav>
     </aside>
     {% endif %}

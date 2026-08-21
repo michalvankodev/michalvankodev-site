@@ -167,6 +167,37 @@
   }
 }
 
+/* Skip-to-content: first tab stop → <main> landmark */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--color-blue-950);
+  color: var(--color-blue-50);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+/* Print: articles read like a book on paper — white page, chrome hidden
+ * (header/footer/TOC/further-reading/progress/year headers/back-to-top
+ * already carry print:hidden; this block catches the page surface) */
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .article-body a {
+    text-decoration: none;
+  }
+}
+
 /* Mono kicker label — the machine voice of page chrome */
 .kicker {
   font-family: var(--font-mono);
@@ -376,27 +407,28 @@ article a {
   @apply m-4 mx-auto max-w-image aspect-video;
 }
 
-.social-card-twitch:hover {
-  transform: translate3d(0.6rem, -0.6rem, 0px);
-  box-shadow: -3px 3px 0px 3px #6441a5;
-  transition-delay: 75ms;
-}
+/* Brand hover effects on external-link social cards — the only decorative
+ * effects on the site. Gated by prefers-reduced-motion: transforms and the
+ * tiktok glitch animate only for motion-tolerant users. */
+@media (prefers-reduced-motion: no-preference) {
+  .social-card-twitch:hover {
+    transform: translate3d(0.6rem, -0.6rem, 0px);
+    box-shadow: -3px 3px 0px 3px #6441a5;
+    transition-delay: 75ms;
+  }
 
-.social-card-youtube:hover {
-  @apply rounded-none;
-  transform: scale(1.02);
-  transition-delay: 100ms;
-}
+  .social-card-youtube:hover {
+    @apply rounded-none;
+    transform: scale(1.02);
+    transition-delay: 100ms;
+  }
 
-.social-card-instagram:hover {
-  filter: brightness(84%);
-  transition-delay: 100ms;
-}
+  .social-card-instagram:hover {
+    filter: brightness(84%);
+    transition-delay: 100ms;
+  }
 
-.social-card-tiktok {
-  position: relative;
-
-  &:hover {
+  .social-card-tiktok:hover {
     animation: tiktok-glitch 1.5s infinite;
     animation-delay: 200ms;
   }

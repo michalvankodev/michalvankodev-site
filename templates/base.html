@@ -34,11 +34,12 @@
     <link rel="icon" type="image/png" href="/images/m-logo-192.png" />
   </head>
   <body class="bg-blue-50 text-slate-950">
+    <a href="#main-content" class="skip-link">skip to content</a>
     <div class="preload-assets" style="display: none">
         {% include "icons/sprite.svg" %}
     </div>
     {% include "site_header.html" %}
-    <main>
+    <main id="main-content">
       {% block content %} Placeholder {% endblock %}
     </main>
     {% include "site_footer.html" %}

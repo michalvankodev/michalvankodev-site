@@ -48,6 +48,16 @@ collections:
           default: ['News'],
           required: false,
         }
+      - {
+          label: 'Language',
+          name: 'lang',
+          widget: 'select',
+          options:
+            - { label: 'English', value: 'en' }
+            - { label: 'Slovenčina', value: 'sk' }
+          default: 'en',
+          required: false,
+        }
       - { label: 'Body', name: 'body', widget: 'markdown' }
       - {
           label: 'Writers notes',

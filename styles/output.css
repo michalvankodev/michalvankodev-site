@@ -864,12 +864,6 @@
   .text-pink-950 {
     color: var(--color-pink-950);
   }
-  .text-slate-400 {
-    color: var(--color-slate-400);
-  }
-  .text-slate-500 {
-    color: var(--color-slate-500);
-  }
   .text-slate-600 {
     color: var(--color-slate-600);
   }
@@ -1238,6 +1232,29 @@
     color: var(--color-blue-950);
   }
 }
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--color-blue-950);
+  color: var(--color-blue-50);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: 0;
+}
+@media print {
+  body {
+    background: #fff;
+  }
+  .article-body a {
+    text-decoration: none;
+  }
+}
 .kicker {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
@@ -1549,23 +1566,22 @@ article a:visited {
   aspect-ratio: var(--aspect-video);
   max-width: var(--spacing-image);
 }
-.social-card-twitch:hover {
-  transform: translate3d(0.6rem, -0.6rem, 0px);
-  box-shadow: -3px 3px 0px 3px #6441a5;
-  transition-delay: 75ms;
-}
-.social-card-youtube:hover {
-  border-radius: 0;
-  transform: scale(1.02);
-  transition-delay: 100ms;
-}
-.social-card-instagram:hover {
-  filter: brightness(84%);
-  transition-delay: 100ms;
-}
-.social-card-tiktok {
-  position: relative;
-  &:hover {
+@media (prefers-reduced-motion: no-preference) {
+  .social-card-twitch:hover {
+    transform: translate3d(0.6rem, -0.6rem, 0px);
+    box-shadow: -3px 3px 0px 3px #6441a5;
+    transition-delay: 75ms;
+  }
+  .social-card-youtube:hover {
+    border-radius: 0;
+    transform: scale(1.02);
+    transition-delay: 100ms;
+  }
+  .social-card-instagram:hover {
+    filter: brightness(84%);
+    transition-delay: 100ms;
+  }
+  .social-card-tiktok:hover {
     animation: tiktok-glitch 1.5s infinite;
     animation-delay: 200ms;
   }
