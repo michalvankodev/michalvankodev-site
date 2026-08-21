@@ -12,6 +12,7 @@ use crate::components::site_header::HeaderProps;
 #[template(path = "not_found.html")]
 pub struct NotFoundPage {
     title: String,
+    url: String,
     header_props: HeaderProps,
 }
 
@@ -23,7 +24,8 @@ pub async fn render_not_found(
         StatusCode::NOT_FOUND,
         Html(
             NotFoundPage {
-                title: "This page does not exists".to_owned(),
+                title: "Page not found".to_owned(),
+                url: original_uri.to_string(),
                 header_props: HeaderProps::default(),
             }
             .render()
