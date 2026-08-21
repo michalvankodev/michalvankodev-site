@@ -1,15 +1,34 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Baloo2", "Baloo2 Noto Fallback", "Baloo2 Fallback", "ui-sans-serif", "system-ui", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* Three type voices (specs/redesign-feature-set-decided.md):
+   * display = Baloo 2 (headings, wordmark — restored after Overlock's
+   * latin-ext failed the Slovak charset check) · read = Noto Sans (body,
+   * UI) · mono = Noto Sans Mono (dates, tags, kickers, code, metadata) */
+  --font-sans: "Adwaita Sans", "Noto Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
+  --font-read: "Adwaita Sans", "Noto Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
+  --font-display: "Baloo 2", "Noto Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Noto Sans Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
-  --text-readxl: 1.75rem;
-  --text-readxl--line-height: 2.25rem;
-  --text-readxl--letter-spacing: -0.015rem;
-  --text-readxl--font-weight: 400;
+  /* Reading text: one fixed size, all viewports (rem — browser font-size
+   * preference respected; no viewport scaling for reading text) */
+  --text-read: 1.25rem;
+  --text-read--line-height: 1.75;
 
-  --spacing-note: 60rem;
-  --spacing-read: 64rem;
+  /* Display ramp (Baloo 2) — fluid, one weight per tier, explicit line-heights
+   * (variable 400–800; vertical metrics differ from Noto's) */
+  --text-display-1: clamp(2.5rem, 5vw, 4rem);
+  --text-display-1--line-height: 1.05;
+  --text-display-1--font-weight: 800;
+  --text-display-2: clamp(1.875rem, 3.5vw, 2.75rem);
+  --text-display-2--line-height: 1.1;
+  --text-display-2--font-weight: 700;
+  --text-display-3: clamp(1.5rem, 2.5vw, 2rem);
+  --text-display-3--line-height: 1.15;
+  --text-display-3--font-weight: 600;
+
+  --spacing-note: 36rem;
+  --spacing-read: 42rem;
   --spacing-image: min(70rem, 95vw);
   --spacing-maxindex: 100rem;
 
@@ -50,16 +69,16 @@
   --color-purple-950: #1A0C2D;
 }
 
+/* Baloo 2 — display voice (variable 400–800); latin + latin-ext union
+ * covers the full Slovak charset (ext: ľščťžŕĺďň, latin: ôä „ “ … –) */
 @font-face {
-  font-family: 'Baloo2';
+  font-family: 'Baloo 2';
   font-style: normal;
+  font-weight: 400 800;
   font-display: swap;
-  src:
-    local('Baloo2'),
-    url(/fonts/baloo2/Baloo2-Latin-Variable-wght.woff2) format('woff2');
+  src: url(/fonts/baloo2/Baloo2-Latin-Variable-wght.woff2) format('woff2');
 }
 
-/* latin-ext */
 @font-face {
   font-family: 'Baloo 2';
   font-style: normal;
@@ -70,27 +89,54 @@
     U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
+/* Adwaita Sans — reading voice (GNOME's Inter derivative; variable
+ * opsz 14–32 + wght 100–900, self-subsetted to latin + latin-ext).
+ * Full Slovak charset verified in the single file. */
 @font-face {
-  font-family: 'Baloo2 Fallback';
+  font-family: 'Adwaita Sans';
   font-style: normal;
-  font-weight: 400;
-  src: local('BlinkMacSystemFont'), local('Segoe UI'), local('Helvetica Neue'),
-    local('Arial');
-  ascent-override: 111.2%;
-  descent-override: 54.05%;
-  line-gap-override: 0%;
-  size-adjust: 96.95%;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/fonts/adwaita-sans/AdwaitaSans-Latin-Variable.woff2) format('woff2');
+}
+
+/* Noto Sans — fallback/reading voice (variable, 100–900) */
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/fonts/noto-sans/NotoSans-Latin-Variable-wght.woff2) format('woff2');
 }
 
 @font-face {
-  font-family: 'Baloo2 Noto Fallback';
+  font-family: 'Noto Sans';
   font-style: normal;
-  font-weight: 400;
-  src: local('Noto Sans');
-  ascent-override: 88%;
-  descent-override: none;
-  line-gap-override: 0%;
-  size-adjust: 92%;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/fonts/noto-sans/NotoSans-Latin-ext-Variable-wght.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Noto Sans Mono — machine voice (variable, 100–900); vertical metrics
+ * identical to Noto Sans by design — one font-size matches line boxes */
+@font-face {
+  font-family: 'Noto Sans Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/fonts/noto-sans-mono/NotoSansMono-Latin-Variable-wght.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/fonts/noto-sans-mono/NotoSansMono-Latin-ext-Variable-wght.woff2) format('woff2');
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 @layer base {
@@ -101,27 +147,45 @@
   strong {
     @apply font-medium;
   }
+
+  /* One heading rule: display voice, blue-950, single weight ramp */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    @apply text-blue-950;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue-500;
+  }
+
+  /* Brand-pink selection */
+  ::selection {
+    @apply bg-pink-200 text-blue-950;
+  }
 }
 
 .article-body {
   h1 {
-    @apply px-4 text-2xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-4xl lg:text-5xl;
+    @apply px-4 text-display-3 mb-3 mt-6 max-w-read mx-auto;
   }
 
   h2 {
-    @apply px-4 text-xl font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-2xl md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-4xl;
+    @apply px-4 text-2xl font-semibold mb-3 mt-6 max-w-read mx-auto md:mb-4 md:mt-10;
   }
 
   h3 {
-    @apply px-4 text-lg font-semibold text-blue-900 mb-3 mt-4 max-w-read mx-auto md:text-xl md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-3xl;
+    @apply px-4 text-xl font-semibold mb-2 mt-5 max-w-read mx-auto md:mt-8;
   }
 
   h4 {
-    @apply px-4 text-lg font-medium text-blue-900 mb-2 mt-3 max-w-read mx-auto md:text-lg md:mb-6 md:mt-8 lg:mb-8 lg:mt-12 lg:text-3xl;
+    @apply px-4 text-lg font-semibold mb-2 mt-4 max-w-read mx-auto;
   }
 
   p {
-    @apply px-4 my-2 text-slate-950 text-justify mx-auto max-w-read md:text-lg md:my-8 lg:text-readxl;
+    @apply px-4 my-2 text-slate-950 text-justify text-read mx-auto max-w-read md:my-4;
   }
 
   pre {
@@ -137,11 +201,11 @@
   }
 
   figcaption {
-    @apply mt-2 text-center text-sm italic text-blue-800 md:text-base lg:text-lg;
+    @apply mt-2 text-center text-sm italic text-blue-800 md:text-base;
   }
 
   table {
-    @apply text-sm mx-auto my-4 max-w-image table-auto border-collapse border-spacing-12 border border-slate-200 rounded-sm md:text-base lg:text-xl lg:my-8;
+    @apply text-sm mx-auto my-4 max-w-image table-auto border-collapse border-spacing-12 border border-slate-200 rounded-sm md:text-base md:my-8;
   }
 
   thead {
@@ -170,16 +234,16 @@
   }
 
   :not(pre) code {
-    @apply text-pink-900 rounded-sm border border-blue-300 px-1 py-0.5 bg-blue-100 text-sm md:text-base lg:text-xl;
+    @apply text-pink-900 rounded-sm border border-blue-300 px-1 py-0.5 bg-blue-100 text-sm md:text-base;
   }
 
   pre code pre {
-    @apply mx-2 rounded-sm lg:mx-auto lg:text-lg shadow-xs lg:max-w-note;
+    @apply mx-2 rounded-sm lg:mx-auto shadow-xs lg:max-w-note;
   }
 
   ul,
   ol {
-    @apply pl-10 pr-6 my-2 text-slate-950 mx-auto max-w-read md:text-lg md:my-8 lg:text-readxl lg:pl-14;
+    @apply pl-10 pr-6 my-2 text-slate-950 text-read mx-auto max-w-read md:my-4;
 
     & p {
       @apply px-2;
