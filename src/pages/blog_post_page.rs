@@ -5,6 +5,7 @@ use axum::{extract::Path, http::StatusCode};
 use chrono::{DateTime, Utc};
 
 use crate::blog_posts::blog_post_model::{Segment, BLOG_POST_PATH};
+use crate::filters::{extract_headings, HeadingToc};
 use crate::post_utils::post_listing::get_post_list;
 use crate::post_utils::post_parser::ParseResult;
 use crate::{
@@ -25,6 +26,8 @@ pub struct BlogPostTemplate {
     pub header_props: HeaderProps,
     pub slug: String,
     pub thumbnail: Option<String>,
+    pub toc: Vec<HeadingToc>,
+    pub reading_time: u32,
     pub recommended_posts: Vec<ParseResult<BlogPostMetadata>>,
 }
 
@@ -42,11 +45,11 @@ pub async fn render_blog_post(
         Segment::Blog
     };
 
-    let mut recommended_posts = get_recommended_posts(&segment, &post.metadata.tags).await?;
-    recommended_posts.retain(|post| post.slug != post_id);
-    recommended_posts.sort_by_key(|post| post.slug.to_string());
-    recommended_posts.reverse();
-    let recommended_posts = recommended_posts.into_iter().take(2).collect::<Vec<_>>();
+    let toc = extract_headings(&post.body);
+    let reading_time = (post.body.split_whitespace().count() as u32 / 220).max(1);
+
+    let recommended_posts =
+        get_recommended_posts(&segment, &post.metadata.tags, &post_id).await?;
 
     let header_props = match segment {
         Segment::Blog => HeaderProps::with_back_link(Link {
@@ -69,6 +72,8 @@ pub async fn render_blog_post(
             slug: post.slug,
             segment,
             thumbnail: post.metadata.thumbnail,
+            toc,
+            reading_time,
             header_props,
             recommended_posts,
         }
@@ -77,13 +82,24 @@ pub async fn render_blog_post(
     ))
 }
 
+/// Tag-matched recommendations, ranked by tag-overlap count then date
+/// (newest first), excluding the current post. Top 2.
 async fn get_recommended_posts(
     segment: &Segment,
     tags: &[String],
+    current_slug: &str,
 ) -> Result<Vec<ParseResult<BlogPostMetadata>>, StatusCode> {
     let posts = get_post_list::<BlogPostMetadata>(BLOG_POST_PATH).await?;
 
-    let recommended_posts = posts
+    let overlap = |post: &ParseResult<BlogPostMetadata>| {
+        post.metadata
+            .tags
+            .iter()
+            .filter(|post_tag| tags.contains(post_tag))
+            .count()
+    };
+
+    let mut recommended_posts: Vec<_> = posts
         .into_iter()
         .filter(|post| {
             let is_same_segment = post
@@ -91,14 +107,14 @@ async fn get_recommended_posts(
                 .segments
                 .iter()
                 .any(|post_segment| post_segment == segment);
-            let has_same_tags = post
-                .metadata
-                .tags
-                .iter()
-                .any(|post_tag| tags.contains(post_tag));
-            is_same_segment && has_same_tags
+            is_same_segment && overlap(post) > 0 && post.slug != current_slug
         })
-        .collect::<Vec<_>>();
+        .collect();
+    recommended_posts.sort_by(|a, b| {
+        overlap(b)
+            .cmp(&overlap(a))
+            .then(b.metadata.date.cmp(&a.metadata.date))
+    });
 
-    Ok(recommended_posts)
+    Ok(recommended_posts.into_iter().take(2).collect())
 }
