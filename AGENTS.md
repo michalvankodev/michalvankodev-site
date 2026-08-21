@@ -166,7 +166,7 @@ Live since 2026-08-20 — full design record, decision log and runbook in [`spec
 - `.forgejo/workflows/test.yaml` — `cargo test --all-features` on non-main pushes (push-only trigger; v15 only reads `.forgejo/workflows/`, the old `.gitea/` dir is dead)
 - `.forgejo/workflows/deploy.yaml` — `main` pushes + `workflow_dispatch`: test → release build → SSG export (server + crawl in **one step**) → local rsync into the prod dist dir → artifact upload
 - **Runner:** `forgejo-runner` v13 in **host mode** (`runs-on: host`), systemd user service on katelyn (runs as the deploy user) — jobs execute directly on the deploy target; register/uuid+token live in `~/.config/forgejo-runner/config.yml` (`server.connections`, the legacy `register` subcommand is deprecated)
-- **Rust cache:** `CARGO_TARGET_DIR under the deploy user's home (`~/forgejo-runner-cache/target`)` persists across runs (registry at `~/.cargo`); warm release build ≈ 16 s
+- **Rust cache:** `CARGO_TARGET_DIR` under the deploy user's home (`~/forgejo-runner-cache/target`) persists across runs (registry at `~/.cargo`); warm release build ≈ 16 s
 - **Image cache:** `generated_images/` restored from production dist before each build (the generator skips existing files)
 
 **Host-mode CI quirks (hard-won):**
@@ -190,16 +190,39 @@ internet → alula (public entry host)
            phoebe — dev workstation (this repo)
 ```
 
-- No addresses/ports are recorded here on purpose (public repo). Resolve
-  hosts via DNS / `/etc/hosts` on phoebe (`getent hosts katelyn`), and get
-  the exact Forgejo git URL from `git remote -v`
-- katelyn's LAN address is pinned by a router DHCP reservation but can
-  transiently differ until it reboots — the `katelyn` ssh alias (in
-  `~/.ssh/config` + `/etc/hosts`) may lag reality; connect with
-  `ssh katelyn (alias + key in ~/.ssh/config)`. Passwordless sudo available
-- Git remotes: `origin` = GitHub; `katelyn` = the self-hosted Forgejo
-  (exact URL: `git remote -v`; key `~/.ssh/forgejo_katelyn`)
-- **PR preview deployments** (`<label>.dev.michalvanko.dev`, on-demand TLS via alula + `ask` over the rathole tunnel, hardlink-overlay storage, PR-driven lifecycle) are fully specified in `specs/CI-deploy.md` § Preview deployments (D10–D12) but **not yet implemented**
+- **All Forgejo access goes through the public tunnel host — never katelyn's
+  LAN address:** web/API at `https://forgejo.katelyn.michalvanko.dev`, git SSH
+  at `ssh://git@forgejo.katelyn.michalvanko.dev/...` (keys + port live in
+  `~/.ssh/config` — keep the port OUT of the git URL, an explicit port breaks
+  `fj`'s API host parsing). The tunnel roundtrip (phoebe → alula → rathole →
+  katelyn) is stable across katelyn's LAN IP drift. Do NOT open extra
+  Forgejo ports on katelyn's LAN firewall — ssh is the only LAN service it
+  exposes
+- Git remotes: `origin` = GitHub; `katelyn` = the self-hosted Forgejo via
+  the public tunnel host (exact URL: `git remote -v`)
+- `fj` (forgejo-cli) is installed at `~/.local/bin/fj` (from Codeberg
+  `forgejo-contrib/forgejo-cli` releases), token-authenticated against the
+  instance (token fed via stdin to `fj auth add-token`; keys live in
+  `~/.local/share/forgejo-cli/keys.json` — same token as the `FORGEJO_TOKEN`
+  fish universal var). Reference: the `forgejo-cli` skill. Quirks learned the
+  hard way:
+  - global flags (`-H`, `--style`) go BEFORE the subcommand; subcommand
+    `-r owner/repo` still needs `-H` unless repo auto-detection works
+  - repo auto-detection = a remote pointing at the tunnel host + the branch
+    upstream tracking it (`git branch --set-upstream-to=katelyn/main`)
+  - no `-R/--remote` (that's `tea`), no `--version` (`fj version`)
+- katelyn's LAN address drifts (DHCP): its `/etc/hosts` entry and
+  `katelyn`-named known_hosts keys on phoebe were refreshed 2026-08-21 —
+  if `ssh katelyn` fails, re-verify the IP (`ip neigh`), re-pin `/etc/hosts`
+  and refresh known_hosts before connecting. Passwordless sudo available.
+  Direct katelyn SSH (alias + key in `~/.ssh/config`) is ONLY for host
+  admin (Caddy quadlet, runner, podman, firewall) — git/Forgejo work always
+  goes through the tunnel host
+- **PR preview deployments** are live (2026-08-20): every open PR gets
+  `https://<label>.dev.michalvanko.dev` — on-demand TLS via alula + `ask`
+  over the rathole tunnel, hardlink-overlay storage, PR-driven lifecycle,
+  and a marker comment on the PR with the live URL. Spec + implementation
+  record: `specs/CI-deploy.md` § Preview deployments (D10–D12)
 
 ### Content Structure
 
