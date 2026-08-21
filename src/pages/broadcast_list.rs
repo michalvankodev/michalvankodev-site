@@ -18,7 +18,7 @@ use crate::{
     projects::featured_projects::get_featured_projects,
 };
 
-use super::post_list::PostListTemplate;
+use super::post_list::{group_posts_by_year, PostListTemplate};
 
 pub async fn render_broadcast_post_list(
     tag: Option<Path<String>>,
@@ -35,6 +35,7 @@ pub async fn render_broadcast_post_list(
 
     let posts = get_posts_by_segment(post_list, &[Segment::Broadcasts]);
     let posts = get_posts_by_tag(posts, &tag);
+    let grouped_posts = group_posts_by_year(posts);
 
     let header_props = match tag {
         Some(_) => HeaderProps::with_back_link(Link {
@@ -57,7 +58,7 @@ pub async fn render_broadcast_post_list(
             title: title.clone(),
             og_title: title,
             segment: Segment::Broadcasts,
-            posts,
+            grouped_posts,
             header_props,
             tags: popular_tags,
             featured_projects,

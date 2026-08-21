@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{%- import "components/social_card.html" as sc -%}
 
 {% block og_meta %}
 <meta property="og:title" content="{{og_title}} @michalvankodev" />
@@ -10,57 +9,45 @@
 
 {% block content %}
 
-<section id="post-container" class="lg:grid lg:grid-cols-[2fr_1fr] lg:grid-rows-[min-content_1fr] xl:gap-x-32 max-w-maxindex mx-auto">
-  <section id="post-list" class="lg:row-span-2">
-    {% if posts.len() == 0 %}
-    <p class="no-posts">You've found void in the space.</p>
-    {% else %}
-    <header class="pt-12 pb-2 mx-5">
-      <p class="kicker">~/{{segment}}</p>
-      <h1 class="text-display-2 lowercase mt-2">
-        {{title}}
-      </h1>
-    </header>
+<section id="post-container" class="max-w-read mx-auto px-5">
+  <header class="pt-12 pb-2">
+    <p class="kicker">~/{{segment}}</p>
+    <h1 class="text-display-2 lowercase mt-2">
+      {{title}}
+    </h1>
 
-    <section id="tags-list">
-      <ul class="mx-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-sm">
+    {% if tags.len() > 0 %}
+    <section id="tags-list" class="mt-4">
+      <ul class="flex flex-wrap gap-x-3 gap-y-1 font-mono text-sm">
        {% for tag in tags %}
         <li>
           <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline hover:text-blue-500">#{{tag}}</a>
         </li>
-        {% endfor %}
+       {% endfor %}
       </ul>
     </section>
-
-    <hr class="border-slate-300 m-5 md:my-8">
-
-    <ul class="mx-5">
-      {% for post in posts %}
-      <li>
-        {% include "components/blog_post_preview.html" %}
-        <hr class="border-slate-300 my-5 md:my-8">
-      </li>
-      {% endfor %}
-    </ul>
     {% endif %}
-  </section> <!-- /#post-list -->
-  <section id="socials" class="hidden lg:block">
-    {% include "sections/social.html" %}
-  </section> <!-- /#socials -->
-  
-  <section id="showcase" class="hidden lg:block">
-    <h2 class="text-blue-950 font-bold text-2xl lowercase m-5 md:text-3xl"><a href="/showcase" class="text-blue-950 no-underline">Showcase</a></h2>
+  </header>
 
-    <ul class="mx-6">
-     {% for project in featured_projects %}
-      <li class="my-4">
-        {% include "components/project_preview_card.html" %}
-      </li>
+  {% if grouped_posts.is_empty() %}
+  <p class="text-read text-slate-700 py-10">You've found void in the space.</p>
+  {% else %}
+  {% for group in grouped_posts %}
+  <section class="year-group">
+    <h2 class="print:hidden sticky top-0 bg-blue-50 z-10 text-2xl font-bold text-blue-950 border-b-2 border-blue-950 py-3 mt-8">
+      {{group.year}}
+      <span class="font-mono text-sm font-medium text-slate-400 ml-2">{{group.posts.len()}}</span>
+    </h2>
+    <ul>
+     {% for post in group.posts %}
+      <li>{% include "components/blog_post_preview.html" %}</li>
      {% endfor %}
     </ul>
-    <section class="text-center my-3 md:text-lg">
-     <a href="/showcase">check out more projects</a> 
-    </section>
-  </section> <!-- /#showcase -->
-</section> <!-- /#post-list-container -->
+  </section>
+  {% endfor %}
+  {% endif %}
+
+  <p class="text-center my-8 font-mono text-sm print:hidden"><a href="#top">↑ top</a></p>
+</section>
+
 {% endblock %}
