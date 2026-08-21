@@ -658,3 +658,9 @@ encode the ramp as named size classes so future templates can't drift.
       `/` shortcut to focus search, match highlighting + diacritics folding,
       indexing projects + portfolio, 404 search integration, OpenSearch
       descriptor. Masthead gains `/search` when this lands.
+- [ ] **Section affordance links** — the `all →` masthead-link on chapter
+      headers (`section_header` macro, disabled in-place via `{% if false %}`)
+      and the `read →` link under the lead story. Removed from the homepage
+      during live review while wording/placement is decided (candidates:
+      per-section labels, arrow style, or dropping entirely since headings
+      already link).
