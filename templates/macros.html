@@ -1,0 +1,20 @@
+{% macro section_header(kicker, title, href) %}
+<header class="mt-2 mb-6">
+  {% if !kicker.is_empty() %}
+  <p class="kicker">~{{ kicker }}</p>
+  {% endif %}
+  <div class="flex items-baseline gap-4 mt-1">
+    <h2 class="text-2xl font-bold text-blue-950 lowercase md:text-3xl">
+      {% if !href.is_empty() %}
+      <a href="{{ href }}" class="text-blue-950 no-underline hover:text-blue-500">{{ title }}</a>
+      {% else %}
+      {{ title }}
+      {% endif %}
+    </h2>
+    {% if !href.is_empty() %}
+    <a href="{{ href }}" class="ml-auto font-mono text-sm no-underline hover:text-blue-500">all&nbsp;→</a>
+    {% endif %}
+  </div>
+  <hr class="border-slate-300 mt-2">
+</header>
+{% endmacro %}

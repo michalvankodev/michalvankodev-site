@@ -167,6 +167,15 @@
   }
 }
 
+/* Mono kicker label — the machine voice of page chrome */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-pink-700);
+}
+
 .article-body {
   h1 {
     @apply px-4 text-display-3 mb-3 mt-6 max-w-read mx-auto;
