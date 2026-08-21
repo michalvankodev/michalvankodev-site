@@ -14,9 +14,12 @@
     {% if project_list.len() == 0 %}
     <p class="no-posts">You've found void in the space.</p>
     {% else %}
-    <h1 class="m-5 text-display-2">
-     Showcase
-    </h1>
+    <header class="pt-12 pb-2 mx-5">
+      <p class="kicker">~/showcase</p>
+      <h1 class="text-display-2 lowercase mt-2">
+        Showcase
+      </h1>
+    </header>
 
     <ul class="m-6 grid grid-flow-row gap-6 md:grid-cols-2 md:grid-rows-[masonry] md:justify-stretch md:items-stretch xl:grid-cols-3">
       {% for project in project_list %}

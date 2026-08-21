@@ -1,20 +1,14 @@
-<header class="min-h-full bg-blue-50 mb-5" view-transition-name="site_header">
-  <nav class="flex">
-    {% match header_props.back_link %}
-    {% when Some with (link) %}
-    <a
-      class="px-3 py-2 text-lg font-medium print:hidden"
-      href="{{link.href}}"
-    >
-      {{link.label}}
+<header id="top" class="bg-blue-50 print:hidden" view-transition-name="site_header">
+  <nav class="max-w-image mx-auto flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 px-5 py-5">
+    <a class="font-display text-lg font-bold text-blue-950 no-underline hover:text-blue-500" href="/">
+      @michalvankodev
     </a>
-    {% when None %}
-    {% endmatch %}
-      <aside class="flex logo-section grow justify-end content-end">
-        <a class="logo p-3 text-base" href="/">
-          @michalvankodev
-        </a>
-      </aside>
+    <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1 font-mono text-sm">
+      <a class="text-blue-950 no-underline hover:underline hover:text-blue-500" href="/blog">/blog</a>
+      <a class="text-blue-950 no-underline hover:underline hover:text-blue-500" href="/broadcasts">/broadcasts</a>
+      <a class="text-blue-950 no-underline hover:underline hover:text-blue-500" href="/showcase">/showcase</a>
+      <a class="text-blue-950 no-underline hover:underline hover:text-blue-500" href="/contact">/contact</a>
+    </div>
   </nav>
-  <hr class="border-slate-300 mx-5">
+  <hr class="border-slate-300">
 </header>

@@ -1,58 +1,60 @@
-<footer class="my-4" view-transition-name="site_footer">
-  <hr class="mb-4 border-slate-300 mx-5">
-  <section class="flex justify-around">
-  <p
-    class="text-center flex-1"
-    xmlns:cc="http://creativecommons.org/ns#"
-    xmlns:dct="http://purl.org/dc/terms/"
-  >
-    <a
-      property="dct:title"
-      rel="cc:attributionURL"
-      href="https://michalvanko.dev/"
-      >michalvanko.dev</a
+<footer class="mt-16 print:hidden" view-transition-name="site_footer">
+  <hr class="border-slate-300">
+  <section class="max-w-image mx-auto px-5 py-6 flex flex-wrap items-center justify-between gap-4">
+    <p
+      class="font-mono text-xs text-slate-600"
+      xmlns:cc="http://creativecommons.org/ns#"
+      xmlns:dct="http://purl.org/dc/terms/"
     >
-    by
-    <a
-      rel="cc:attributionURL dct:creator"
-      property="cc:attributionName"
-      href="/contact"
-      >Michal Vanko</a
-    >
-    is licensed under
-    <a
-      href="http://creativecommons.org/licenses/by-nc-nd/4.0/?ref=chooser-v1"
-      target="_blank"
-      rel="license noopener noreferrer"
-      style="display: inline-block"
-      >CC BY-NC-ND 4.0<img
+      <a
+        property="dct:title"
+        rel="cc:attributionURL"
+        href="https://michalvanko.dev/"
+        >michalvanko.dev</a
+      >
+      ·
+      <a
+        rel="cc:attributionURL dct:creator"
+        property="cc:attributionName"
+        href="/contact"
+        >Michal Vanko</a
+      >
+      ·
+      <a
+        href="http://creativecommons.org/licenses/by-nc-nd/4.0/?ref=chooser-v1"
+        target="_blank"
+        rel="license noopener noreferrer"
+        style="display: inline-block"
+        >CC BY-NC-ND 4.0<img
         src="/images/creative-commons/cc.svg"
         alt="cc"
-        class="inline-block h-6 mx-0.5"
-        height="24"
-        width="24" /><img
+        class="inline-block h-4 mx-0.5 align-text-bottom"
+        height="16"
+        width="16" /><img
         src="/images/creative-commons/by.svg"
-        alt="by"         
-        class="inline-block h-6 mx-0.5"
-        height="24"
-        width="24" /><img
+        alt="by"
+        class="inline-block h-4 mx-0.5 align-text-bottom"
+        height="16"
+        width="16" /><img
         src="/images/creative-commons/nc.svg"
         alt="nc"
-        class="inline-block h-6 mx-0.5"
-        height="24"
-        width="24" /><img
+        class="inline-block h-4 mx-0.5 align-text-bottom"
+        height="16"
+        width="16" /><img
         src="/images/creative-commons/nd.svg"
         alt="nd"
-        class="inline-block h-6 mx-0.5"
-        height="24"
-        width="24"
+        class="inline-block h-4 mx-0.5 align-text-bottom"
+        height="16"
+        width="16"
       /></a>
-  </p>
-  <aside class="mx-3">
-    <a href="/feed.xml">
-   	  <svg role="img" aria-hidden="true" aria-label="RSS feed" class="fill-blue-950 h-6 w-6">
-  	    <use href="#rss" />
-  	  </svg>
-    </a>
-  </aside>
+    </p>
+    <aside class="flex items-center gap-4">
+      <a href="/portfolio" class="font-mono text-xs text-slate-500 no-underline hover:text-blue-500">/portfolio</a>
+      <a href="/feed.xml" title="RSS feed" class="no-underline">
+        <svg role="img" aria-hidden="true" aria-label="RSS feed" class="fill-blue-950 h-5 w-5 hover:fill-blue-500">
+          <use href="#rss" />
+        </svg>
+      </a>
+    </aside>
+  </section>
 </footer>

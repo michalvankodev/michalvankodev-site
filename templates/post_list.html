@@ -15,15 +15,18 @@
     {% if posts.len() == 0 %}
     <p class="no-posts">You've found void in the space.</p>
     {% else %}
-    <h1 class="m-5 text-display-2">
-      {{title}}
-    </h1>
+    <header class="pt-12 pb-2 mx-5">
+      <p class="kicker">~/{{segment}}</p>
+      <h1 class="text-display-2 lowercase mt-2">
+        {{title}}
+      </h1>
+    </header>
 
     <section id="tags-list">
-      <ul class="mx-5">
+      <ul class="mx-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-sm">
        {% for tag in tags %}
-        <li class="inline-block mx-0.5 p-0.5 md:text-xl">
-          <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950">#{{tag|capitalize}}</a>
+        <li>
+          <a href="/{{segment}}/tags/{{tag}}" class="text-pink-950 no-underline hover:text-blue-500">#{{tag}}</a>
         </li>
         {% endfor %}
       </ul>
@@ -46,7 +49,7 @@
   </section> <!-- /#socials -->
   
   <section id="showcase" class="hidden lg:block">
-    <h2 class="text-blue-950 font-bold text-2xl m-5 md:text-4xl"><a href="/showcase" class="text-blue-950 no-underline">Showcase</a></h2>
+    <h2 class="text-blue-950 font-bold text-2xl lowercase m-5 md:text-3xl"><a href="/showcase" class="text-blue-950 no-underline">Showcase</a></h2>
 
     <ul class="mx-6">
      {% for project in featured_projects %}
