@@ -167,7 +167,6 @@
   }
 }
 
-/* Mono kicker label — the machine voice of page chrome */
 .kicker {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
