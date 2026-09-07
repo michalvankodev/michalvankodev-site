@@ -535,12 +535,25 @@ logic ever be needed — `ask` is just the built-in `http` module.)
 - `interval`/`burst` options inside `on_demand_tls` are deprecated —
   **do not add them** (official docs: "NOT recommended").
 
-### D11: Lifecycle = PR-driven only (decided 2026-08-20)
+### D11: Lifecycle = PR-driven only (decided 2026-08-20; extended 2026-09-07)
 
 | PR event | Preview action |
 |---|---|
 | `opened`, `synchronize`, `reopened` | build + deploy |
 | `closed` (covers **merged**) | `rm -rf ~/previews/<hostname>/` |
+| **`push` to a branch with an open PR** (added 2026-09-07) | build + deploy |
+
+The 2026-09-07 extension: stacked-PR merges land as **pushes to the base
+branch** (e.g. merging slice 05 into `redesign/00-foundation`) and fire no
+`pull_request` event for the PRs *headed* by that branch — dependent
+previews stayed stale until their own PR got activity (found live: the
+foundation preview froze pre-merge while reviewing slice 06). `preview.yaml`
+now also runs on `push` (main excluded) and rebuilds the preview iff some
+open PR's **head** branch equals the pushed branch — base-only matches must
+not deploy, or pushes to already-merged branches would resurrect orphaned
+previews that no PR will ever tear down. Discovered the hard way this same
+day: an accidental push to a merged slice's branch (`redesign/04-list-pages`)
+would have done exactly that.
 
 - Forgejo Actions has **no branch-`delete` event**; the PR lifecycle is
   the only trigger pair with symmetric create/teardown → no scheduled
