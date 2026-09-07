@@ -10,24 +10,24 @@
 
 {% block content %}
 
-<header class="max-w-read mx-auto px-5 pt-12 md:grid md:grid-cols-[1fr_auto]">
+<header class="max-w-image mx-auto px-5 pt-12 pb-12 md:pt-16 md:pb-16 md:grid md:grid-cols-[1fr_auto] md:items-center md:gap-10">
   <div>
     <p class="kicker">~/portfolio</p>
-    <h1 class="my-2 text-display-1 xl:mb-4 xl:mt-4">Michal Vanko</h1>
-    <h3 class="px-4 my-1 text-xl italic md:text-2xl">Software Architect by passion</h3>
-    <section id="contact" class="mt-4">
-      <ul class="max-w-[24rem] mx-auto md:mx-6">
+    <h1 class="mt-2 mb-3 text-display-1">Michal Vanko</h1>
+    <h3 class="text-xl md:text-2xl italic text-slate-700">Software Architect by passion</h3>
+    <section id="contact" class="mt-6">
+      <ul class="max-w-sm">
         {% for link in contact_links %}
-        <li class="my-2">
+        <li class="border-b border-slate-200">
           <a
-            class="flex border-2 place-content-center items-center rounded-full text-blue-900 border-blue-500 py-2 hover:bg-pink-200 fill-blue-900 hover:fill-blue-400 transition-colors no-underline"
+            class="flex items-center gap-4 py-4 text-blue-950 hover:text-blue-500 transition-colors no-underline"
             href="{{link.href}}"
             title="{{link.title}}"
           >
-            <svg aria-hidden="true" class="h-6 w-6 mx-2 self-start">
+            <svg aria-hidden="true" class="h-5 w-5 fill-current shrink-0">
               <use xlink:href="#{{link.svg}}" />
             </svg>
-            <span class="text-lg font-semibold print:hidden">{{link.label}}</span>
+            <span class="text-lg print:hidden">{{link.label}}</span>
             <span class="hidden print:inline text-sm">{{link.href}}</span>
           </a>
         </li>
@@ -35,7 +35,7 @@
       </ul>
     </section>
   </div>
-  <aside id="logo-container" class="hidden md:block h-56 md:h-72 w-56 md:w-72 shrink-0 m-6" aria-label="Animated Michal Vanko logo">
+  <aside id="logo-container" class="hidden md:block h-64 w-64 md:h-80 md:w-80 shrink-0" aria-label="Animated Michal Vanko logo">
     <style>
       #logo-container svg {
         height: 100%;
@@ -61,6 +61,8 @@
         letter.setAttribute("visibility", "visible")
         letter.setAttribute("fill", "#32a8eb")
         letter.setAttribute("stroke-width", "0")
+        var bgStop = svg.querySelector("#bg-gradient #bg-stop")
+        if (bgStop) bgStop.setAttribute("stop-color", "rgba(216, 246, 255, 1)")
       } else {
       var borderTimeline = anime.timeline({
         duration: 2000,
@@ -144,36 +146,14 @@
   </aside>
 </header>
 
-<section id="portfolio-body" class="article-body">
+<section id="portfolio-body" class="article-body mb-12 md:mb-16">
   {{ body|parse_markdown|safe }}
 </section>
 
-<section id="skillsets" class="max-w-maxindex mx-auto xl:grid xl:gap-8 xl:grid-cols-3">
-  <section id="work-history" class="max-w-read mx-auto xl:row-span-2">
-    <h2 class="m-5 text-display-3">Work experience</h2>
-    <ul class="m-6 grid grid-flow-row gap-6">
-      {% for skill in workplace_list %}
-      <li>
-        {% include "components/skill_card.html" %}
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-
-  <section id="education" class="max-w-read mx-auto">
-    <h2 class="m-5 text-display-3">Education</h2>
-    <ul class="m-6 grid grid-flow-row gap-6">
-      {% for skill in education_list %}
-      <li>
-        {% include "components/skill_card.html" %}
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-
-  <section id="skills" class="max-w-read mx-auto">
-    <h2 class="m-5 text-display-3">Skills</h2>
-    <ul class="m-6 grid grid-flow-row gap-6">
+<section id="skillsets" class="max-w-read mx-auto">
+  <section id="skills">
+    <h2 class="text-display-3">Skills</h2>
+    <ul class="mt-4 grid grid-flow-row">
       <li>
         {% call tc::talent_card("code", "Web development", "Extensive expertise in creating performant, live web applications and websites.",) %}{% endcall %}
       </li>
@@ -186,13 +166,34 @@
     </ul>
   </section>
 
-  <section id="technologies" class="max-w-read mx-auto xl:col-span-2">
-    <h2 class="m-5 text-display-3">Technologies</h2>
-
-    <ul class="m-6 flex gap-2 flex-wrap justify-center">
+  <section id="technologies" class="mt-12 md:mt-16">
+    <h2 class="text-display-3">Technologies</h2>
+    <ul class="mt-4 flex gap-2 flex-wrap justify-center">
       {% for technology in technology_list %}
       <li class="p-2 text-pink-900 bg-blue-100 text-sm border rounded-sm border-blue-300 font-mono">
         {{technology}}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section id="work-history" class="mt-12 md:mt-16">
+    <h2 class="text-display-3">Work experience</h2>
+    <ul class="mt-4 grid grid-flow-row">
+      {% for skill in workplace_list %}
+      <li>
+        {% include "components/skill_card.html" %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section id="education" class="mt-12 md:mt-16">
+    <h2 class="text-display-3">Education</h2>
+    <ul class="mt-4 grid grid-flow-row">
+      {% for skill in education_list %}
+      <li>
+        {% include "components/skill_card.html" %}
       </li>
       {% endfor %}
     </ul>

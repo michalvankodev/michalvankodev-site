@@ -104,6 +104,9 @@ pub async fn render_portfolio() -> Result<impl IntoResponse, StatusCode> {
     ];
 
     let technology_list = vec![
+        "AI",
+        "Agents",
+        "Automation",
         "Rust",
         "HTMX",
         "React",
