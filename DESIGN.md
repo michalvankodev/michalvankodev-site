@@ -47,8 +47,9 @@ Tailwind's default blue/pink.
 
 | Token | Hex | Usage |
 |---|---|---|
-| `blue-50` | `#f1f7fe` | **Page background** |
-| `blue-100` | `#e1effd` | Inline code bg, table header bg, row-hover tint layer |
+| `blue-25` | `#f8fbff` | Blockquote plate (lighter than the page background) |
+| `blue-50` | `#f1f7fe` | **Page background**, table zebra rows |
+| `blue-100` | `#e1effd` | Inline code bg |
 | `blue-200` | `#bddefa` | Light decorative fills |
 | `blue-300` | `#82c3f7` | Inline code border |
 | `blue-400` | `#42a6f0` | Hover states (sparingly) |
@@ -175,9 +176,9 @@ rule for every page. Same discipline everywhere.
 
 | Token | Value | Meaning |
 |---|---|---|
-| `max-w-note` | `60rem` | Narrow note width (blockquotes) |
-| `max-w-read` | `64rem` | **Reading measure** — article content (42rem inner measure target ≈ 65–75 cpl) |
-| `max-w-image` | `min(70rem, 95vw)` | Figures, tables, iframes — the wide span |
+| `max-w-note` | `36rem` | Narrow note width |
+| `max-w-read` | `42rem` | **Reading measure** — article content (≈ 65–75 cpl) |
+| `max-w-image` | `min(50rem, 95vw)` | Figures, tables, iframes — the wide span |
 | `max-w-maxindex` | `100rem` | Homepage & listing grids |
 
 - TOC rail lives **outside** `max-w-image`, only on viewports wide enough to
@@ -215,13 +216,22 @@ rule for every page. Same discipline everywhere.
 
 ## Content rendering
 
-- **Code blocks: LIGHT theme** (`InspiredGitHub`-class syntect theme — the
-  dark `base16-ocean.dark` was accidental). Nested-`pre` normalization CSS
-  (syntect emits its own `<pre>`). Inline code unchanged:
-  `text-pink-900 border-b-2 border-blue-300 bg-blue-100`.
-- **Blockquote**: `border-l-2 border-blue-500` + indent + `text-slate-700`,
-  **roman** (no italics, no pink card).
+- **Code blocks: DARK theme** — `base16-ocean.dark` syntect theme on a dark
+  `.code-card` (slate-900 card, slate-700 border): a terminal-chrome accent
+  against the light page. Originally accidental, dropped for light, then
+  **re-adopted deliberately after live review (2026-09-07)**. Rendered as a
+  `.code-card` div (max-w-read, `rounded-xs`) holding the syntect `<pre>`
+  plus a hover-revealed **copy button** (clipboard, "✓ copied" flash; hidden
+  in print, transitions off under reduced motion). Inline code unchanged:
+  `text-pink-900 border border-blue-300 bg-blue-100`.
+- **Blockquote**: soft `blue-25` plate (lighter than the page bg),
+  `border-l-2 border-blue-500`, inset `mx-6` from the text edges,
+  `text-slate-700` **roman**, `leading-normal` — one step under the 1.75
+  reading line-height. No italics, no pink card.
 - **Tables**: mono lowercase header row, 2px navy rule, zebra `blue-50` rows.
+  Breakout centered like figures: natural width up to `max-w-image`
+  (centered via `left-1/2` + `-translate-x-1/2` — auto margins can't center
+  an overflow), so wide tables clear the TOC rail by the figure geometry.
 - **Figure captions**: reading voice (Adwaita Sans), smaller + muted — book
   subtitles, not paper labels.
 - **Lists**: blue markers; text blue-950 when highlighted, otherwise
@@ -311,7 +321,7 @@ Tailwind defaults: `sm` 640 / `md` 768 / `lg` 1024 / `xl` 1280 / `2xl` 1536.
 
 - No dark mode, no `dark:` classes, no theme toggle — ever.
 - No `font-extrabold` at body sizes; no ad-hoc heading weights/colors.
-- No dark code blocks; no pink list markers; no pink blockquote card; no
+- No light code cards; no pink list markers; no pink blockquote card; no
   italics for blockquotes/captions.
 - No prev/next article cards, no keyboard article nav, no surprise
   interactions — we build a site, not an app.

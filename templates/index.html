@@ -29,7 +29,7 @@
 {% let segment = "blog".to_string() %}
 {% for latest in featured_blog_posts %}
 {% if loop.first %}
-<section id="lead-story" class="max-w-image w-fit mx-auto px-5 pt-14">
+<section id="lead-story" class="w-fit mx-auto px-5 pt-14">
   {{ m::section_header("", "latest blog", "/blog") }}
   <article class="md:flex md:items-start md:gap-10">
     {% match latest.metadata.thumbnail %}
@@ -62,7 +62,7 @@
 {% endfor %}
 
 <!-- ~/blog · the rest of the featured writing -->
-<section id="blog" class="max-w-image w-fit mx-auto px-5 pt-14">
+<section id="blog" class="w-fit mx-auto px-5 pt-14">
   {{ m::section_header("", "featured", "/blog") }}
   <ul class="mt-1">
    {% for post in featured_blog_posts %}
@@ -78,7 +78,7 @@
 
 <!-- ~/broadcasts -->
 {% let segment = "broadcasts".to_string() %}
-<section id="broadcasts" class="max-w-image w-fit mx-auto px-5 pt-14">
+<section id="broadcasts" class="w-fit mx-auto px-5 pt-14">
   {{ m::section_header("", "broadcasts", "/broadcasts") }}
   <ul class="mt-1">
     {% for post in featured_broadcasts %}

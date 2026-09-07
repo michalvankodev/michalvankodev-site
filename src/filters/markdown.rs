@@ -189,7 +189,14 @@ pub fn parse_markdown<T: fmt::Display>(
         }
         Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang))) => {
             text_kind = TextKind::Code(lang.to_string());
-            Event::Start(Tag::CodeBlock(CodeBlockKind::Fenced(lang)))
+            // Own the whole card: skip pulldown's <pre><code> wrapper and emit
+            // a .code-card div holding the copy button + the syntect <pre>.
+            Event::Html(
+                formatdoc!(
+                    r#"<div class="code-card"><button type="button" class="code-copy" aria-label="Copy code to clipboard">copy</button>"#
+                )
+                .into(),
+            )
         }
         Event::Text(text) => match &text_kind {
             TextKind::Code(lang) => {
@@ -248,8 +255,15 @@ pub fn parse_markdown<T: fmt::Display>(
         Event::Start(_) => event,
         Event::End(TagEnd::Image) => Event::Html("</figcaption></figure>".into()),
         Event::End(TagEnd::CodeBlock) => {
+            // Fenced blocks were re-wrapped into .code-card (see Start above);
+            // indented blocks still use pulldown's default <pre><code>.
+            let fenced = matches!(text_kind, TextKind::Code(_));
             text_kind = TextKind::Text;
-            Event::End(TagEnd::CodeBlock)
+            if fenced {
+                Event::Html("</div>".into())
+            } else {
+                Event::End(TagEnd::CodeBlock)
+            }
         }
         Event::End(TagEnd::Heading(heading_level)) => {
             text_kind = TextKind::Text;
