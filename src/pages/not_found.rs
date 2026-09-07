@@ -25,7 +25,8 @@ pub async fn render_not_found(
         Html(
             NotFoundPage {
                 title: "Page not found".to_owned(),
-                url: original_uri.to_string(),
+                // Kicker-style path hint ("~/path"), without the leading slash
+                url: original_uri.to_string().trim_start_matches('/').to_owned(),
                 header_props: HeaderProps::default(),
             }
             .render()

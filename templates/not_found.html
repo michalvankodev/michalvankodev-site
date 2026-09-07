@@ -3,15 +3,13 @@
 {% block content %}
 
 <section id="not-found-page" class="max-w-read mx-auto px-5 py-24">
-  <p class="font-mono text-sm text-slate-600">
-    <span class="text-pink-700">$</span> GET {{url}}
-  </p>
-  <p class="font-mono text-lg md:text-xl mt-3">
+  <p class="kicker [overflow-wrap:anywhere]">~/{{url}}</p>
+  <h1 class="text-display-1 mt-2">
     <span class="text-pink-700">404</span>: page not found
-  </p>
-  <p class="text-read text-slate-700 mt-8">
-    Nothing lives here. Try the <a href="/">introduction page</a>, browse the
-    <a href="/blog">writing</a>, or <a href="/contact">get in touch</a>.
+  </h1>
+  <p class="text-read text-slate-700 mt-6">
+    check out <a href="/">introduction page</a>, <a href="/blog">blog</a> or
+    <a href="/contact">get in touch</a>.
   </p>
 </section>
 
