@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<section id="post-container" class="max-w-read mx-auto px-5">
+<section id="post-container" class="max-w-image w-fit mx-auto px-5">
   <header class="pt-12 pb-2">
     <p class="kicker">~/{{segment}}</p>
     <h1 class="text-display-2 lowercase mt-2">
@@ -38,7 +38,7 @@
       {{group.year}}
       <span class="font-mono text-sm font-medium text-slate-400 ml-2">{{group.posts.len()}}</span>
     </h2>
-    <ul>
+    <ul class="w-fit">
      {% for post in group.posts %}
       <li>
         {% include "components/blog_post_preview.html" %}
