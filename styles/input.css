@@ -224,8 +224,10 @@
     @apply p-4 my-1 overflow-auto text-sm mx-auto max-w-read;
   }
 
+  /* Flex column + items-center: wide images overflow the text column
+   * symmetrically (centered on the content) instead of spilling right */
   figure {
-    @apply p-4;
+    @apply p-4 flex flex-col items-center;
 
     img {
       @apply rounded-sm shadow-md mx-auto lg:max-w-image;
