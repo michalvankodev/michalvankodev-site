@@ -5,7 +5,7 @@
   <section class="flex gap-4 py-5">
     {% match project.metadata.cover_image %}
     {% when Some with (source) %}
-    {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 96, 96, project.metadata.title.as_str(), Some("h-12 w-12 md:h-16 md:w-16 rounded-xs")).unwrap_or("cover not found".to_string()) %}
+    {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 96, 96, project.metadata.title.as_str(), Some("h-12 w-12 md:h-16 md:w-16 rounded-xs"), false).unwrap_or("cover not found".to_string()) %}
     <aside class="shrink-0 self-center">
       <figure>
         {{picture|safe}}

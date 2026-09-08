@@ -17,12 +17,20 @@ pub fn generate_picture_markup(
     height: u32,
     alt_text: &str,
     class_name: Option<&str>,
+    fetch_priority: bool,
 ) -> Result<String, anyhow::Error> {
     let orig_path = Path::new(orig_img_path);
     let class_attr = if let Some(class) = class_name {
         format!(r#"class="{class}""#)
     } else {
         "".to_string()
+    };
+    // Content images lazy-load; the hero (fetch_priority) is eager + high
+    // priority — it is above the fold.
+    let loading_attrs = if fetch_priority {
+        r#"decoding="async" fetchpriority="high""#.to_string()
+    } else {
+        r#"loading="lazy" decoding="async""#.to_string()
     };
 
     // Handle SVG files - return simple img tag with provided dimensions for display sizing
@@ -33,6 +41,7 @@ pub fn generate_picture_markup(
             width="{width}"
             height="{height}"
             {class_attr}
+            {loading_attrs}
             alt="{alt_text}"
         >"#
         ));
@@ -48,6 +57,7 @@ pub fn generate_picture_markup(
             width="{width}"
             height="{height}"
             {class_attr}
+            {loading_attrs}
             alt="{alt_text}"
         >"#
         ));
@@ -100,6 +110,7 @@ pub fn generate_picture_markup(
             src="{image_path}"
             width="{width}"
             height="{height}"
+            {loading_attrs}
             alt="{alt_text}"
             {class_attr}
         >"#
@@ -320,14 +331,38 @@ r#"<picture>
     src="/generated_images/images/uploads/2020-03-23_20-24-06_393_300x200.jpg"
     width="300"
     height="200"
+    loading="lazy" decoding="async"
     alt="Testing image alt"
     
 >
 </picture>"#,
     };
     pretty_assertions::assert_eq!(
-        generate_picture_markup(orig_img_path, width, height, "Testing image alt", None,)
-            .expect("picture markup has to be generated"),
+        generate_picture_markup(
+            orig_img_path,
+            width,
+            height,
+            "Testing image alt",
+            None,
+            false,
+        )
+        .expect("picture markup has to be generated"),
         result
     );
+}
+
+#[test]
+fn test_generate_picture_markup_hero_fetch_priority() {
+    let markup = generate_picture_markup(
+        "/images/uploads/2020-03-23_20-24-06_393.jpg",
+        300,
+        200,
+        "Hero",
+        None,
+        true,
+    )
+    .expect("picture markup has to be generated");
+    assert!(markup.contains(r#"fetchpriority="high""#), "hero is high priority");
+    assert!(!markup.contains(r#"loading="lazy""#), "hero must not lazy-load");
+    assert!(markup.contains(r#"decoding="async""#));
 }
