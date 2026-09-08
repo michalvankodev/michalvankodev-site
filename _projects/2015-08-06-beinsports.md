@@ -2,7 +2,7 @@
 title: beinSports
 displayed: true
 link: https://www.beinsports.com/en-us
-cover_image: /images/uploads/bein_logo.af017869.webp
+cover_image: /images/uploads/bein_logo_square.webp
 classification: website
 tags:
   - Freemarker
