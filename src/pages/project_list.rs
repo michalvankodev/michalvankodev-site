@@ -16,6 +16,7 @@ use crate::{
 pub struct ProjectListTemplate {
     pub title: String,
     pub project_list: Vec<ParseResult<ProjectMetadata>>,
+    pub featured_projects: Vec<ParseResult<ProjectMetadata>>,
     pub header_props: HeaderProps,
 }
 
@@ -26,11 +27,18 @@ pub async fn render_projects_list() -> Result<impl IntoResponse, StatusCode> {
     project_list.retain(|project| project.metadata.displayed);
     project_list.reverse();
 
+    // Two-tier showcase: featured plates first, quiet archive rows below —
+    // same structure as the portfolio page section.
+    let (featured_projects, project_list): (Vec<_>, Vec<_>) = project_list
+        .into_iter()
+        .partition(|project| project.metadata.featured);
+
     Ok(Html(
         ProjectListTemplate {
             title: "Showcase".to_owned(),
             header_props: HeaderProps::default(),
             project_list,
+            featured_projects,
         }
         .render()
         .unwrap(),
