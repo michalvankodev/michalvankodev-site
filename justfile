@@ -71,6 +71,11 @@ ssg: ssg_prewarm
 	- wget --no-convert-links -r -p -E -P dist --no-host-directories 127.0.0.1:{{port}}
 	- wget --no-convert-links --content-on-error -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/not-found
 	- wget --no-convert-links -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/showcase/m-logo-svg
+	# sitemap.xml is not linked from any crawled page (robots.txt's Sitemap:
+	# directive is not parsed by wget), so fetch it explicitly — same pattern
+	# as not-found above. The feeds are fine: every page's <head> links
+	# /feed.xml and /feed.json via <link rel="alternate">.
+	- wget --no-convert-links -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/sitemap.xml
 	find generated_images/ -name "*_og*" -exec cp --parents {} dist/ \;
   
 # Preview server
