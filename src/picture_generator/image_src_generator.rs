@@ -42,3 +42,56 @@ pub fn generate_image_with_src(
 
     Ok(image_path)
 }
+
+/// Static raster fallback for og:image/twitter:image. Card crawlers (X,
+/// Facebook, LinkedIn, Mastodon) cannot render SVG, so SVG thumbnails and
+/// missing thumbnails get this 1200x630 brand image instead.
+pub const OG_DEFAULT_IMAGE: &str = "/images/og-default.png";
+
+/// Used directly in templates: best raster og:image src for a post thumbnail.
+/// Raster thumbnails get their generated 1200x630 `_og` variant; SVG sources
+/// and missing thumbnails get the static default card image.
+pub fn og_image_src(thumbnail: Option<&str>) -> String {
+    match thumbnail {
+        Some(src) if !src.to_lowercase().ends_with(".svg") => {
+            generate_image_with_src(src, 1200, 630, "_og")
+                .unwrap_or_else(|_| OG_DEFAULT_IMAGE.to_string())
+        }
+        _ => OG_DEFAULT_IMAGE.to_string(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn svg_thumbnail_gets_default_card_image() {
+        assert_eq!(
+            og_image_src(Some("/images/uploads/pi-logo.svg")),
+            OG_DEFAULT_IMAGE
+        );
+    }
+
+    #[test]
+    fn uppercase_svg_extension_is_also_caught() {
+        assert_eq!(
+            og_image_src(Some("/images/uploads/LOGO.SVG")),
+            OG_DEFAULT_IMAGE
+        );
+    }
+
+    #[test]
+    fn missing_thumbnail_gets_default_card_image() {
+        assert_eq!(og_image_src(None), OG_DEFAULT_IMAGE);
+    }
+
+    #[test]
+    fn raster_thumbnail_gets_generated_og_variant() {
+        let src = og_image_src(Some("/images/uploads/2020-03-23_20-24-06_393.jpg"));
+        assert!(
+            src.contains("_og"),
+            "raster thumbnails get the generated _og variant, got: {src}"
+        );
+    }
+}
