@@ -183,6 +183,44 @@
   }
 }
 
+/* Skip-to-content: first tab stop → <main> landmark */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--color-blue-950);
+  color: var(--color-blue-50);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+/* Active section in the masthead nav — the attribute is set by a tiny
+ * inline script in site_header.html. Styled here (not via a JS-injected
+ * class) so the styling can't silently fall out of the Tailwind bundle. */
+#site-nav a[aria-current='page'] {
+  @apply text-blue-500;
+}
+
+/* Print: articles read like a book on paper — white page surface; the
+ * chrome (header/footer/TOC/further-reading/progress/year headers/
+ * back-to-top) already carries print:hidden on its elements */
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .article-body a {
+    text-decoration: none;
+  }
+}
+
 .article-body :is(h1, h2, h3, h4) {
   scroll-margin-top: 2.5rem;
 }
@@ -386,30 +424,35 @@ article a {
   @apply m-4 mx-auto max-w-image aspect-video;
 }
 
-.social-card-twitch:hover {
-  transform: translate3d(0.6rem, -0.6rem, 0px);
-  box-shadow: -3px 3px 0px 3px #6441a5;
-  transition-delay: 75ms;
-}
+/* Brand hover effects on external-link social cards — the only decorative
+ * effects on the site. Gated by prefers-reduced-motion: transforms and the
+ * tiktok glitch animate only for motion-tolerant users. */
+@media (prefers-reduced-motion: no-preference) {
+  .social-card-twitch:hover {
+    transform: translate3d(0.6rem, -0.6rem, 0px);
+    box-shadow: -3px 3px 0px 3px #6441a5;
+    transition-delay: 75ms;
+  }
 
-.social-card-youtube:hover {
-  @apply rounded-none;
-  transform: scale(1.02);
-  transition-delay: 100ms;
-}
+  .social-card-youtube:hover {
+    @apply rounded-none;
+    transform: scale(1.02);
+    transition-delay: 100ms;
+  }
 
-.social-card-instagram:hover {
-  filter: brightness(84%);
-  transition-delay: 100ms;
+  .social-card-instagram:hover {
+    filter: brightness(84%);
+    transition-delay: 100ms;
+  }
+
+  .social-card-tiktok:hover {
+    animation: tiktok-glitch 1.5s infinite;
+    animation-delay: 200ms;
+  }
 }
 
 .social-card-tiktok {
   position: relative;
-
-  &:hover {
-    animation: tiktok-glitch 1.5s infinite;
-    animation-delay: 200ms;
-  }
 }
 
 @keyframes tiktok-glitch {

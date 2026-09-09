@@ -46,7 +46,7 @@
       {% match thumbnail %}
       {% when Some with (img) %}
       {% let cover = crate::picture_generator::picture_markup_generator::generate_picture_markup(img, 480, 480, "Article cover", Some("w-full h-auto rounded-xs border border-slate-200 shadow-md"), false).unwrap_or("".to_string())|safe %}
-      <figure class="article-cover float-right w-40 sm:w-64 md:w-72 my-2 ml-6 mb-6">
+      <figure class="article-cover float-right w-40 sm:w-64 md:w-72 my-2 ml-6 mb-6" style="view-transition-name: post_cover_{{slug}};">
         {{cover|safe}}
       </figure>
       {% when None %}
