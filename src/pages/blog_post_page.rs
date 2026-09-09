@@ -26,6 +26,7 @@ pub struct BlogPostTemplate {
     pub header_props: HeaderProps,
     pub slug: String,
     pub thumbnail: Option<String>,
+    pub description: String,
     pub toc: Vec<HeadingToc>,
     pub reading_time: u32,
     pub recommended_posts: Vec<ParseResult<BlogPostMetadata>>,
@@ -46,6 +47,10 @@ pub async fn render_blog_post(
     };
 
     let toc = extract_headings(&post.body);
+    let description = crate::post_utils::post_description::post_description(
+        post.metadata.description.as_deref(),
+        &post.body,
+    );
     let reading_time = (post.body.split_whitespace().count() as u32 / 220).max(1);
 
     let recommended_posts =
@@ -72,6 +77,7 @@ pub async fn render_blog_post(
             slug: post.slug,
             segment,
             thumbnail: post.metadata.thumbnail,
+            description,
             toc,
             reading_time,
             header_props,

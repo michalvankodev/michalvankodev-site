@@ -7,7 +7,7 @@
     {% match project.metadata.cover_image %}
     {% when Some with (source) %}
     <figure class="mb-4 md:mb-0">
-      {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 560, 315, project.metadata.title.as_str(), Some("w-full h-auto rounded-xs border border-slate-200")).unwrap_or("cover not found".to_string())|safe %}
+      {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 560, 315, project.metadata.title.as_str(), Some("w-full h-auto rounded-xs border border-slate-200"), false).unwrap_or("cover not found".to_string())|safe %}
       {% match project.metadata.link %}
       {% when Some with (href) %}
       <a href="{{href}}" class="no-underline">{{picture}}</a>
