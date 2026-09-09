@@ -258,14 +258,20 @@ fn generate_srcset(path: &Path, format: &ExportFormat, resolutions: &[(u32, u32,
 }
 
 pub fn get_export_formats(orig_img_path: &Path) -> Vec<ExportFormat> {
-    let path = orig_img_path.extension().and_then(|ext| ext.to_str());
+    let path = orig_img_path
+        .extension()
+        .and_then(|ext| ext.to_str())
+        .map(|ext| ext.to_lowercase());
 
-    match path {
+    match path.as_deref() {
         // THINK: Do we want to enable avif? It's very expensive to encode
         // Some("jpg" | "jpeg") => vec![ExportFormat::Avif, ExportFormat::Jpeg],
         // Some("png") => vec![ExportFormat::Avif, ExportFormat::Png],
         Some("jpg" | "jpeg") => vec![ExportFormat::Jpeg],
         Some("png") => vec![ExportFormat::Png],
+        // SVG is not a raster format, but card crawlers (og:image/twitter:image)
+        // cannot render it — rasterize through resvg into PNG (see process_job).
+        Some("svg") => vec![ExportFormat::Png],
         Some(_) | None => vec![],
     }
 }

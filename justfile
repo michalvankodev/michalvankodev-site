@@ -76,6 +76,9 @@ ssg: ssg_prewarm
 	# as not-found above. The feeds are fine: every page's <head> links
 	# /feed.xml and /feed.json via <link rel="alternate">.
 	- wget --no-convert-links -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/sitemap.xml
+	# og-default.png is referenced only from <meta> tags — wget parses neither
+	# meta content nor og:image — so fetch it explicitly like the sitemap.
+	- wget --no-convert-links -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/images/og-default.png
 	find generated_images/ -name "*_og*" -exec cp --parents {} dist/ \;
   
 # Preview server
