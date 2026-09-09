@@ -175,6 +175,8 @@ fn build_json_feed_body(feed_items: &[FeedItem]) -> String {
         "title": "michalvanko.dev latest posts",
         "home_page_url": SITE_URL,
         "feed_url": format!("{SITE_URL}/feed.json"),
+        "icon": format!("{SITE_URL}/images/m-logo.svg"),
+        "favicon": format!("{SITE_URL}/images/m-logo.svg"),
         "description": "Latest posts published on michalvanko.dev blog site",
         "language": "en",
         "items": items,
@@ -233,6 +235,11 @@ mod tests {
             parsed["version"],
             "https://jsonfeed.org/version/1.1",
             "JSON Feed version header"
+        );
+        assert_eq!(
+            parsed["icon"],
+            "https://michalvanko.dev/images/m-logo.svg",
+            "feed icon points at the site logo"
         );
         let feed_items = parsed["items"].as_array().expect("items array");
         assert!(!feed_items.is_empty());
