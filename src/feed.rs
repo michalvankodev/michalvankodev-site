@@ -62,13 +62,15 @@ pub async fn build_feed_items() -> Result<Vec<FeedItem>, StatusCode> {
                 .find(|segment| matches!(segment, Segment::Blog | Segment::Broadcasts))
                 .cloned()
                 .unwrap_or(Segment::Blog);
-            let description_html = truncate_md::default()
-                .with_rows(2)
-                .execute(&post.body, &EmptyValues)
-                .and_then(|truncated| {
-                    parse_markdown::default().execute(&truncated, &EmptyValues)
-                })
-                .unwrap_or("Can't parse post body".to_string());
+            let description_html = post.metadata.description.clone().unwrap_or_else(|| {
+                truncate_md::default()
+                    .with_rows(2)
+                    .execute(&post.body, &EmptyValues)
+                    .and_then(|truncated| {
+                        parse_markdown::default().execute(&truncated, &EmptyValues)
+                    })
+                    .unwrap_or("Can't parse post body".to_string())
+            });
             let content_html = parse_markdown::default()
                 .execute(&post.body, &EmptyValues)
                 .unwrap_or("Can't process full post body".to_string());

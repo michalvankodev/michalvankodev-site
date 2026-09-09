@@ -23,4 +23,9 @@ pub struct BlogPostMetadata {
     pub date: DateTime<Utc>,
     pub thumbnail: Option<String>,
     pub tags: Vec<String>,
+    /// Hand-written summary used for og:description/twitter:description and
+    /// feed summaries. Optional — a plain-text excerpt is derived from the
+    /// post body when absent (see post_utils::post_description).
+    #[serde(default)]
+    pub description: Option<String>,
 }
