@@ -5,7 +5,7 @@
 	<aside class="row-span-2 self-center float-start sm:float-none mr-3 mb-3 sm:ml-0 sm:mb-0">
 		{% match post.metadata.thumbnail %}
 		{% when Some with (orig_path) %}
-		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", None, true).unwrap_or("thumbnail not found".to_string())|safe }}
+		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", None, false).unwrap_or("thumbnail not found".to_string())|safe }}
 		{% when None %}
 		<div>
 			{% include "components/blog_post_default_thumbnail.html" %}
