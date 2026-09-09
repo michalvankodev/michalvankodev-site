@@ -11,14 +11,19 @@
 	encode zstd gzip
 	file_server
 
-	# Cache policy is honest about filenames: generated images and CSS are
-	# size-suffixed, NOT content-hashed — immutable would serve stale assets
-	# past a redeploy. Moderate max-age + etag/last-modified revalidation
-	# (file_server emits etag automatically); HTML always revalidates.
-	@static_assets {
-		path_regexp static_assets \.(jpg|jpeg|png|gif|svg|ico|mp4|webm|woff|woff2|eot|ttf|otf|js|css|avif|webp)$
+	# Cache policy is honest about filenames: generated images and vendored
+	# assets are effectively filename-versioned and cache well; CSS is a
+	# constant filename that changes on every deploy, so it must always
+	# revalidate (cheap etag 304s). HTML revalidates too.
+	@css {
+		path_regexp css \.css$
 	}
-	header @static_assets Cache-Control "public, max-age=604800"
+	header @css Cache-Control "no-cache"
+
+	@static_assets {
+		path_regexp static_assets \.(jpg|jpeg|png|gif|svg|ico|mp4|webm|woff|woff2|eot|ttf|otf|js|avif|webp)$
+	}
+	header @static_assets Cache-Control "public, max-age=2592000"
 
 	# HTML (and everything else without an extension match): always revalidate
 	header ?Cache-Control "no-cache"
