@@ -6,6 +6,7 @@ segments:
 published: true
 date: 2022-11-27T19:49:09.204Z
 thumbnail: /images/uploads/image_7115.jpg
+cover: false
 tags:
   - News
   - Travel

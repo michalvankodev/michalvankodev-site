@@ -22,7 +22,7 @@
 
 {% endblock %}
 
-{% block content %}
+{% block page_container %}
 <div id="read-progress" class="fixed top-0 left-0 h-0.5 bg-pink-600 z-50 motion-reduce:hidden print:hidden" style="width:0%" aria-hidden="true"></div>
 <article class="mb-6">
   <!-- Header, body and footer share one 2xl grid axis:
@@ -43,11 +43,11 @@
 
   <div class="max-w-image 2xl:max-w-[90rem] mx-auto px-5 mt-8 2xl:grid 2xl:grid-cols-[minmax(0,1fr)_minmax(0,42rem)_minmax(0,24rem)]">
     <div class="article-body-wrap flow-root 2xl:col-start-2">
-      {% match thumbnail %}
+      {% match cover %}
       {% when Some with (img) %}
-      {% let cover = crate::picture_generator::picture_markup_generator::generate_picture_markup(img, 480, 480, "Article cover", Some("w-full h-auto rounded-xs border border-slate-200 shadow-md"), false).unwrap_or("".to_string())|safe %}
+      {% let cover_markup = crate::picture_generator::picture_markup_generator::generate_picture_markup(img, 480, 480, "Article cover", Some("w-full h-auto rounded-xs border border-slate-200 shadow-md"), false).unwrap_or("".to_string())|safe %}
       <figure class="article-cover float-right w-40 sm:w-64 md:w-72 my-2 ml-6 mb-6" style="view-transition-name: post_cover_{{slug}};">
-        {{cover|safe}}
+        {{cover_markup|safe}}
       </figure>
       {% when None %}
       {% endmatch %}
@@ -78,16 +78,21 @@
 <footer class="max-w-[90rem] mx-auto px-5 pb-4 2xl:grid 2xl:grid-cols-[minmax(0,1fr)_minmax(0,42rem)_minmax(0,24rem)]">
 
 {% if recommended_posts.len() > 0 %}
+<!-- Heading + previews share one content-width wrapper: the heading spans
+     exactly the width of the widest preview below it (same pattern as the
+     index lists), not the narrower article text column. -->
 <section id="recommended-articles" class="print:hidden mt-12 mx-auto w-full 2xl:col-start-1 2xl:col-span-3">
-  {{ m::section_header("", "further reading", "") }}
-  <ul class="mt-1 w-fit mx-auto">
-   {% for post in recommended_posts %}
-    <li>
-      {% include "components/blog_post_preview.html" %}
-      <hr class="border-slate-300 my-5 md:my-8">
-    </li>
-   {% endfor %}
-  </ul>
+  <div class="w-fit mx-auto">
+    {{ m::section_header("", "further reading", "") }}
+    <ul class="mt-1">
+    {% for post in recommended_posts %}
+      <li>
+        {% include "components/blog_post_preview.html" %}
+        <hr class="border-slate-300 my-5 md:my-8">
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
 </section>
 {% endif %}
 

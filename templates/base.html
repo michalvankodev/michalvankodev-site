@@ -48,7 +48,15 @@
     </div>
     {% include "site_header.html" %}
     <main id="main-content" tabindex="-1">
-      {% block content %} Placeholder {% endblock %}
+      <!-- Standard pages inherit the max-w-image rail (same width as the
+           masthead nav) by only overriding the inner `content` block. Custom
+           layouts (index, blog_post, egg_fetcher) opt out by overriding the
+           whole `page_container` block instead. -->
+      {% block page_container %}
+      <div class="max-w-image mx-auto px-5">
+        {% block content %} Placeholder {% endblock %}
+      </div>
+      {% endblock page_container %}
     </main>
     {% include "site_footer.html" %}
   </body>
