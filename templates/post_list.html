@@ -34,11 +34,16 @@
   {% else %}
   {% for group in grouped_posts %}
   <section class="year-group">
-    <h2 class="text-2xl font-bold text-blue-950 border-b border-slate-300 pt-3 pb-2 mt-8 mb-3 print:hidden">
+    <!-- mb equals a single hr margin (my-5/md:my-8): the year rule is
+         visually the same kind of divider as the hr between articles,
+         so the rule-to-content distance stays identical everywhere -->
+    <h2 class="text-2xl font-bold text-blue-950 border-b border-slate-300 pt-3 pb-2 mt-8 mb-5 md:mb-8 print:hidden">
       {{group.year}}
       <span class="font-mono text-sm font-medium text-slate-400 ml-2">{{group.posts.len()}}</span>
     </h2>
-    <ul class="w-fit">
+    <!-- full width (no w-fit): each item's rule must span the whole
+         preview, thumbnail included -->
+    <ul>
      {% for post in group.posts %}
       <li>
         {% include "components/blog_post_preview.html" %}

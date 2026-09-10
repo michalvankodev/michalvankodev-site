@@ -1,11 +1,16 @@
+<!-- Phones: thumbnail floats top-left and the text wraps beside it,
+	continuing underneath once it passes the image (flow-root on the
+	article keeps the item box containing the float, so the rule below
+	spans the whole preview). sm+: two-column grid, thumbnail centered
+	vertically in its own column. -->
 <article
-	class="sm:grid sm:grid-cols-[max-content_1fr] sm:grid-rows-[max-content_1fr] sm:grid-flow-col sm:gap-4 md:gap-x-8 break-inside-avoid clear-both sm:clear-none"
+	class="flow-root sm:grid sm:grid-cols-[max-content_1fr] sm:grid-rows-[max-content_1fr] sm:grid-flow-col sm:gap-x-4 md:gap-x-8 md:gap-y-4 break-inside-avoid"
 	style="view-transition-name:blog_post_preview_{{post.slug}};"
 >
-	<aside class="row-span-2 self-center float-start sm:float-none mr-3 mb-3 sm:ml-0 sm:mb-0">
+	<aside class="float-start mr-3 mb-2 sm:float-none sm:m-0 sm:row-span-2 sm:self-center">
 		{% match post.metadata.thumbnail %}
 		{% when Some with (orig_path) %}
-		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", None, false).unwrap_or("thumbnail not found".to_string())|safe }}
+		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", Some("w-24 h-auto sm:w-[180px]"), false).unwrap_or("thumbnail not found".to_string())|safe }}
 		{% when None %}
 		<div>
 			{% include "components/blog_post_default_thumbnail.html" %}
@@ -27,5 +32,5 @@
 		  <a rel="prefetch" href="/{{segment}}/{{post.slug}}" class="text-blue-950 visited:text-purple-700 no-underline">{{post.metadata.title}}</a>
 		</h3>
 	</header>
-	<section class="text-base leading-7 text-slate-800 md:text-xl text-justify max-w-read"><div class="line-clamp-4">{{post.body|truncate_md(4)|parse_markdown|safe}}</div></section>
+	<section class="text-sm leading-6 text-slate-800 md:text-xl md:leading-7 text-justify max-w-read"><div class="line-clamp-4">{{post.body|truncate_md(4)|parse_markdown|safe}}</div></section>
 </article>
