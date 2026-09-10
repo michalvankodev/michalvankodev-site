@@ -1,48 +1,55 @@
-<section class="border border-slate-200 rounded-md bg-white p-4 break-inside-avoid" style="view-transition-name: project_preview_{{project.slug}};">
-  <header class="px-4 mb-3"> 
-    <h2 class="text-xl font-semibold text-blue-900 md:text-2xl">
+{# Editorial plate: cover side-plate + text, for featured projects.
+   Meta (classification · year) sits above the name like the article
+   listing; the technology list closes the plate. Stacked in a divide-y
+   list; view-transition-name kept from the card era. #}
+<section class="break-inside-avoid" style="view-transition-name: project_preview_{{project.slug}};">
+  <section class="md:grid md:grid-cols-[minmax(0,17rem)_1fr] md:gap-6">
+    {% match project.metadata.cover_image %}
+    {% when Some with (source) %}
+    <figure class="mb-4 md:mb-0">
+      {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 560, 315, project.metadata.title.as_str(), Some("w-full h-auto rounded-xs border border-slate-200"), false).unwrap_or("cover not found".to_string())|safe %}
       {% match project.metadata.link %}
       {% when Some with (href) %}
-      <a href="{{href}}" class="text-blue-900 no-underline">
-        {{project.metadata.title}}
-      </a>
+      <a href="{{href}}" class="no-underline">{{picture}}</a>
       {% when None %}
-      {{project.metadata.title}}
+      {{picture}}
       {% endmatch %}
-    </h2>
-    <section class="description text-slate-800 my-2 md:text-xl text-justify leading-tight md:leading-tight">
-      {{project.body|parse_markdown|safe}}
+    </figure>
+    {% when None %}
+    {% endmatch %}
+
+    <section class="min-w-0">
+      <header>
+        <div class="flex flex-wrap items-baseline gap-x-3 font-mono text-xs md:text-sm lowercase">
+          {% if let Some(year) = crate::projects::project_model::year_from_slug(project.slug) %}
+          <span class="text-slate-500">{{year}}</span>
+          <span class="text-slate-400">|</span>
+          {% endif %}
+          <span class="text-slate-500">
+            {{crate::projects::project_model::translate_classification(project.metadata.classification)|lower}}
+          </span>
+        </div>
+        <h3 class="text-xl font-semibold leading-snug mt-[0.2rem]">
+          {% match project.metadata.link %}
+          {% when Some with (href) %}
+          <a href="{{href}}" class="text-blue-950 no-underline hover:text-blue-500">
+            {{project.metadata.title}}
+          </a>
+          {% when None %}
+          <span class="text-blue-950">{{project.metadata.title}}</span>
+          {% endmatch %}
+        </h3>
+      </header>
+
+      <section class="text-base text-slate-700 leading-relaxed mt-1 line-clamp-3">
+        {{project.body|parse_markdown|safe}}
+      </section>
+
+      <footer class="mt-3 flex flex-wrap gap-x-3 font-mono text-xs md:text-sm text-pink-950 lowercase">
+        {% for tag in crate::projects::project_model::display_tags(project.metadata.classification, project.metadata.tags) %}
+        <span>#{{tag|lower}}</span>
+        {% endfor %}
+      </footer>
     </section>
-  </header>
-  <!-- <hr class="border-blue-950 my-5"> -->
-
-  {% match project.metadata.cover_image %}
-  {% when Some with (source) %}
-  {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 420, 236, "Project cover", Some("max-h-[236px]")).unwrap_or("cover not found".to_string()) %}
-  <figure class="mx-4 my-2 flex justify-center">
-      {% match project.metadata.link %}
-      {% when Some with (href) %}
-      <a href="{{href}}">
-       {{picture|safe}}
-      </a>
-      {% when None %}
-       {{picture|safe}}
-      {% endmatch %}
-  </figure>
-  {% when None %}
-  {% endmatch %}
-
-
-	<footer class="text-sm px-4 md:text-base">
-    <h3 class="text-xl font-semibold text-blue-900 my-2 md:text-2xl">
-      {{crate::projects::project_model::translate_classification(project.metadata.classification)}}
-    </h3>
-    <ul class="inline-block">
-     {% for tag in project.metadata.tags %}
-      <li class="inline-block text-pink-950">
-        {{tag}}
-      </li>
-      {% endfor %}
-    </ul>
-	</footer>
+  </section>
 </section>

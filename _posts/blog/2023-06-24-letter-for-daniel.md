@@ -6,6 +6,7 @@ segments:
 published: true
 date: 2023-06-24T16:34:45.527Z
 thumbnail: /images/uploads/img_9715-rotated.jpg
+cover: false
 tags:
   - News
   - Personal

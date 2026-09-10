@@ -42,3 +42,58 @@ pub fn generate_image_with_src(
 
     Ok(image_path)
 }
+
+/// Static raster fallback for og:image/twitter:image when a post has no
+/// thumbnail at all. Card crawlers (X, Facebook, LinkedIn, Mastodon) cannot
+/// render SVG, but SVG thumbnails are covered by pipeline rasterization
+/// (get_export_formats routes .svg → PNG) — this constant only covers `None`.
+pub const OG_DEFAULT_IMAGE: &str = "/images/og-default.png";
+
+/// Used directly in templates: best raster og:image src for a post thumbnail.
+/// Raster and SVG thumbnails get their generated 1200x630 `_og` variant;
+/// posts without a thumbnail get the static default card image.
+pub fn og_image_src(thumbnail: Option<&str>) -> String {
+    match thumbnail {
+        Some(src) => generate_image_with_src(src, 1200, 630, "_og")
+            .unwrap_or_else(|_| OG_DEFAULT_IMAGE.to_string()),
+        None => OG_DEFAULT_IMAGE.to_string(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn svg_thumbnail_gets_rasterized_og_variant() {
+        // SVGs route through the pipeline now (get_export_formats: svg → Png)
+        let src = og_image_src(Some("/images/uploads/pi-logo.svg"));
+        assert!(
+            src.contains("_og") && src.ends_with(".png"),
+            "svg thumbnails get a rasterized _og PNG, got: {src}"
+        );
+    }
+
+    #[test]
+    fn uppercase_svg_extension_is_also_rasterized() {
+        let src = og_image_src(Some("/images/uploads/LOGO.SVG"));
+        assert!(
+            src.contains("_og") && src.ends_with(".png"),
+            "extension matching is case-insensitive, got: {src}"
+        );
+    }
+
+    #[test]
+    fn missing_thumbnail_gets_default_card_image() {
+        assert_eq!(og_image_src(None), OG_DEFAULT_IMAGE);
+    }
+
+    #[test]
+    fn raster_thumbnail_gets_generated_og_variant() {
+        let src = og_image_src(Some("/images/uploads/2020-03-23_20-24-06_393.jpg"));
+        assert!(
+            src.contains("_og"),
+            "raster thumbnails get the generated _og variant, got: {src}"
+        );
+    }
+}

@@ -1,14 +1,15 @@
 {% extends "base.html" %}
-{% block content %} 
 
-<section id="not-found-page">
-  <p class="mx-6 mt-3 text-4xl text-blue-950 text-center font-extrabold lg:mx-auto max-w-read">
-    This page doesn't exists 
-  </p>
-  <p class="m-6 text-9xl text-blue-950 text-center font-extrabold lg:mx-auto max-w-read">😓
-  </p>
-  <p class="mx-6 mt-3 text-xl text-blue-950 text-center lg:mx-auto max-w-read">
-    check out <a href="/">introduction page</a> or <a href="/contact">contact page</a>
+{% block content %}
+
+<section id="not-found-page" class="py-24">
+  <p class="kicker [overflow-wrap:anywhere]">~/{{url}}</p>
+  <h1 class="text-display-1 mt-2">
+    <span class="text-pink-700">404</span>: page not found
+  </h1>
+  <p class="text-read text-slate-700 mt-6">
+    check out <a href="/">introduction page</a>, <a href="/blog">blog</a> or
+    <a href="/contact">get in touch</a>.
   </p>
 </section>
 

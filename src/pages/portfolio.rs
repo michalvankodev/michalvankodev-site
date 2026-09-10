@@ -46,6 +46,7 @@ pub struct PortfolioTemplate {
     pub title: String,
     pub body: String,
     pub project_list: Vec<ParseResult<ProjectMetadata>>,
+    pub featured_projects: Vec<ParseResult<ProjectMetadata>>,
     pub header_props: HeaderProps,
     pub workplace_list: Vec<Workplace>,
     pub education_list: Vec<Education>,
@@ -61,6 +62,12 @@ pub async fn render_portfolio() -> Result<impl IntoResponse, StatusCode> {
     project_list.sort_by_key(|post| post.slug.to_string());
     project_list.retain(|project| project.metadata.displayed);
     project_list.reverse();
+
+    // Two-tier showcase: featured projects get editorial plates, the rest
+    // become quiet archive rows (same split the homepage makes).
+    let (featured_projects, project_list): (Vec<_>, Vec<_>) = project_list
+        .into_iter()
+        .partition(|project| project.metadata.featured);
 
     let workplace_list = portfolio
         .metadata
@@ -104,6 +111,9 @@ pub async fn render_portfolio() -> Result<impl IntoResponse, StatusCode> {
     ];
 
     let technology_list = vec![
+        "AI",
+        "Agents",
+        "Automation",
         "Rust",
         "HTMX",
         "React",
@@ -135,6 +145,7 @@ pub async fn render_portfolio() -> Result<impl IntoResponse, StatusCode> {
             body: portfolio.body,
             header_props: HeaderProps::default(),
             project_list,
+            featured_projects,
             workplace_list,
             education_list,
             contact_links,

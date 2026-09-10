@@ -24,6 +24,7 @@ anyhow = "1.0.86"
 syntect = { version = "5.3.0", default-features = false, features = ["default-fancy"] }
 indoc = "2.0.5"
 mime_guess = "2.0.5"
+resvg = "0.48.1"
 
 [dev-dependencies]
 pretty_assertions = "1"

@@ -4,27 +4,41 @@
 <meta property="og:title" content="{{title}} @michalvankodev" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://michalvanko.dev/showcase" />
-<meta property="og:image" content="https://michalvanko.dev/images/m-logo.svg" />
+<meta property="og:image" content="https://michalvanko.dev/images/og-default.png" />
 {% endblock %}
 
 {% block content %}
 
-<section id="project-list-container" class="max-w-maxindex mx-auto">
+<section id="project-list-container">
   <section id="project-list">
-    {% if project_list.len() == 0 %}
-    <p class="no-posts">You've found void in the space.</p>
-    {% else %}
-    <h1 class="m-5 text-4xl text-blue-950 font-extrabold md:text-6xl">
-     Showcase
-    </h1>
+    <header class="pt-12 pb-2">
+      <p class="kicker">~/showcase</p>
+      <h1 class="text-display-2 lowercase mt-2">
+        Showcase
+      </h1>
+    </header>
 
-    <ul class="m-6 grid grid-flow-row gap-6 md:grid-cols-2 md:grid-rows-[masonry] md:justify-stretch md:items-stretch xl:grid-cols-3">
-      {% for project in project_list %}
-      <li>
+    {% if featured_projects.len() > 0 %}
+    <ul class="mt-6 divide-y divide-slate-200">
+      {% for project in featured_projects %}
+      <li class="py-6 first:pt-2">
         {% include "components/project_preview_card.html" %}
       </li>
       {% endfor %}
     </ul>
+    {% endif %}
+
+    {% if project_list.len() > 0 %}
+    <p class="mt-8 font-mono text-sm lowercase text-slate-500">more work</p>
+    <ul class="mt-1">
+      {% for project in project_list %}
+      {% include "components/project_row.html" %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if featured_projects.len() == 0 && project_list.len() == 0 %}
+    <p class="no-posts">You've found void in the space.</p>
     {% endif %}
   </section> <!-- /#project-list -->
  

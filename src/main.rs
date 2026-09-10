@@ -4,6 +4,7 @@ use tower_livereload::LiveReloadLayer;
 use tracing::info;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+mod assets;
 mod blog_posts;
 mod components;
 mod feed;

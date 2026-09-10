@@ -18,6 +18,13 @@ collections:
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}' # Filename template, e.g., YYYY-MM-DD-title.md
     fields: # The fields for each document, usually in front matter
       - { label: 'Title', name: 'title', widget: 'string' }
+      - {
+          label: 'Description',
+          name: 'description',
+          widget: 'text',
+          required: false,
+          hint: 'Summary for social cards and feeds; derived from the post body when empty',
+        }
       - label: 'Segments'
         name: 'segments'
         widget: 'select'

@@ -11,4 +11,4 @@ tags:
 featured: true
 ---
 A presentation about hypermedia systems, HTMX, HyperView, and the
-HATEOAS principles. 2024
+HATEOAS principles.

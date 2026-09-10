@@ -14,7 +14,7 @@ notes: add some stuff about redox keyboard itself
 
 In this blog post, I am going to take you out on a little journey of making my own keyboard. Perhaps help you if you've decided to make yourself your own.
 
-![Preview of Redox keyboard with RGB lights turned on in a dark](/images/uploads/img_20200301_171735.jpg 'Preview of Redox keyboard with RGB lights turned on in a dark')
+<!-- ![Preview of Redox keyboard with RGB lights turned on in a dark](/images/uploads/img_20200301_171735.jpg 'Preview of Redox keyboard with RGB lights turned on in a dark') -->
 
 But first, I want to tell you:
 

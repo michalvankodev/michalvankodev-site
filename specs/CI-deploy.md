@@ -535,12 +535,25 @@ logic ever be needed — `ask` is just the built-in `http` module.)
 - `interval`/`burst` options inside `on_demand_tls` are deprecated —
   **do not add them** (official docs: "NOT recommended").
 
-### D11: Lifecycle = PR-driven only (decided 2026-08-20)
+### D11: Lifecycle = PR-driven only (decided 2026-08-20; extended 2026-09-07)
 
 | PR event | Preview action |
 |---|---|
 | `opened`, `synchronize`, `reopened` | build + deploy |
 | `closed` (covers **merged**) | `rm -rf ~/previews/<hostname>/` |
+| **`push` to a branch with an open PR** (added 2026-09-07) | build + deploy |
+
+The 2026-09-07 extension: stacked-PR merges land as **pushes to the base
+branch** (e.g. merging slice 05 into `redesign/00-foundation`) and fire no
+`pull_request` event for the PRs *headed* by that branch — dependent
+previews stayed stale until their own PR got activity (found live: the
+foundation preview froze pre-merge while reviewing slice 06). `preview.yaml`
+now also runs on `push` (main excluded) and rebuilds the preview iff some
+open PR's **head** branch equals the pushed branch — base-only matches must
+not deploy, or pushes to already-merged branches would resurrect orphaned
+previews that no PR will ever tear down. Discovered the hard way this same
+day: an accidental push to a merged slice's branch (`redesign/04-list-pages`)
+would have done exactly that.
 
 - Forgejo Actions has **no branch-`delete` event**; the PR lifecycle is
   the only trigger pair with symmetric create/teardown → no scheduled
@@ -712,14 +725,29 @@ Deviations from the original spec text, all deliberate:
   (`bind_addr = 127.0.0.1:9123`) on alula, matching client entry on
   katelyn. Loopback-only on both ends — the check is never
   internet-reachable.
-- **PR comments with the preview URL** (2026-08-21): the deploy job
-  upserts a marker comment (`<!-- preview-link -->`) on the PR via the
-  runner-provisioned `GITHUB_TOKEN` — POST on first deploy, PATCH on
-  every re-deploy (one comment per PR, no per-push spam). Teardown
-  PATCHes the same comment to "removed" so closed PRs carry no dead
-  link. Both steps are best-effort: an API failure logs a `::warning::`
-  but never fails the deploy/teardown. No secret was added — the
-  automatic token already covers `write:issue` for same-repo PRs.
+- **PR comments with the preview URL** (2026-08-21, reworked 2026-09-09):
+  the deploy job upserts a marker comment (`<!-- preview-link -->`) on
+  the PR via the runner-provisioned `GITHUB_TOKEN` — POST on first
+  deploy, PATCH on every re-deploy (one comment per PR, no per-push
+  spam). Teardown PATCHes the same comment to "removed" so closed PRs
+  carry no dead link. Both steps are best-effort: an API failure logs a
+  `::warning::` but never fails the deploy/teardown. No secret was
+  added — the automatic token already covers `write:issue` for same-repo
+  PRs.
+  - Push-triggered re-deploys resolve the PR via meta's open-PR lookup
+    (`meta.outputs.pr_number`) — `github.event.pull_request` is empty on
+    push events, so the comment steps take the number from meta either way.
+  - The comment reports commit (short SHA), deploy time (UTC), build
+    duration (clock starts at `npm install`), dist size with the delta vs
+    the previous deploy of that preview (captured via `du -sb` before the
+    rsync --delete), changed-files count vs prod (rsync `--itemize-changes`
+    dry-run: `hf` hardlink lines are unchanged and excluded), rendered page
+    count, and the image-cache hit rate (variants restored from prod
+    `generated_images/` by `cp -al` vs the final dist count).
+  - Runner-host requirements: `jq` and `numfmt` (both present on
+    katelyn). API URLs build on the runner-provided `GITHUB_API_URL`,
+    which on this Forgejo already includes `/api/v1` — verified by a
+    throwaway probe workflow (run #276); don't append another api path.
 - **alula system Caddy:** global `on_demand_tls { ask
   http://127.0.0.1:9123 }` + a `*.dev.michalvanko.dev` vhost with
   `tls { on_demand }` proxying to `127.0.0.1:3080` (the already-tunneled

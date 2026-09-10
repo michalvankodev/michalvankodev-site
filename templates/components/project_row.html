@@ -1,0 +1,56 @@
+{# Archive row: quiet hairline row for non-featured projects — thumbnail
+   geometry from the skill rows, meta line above the name like the article
+   listing, technology list closing the row. #}
+<li class="border-b border-slate-200">
+  <section class="flex gap-4 py-5">
+    {% match project.metadata.cover_image %}
+    {% when Some with (source) %}
+    {% let picture = crate::picture_generator::picture_markup_generator::generate_picture_markup(source, 96, 96, project.metadata.title.as_str(), Some("h-12 w-12 md:h-16 md:w-16 rounded-xs"), false).unwrap_or("cover not found".to_string()) %}
+    <aside class="shrink-0 self-center">
+      <figure>
+        {{picture|safe}}
+      </figure>
+    </aside>
+    {% when None %}
+    <aside class="shrink-0 self-center">
+      <div class="h-12 w-12 md:h-16 md:w-16 rounded-xs bg-blue-100 flex justify-center items-center">
+        <span class="font-display text-blue-500 text-xl md:text-2xl">{{project.metadata.title|fmt("{:.1}")|lower}}</span>
+      </div>
+    </aside>
+    {% endmatch %}
+
+    <section class="min-w-0">
+      <header>
+        <div class="flex flex-wrap items-baseline gap-x-3 font-mono text-xs md:text-sm lowercase">
+          {% if let Some(year) = crate::projects::project_model::year_from_slug(project.slug) %}
+          <span class="text-slate-500">{{year}}</span>
+          <span class="text-slate-400">|</span>
+          {% endif %}
+          <span class="text-slate-500">
+            {{crate::projects::project_model::translate_classification(project.metadata.classification)|lower}}
+          </span>
+        </div>
+        <h3 class="text-lg font-semibold leading-snug mt-[0.2rem]">
+          {% match project.metadata.link %}
+          {% when Some with (href) %}
+          <a href="{{href}}" class="text-blue-950 no-underline hover:text-blue-500">
+            {{project.metadata.title}}
+          </a>
+          {% when None %}
+          <span class="text-blue-950">{{project.metadata.title}}</span>
+          {% endmatch %}
+        </h3>
+      </header>
+
+      <section class="text-base text-slate-700 leading-relaxed mt-1 line-clamp-2">
+        {{project.body|parse_markdown|safe}}
+      </section>
+
+      <footer class="mt-2 flex flex-wrap gap-x-3 font-mono text-xs md:text-sm text-pink-950 lowercase">
+        {% for tag in crate::projects::project_model::display_tags(project.metadata.classification, project.metadata.tags) %}
+        <span>#{{tag|lower}}</span>
+        {% endfor %}
+      </footer>
+    </section>
+  </section>
+</li>

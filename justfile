@@ -4,9 +4,17 @@ port := env_var_or_default('PORT', '3080')
 tailwind:
 	npx @tailwindcss/cli -i ./styles/input.css -o ./styles/output.css --watch
 
-# Tailwind one-shot build (used in CI)
+# Tailwind one-shot build (used in CI and prod export). Emits the fixed
+# styles/output.css (dev fallback) plus styles/output.<hash>.css which the
+# prod server (TARGET=PROD) references so browsers cache it immutable.
 tailwind_build:
+	#!/usr/bin/env bash
+	set -euxo pipefail
 	npx @tailwindcss/cli -i ./styles/input.css -o ./styles/output.css
+	hash=$(sha256sum styles/output.css | cut -c1-8)
+	cp styles/output.css "styles/output.$hash.css"
+	find styles -maxdepth 1 -name 'output.*.css' ! -name "output.$hash.css" -delete
+	echo "hashed stylesheet: styles/output.$hash.css"
 
 # svg sprite creation
 svgstore:
@@ -71,6 +79,14 @@ ssg: ssg_prewarm
 	- wget --no-convert-links -r -p -E -P dist --no-host-directories 127.0.0.1:{{port}}
 	- wget --no-convert-links --content-on-error -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/not-found
 	- wget --no-convert-links -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/showcase/m-logo-svg
+	# sitemap.xml is not linked from any crawled page (robots.txt's Sitemap:
+	# directive is not parsed by wget), so fetch it explicitly — same pattern
+	# as not-found above. The feeds are fine: every page's <head> links
+	# /feed.xml and /feed.json via <link rel="alternate">.
+	- wget --no-convert-links -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/sitemap.xml
+	# og-default.png is referenced only from <meta> tags — wget parses neither
+	# meta content nor og:image — so fetch it explicitly like the sitemap.
+	- wget --no-convert-links -p -E -P dist --no-host-directories 127.0.0.1:{{port}}/images/og-default.png
 	find generated_images/ -name "*_og*" -exec cp --parents {} dist/ \;
   
 # Preview server
