@@ -1,11 +1,16 @@
+<!-- Grid at every viewport (the thumbnail column never floats): the
+	article box then contains the whole item, so the rule below it spans
+	under the thumbnail too, and text never wraps around the image.
+	Thumbnail steps down to 6rem on phones so the text column keeps a
+	workable measure. -->
 <article
-	class="sm:grid sm:grid-cols-[max-content_1fr] sm:grid-rows-[max-content_1fr] sm:grid-flow-col sm:gap-4 md:gap-x-8 break-inside-avoid clear-both sm:clear-none"
+	class="grid grid-cols-[max-content_1fr] grid-rows-[max-content_1fr] grid-flow-col gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 break-inside-avoid"
 	style="view-transition-name:blog_post_preview_{{post.slug}};"
 >
-	<aside class="row-span-2 self-center float-start sm:float-none mr-3 mb-3 sm:ml-0 sm:mb-0">
+	<aside class="row-span-2 self-center">
 		{% match post.metadata.thumbnail %}
 		{% when Some with (orig_path) %}
-		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", None, false).unwrap_or("thumbnail not found".to_string())|safe }}
+		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", Some("w-24 h-auto sm:w-[180px]"), false).unwrap_or("thumbnail not found".to_string())|safe }}
 		{% when None %}
 		<div>
 			{% include "components/blog_post_default_thumbnail.html" %}

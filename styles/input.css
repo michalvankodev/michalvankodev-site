@@ -10,8 +10,9 @@
   --font-display: "Baloo 2", "Noto Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Noto Sans Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
-  /* Reading text: one fixed size, all viewports (rem — browser font-size
-   * preference respected; no viewport scaling for reading text) */
+  /* Reading text: one fixed size per viewport class (rem — browser
+   * font-size preference respected; no viewport scaling for reading
+   * text). Small screens step down below; see the :root override. */
   --text-read: 1.25rem;
   --text-read--line-height: 1.75;
 
@@ -68,6 +69,21 @@
   --color-purple-800: #36185C;
   --color-purple-900: #281244;
   --color-purple-950: #1A0C2D;
+}
+
+/* Reading text steps down on phones: 1.25rem measures only 4–6 words
+ * per line at 320–390 px, so small screens get the system reading size
+ * instead. Breakpoint step (not vw scaling) keeps the rem semantics —
+ * browser font-size preference still controls the size. Unlayered :root
+ * beats the @layer theme declaration above. */
+:root {
+  --text-read: 1.0625rem;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --text-read: 1.25rem;
+  }
 }
 
 /* Baloo 2 — display voice (variable 400–800); latin + latin-ext union

@@ -38,7 +38,9 @@
       {{group.year}}
       <span class="font-mono text-sm font-medium text-slate-400 ml-2">{{group.posts.len()}}</span>
     </h2>
-    <ul class="w-fit">
+    <!-- full width (no w-fit): each item's rule must span the whole
+         preview, thumbnail included -->
+    <ul>
      {% for post in group.posts %}
       <li>
         {% include "components/blog_post_preview.html" %}
