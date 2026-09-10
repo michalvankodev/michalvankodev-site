@@ -1,13 +1,13 @@
-<!-- Grid at every viewport (the thumbnail column never floats): the
-	article box then contains the whole item, so the rule below it spans
-	under the thumbnail too, and text never wraps around the image.
-	Thumbnail steps down to 6rem on phones so the text column keeps a
-	workable measure. -->
+<!-- Phones: thumbnail floats top-left and the text wraps beside it,
+	continuing underneath once it passes the image (flow-root on the
+	article keeps the item box containing the float, so the rule below
+	spans the whole preview). sm+: two-column grid, thumbnail centered
+	vertically in its own column. -->
 <article
-	class="grid grid-cols-[max-content_1fr] grid-rows-[max-content_1fr] grid-flow-col gap-x-4 gap-y-2 md:gap-x-8 md:gap-y-4 break-inside-avoid"
+	class="flow-root sm:grid sm:grid-cols-[max-content_1fr] sm:grid-rows-[max-content_1fr] sm:grid-flow-col sm:gap-x-4 md:gap-x-8 md:gap-y-4 break-inside-avoid"
 	style="view-transition-name:blog_post_preview_{{post.slug}};"
 >
-	<aside class="row-span-2 self-center">
+	<aside class="float-start mr-3 mb-2 sm:float-none sm:m-0 sm:row-span-2 sm:self-center">
 		{% match post.metadata.thumbnail %}
 		{% when Some with (orig_path) %}
 		{{ crate::picture_generator::picture_markup_generator::generate_picture_markup(orig_path, 180, 240, "Article thumbnail", Some("w-24 h-auto sm:w-[180px]"), false).unwrap_or("thumbnail not found".to_string())|safe }}
