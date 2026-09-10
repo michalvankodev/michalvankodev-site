@@ -4,7 +4,7 @@ use axum::response::{Html, IntoResponse};
 use axum::{extract::Path, http::StatusCode};
 use chrono::{DateTime, Utc};
 
-use crate::blog_posts::blog_post_model::{Segment, BLOG_POST_PATH};
+use crate::blog_posts::blog_post_model::{Cover, Segment, BLOG_POST_PATH};
 use crate::filters::{extract_headings, HeadingToc};
 use crate::post_utils::post_listing::get_post_list;
 use crate::post_utils::post_parser::ParseResult;
@@ -26,6 +26,9 @@ pub struct BlogPostTemplate {
     pub header_props: HeaderProps,
     pub slug: String,
     pub thumbnail: Option<String>,
+    /// Resolved article cover: explicit `cover` image, else `thumbnail`,
+    /// else none (when `cover: false`).
+    pub cover: Option<String>,
     pub description: String,
     pub toc: Vec<HeadingToc>,
     pub reading_time: u32,
@@ -56,6 +59,12 @@ pub async fn render_blog_post(
     let recommended_posts =
         get_recommended_posts(&segment, &post.metadata.tags, &post_id).await?;
 
+    let cover = match &post.metadata.cover {
+        Cover::Image(path) => Some(path.clone()),
+        Cover::Thumbnail => post.metadata.thumbnail.clone(),
+        Cover::Disabled => None,
+    };
+
     let header_props = match segment {
         Segment::Blog => HeaderProps::with_back_link(Link {
             href: "/blog".to_string(),
@@ -77,6 +86,7 @@ pub async fn render_blog_post(
             slug: post.slug,
             segment,
             thumbnail: post.metadata.thumbnail,
+            cover,
             description,
             toc,
             reading_time,
