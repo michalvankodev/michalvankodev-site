@@ -462,27 +462,20 @@ article a {
 }
 
 /* YouTube's current hover highlight (youtube.com 2025): a translucent red
- * halo spreading 1rem around the whole card. Drawn on an ::after that sits
- * exactly over the card (z-index -1 keeps it behind the white bg, so only
- * the surrounding halo shows); the spread animates 0 → 1rem on hover.
- * Shadow growth, no element motion — safe outside the motion gate. */
+ * halo spreading 1rem around the whole card. Outer box-shadows paint only
+ * outside the border-box, so the shadow lives directly on the card and
+ * follows its border-radius; the spread animates 0 → 1rem on hover.
+ * The transition list carries transition-colors' properties so the card's
+ * hover:border-blue-400 keeps fading (this unlayered rule overrides the
+ * utility). Shadow growth, no element motion — safe outside the motion
+ * gate. */
 .social-card-youtube {
-  position: relative;
+  box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.13);
+  transition: box-shadow 150ms ease-out, color 150ms cubic-bezier(0.4, 0, 0.2, 1), background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), border-color 150ms cubic-bezier(0.4, 0, 0.2, 1), text-decoration-color 150ms cubic-bezier(0.4, 0, 0.2, 1), fill 150ms cubic-bezier(0.4, 0, 0.2, 1), stroke 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.social-card-youtube::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 1px;
-  box-shadow: 0 0 0rem 0rem rgba(255, 0, 0, 0.13);
-  transition: box-shadow 150ms ease-out;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.social-card-youtube:hover::after {
-  box-shadow: 0 0 0rem 1rem rgba(255, 0, 0, 0.13);
+.social-card-youtube:hover {
+  box-shadow: 0 0 0 1rem rgba(255, 0, 0, 0.13);
 }
 
 .social-card-tiktok {
