@@ -450,12 +450,6 @@ article a {
     transition-delay: 75ms;
   }
 
-  .social-card-youtube:hover {
-    @apply rounded-none;
-    transform: scale(1.02);
-    transition-delay: 100ms;
-  }
-
   .social-card-instagram:hover {
     filter: brightness(84%);
     transition-delay: 100ms;
@@ -465,6 +459,30 @@ article a {
     animation: tiktok-glitch 1.5s infinite;
     animation-delay: 200ms;
   }
+}
+
+/* YouTube's current hover highlight (youtube.com 2025): a translucent red
+ * halo spreading 1rem around the whole card. Drawn on an ::after that sits
+ * exactly over the card (z-index -1 keeps it behind the white bg, so only
+ * the surrounding halo shows); the spread animates 0 → 1rem on hover.
+ * Shadow growth, no element motion — safe outside the motion gate. */
+.social-card-youtube {
+  position: relative;
+}
+
+.social-card-youtube::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 1px;
+  box-shadow: 0 0 0rem 0rem rgba(255, 0, 0, 0.13);
+  transition: box-shadow 150ms ease-out;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.social-card-youtube:hover::after {
+  box-shadow: 0 0 0rem 1rem rgba(255, 0, 0, 0.13);
 }
 
 .social-card-tiktok {
