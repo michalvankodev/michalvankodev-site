@@ -7,7 +7,7 @@
 {% block page_container %}
 
 <!-- Introduction -->
-<section id="about-me" class="max-w-read mx-auto px-5 pt-12">
+<section id="about-me" class="max-w-read mx-auto px-8 pt-12">
   <p class="kicker">~</p>
   <h1 class="font-display text-display-2 text-blue-950 lowercase mt-2">About me</h1>
   <p class="text-read text-slate-800 mt-6">
@@ -29,7 +29,7 @@
 {% let segment = "blog".to_string() %}
 {% for latest in featured_blog_posts %}
 {% if loop.first %}
-<section id="lead-story" class="w-fit mx-auto px-5 pt-14">
+<section id="lead-story" class="w-fit mx-auto px-8 pt-14">
   {{ m::section_header("", "latest blog", "/blog") }}
   <article class="md:flex md:items-start md:gap-10">
     {% match latest.metadata.thumbnail %}
@@ -62,7 +62,7 @@
 {% endfor %}
 
 <!-- ~/blog · the rest of the featured writing -->
-<section id="blog" class="w-fit mx-auto px-5 pt-14">
+<section id="blog" class="w-fit mx-auto px-8 pt-14">
   {{ m::section_header("", "featured", "/blog") }}
   <ul class="mt-1">
    {% for post in featured_blog_posts %}
@@ -78,7 +78,7 @@
 
 <!-- ~/broadcasts -->
 {% let segment = "broadcasts".to_string() %}
-<section id="broadcasts" class="w-fit mx-auto px-5 pt-14">
+<section id="broadcasts" class="w-fit mx-auto px-8 pt-14">
   {{ m::section_header("", "broadcasts", "/broadcasts") }}
   <ul class="mt-1">
     {% for post in featured_broadcasts %}
@@ -91,7 +91,7 @@
 </section>
 
 <!-- ~/showcase -->
-<section id="showcase-section" class="max-w-image mx-auto px-5 pt-14">
+<section id="showcase-section" class="max-w-image mx-auto px-8 pt-14">
   {{ m::section_header("", "showcase", "/showcase") }}
   <ul class="mt-4 divide-y divide-slate-200">
    {% for project in featured_projects %}
@@ -103,7 +103,7 @@
 </section>
 
 <!-- elsewhere -->
-<section id="socials" class="max-w-image mx-auto px-5 pt-14 pb-4">
+<section id="socials" class="max-w-image mx-auto px-8 pt-14 pb-4">
   {{ m::section_header("", "social", "") }}
   <div class="mt-6">
     {% include "sections/social.html" %}
