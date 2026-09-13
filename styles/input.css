@@ -242,24 +242,27 @@
 }
 
 .article-body {
+  /* No horizontal padding here: the container (px-5) owns the viewport
+   * gutter and the 2xl grid column is exactly max-w-read — per-block px-4
+   * double-guttered mobile and broke title/body alignment on desktop. */
   h1 {
-    @apply px-4 text-display-3 mb-3 mt-6 max-w-read mx-auto;
+    @apply text-display-3 mb-3 mt-6 max-w-read mx-auto;
   }
 
   h2 {
-    @apply px-4 text-2xl font-semibold mb-3 mt-6 max-w-read mx-auto md:mb-4 md:mt-10;
+    @apply text-2xl font-semibold mb-3 mt-6 max-w-read mx-auto md:mb-4 md:mt-10;
   }
 
   h3 {
-    @apply px-4 text-xl font-semibold mb-2 mt-5 max-w-read mx-auto md:mt-8;
+    @apply text-xl font-semibold mb-2 mt-5 max-w-read mx-auto md:mt-8;
   }
 
   h4 {
-    @apply px-4 text-lg font-semibold mb-2 mt-4 max-w-read mx-auto;
+    @apply text-lg font-semibold mb-2 mt-4 max-w-read mx-auto;
   }
 
   p {
-    @apply px-4 my-2 text-slate-950 text-justify text-read mx-auto max-w-read md:my-4;
+    @apply my-2 text-slate-950 text-justify text-read mx-auto max-w-read md:my-4;
   }
   /* Chapter opening: regular typographic drop cap (display voice) on the
    * first paragraph — float-based, bulletproof everywhere */
