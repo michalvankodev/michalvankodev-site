@@ -192,7 +192,7 @@ and letting `mx-auto` split the leftover into a phantom 2.5vw/side margin.
 - Cover side plate (~≤500px, chapter-intro style) sits beside the article
   opening, left of measure; TOC rail in the right margin. Never a full-width
   frontispiece.
-- Page containers: `px-5` gutter on the shell; content blocks carry no
+- Page containers: `px-2` gutter on the shell; content blocks carry no
   horizontal padding of their own (a per-block `px-4` era is gone — it
   double-guttered mobile and broke title/body alignment).
 
