@@ -189,6 +189,14 @@
   }
 }
 
+/* Page gutter: the ONE horizontal padding for page containers — shells,
+ * header nav, footer, homepage sections, article header/body. Never
+ * scatter px-* on containers: change it here and every page stays
+ * aligned (mobile misalignment taught us this the hard way). */
+.page-gutter {
+  @apply px-2;
+}
+
 .kicker {
   font-family: var(--font-mono);
   font-size: 0.8125rem;
