@@ -178,15 +178,23 @@ rule for every page. Same discipline everywhere.
 |---|---|---|
 | `max-w-note` | `36rem` | Narrow note width |
 | `max-w-read` | `42rem` | **Reading measure** — article content (≈ 65–75 cpl) |
-| `max-w-image` | `min(50rem, 95vw)` | Figures, tables, iframes — the wide span |
+| `max-w-shell` | `50rem` | **Page containers** — header, footer, page shells (flat, no vw term) |
+| `max-w-image` | `min(50rem, 95vw)` | Media only — figures, tables, iframes (95vw keeps breakout media off screen edges) |
 | `max-w-maxindex` | `100rem` | Homepage & listing grids |
+
+Containers must use `max-w-shell`, never `max-w-image`: the 95vw term is
+inert for media (media applies it only at lg+ where 50rem < 95vw) but
+active on mobile for containers, shrinking every shell below the viewport
+and letting `mx-auto` split the leftover into a phantom 2.5vw/side margin.
 
 - TOC rail lives **outside** `max-w-image`, only on viewports wide enough to
   fit both (never overlaps wide images; breakpoint likely 2xl+).
 - Cover side plate (~≤500px, chapter-intro style) sits beside the article
   opening, left of measure; TOC rail in the right margin. Never a full-width
   frontispiece.
-- Gutters `m-5`/`mx-5` on sections; content `px-4` on mobile.
+- Page containers: `px-5` gutter on the shell; content blocks carry no
+  horizontal padding of their own (a per-block `px-4` era is gone — it
+  double-guttered mobile and broke title/body alignment).
 
 ## Lists & archives
 

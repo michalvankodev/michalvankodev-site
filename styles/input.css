@@ -30,6 +30,11 @@
 
   --spacing-note: 36rem;
   --spacing-read: 42rem;
+  /* Shell = page containers only (header, footer, page shells). Flat 50rem:
+   * the old practice of containers borrowing max-w-image (min(50rem,95vw))
+   * shrank every shell below the viewport on mobile and let its mx-auto
+   * split the leftover into a phantom 2.5vw/side margin. */
+  --spacing-shell: 50rem;
   --spacing-image: min(50rem, 95vw);
   --spacing-maxindex: 100rem;
 
