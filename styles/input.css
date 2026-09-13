@@ -194,7 +194,7 @@
  * scatter px-* on containers: change it here and every page stays
  * aligned (mobile misalignment taught us this the hard way). */
 .page-gutter {
-  @apply px-2;
+  @apply px-4;
 }
 
 .kicker {
