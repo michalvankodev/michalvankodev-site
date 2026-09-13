@@ -198,14 +198,11 @@ internet → alula (public entry host)
   katelyn) is stable across katelyn's LAN IP drift. Do NOT open extra
   Forgejo ports on katelyn's LAN firewall — ssh is the only LAN service it
   exposes
-- Git remotes: `katelyn` is the ONLY remote — the self-hosted Forgejo via
-  the public tunnel host (exact URL: `git remote -v`). There is no `origin`
-  (the old `origin` alias pointed at a dead Gitea hostname and was removed
-  2026-09-13; GitHub was never the real remote). All branches track
-  `katelyn/*`; repo-local config makes that the default for new work too:
-  `checkout.defaultRemote = katelyn` + `push.autoSetupRemote = true` (plain
-  `git push` on a fresh branch creates it on katelyn and sets upstream).
-  Never re-add `origin`
+- Git remotes: `katelyn` (self-hosted Forgejo via the public tunnel host,
+  exact URL: `git remote -v`) is the default — all pushes and PRs go there;
+  repo config (`checkout.defaultRemote`, `push.autoSetupRemote`) makes plain
+  `git push` just work. `origin` (GitHub) also exists but is unused — do not
+  push, fetch, or open PRs against it
 - `fj` (forgejo-cli) is installed at `~/.local/bin/fj` (from Codeberg
   `forgejo-contrib/forgejo-cli` releases), token-authenticated against the
   instance (token fed via stdin to `fj auth add-token`; keys live in
