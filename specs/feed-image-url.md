@@ -137,9 +137,12 @@ landed surfaced a second wave — all addressed in `src/feed.rs` on this branch:
   enclosures. Fixed: real byte size via `tokio::fs::metadata` on the
   `static/`-relative path; when the file can't be stat'ed (external URL,
   missing file) the enclosure is dropped with a `warn!` — there is no honest
-  positive integer to emit. First victim of the new log line: the accidental
-  draft `_posts/blog/dev-2019-08-09-ide-to copy.md` (published with a 404
-  thumbnail) — deleted.
+  positive integer to emit. First catch of the new log line:
+  `_posts/blog/dev-2019-08-09-ide-to copy.md` — a **development/test
+  article that is intentionally published** (kept!) — referenced a 404-ing
+  thumbnail (`/images/uploads/screenshot.gif`); its `thumbnail:` line is
+  commented out (mirroring `dev-2019-08-09-ide-to.md`), so the article stays
+  without the dead reference.
 - **Remaining `ContainsRelRef` ×25:** all fragment-only `href="#anchor"` TOC
   links (post heading anchors) plus two empty `href=""` from `[text]()`
   markdown typos in one post. Fixed: `absolutize_html` now takes the post's
