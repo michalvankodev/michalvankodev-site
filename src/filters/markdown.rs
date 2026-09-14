@@ -258,10 +258,6 @@ pub fn parse_markdown<T: fmt::Display>(
     let mut heading_ended: Option<bool> = None;
 
     let mds = markdown.to_string();
-    // External-URL images emit a bare <img …> (no figure/figcaption); while
-    // inside one, the alt-text Text events and the End(Image) closer must
-    // be suppressed — the title already lives in the alt attribute.
-    let mut in_bare_img = false;
     let parser = Parser::new_ext(&mds, options).map(|event| match event {
         /*
         Parsing images considers `alt` attribute as inner `Text` event
@@ -274,23 +270,12 @@ pub fn parse_markdown<T: fmt::Display>(
             title,
             id: _,
         }) => {
-            if !dest_url.starts_with("/") {
-                in_bare_img = true;
-                return Event::Html(
-                    formatdoc!(
-                        r#"<img
-                          alt="{alt}"
-                          src="{src}"
-                        />"#,
-                        alt = escape_attr(&title),
-                        src = escape_attr(&dest_url),
-                    )
-                    .into(),
-                );
-            }
-
-            // Handle SVG files - don't try to get dimensions (image crate doesn't support SVG)
-            if dest_url.to_lowercase().ends_with(".svg") {
+            // External URLs and SVG files: no local file to probe for
+            // dimensions (image crate can't read SVGs, external URLs aren't
+            // on disk) — render the simple figure directly. The alt text
+            // then flows into the <figcaption> via the inner Text events,
+            // exactly like local raster images: image + visible caption.
+            if !dest_url.starts_with("/") || dest_url.to_lowercase().ends_with(".svg") {
                 return Event::Html(
                     formatdoc!(
                         r#"<figure>
@@ -357,9 +342,6 @@ pub fn parse_markdown<T: fmt::Display>(
             )
         }
         Event::Text(text) => match &text_kind {
-            // Alt text of an external bare-<img> image: already in the alt
-            // attribute — emitting it would duplicate the text visibly.
-            _ if in_bare_img => Event::Html("".into()),
             TextKind::Code(lang) => {
                 // TODO Check https://github.com/trishume/syntect/pull/535 for typescript support
                 let lang = if ["ts".to_string(), "typescript".to_string()].contains(lang) {
@@ -414,16 +396,9 @@ pub fn parse_markdown<T: fmt::Display>(
             Event::Html(format!("<{level} ").into())
         }
         Event::Start(_) => event,
-        Event::End(TagEnd::Image) => {
-            // Match the opener: bare external <img> is complete (nothing to
-            // close); local images close the figcaption/figure they opened.
-            if in_bare_img {
-                in_bare_img = false;
-                Event::Html("".into())
-            } else {
-                Event::Html("</figcaption></figure>".into())
-            }
-        }
+        // Every image path (external, svg, local raster) opens a figure —
+        // so the closer is unconditional again.
+        Event::End(TagEnd::Image) => Event::Html("</figcaption></figure>".into()),
         Event::End(TagEnd::CodeBlock) => {
             // Fenced blocks were re-wrapped into .code-card (see Start above);
             // indented blocks still use pulldown's default <pre><code>.
@@ -531,34 +506,44 @@ mod tests {
     }
 
     #[test]
-    fn external_image_renders_bare_img_without_figure_junk() {
-        // External URLs don't get the figure treatment — and crucially must
-        // not emit the figcaption/figure *closers* (pre-existing mismatch)
-        // or leak the alt text as visible duplicate text.
+    fn external_image_gets_a_figure_with_visible_caption() {
+        // Author intent: external images show the alt text as a visible
+        // caption, same as local images (title in the alt attribute, alt
+        // text inside <figcaption>). The pre-S8 workaround emitted the
+        // caption text after a bare <img> with figure *closers* only —
+        // now the opener matches (F13).
         let html = render(
             "![Preview of headphones](https://cdn.example.net/x.jpeg 'Preview of headphones')",
         );
-        assert!(html.contains("<img"), "{html}");
-        assert!(html.contains(r#"src="https://cdn.example.net/x.jpeg""#), "{html}");
-        assert!(!html.contains("figcaption"), "no figcaption closer without a figure: {html}");
-        assert!(!html.contains("</figure>"), "{html}");
-        assert_eq!(
-            html.matches("Preview of headphones").count(),
-            1,
-            "alt text must appear exactly once (the attribute): {html}"
+        assert!(html.contains("<figure"), "external images open a figure: {html}");
+        assert!(
+            html.contains(r#"src="https://cdn.example.net/x.jpeg""#),
+            "{html}"
         );
+        assert!(
+            html.contains(r#"alt="Preview of headphones""#),
+            "title renders as the alt attribute: {html}"
+        );
+        assert!(
+            html.contains("<figcaption>"),
+            "caption text is visible in a figcaption: {html}"
+        );
+        assert!(html.contains("</figcaption></figure>"), "{html}");
         assert!(!paragraph_nests_block(&html));
     }
 
     #[test]
-    fn external_image_between_text_keeps_one_paragraph() {
+    fn external_image_between_text_splits_the_paragraph() {
+        // The external image is a block-level figure now — same gating as
+        // local images: leading text keeps its <p>, trailing text reopens one.
         let html = render(
             "see [the shop](https://example.com) and ![pic](https://cdn.example.net/y.png) here",
         );
         assert!(html.contains("<a href=\"https://example.com\">the shop</a>"), "{html}");
-        assert!(html.contains("<img"), "{html}");
-        assert_eq!(html.matches("<p>").count(), 1, "{html}");
-        assert_eq!(html.matches("</p>").count(), 1, "{html}");
+        assert!(html.contains("<figure"), "{html}");
+        assert!(!paragraph_nests_block(&html), "{html}");
+        assert_eq!(html.matches("<p>").count(), html.matches("</p>").count());
+        assert!(html.matches("<p>").count() >= 1, "{html}");
     }
 
     #[test]
