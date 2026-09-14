@@ -6,8 +6,13 @@ feeds verified root-relative-free locally** (2026-09-11: `feed.json` +
 chain in [Appendix A](#appendix-a--proof-why-relative-urls-are-unusable-in-feed-content).
 Split out of PR #13 (redesign 08 — syndication & perf) review
 for a separate session.
+**2026-09-14 follow-up round on the same PR** (validator re-run against the
+preview): fragment-only `#anchor` hrefs absolutized against the post URL,
+enclosure `length` byte sizes, `atom:link rel=self`, `webMaster` real name,
+channel `pubDate` = newest item — see
+[Validator follow-up round](#validator-follow-up-round-2026-09-14-same-pr).
 Author: michalvanko + agent
-Last updated: 2026-09-11
+Last updated: 2026-09-14
 
 ## Problem
 
@@ -122,20 +127,56 @@ Extend the feed tests to assert, for every item of both feeds:
 - a known code-sample fixture is byte-identical (guards against text-content
   rewriting)
 
-## Related open findings from the PR #13 review + W3C validator run
+## Validator follow-up round (2026-09-14, same PR)
 
-- `/feed.json` + `/sitemap.xml` never land in `dist/` (crawler never sees
-  them) — preview 404s prove it; needs its own fix (discovery `<link>` in
-  `base.html` and/or explicit curl into `dist/` in `just ssg`).
+Re-running the W3C validator against the PR preview after the absolutization
+landed surfaced a second wave — all addressed in `src/feed.rs` on this branch:
+
+- **Enclosure `length` (validator ERROR):** the `rss` crate always emits the
+  attribute and `render_rss_feed` never set it → `length=""` on all 20
+  enclosures. Fixed: real byte size via `tokio::fs::metadata` on the
+  `static/`-relative path; when the file can't be stat'ed (external URL,
+  missing file) the enclosure is dropped with a `warn!` — there is no honest
+  positive integer to emit. First victim of the new log line: the accidental
+  draft `_posts/blog/dev-2019-08-09-ide-to copy.md` (published with a 404
+  thumbnail) — deleted.
+- **Remaining `ContainsRelRef` ×25:** all fragment-only `href="#anchor"` TOC
+  links (post heading anchors) plus two empty `href=""` from `[text]()`
+  markdown typos in one post. Fixed: `absolutize_html` now takes the post's
+  canonical URL and rewrites `#anchor` → `<post-url>#anchor` (readers jump to
+  the post, not to themselves); the two typos got real URLs
+  (`_posts/blog/2022-05-07-treasure-hunt-weekly-18-2022.md`). The feed-level
+  audit now also fails on fragment-only and empty hrefs — mirroring the
+  validator.
+- **`MissingAtomSelfLink`:** channel now carries
+  `atom:link rel="self"` via the rss crate's `atom` feature.
+- **`MissingRealName`:** `webMaster` is now `email (Michal Vanko)` per the
+  RSS Profile.
+- **Channel `pubDate` bug:** `feed_items.last()` on a newest-first list set
+  the channel pubDate to the *oldest* post (2019). Now `.first()` — the
+  newest item.
+- Byte-identity hardening: `absolutize_srcset` returns the input unchanged
+  when no candidate is root-relative (guards against separator
+  re-serialization of already-absolute srcsets).
+
+Still open after this round (separate work, own decisions):
+
+- `/feed.json` + `/sitemap.xml` in `dist/` — **resolved** (contrary to the
+  earlier note): `base.html` links both feeds via `<link rel="alternate">`
+  and the wget crawl follows them; `sitemap.xml` is fetched explicitly in
+  `just ssg`.
+- `content:encoded` "Invalid HTML: unexpected end tag (p)" — root cause is
+  upstream of the feed: `parse_markdown` emits `<figure>` (and `.code-card`
+  divs) *inside* `<p>` for inline images; HTML5 parsers implicitly close the
+  paragraph at the block element, making pulldown's later `</p>` stray. Also
+  affects the website itself (browsers cope). Fixing it means restructuring
+  the image/codeblock event handling in `src/filters/markdown.rs`.
+- `iframe` in `content:encoded` (Twitch embeds, `SecurityRisk` ×3) — policy
+  decision: keep (readers strip them anyway) or replace with a link in feed
+  content only.
 - SVG `og:image` / `twitter:image` are unusable for social cards.
-- Enclosure `length` is `0` — invalid per the RSS Profile ("must be a positive
-  integer"); the `rss` crate requires an explicit length and
-  `render_rss_feed` never sets one.
-- `description` excerpts truncate mid-element → validator warns "Invalid HTML:
-  unexpected end tag (p)" (`truncate_md` cuts without closing tags).
-- A post embeds an `<iframe>` in `content:encoded` (validator `SecurityRisk`
-  warning) — decide: allow it (many readers strip iframes) or remove it.
-- Channel is missing `atom:link rel="self"` (`MissingAtomSelfLink` warning).
+- A post title containing `&`/`<` triggers the validator's `CharacterData`
+  hex-reference style warning (cosmetic).
 
 ## Appendix A — Proof: why relative URLs are unusable in feed content
 

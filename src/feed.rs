@@ -3,8 +3,9 @@ use axum::http::{header, StatusCode};
 use axum::response::IntoResponse;
 use chrono::{DateTime, Utc};
 use lol_html::{element, errors::RewritingError, rewrite_str, RewriteStrSettings};
-use rss::{ChannelBuilder, EnclosureBuilder, GuidBuilder, Item, ItemBuilder};
-use tracing::error;
+use rss::extension::atom::{AtomExtension, Link as AtomLink};
+use rss::{Channel, ChannelBuilder, EnclosureBuilder, GuidBuilder, ItemBuilder};
+use tracing::{error, warn};
 
 use crate::blog_posts::blog_post_model::{BlogPostMetadata, Segment, BLOG_POST_PATH};
 use crate::filters::{parse_markdown, truncate_md};
@@ -36,9 +37,30 @@ fn absolutize_url(url: &str) -> Option<String> {
     }
 }
 
+/// Absolutize a fragment-only reference (`#heading`) against the post's
+/// canonical URL. In a feed reader `href="#x"` resolves against the
+/// *reader's* document (W3C validator: ContainsRelRef) and jumps nowhere
+/// useful; pointing it at the post makes the link work everywhere.
+fn absolutize_fragment(href: &str, post_url: &str) -> Option<String> {
+    if href.starts_with('#') && href.len() > 1 {
+        Some(format!("{post_url}{href}"))
+    } else {
+        None
+    }
+}
+
 /// Absolutize every URL candidate in a `srcset` value, keeping resolution
 /// descriptors (`1x`, `640w`) intact. Candidates are comma-separated.
+/// Returns the input unchanged (byte-identical) when no candidate is
+/// root-relative.
 fn absolutize_srcset(srcset: &str) -> String {
+    let needs_rewrite = srcset.split(',').any(|candidate| {
+        let url = candidate.trim().split_whitespace().next().unwrap_or("");
+        is_root_relative(url)
+    });
+    if !needs_rewrite {
+        return srcset.to_string();
+    }
     srcset
         .split(',')
         .map(|candidate| {
@@ -57,17 +79,22 @@ fn absolutize_srcset(srcset: &str) -> String {
 
 /// Make all URLs in rendered post HTML absolute. Feed readers render this
 /// markup inside their own document context, so root-relative URLs would
-/// resolve against the reader's origin (JSON Feed 1.1 and the RSS Best
-/// Practices Profile both require absolute URLs in feed content).
+/// resolve against the reader's origin (the RSS Best Practices Profile
+/// requires absolute URLs in feed content).
+///
+/// `post_url` is the post's canonical absolute URL — fragment-only `#anchor`
+/// references (post TOC links) are rewritten against it.
 ///
 /// The rewrite is attribute-aware (real element attributes only, never text
 /// content), so `href="/…"`-style snippets displayed inside code samples are
 /// safe by construction. See specs/feed-image-url.md.
-fn absolutize_html(html: &str) -> String {
+fn absolutize_html(html: &str, post_url: &str) -> String {
     let settings = RewriteStrSettings::new()
         .append_element_content_handler(element!("a[href]", |el| {
             if let Some(href) = el.get_attribute("href") {
-                if let Some(abs) = absolutize_url(&href) {
+                let rewritten = absolutize_url(&href)
+                    .or_else(|| absolutize_fragment(&href, post_url));
+                if let Some(abs) = rewritten {
                     el.set_attribute("href", &abs)?;
                 }
             }
@@ -83,7 +110,12 @@ fn absolutize_html(html: &str) -> String {
         }))
         .append_element_content_handler(element!("img[srcset], source[srcset]", |el| {
             if let Some(srcset) = el.get_attribute("srcset") {
-                el.set_attribute("srcset", &absolutize_srcset(&srcset))?;
+                let absolutized = absolutize_srcset(&srcset);
+                // Only touch the attribute when something actually changed —
+                // already-absolute srcsets pass through byte-identical.
+                if absolutized != srcset {
+                    el.set_attribute("srcset", &absolutized)?;
+                }
             }
             Ok(())
         }))
@@ -150,6 +182,7 @@ pub async fn build_feed_items() -> Result<Vec<FeedItem>, StatusCode> {
                 .find(|segment| matches!(segment, Segment::Blog | Segment::Broadcasts))
                 .cloned()
                 .unwrap_or(Segment::Blog);
+            let url = post_url(&segment, &post.slug);
             // Syndicated HTML must carry absolute URLs — feed readers render
             // it against their own origin. Single choke point for both
             // description and full content (see specs/feed-image-url.md).
@@ -161,13 +194,13 @@ pub async fn build_feed_items() -> Result<Vec<FeedItem>, StatusCode> {
                         parse_markdown::default().execute(&truncated, &EmptyValues)
                     })
                     .unwrap_or("Can't parse post body".to_string())
-            }));
+            }), &url);
             let content_html = absolutize_html(&parse_markdown::default()
                 .execute(&post.body, &EmptyValues)
-                .unwrap_or("Can't process full post body".to_string()));
+                .unwrap_or("Can't process full post body".to_string()), &url);
             FeedItem {
                 title: post.metadata.title,
-                url: post_url(&segment, &post.slug),
+                url,
                 description_html,
                 content_html,
                 date: post.metadata.date,
@@ -185,27 +218,63 @@ pub async fn build_feed_items() -> Result<Vec<FeedItem>, StatusCode> {
     Ok(items)
 }
 
+/// Byte size of a site-local asset, for the RSS enclosure `length`
+/// attribute (the RSS Best Practices Profile requires a positive integer —
+/// the W3C validator errors on the empty value the builder defaults to).
+/// Returns `None` for external URLs or unreadable files; the caller then
+/// skips the enclosure rather than emit an invalid length.
+async fn local_file_length(url: &str) -> Option<u64> {
+    let path = url.strip_prefix(SITE_URL)?;
+    let length = tokio::fs::metadata(format!("static{path}")).await.ok()?.len();
+    (length > 0).then_some(length)
+}
+
 pub async fn render_rss_feed() -> Result<impl IntoResponse, StatusCode> {
     let feed_items = build_feed_items().await?;
+    let response = build_rss_channel(&feed_items).await.to_string();
+    Ok(([(header::CONTENT_TYPE, "application/xml")], response))
+}
 
+/// Assemble the RSS channel from shared feed items. Split out of the
+/// handler so tests can audit the serialized feed (channel metadata,
+/// enclosures, atom:link) without an HTTP round-trip.
+async fn build_rss_channel(feed_items: &[FeedItem]) -> Channel {
     let last_build_date = Utc::now().to_rfc2822();
+    // Channel pubDate reflects the newest content in the feed (items are
+    // sorted newest-first), not the oldest.
     let publish_date = feed_items
-        .last()
+        .first()
         .map_or_else(|| last_build_date.clone(), |item| item.date.to_rfc2822());
 
-    let post_items = feed_items
-        .iter()
-        .map(|item| {
-            let enclosure = item.image.as_ref().map(|url| {
-                let mime_type = mime_guess::from_path(url)
-                    .first()
-                    .map(|mime| mime.to_string())
-                    .unwrap_or("image".to_string());
-                EnclosureBuilder::default()
-                    .url(url.clone())
-                    .mime_type(mime_type)
-                    .build()
-            });
+    let mut post_items = Vec::with_capacity(feed_items.len());
+    for item in feed_items {
+        let enclosure = item.image.as_ref().and_then(|url| {
+            let mime_type = mime_guess::from_path(url)
+                .first()
+                .map(|mime| mime.to_string())
+                .unwrap_or("image".to_string());
+            Some((url, mime_type))
+        });
+        let enclosure = match enclosure {
+            // The RSS Profile mandates a positive-integer length; when we
+            // can't stat the file there is no honest value, so drop the
+            // enclosure (the thumbnail survives in JSON Feed and og:image).
+            Some((url, mime_type)) => match local_file_length(url).await {
+                Some(length) => Some(
+                    EnclosureBuilder::default()
+                        .url(url.clone())
+                        .length(length.to_string())
+                        .mime_type(mime_type)
+                        .build(),
+                ),
+                None => {
+                    warn!(url, "enclosure dropped: cannot stat file for length");
+                    None
+                }
+            },
+            None => None,
+        };
+        post_items.push(
             ItemBuilder::default()
                 .title(Some(item.title.clone()))
                 .link(Some(item.url.clone()))
@@ -216,23 +285,28 @@ pub async fn render_rss_feed() -> Result<impl IntoResponse, StatusCode> {
                     GuidBuilder::default().value(item.url.clone()).build(),
                 ))
                 .pub_date(Some(item.date.to_rfc2822()))
-                .build()
-        })
-        .collect::<Vec<Item>>();
+                .build(),
+        );
+    }
 
-    let feed_builder = ChannelBuilder::default()
+    ChannelBuilder::default()
         .title("michalvanko.dev latest posts".to_string())
         .link(SITE_URL.to_string())
         .description("Latest posts published on michalvanko.dev blog site".to_string())
         .language(Some("en".to_string()))
-        .webmaster(Some("michalvankosk@gmail.com".to_string()))
+        .webmaster(Some("michalvankosk@gmail.com (Michal Vanko)".to_string()))
         .pub_date(Some(publish_date))
         .last_build_date(Some(last_build_date))
+        .atom_ext(AtomExtension {
+            links: vec![AtomLink {
+                href: format!("{SITE_URL}/feed.xml"),
+                rel: "self".to_string(),
+                mime_type: Some("application/rss+xml".to_string()),
+                ..AtomLink::default()
+            }],
+        })
         .items(post_items)
-        .build();
-
-    let response = feed_builder.to_string();
-    Ok(([(header::CONTENT_TYPE, "application/xml")], response))
+        .build()
 }
 
 pub async fn render_json_feed() -> Result<impl IntoResponse, StatusCode> {
@@ -281,6 +355,7 @@ fn build_json_feed_body(feed_items: &[FeedItem]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::str::FromStr;
 
     /// RSS full-text audit: every feed item carries full parsed body HTML and
     /// absolute URLs only (links, guids, enclosures).
@@ -348,8 +423,9 @@ mod tests {
 
     // ---------- absolutization (specs/feed-image-url.md test plan) ----------
 
-    /// Collect root-relative URL attribute values from an HTML string — the
-    /// exact property the W3C feed validator flags (`ContainsRelRef`).
+    /// Collect root-relative or fragment-only URL attribute values from an
+    /// HTML string — the exact properties the W3C feed validator flags
+    /// (`ContainsRelRef`; fragments and empty hrefs count as relative too).
     /// Text content is not scanned: code samples legitimately contain
     /// `href="/…"`-shaped *text* (inline code spans keep raw quotes), which
     /// is not an attribute — so `<pre>`/`<code>` contents are stripped first,
@@ -370,7 +446,9 @@ mod tests {
                             hits.push(format!("{attr}: {url}"));
                         }
                     }
-                } else if is_root_relative(value) {
+                } else if is_root_relative(value)
+                    || (attr == "href" && (value.starts_with('#') || value.is_empty()))
+                {
                     hits.push(format!("{attr}: {value}"));
                 }
                 rest = after;
@@ -406,6 +484,7 @@ mod tests {
     fn absolutizes_root_relative_href_and_src() {
         let out = absolutize_html(
             r#"<p><a href="/blog/x">post</a> and <img src="/images/uploads/pi-logo.svg" alt="logo"></p>"#,
+            "https://michalvanko.dev/blog/x",
         );
         assert_eq!(
             out,
@@ -414,10 +493,25 @@ mod tests {
     }
 
     #[test]
+    fn fragment_hrefs_resolve_against_post_url() {
+        // Post TOC links (`[text](#heading)`) render as href="#heading" —
+        // on the site they jump within the page, in a reader they resolve
+        // against the reader's document. They must point at the post.
+        let out = absolutize_html(
+            r##"<p><a href="#meet-pi">Meet Pi</a> and <a href="/blog">home</a></p>"##,
+            "https://michalvanko.dev/blog/2026-04-01-week-with-my-pi-agent",
+        );
+        assert_eq!(
+            out,
+            r##"<p><a href="https://michalvanko.dev/blog/2026-04-01-week-with-my-pi-agent#meet-pi">Meet Pi</a> and <a href="https://michalvanko.dev/blog">home</a></p>"##
+        );
+    }
+
+    #[test]
     fn absolutizes_srcset_candidates_and_keeps_descriptors() {
         // Shape mirrors picture_markup_generator output.
         let input = r#"<picture><source srcset="/generated_images/a_300x200.jpg 1x, /generated_images/a_600x400.jpg 2x" type="image/jpeg"><img src="/generated_images/a_600x400.jpg" alt="a"></picture>"#;
-        let out = absolutize_html(input);
+        let out = absolutize_html(input, "https://michalvanko.dev/blog/x");
         assert!(
             out.contains("srcset=\"https://michalvanko.dev/generated_images/a_300x200.jpg 1x, https://michalvanko.dev/generated_images/a_600x400.jpg 2x\""),
             "srcset candidates absolutized, descriptors intact: {out}"
@@ -433,10 +527,19 @@ mod tests {
     fn absolute_and_protocol_relative_urls_pass_through_byte_identical() {
         let input = r#"<p>See <a href="https://example.com/x?y=1">this</a> and <img src="https://cdn.example.org/i.png" srcset="https://cdn.example.org/i@2x.png 2x"> plus <a href="//other.example/y">protocol-relative</a>.</p>"#;
         assert_eq!(
-            absolutize_html(input),
+            absolutize_html(input, "https://michalvanko.dev/blog/x"),
             input,
             "already-absolute URLs must pass through byte-identical"
         );
+    }
+
+    #[test]
+    fn multi_candidate_absolute_srcset_is_byte_identical() {
+        // Guards the unconditional-set_attribute regression: an
+        // already-absolute multi-candidate srcset must not be re-serialized
+        // (separator/descriptor normalization would change bytes).
+        let input = r#"<img src="https://cdn.example.org/i.png" srcset="https://cdn.example.org/a.png 1x,https://cdn.example.org/b.png 2x">"#;
+        assert_eq!(absolutize_html(input, "https://michalvanko.dev/blog/x"), input);
     }
 
     #[test]
@@ -447,7 +550,7 @@ mod tests {
         // attribute-aware rewrite must not change a single byte.
         let input = r#"<pre style="background-color:#2b303b;"><code>&lt;a href=&quot;/about&quot;&gt;about&lt;/a&gt; — and src=&quot;/images/x.png&quot;</code></pre>"#;
         assert_eq!(
-            absolutize_html(input),
+            absolutize_html(input, "https://michalvanko.dev/blog/x"),
             input,
             "code samples must survive the rewrite untouched"
         );
@@ -459,7 +562,7 @@ mod tests {
         let html = parse_markdown::default()
             .execute(md, &EmptyValues)
             .expect("markdown parses");
-        let out = absolutize_html(&html);
+        let out = absolutize_html(&html, "https://michalvanko.dev/blog/x");
         assert_eq!(
             root_relative_urls(&out),
             Vec::<String>::new(),
@@ -506,5 +609,59 @@ mod tests {
                 }
             }
         }
+    }
+
+    /// RSS channel audit: the properties the W3C feed validator checks —
+    /// atom:link rel=self, webMaster with a real name, channel pubDate =
+    /// newest item, and every enclosure carrying a positive-integer length.
+    #[tokio::test]
+    async fn rss_channel_validates_against_w3c_findings() {
+        let items = build_feed_items().await.expect("feed items built");
+        let channel = build_rss_channel(&items).await;
+
+        let atom_links = channel
+            .atom_ext()
+            .expect("atom extension present")
+            .links();
+        let self_link = atom_links
+            .iter()
+            .find(|l| l.rel == "self")
+            .expect("atom:link rel=self present");
+        assert_eq!(self_link.href, format!("{SITE_URL}/feed.xml"));
+        assert_eq!(self_link.mime_type.as_deref(), Some("application/rss+xml"));
+
+        assert_eq!(
+            channel.webmaster(),
+            Some("michalvankosk@gmail.com (Michal Vanko)"),
+            "webMaster needs email (Real Name) per the RSS Profile"
+        );
+
+        assert!(!items.is_empty());
+        let newest = items[0].date.to_rfc2822();
+        assert_eq!(
+            channel.pub_date(),
+            Some(newest.as_str()),
+            "channel pubDate must be the newest item's date (items are newest-first)"
+        );
+
+        for item in channel.items() {
+            if let Some(enclosure) = item.enclosure() {
+                let length: u64 = enclosure
+                    .length()
+                    .parse()
+                    .unwrap_or_else(|_| panic!("length must be an integer: {}", enclosure.length()));
+                assert!(
+                    length > 0,
+                    "enclosure length must be a positive integer: {}",
+                    enclosure.url()
+                );
+            }
+        }
+
+        // Round-trip through the serializer: the reader must parse what we
+        // emit (also exercises xmlns:atom handling for the self link).
+        let xml = channel.to_string();
+        let reparsed = rss::Channel::from_str(&xml).expect("serialized feed re-parses");
+        assert!(reparsed.atom_ext().is_some());
     }
 }
