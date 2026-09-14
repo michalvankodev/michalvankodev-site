@@ -164,9 +164,12 @@ showcase listing (generic `post_list.html`, `<h1>` at line 15) provides an
 page's outline: index uses an `<h1>` hero and `<h2>` section headings, so
 posts-at-h3 may be fine there).
 
-**Fix (implemented 2026-09-14):** `/showcase` got `h2` section headings
-("featured work", "more work" — the latter was a styled `p`); `/` got an
-`h2` "what I do" above the talent-card grid (talent cards are `h3`);
+**Fix (implemented 2026-09-14, revised same day):** `/showcase` got `h2`
+section headings ("featured work", "more work" — the latter was a styled
+`p`); the talent-card component's titles were demoted `h3` → `h2` (used
+on `/` and `/portfolio`, outline-valid on both — on portfolio the cards
+become siblings of the "Skills" h2; an initially added visible `h2`
+"what I do" above the index cards was dropped in favor of the demotion);
 `/portfolio`'s tagline `h3` became a styled `p` (not a real section
 heading). Shared preview components unchanged — `/blog`'s outline was
 already h1 → h2 (year) → h3. Verification: no "skipping 1 heading level"
