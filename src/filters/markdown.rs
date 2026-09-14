@@ -183,6 +183,9 @@ impl<'a, I: Iterator<Item = Event<'a>>> Iterator for BlockFigureParagraphGate<'a
                 Event::Start(Tag::Paragraph) => {
                     self.in_paragraph = true;
                     self.paragraph_open = false;
+                    // Defensive: a paragraph start invalidates any stale
+                    // figure span (ours always close before End(Paragraph)).
+                    self.in_figure = false;
                 }
                 Event::End(TagEnd::Paragraph) => {
                     let close = self.paragraph_open;
@@ -195,13 +198,25 @@ impl<'a, I: Iterator<Item = Event<'a>>> Iterator for BlockFigureParagraphGate<'a
                 event if is_figure_start(&event) => {
                     // Close an open paragraph before the block element; a
                     // fresh `<p>` reopens if trailing inline content follows.
-                    if !self.in_figure && self.in_paragraph && self.paragraph_open {
-                        self.paragraph_open = false;
-                        self.queue.push_back(Event::Html("</p>".into()));
+                    //
+                    // The figure span is only tracked while INSIDE a
+                    // paragraph: an `Event::Html` there can only be one of our
+                    // generated figures (source-level raw HTML blocks are
+                    // emitted block-level, never wrapped in Paragraph
+                    // events, and inline raw HTML uses InlineHtml). A
+                    // hand-written `<figure>…</figure>` block in a post must
+                    // NOT set the flag — its plain `</figure>` closer never
+                    // matches ours, so the flag would stick and swallow the
+                    // `<p>` of every following paragraph.
+                    if self.in_paragraph {
+                        if self.paragraph_open {
+                            self.paragraph_open = false;
+                            self.queue.push_back(Event::Html("</p>".into()));
+                        }
+                        // Figcaption content passes through untouched (alt
+                        // text must not reopen a paragraph inside the figure).
+                        self.in_figure = true;
                     }
-                    // Figcaption content passes through untouched (alt text
-                    // must not reopen a paragraph inside the figure).
-                    self.in_figure = true;
                     self.queue.push_back(event);
                 }
                 event if is_figure_end(&event) => {
@@ -556,6 +571,30 @@ mod tests {
             "{html}"
         );
         assert!(!html.contains("&f=1"), "no raw ampersand may survive: {html}");
+    }
+
+    #[test]
+    fn raw_source_figure_block_does_not_break_following_paragraphs() {
+        // Real corpus shape (2026-04-01-week-with-my-pi-agent): a hand-written
+        // <figure> HTML block. It must pass through verbatim WITHOUT being
+        // mistaken for a generated figure span — its plain </figure> closer
+        // would never match ours, sticking the gate's in_figure flag and
+        // stripping <p> from every subsequent paragraph.
+        let md = "intro text\n\n<figure>\n  <img src=\"/x.svg\" alt=\"x\" class=\"w-4\">\n</figure>\n\nPi itself is very simple.\n\nMore paragraph text.\n\n![captioned](/images/uploads/pi-logo.svg 'cap')\n\ntail text";
+        let html = render(md);
+        assert!(html.contains("<figure>\n  <img src=\"/x.svg\""), "raw block verbatim: {html}");
+        assert!(html.contains("<p>intro text</p>"), "{html}");
+        assert!(
+            html.contains("<p>Pi itself is very simple.</p>"),
+            "paragraph after raw figure keeps its <p>: {html}"
+        );
+        assert!(
+            html.contains("<p>More paragraph text.</p>"),
+            "{html}"
+        );
+        // …and the gate still works for generated figures after the raw block:
+        assert!(!paragraph_nests_block(&html), "{html}");
+        assert!(html.contains("<figcaption>"), "{html}");
     }
 
     #[test]

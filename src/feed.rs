@@ -496,6 +496,25 @@ mod tests {
                 "iframe leaked into feed content for {}",
                 item.url
             );
+            // S8 regression guard (raw source <figure> blocks): a long bare
+            // text run directly after </figure> means the paragraph gate's
+            // figure flag stuck and swallowed the <p> of every following
+            // paragraph (seen on 2026-04-01-week-with-my-pi-agent).
+            let mut rest = item.content_html.as_str();
+            while let Some(pos) = rest.find("</figure>") {
+                let after = &rest[pos + "</figure>".len()..];
+                let text_run: String = after
+                    .chars()
+                    .take_while(|c| *c != '<')
+                    .collect::<String>();
+                assert!(
+                    text_run.trim().len() < 80,
+                    "unwrapped paragraph text after </figure> in {}: {:?}",
+                    item.url,
+                    &text_run[..text_run.len().min(60)]
+                );
+                rest = after;
+            }
             if let Some(image) = &item.image {
                 assert!(
                     image.starts_with("https://michalvanko.dev/") || image.starts_with("http"),
