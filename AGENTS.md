@@ -146,7 +146,17 @@ just prod          # Run server in release mode
 just export        # Generate static site to dist/
 just ssg           # Prewarm + crawl a running server into dist/
 just deploy        # Manual rsync dist/ to prod (CI does this automatically on main)
+just validate      # W3C validation of feed.xml + key pages (raw-content POST)
+just validate-feed # feed.xml only — target: local|prod|<base-url>; STRICT=1 fails on warnings
+just validate-html # pages only — KEEP_CSS=1 includes CSS-checker messages
 ```
+
+W3C validation (`scripts/validate_*.py`) POSTs generated markup directly to
+validator.w3.org — localhost/dev output works, no deploy needed, results are
+never cached. The services are shared public infrastructure: keep usage
+manual (pre-deploy / review), not per-push CI. `validate-html` trims the
+debug-only livereload script injected after `</html>` and hides CSS-checker
+errors (Nu's CSS knowledge lags Tailwind v4).
 
 Pushes to `main` deploy automatically via Forgejo Actions — manual `just deploy` is only a fallback.
 

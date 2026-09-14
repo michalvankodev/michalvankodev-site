@@ -300,9 +300,16 @@ warning ContainsRelRef  description should not contain relative URL references
 Reproduce:
 
 ```bash
+# remote, url-based (cached per URL — cache-bust with a query param):
 curl -s "https://validator.w3.org/feed/check.cgi?url=https%3A%2F%2Fmichalvanko.dev%2Ffeed.xml&output=soap12" \
   | grep -o 'ContainsRelRef[^<]*'
+
+# or, against local/dev output (raw-content POST, never cached):
+just validate-feed
 ```
+
+`just validate-feed` / `just validate-html` wrap this as a repeatable check
+(`scripts/validate_feed.py` / `scripts/validate_html.py`).
 
 This is the property the feed tests must encode after the fix: no attribute
 value (`src`, `href`, any `srcset` entry) in either feed may be root-relative.

@@ -41,6 +41,85 @@ test:
 test_watch:
 	cargo watch -x test
 
+# ---------- W3C validation (raw-content POST — no public URL, no cache) ----------
+# Both scripts POST the generated markup directly to the W3C services, so
+# localhost/dev output validates without a deploy. The services are shared
+# public infrastructure — keep usage manual (pre-deploy / review checks),
+# not per-push CI.
+
+# W3C-validate the RSS feed (validator.w3.org/feed).
+# target: 'local' (default; auto-starts a dev server on :{{port}} if none is
+# running — first feed render takes ~15s), 'prod', or any base URL.
+# STRICT=1 also fails on warnings (SelfDoesntMatchLocation is allowlisted:
+# rawdata submissions have no location to compare against).
+validate-feed target='local':
+	#!/usr/bin/env bash
+	set -euo pipefail
+	tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+	case "{{target}}" in
+	local)
+		started=0
+		if ! nc -z localhost {{port}}; then
+			echo ">> no server on :{{port}} — starting one"
+			cargo run >"$tmp/server.log" 2>&1 &
+			started=1
+		fi
+		just wait_for_port
+		curl -fsS --max-time 300 "http://127.0.0.1:{{port}}/feed.xml" -o "$tmp/feed.xml" \
+			|| { echo "!! feed fetch failed — server log tail:"; tail -30 "$tmp/server.log"; exit 2; }
+		if [ "$started" = 1 ]; then just kill; fi
+		src="$tmp/feed.xml"
+		;;
+	prod)
+		src="https://michalvanko.dev/feed.xml"
+		;;
+	*)
+		base="{{target}}"; [ "${base#http}" = "$base" ] && base="https://$base"
+		src="$base/feed.xml"
+		;;
+	esac
+	python3 scripts/validate_feed.py "$src" ${STRICT:+--strict}
+
+# W3C-validate key pages (Nu Html Checker, direct body POST).
+# target like validate-feed; pages: space-separated paths under the base.
+# CSS-checker messages are hidden by default (Nu's CSS knowledge lags
+# Tailwind v4) — KEEP_CSS=1 to include them.
+validate-html target='local' pages='/ /blog /showcase /portfolio /blog/2026-04-01-week-with-my-pi-agent':
+	#!/usr/bin/env bash
+	set -euo pipefail
+	tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+	case "{{target}}" in
+	local)
+		started=0
+		if ! nc -z localhost {{port}}; then
+			echo ">> no server on :{{port}} — starting one"
+			cargo run >"$tmp/server.log" 2>&1 &
+			started=1
+		fi
+		just wait_for_port
+		for p in {{pages}}; do
+			out="$tmp/$(echo "$p" | tr '/' '_').html"
+			curl -fsS --max-time 300 "http://127.0.0.1:{{port}}$p" -o "$out" \
+				|| { echo "!! fetch failed: $p — server log tail:"; tail -30 "$tmp/server.log"; exit 2; }
+		done
+		if [ "$started" = 1 ]; then just kill; fi
+		set -- "$tmp"/*.html
+		;;
+	prod)
+		set --
+		for p in {{pages}}; do set -- "$@" "https://michalvanko.dev$p"; done
+		;;
+	*)
+		base="{{target}}"; [ "${base#http}" = "$base" ] && base="https://$base"
+		set --
+		for p in {{pages}}; do set -- "$@" "$base$p"; done
+		;;
+	esac
+	python3 scripts/validate_html.py "$@" ${KEEP_CSS:+--keep-css}
+
+# Validate everything W3C can check from local output: feed + key pages
+validate: validate-feed validate-html
+
 # Run server in production mode
 prod $TARGET="PROD" $RUST_LOG="info":
     cargo run --release

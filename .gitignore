@@ -28,3 +28,4 @@ package-lock.json
 # `just dev` / CI (deploy + preview build it fresh; tests never read it)
 styles/output.css
 styles/output.*.css
+scripts/__pycache__/
