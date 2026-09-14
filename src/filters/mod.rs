@@ -1,5 +1,7 @@
 mod markdown;
 pub use markdown::{extract_headings, parse_markdown, HeadingToc};
+#[cfg(test)]
+pub(crate) use markdown::paragraph_nests_block;
 
 use chrono::{DateTime, Utc};
 

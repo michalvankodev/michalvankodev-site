@@ -77,6 +77,74 @@ fn absolutize_srcset(srcset: &str) -> String {
         .join(", ")
 }
 
+/// Length of the well-formed entity reference at the start of `after`
+/// (e.g. `amp;` for `&amp;x`, `#x26;` for `&#x26;x`), or 0 if `&` is a
+/// stray ampersand.
+fn entity_len(after: &str) -> usize {
+    let bytes = after.as_bytes();
+    let mut i = 0;
+    if bytes.first() == Some(&b'#') {
+        i = 1;
+    }
+    let start = i;
+    while i < bytes.len() && bytes[i].is_ascii_alphanumeric() && i - start < 10 {
+        i += 1;
+    }
+    if i > start && i < bytes.len() && bytes[i] == b';' {
+        i + 1
+    } else {
+        0
+    }
+}
+
+/// `&` that is not part of a well-formed entity reference → `&amp;`.
+/// lol_html hands attribute values back in serialized form: entities that
+/// were already there (`&amp;`, `&#x26;`) must survive, while a stray `&`
+/// from hand-written embed HTML (raw `?video=1&parent=x`) must be escaped
+/// or the feed content is invalid HTML (the validator's NotHtml).
+fn escape_raw_ampersands(value: &str) -> String {
+    let mut out = String::with_capacity(value.len() + 8);
+    let mut rest = value;
+    while let Some(pos) = rest.find('&') {
+        out.push_str(&rest[..pos]);
+        let after = &rest[pos + 1..];
+        let n = entity_len(after);
+        if n > 0 {
+            out.push_str(&rest[pos..pos + 1 + n]);
+            rest = &rest[pos + 1 + n..];
+        } else {
+            out.push_str("&amp;");
+            rest = after;
+        }
+    }
+    out.push_str(rest);
+    out
+}
+
+/// Human label for an embed link card, derived from the embed host
+/// (specs/w3c-validation.md S9). Feed readers commonly sanitize iframes
+/// away, so the card tells the reader where the embed would have been.
+fn embed_label(src: &str) -> &'static str {
+    let host = src
+        .split_once("//")
+        .map(|(_, rest)| rest)
+        .unwrap_or(src)
+        .split(['/', '?'])
+        .next()
+        .unwrap_or("");
+    if host.contains("twitch") {
+        "watch on Twitch"
+    } else if host.contains("youtube") || host.contains("youtu.be") {
+        "watch on YouTube"
+    } else if host.contains("spotify") {
+        "listen on Spotify"
+    } else if host.contains("vimeo") {
+        "watch on Vimeo"
+    } else {
+        "open the embedded content"
+    }
+}
+
 /// Make all URLs in rendered post HTML absolute. Feed readers render this
 /// markup inside their own document context, so root-relative URLs would
 /// resolve against the reader's origin (the RSS Best Practices Profile
@@ -84,6 +152,10 @@ fn absolutize_srcset(srcset: &str) -> String {
 ///
 /// `post_url` is the post's canonical absolute URL — fragment-only `#anchor`
 /// references (post TOC links) are rewritten against it.
+///
+/// Iframes are additionally *replaced* with link cards: the W3C feed
+/// validator flags any iframe in `content:encoded` as `SecurityRisk`, and
+/// readers strip them anyway. The site keeps the live embed.
 ///
 /// The rewrite is attribute-aware (real element attributes only, never text
 /// content), so `href="/…"`-style snippets displayed inside code samples are
@@ -119,10 +191,38 @@ fn absolutize_html(html: &str, post_url: &str) -> String {
             }
             Ok(())
         }))
-        // Media/embed carriers posts rarely use — kept covered so the
-        // feed-level invariant (no root-relative src/href/srcset anywhere)
-        // holds for future content, not just today's.
-        .append_element_content_handler(element!("iframe[src], video[src], audio[src], source[src]", |el| {
+        // Feed embed policy (S9): iframes never ship in feed content —
+        // they are a SecurityRisk per the W3C feed validator and readers
+        // commonly sanitize them. Replace with a link card to the original
+        // (already absolute) embed URL; the site keeps the live embed.
+        .append_element_content_handler(element!("iframe", |el| {
+            if el.removed() {
+                return Ok(());
+            }
+            match el.get_attribute("src").filter(|src| !src.is_empty()) {
+                Some(src) => {
+                    let href = absolutize_url(&src).unwrap_or(src);
+                    el.before(
+                        &format!(
+                            "<p><a href=\"{}\">▶ {}</a></p>",
+                            escape_raw_ampersands(&href),
+                            embed_label(&href)
+                        ),
+                        lol_html::html_content::ContentType::Html,
+                    );
+                    el.remove();
+                }
+                None => {
+                    // No src — nothing to link to; drop the empty shell.
+                    el.remove();
+                }
+            }
+            Ok(())
+        }))
+        // Media carriers that stay elements in the feed — kept absolutized
+        // so the feed-level invariant (no root-relative src anywhere) holds
+        // for future content, not just today's.
+        .append_element_content_handler(element!("video[src], audio[src], source[src]", |el| {
             if let Some(src) = el.get_attribute("src") {
                 if let Some(abs) = absolutize_url(&src) {
                     el.set_attribute("src", &abs)?;
@@ -383,6 +483,19 @@ mod tests {
                 "content body must not be empty for {}",
                 item.url
             );
+            // S8: no figure/code-card nested inside <p> anywhere in the
+            // corpus — the shape the W3C validator reports as NotHtml.
+            assert!(
+                !crate::filters::paragraph_nests_block(&item.content_html),
+                "block element nested inside <p> in {}",
+                item.url
+            );
+            // S9: iframes are replaced by link cards in feed content.
+            assert!(
+                !item.content_html.contains("<iframe"),
+                "iframe leaked into feed content for {}",
+                item.url
+            );
             if let Some(image) = &item.image {
                 assert!(
                     image.starts_with("https://michalvanko.dev/") || image.starts_with("http"),
@@ -540,6 +653,72 @@ mod tests {
         // (separator/descriptor normalization would change bytes).
         let input = r#"<img src="https://cdn.example.org/i.png" srcset="https://cdn.example.org/a.png 1x,https://cdn.example.org/b.png 2x">"#;
         assert_eq!(absolutize_html(input, "https://michalvanko.dev/blog/x"), input);
+    }
+
+    #[test]
+    fn iframes_become_link_cards_with_host_labels() {
+        // S9: the embed stays on the site, the feed gets a link card.
+        // `&` in the URL must come back escaped — lol_html decodes attribute
+        // values, and `before()` inserts raw HTML (NotHtml otherwise).
+        let out = absolutize_html(
+            r#"<iframe src="https://player.twitch.tv/?video=1427225407&amp;parent=michalvanko.dev" width="100%"></iframe>"#,
+            "https://michalvanko.dev/blog/x",
+        );
+        assert!(!out.contains("<iframe"), "iframe must not ship in feed content: {out}");
+        assert!(
+            out.contains("<p><a href=\"https://player.twitch.tv/?video=1427225407&amp;parent=michalvanko.dev\">▶ watch on Twitch</a></p>"),
+            "link card preserves the embed URL (escaped) and names the host: {out}"
+        );
+        assert!(!out.contains("&parent="), "no raw ampersand: {out}");
+
+        // Real corpus shape: hand-written embed HTML carries a RAW `&` in the
+        // src (posts write `?video=1&parent=x` unescaped). It must come out
+        // escaped — without double-escaping already-escaped entities.
+        let out = absolutize_html(
+            r#"<iframe src="https://player.twitch.tv/?video=1728904048&parent=localhost"></iframe>"#,
+            "https://michalvanko.dev/blog/x",
+        );
+        assert!(
+            out.contains("href=\"https://player.twitch.tv/?video=1728904048&amp;parent=localhost\""),
+            "raw ampersand escaped once: {out}"
+        );
+        assert!(!out.contains("&amp;amp;"), "no double escape: {out}");
+
+        let out = absolutize_html(
+            r#"<iframe src="https://www.youtube.com/embed/hoLMdrD5pic"></iframe>"#,
+            "https://michalvanko.dev/blog/x",
+        );
+        assert!(out.contains("▶ watch on YouTube"), "{out}");
+
+        let out = absolutize_html(
+            r#"<iframe src="https://open.spotify.com/embed-podcast/episode/0NE6Gakn6wUP6oj7Rq4viR"></iframe>"#,
+            "https://michalvanko.dev/blog/x",
+        );
+        assert!(out.contains("▶ listen on Spotify"), "{out}");
+    }
+
+    #[test]
+    fn root_relative_iframe_src_is_absolutized_in_the_link_card() {
+        let out = absolutize_html(
+            r#"<iframe src="/embed/player"></iframe>"#,
+            "https://michalvanko.dev/blog/x",
+        );
+        assert!(!out.contains("<iframe"), "{out}");
+        assert!(
+            out.contains("href=\"https://michalvanko.dev/embed/player\""),
+            "root-relative embed src absolutized in the card: {out}"
+        );
+    }
+
+    #[test]
+    fn srcless_iframe_is_removed_without_a_card() {
+        let out = absolutize_html(
+            "<iframe width=\"560\"></iframe><p>kept</p>",
+            "https://michalvanko.dev/blog/x",
+        );
+        assert!(!out.contains("<iframe"), "{out}");
+        assert!(!out.contains("<a href"), "nothing to link to: {out}");
+        assert!(out.contains("<p>kept</p>"), "sibling content intact: {out}");
     }
 
     #[test]

@@ -54,8 +54,9 @@ test_watch:
 # W3C-validate the RSS feed (validator.w3.org/feed).
 # target: 'local' (default; auto-starts a dev server on :{{port}} if none is
 # running — first feed render takes ~15s), 'prod', or any base URL.
-# STRICT=1 also fails on warnings (SelfDoesntMatchLocation is allowlisted:
-# rawdata submissions have no location to compare against).
+# Strict by default: fails on warnings too, so a regression can't slip
+# through (S8/S9/S10 cleared the last of them). LAX=1 drops back to
+# errors-only when investigating a new warning.
 validate-feed target='local':
 	#!/usr/bin/env bash
 	set -euo pipefail
@@ -82,7 +83,9 @@ validate-feed target='local':
 		src="$base/feed.xml"
 		;;
 	esac
-	python3 scripts/validate_feed.py "$src" ${STRICT:+--strict}
+	strict_flag=--strict
+	if [ -n "${LAX:-}" ]; then strict_flag=; fi
+	python3 scripts/validate_feed.py "$src" $strict_flag
 
 # W3C-validate key pages (Nu Html Checker, direct body POST).
 # target like validate-feed; pages: space-separated paths under the base.

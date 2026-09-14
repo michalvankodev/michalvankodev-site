@@ -31,7 +31,13 @@ UA = "michalvankodev-site validate (just validate-feed)"
 # rawdata submissions carry no retrieval URI, so the atom:link self vs
 # document-location comparison cannot be meaningful — ignore it unless
 # explicitly kept via --allow "".
-DEFAULT_ALLOW = ("SelfDoesntMatchLocation",)
+#
+# CharacterData ("encode & and < in plain text using hexadecimal character
+# references"): the rss crate emits `&amp;`/`&lt;`, the validator merely
+# prefers `&#x26;`/`&#x3C;` — both are well-formed XML, it is a style
+# preference (specs/w3c-validation.md S10), so it is allowlisted rather
+# than worked around in the serializer.
+DEFAULT_ALLOW = ("SelfDoesntMatchLocation", "CharacterData")
 
 
 def local_name(tag: str) -> str:

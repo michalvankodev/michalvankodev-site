@@ -88,6 +88,155 @@ enum TextKind {
     Code(String),
 }
 
+/// A raw-HTML chunk that opens one of the block-level elements the image
+/// mapping below generates. Matched on the `formatdoc!` prefixes we emit
+/// ourselves — pulldown's own output never starts a block with `Event::Html`
+/// inside a paragraph.
+fn is_figure_start(event: &Event<'_>) -> bool {
+    matches!(event, Event::Html(html) if html.trim_start().starts_with("<figure"))
+}
+
+/// The exact closing chunk the `Event::End(TagEnd::Image)` arm emits.
+fn is_figure_end(event: &Event<'_>) -> bool {
+    matches!(event, Event::Html(html) if html.trim() == "</figcaption></figure>")
+}
+
+/// Events that carry real inline paragraph content — i.e. should produce
+/// (or reopen) a `<p>`. Whitespace-only text, line breaks and empty chunks
+/// are excluded: directly after a figure they would materialize an empty
+/// `<p>` where browsers today silently drop the auto-closed one. Non-figure
+/// raw HTML (`Event::Html` — e.g. the bare external-URL `<img>`) counts as
+/// content: inside a paragraph, source-level block HTML never arrives as
+/// `Event::Html` (raw blocks are emitted outside paragraphs), so these are
+/// always our own inline-capable mappings. Figure start/end chunks are
+/// intercepted by their own match arms before this is consulted.
+/// `Start(_)` covers the inline tags that can open inside a paragraph
+/// (Link, Emphasis, Strong, …).
+fn is_inline_content(event: &Event<'_>) -> bool {
+    match event {
+        Event::Text(text) => !text.chars().all(char::is_whitespace),
+        Event::Html(html) => !html.is_empty(),
+        Event::Code(_)
+        | Event::InlineHtml(_)
+        | Event::FootnoteReference(_)
+        | Event::TaskListMarker(_)
+        | Event::InlineMath(_)
+        | Event::Start(_) => true,
+        _ => false,
+    }
+}
+
+/// Streaming `<p>` gate for `parse_markdown` (specs/w3c-validation.md S8).
+///
+/// pulldown-cmark wraps `![alt](url)` in `Start(Paragraph)` … `End(Paragraph)`
+/// while the image mapping renders the image as a block-level `<figure>`;
+/// pushing both emits `<p><figure>…</figure></p>`. That is invalid HTML5 —
+/// parsers implicitly close the `<p>` when the figure starts, so the
+/// trailing `</p>` is stray (the W3C feed validator reports it as `NotHtml`
+/// for every affected item; the Nu checker reports "No p element in scope
+/// but a p end tag seen").
+///
+/// The gate defers `<p>` until inline content actually arrives, closes it
+/// before a figure starts mid-paragraph, and reopens a fresh `<p>` for
+/// trailing inline content — so an image-only paragraph emits a bare
+/// `<figure>` at block level, and `text ![img] tail` splits into two
+/// paragraphs around it (figures render block-level anyway, so the visual
+/// result is unchanged).
+///
+/// Known limitation, matching today's content (every post image is a
+/// standalone paragraph): an image nested inside an *open* inline element
+/// (link/emphasis) would close the `<p>` while that element is still open.
+struct BlockFigureParagraphGate<'a, I> {
+    inner: I,
+    queue: std::collections::VecDeque<Event<'a>>,
+    /// Between `Start(Paragraph)` and `End(Paragraph)`.
+    in_paragraph: bool,
+    /// The `<p>` start was actually emitted (and not yet closed).
+    paragraph_open: bool,
+    /// Between our figure-start and figure-end chunks (figcaption text).
+    in_figure: bool,
+}
+
+impl<'a, I: Iterator<Item = Event<'a>>> BlockFigureParagraphGate<'a, I> {
+    fn new(inner: I) -> Self {
+        Self {
+            inner,
+            queue: std::collections::VecDeque::new(),
+            in_paragraph: false,
+            paragraph_open: false,
+            in_figure: false,
+        }
+    }
+}
+
+impl<'a, I: Iterator<Item = Event<'a>>> Iterator for BlockFigureParagraphGate<'a, I> {
+    type Item = Event<'a>;
+
+    fn next(&mut self) -> Option<Event<'a>> {
+        loop {
+            if let Some(event) = self.queue.pop_front() {
+                return Some(event);
+            }
+            match self.inner.next()? {
+                // Defer the `<p>`: emit it only when inline content shows up.
+                // An image-only paragraph therefore never materializes one.
+                Event::Start(Tag::Paragraph) => {
+                    self.in_paragraph = true;
+                    self.paragraph_open = false;
+                }
+                Event::End(TagEnd::Paragraph) => {
+                    let close = self.paragraph_open;
+                    self.in_paragraph = false;
+                    self.paragraph_open = false;
+                    if close {
+                        return Some(Event::End(TagEnd::Paragraph));
+                    }
+                }
+                event if is_figure_start(&event) => {
+                    // Close an open paragraph before the block element; a
+                    // fresh `<p>` reopens if trailing inline content follows.
+                    if !self.in_figure && self.in_paragraph && self.paragraph_open {
+                        self.paragraph_open = false;
+                        self.queue.push_back(Event::Html("</p>".into()));
+                    }
+                    // Figcaption content passes through untouched (alt text
+                    // must not reopen a paragraph inside the figure).
+                    self.in_figure = true;
+                    self.queue.push_back(event);
+                }
+                event if is_figure_end(&event) => {
+                    self.in_figure = false;
+                    self.queue.push_back(event);
+                }
+                event => {
+                    if self.in_figure || !self.in_paragraph || self.paragraph_open {
+                        return Some(event);
+                    }
+                    if is_inline_content(&event) {
+                        self.paragraph_open = true;
+                        self.queue.push_back(Event::Start(Tag::Paragraph));
+                        self.queue.push_back(event);
+                    }
+                    // else: whitespace/line break with no open `<p>` — drop it
+                    // (would render an empty paragraph browsers don't show today).
+                }
+            }
+        }
+    }
+}
+
+/// Escape a value interpolated into a double-quoted HTML attribute in the
+/// hand-built `formatdoc!` tags below. pulldown-cmark escapes text *content*,
+/// but these attribute slots take raw URLs/titles — an unescaped `&` (e.g.
+/// `?video=1&parent=x`) is invalid HTML and surfaces as the feed
+/// validator's NotHtml / lxml's htmlParseEntityRef.
+fn escape_attr(value: &str) -> String {
+    value
+        .replace('&', "&amp;")
+        .replace('"', "&quot;")
+        .replace('<', "&lt;")
+}
+
 // pub fn parse_markdown(markdown: &str) -> ::askama::Result<String>
 #[askama::filter_fn]
 pub fn parse_markdown<T: fmt::Display>(
@@ -109,6 +258,10 @@ pub fn parse_markdown<T: fmt::Display>(
     let mut heading_ended: Option<bool> = None;
 
     let mds = markdown.to_string();
+    // External-URL images emit a bare <img …> (no figure/figcaption); while
+    // inside one, the alt-text Text events and the End(Image) closer must
+    // be suppressed — the title already lives in the alt attribute.
+    let mut in_bare_img = false;
     let parser = Parser::new_ext(&mds, options).map(|event| match event {
         /*
         Parsing images considers `alt` attribute as inner `Text` event
@@ -122,12 +275,15 @@ pub fn parse_markdown<T: fmt::Display>(
             id: _,
         }) => {
             if !dest_url.starts_with("/") {
+                in_bare_img = true;
                 return Event::Html(
                     formatdoc!(
                         r#"<img
-                          alt="{title}"
-                          src="{dest_url}"
-                        />"#
+                          alt="{alt}"
+                          src="{src}"
+                        />"#,
+                        alt = escape_attr(&title),
+                        src = escape_attr(&dest_url),
                     )
                     .into(),
                 );
@@ -138,9 +294,11 @@ pub fn parse_markdown<T: fmt::Display>(
                 return Event::Html(
                     formatdoc!(
                         r#"<figure>
-                            <img src="{dest_url}" alt="{title}">
+                            <img src="{src}" alt="{alt}">
                             <figcaption>
-                        "#
+                        "#,
+                        src = escape_attr(&dest_url),
+                        alt = escape_attr(&title),
                     )
                     .into(),
                 );
@@ -199,6 +357,9 @@ pub fn parse_markdown<T: fmt::Display>(
             )
         }
         Event::Text(text) => match &text_kind {
+            // Alt text of an external bare-<img> image: already in the alt
+            // attribute — emitting it would duplicate the text visibly.
+            _ if in_bare_img => Event::Html("".into()),
             TextKind::Code(lang) => {
                 // TODO Check https://github.com/trishume/syntect/pull/535 for typescript support
                 let lang = if ["ts".to_string(), "typescript".to_string()].contains(lang) {
@@ -253,7 +414,16 @@ pub fn parse_markdown<T: fmt::Display>(
             Event::Html(format!("<{level} ").into())
         }
         Event::Start(_) => event,
-        Event::End(TagEnd::Image) => Event::Html("</figcaption></figure>".into()),
+        Event::End(TagEnd::Image) => {
+            // Match the opener: bare external <img> is complete (nothing to
+            // close); local images close the figcaption/figure they opened.
+            if in_bare_img {
+                in_bare_img = false;
+                Event::Html("".into())
+            } else {
+                Event::Html("</figcaption></figure>".into())
+            }
+        }
         Event::End(TagEnd::CodeBlock) => {
             // Fenced blocks were re-wrapped into .code-card (see Start above);
             // indented blocks still use pulldown's default <pre><code>.
@@ -273,8 +443,151 @@ pub fn parse_markdown<T: fmt::Display>(
         _ => event,
     });
 
-    // Write to String buffer
+    // Write to String buffer. The gate keeps generated `<figure>` blocks out
+    // of the implicit `<p>` wrapper (invalid HTML5 nesting, S8).
     let mut html = String::new();
-    pulldown_cmark::html::push_html(&mut html, parser);
+    pulldown_cmark::html::push_html(&mut html, BlockFigureParagraphGate::new(parser));
     Ok(html)
+}
+
+/// True when a block-level element (`<figure`, `<div`) appears between a
+/// `<p>` start and its matching `</p>` — the invalid nesting the W3C feed
+/// validator reports as `NotHtml` and Nu as a stray `</p>` (S8). Also used
+/// by the feed tests to audit every rendered post body.
+#[cfg(test)]
+pub(crate) fn paragraph_nests_block(html: &str) -> bool {
+    let mut in_paragraph = false;
+    let mut rest = html;
+    while let Some(rel) = rest.find('<') {
+        let at = rel;
+        let tail = &rest[at..];
+        if tail.starts_with("<p>") || tail.starts_with("<p ") {
+            in_paragraph = true;
+        } else if tail.starts_with("</p>") {
+            in_paragraph = false;
+        } else if in_paragraph && (tail.starts_with("<figure") || tail.starts_with("<div")) {
+            return true;
+        }
+        rest = &rest[at + 1..];
+    }
+    false
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    struct NoValues;
+    impl askama::Values for NoValues {
+        fn get_value<'a>(&'a self, _key: &str) -> Option<&'a dyn std::any::Any> {
+            None
+        }
+    }
+
+    fn render(md: &str) -> String {
+        parse_markdown::default()
+            .execute(md, &NoValues)
+            .expect("markdown renders")
+    }
+
+    #[test]
+    fn image_only_paragraph_renders_bare_figure() {
+        // SVG path: no dimension probing, figure emitted directly (S8).
+        let html = render("![Pi agent logo](/images/uploads/pi-logo.svg 'Pi agent logo')");
+        assert!(html.contains("<figure"), "figure rendered: {html}");
+        assert!(!html.contains("<p"), "no paragraph around image-only paragraph: {html}");
+        assert!(!paragraph_nests_block(&html));
+    }
+
+    #[test]
+    fn text_around_image_splits_the_paragraph() {
+        let html = render("before ![Pi agent logo](/images/uploads/pi-logo.svg) after");
+        assert!(!paragraph_nests_block(&html), "figure must not nest in <p>: {html}");
+        assert!(html.contains("<p>before"), "leading text keeps its paragraph: {html}");
+        assert!(html.contains("<p>"), "trailing text reopens a paragraph: {html}");
+        assert_eq!(
+            html.matches("<p>").count(),
+            html.matches("</p>").count(),
+            "paragraph tags stay balanced: {html}"
+        );
+    }
+
+    #[test]
+    fn consecutive_image_paragraphs_stay_bare() {
+        let html = render(
+            "![one](/images/uploads/pi-logo.svg)\n\n![two](/images/uploads/pi-logo.svg)",
+        );
+        assert_eq!(html.matches("<figure").count(), 2, "{html}");
+        assert!(!html.contains("<p"), "{html}");
+    }
+
+    #[test]
+    fn fenced_code_is_never_wrapped_in_paragraph() {
+        let html = render("intro text\n\n```rust\nfn main() {}\n```\n\noutro text");
+        assert!(html.contains("<p>intro text</p>"), "{html}");
+        assert!(html.contains("code-card"), "{html}");
+        assert!(html.contains("<p>outro text</p>"), "{html}");
+        assert!(!paragraph_nests_block(&html), "{html}");
+    }
+
+    #[test]
+    fn external_image_renders_bare_img_without_figure_junk() {
+        // External URLs don't get the figure treatment — and crucially must
+        // not emit the figcaption/figure *closers* (pre-existing mismatch)
+        // or leak the alt text as visible duplicate text.
+        let html = render(
+            "![Preview of headphones](https://cdn.example.net/x.jpeg 'Preview of headphones')",
+        );
+        assert!(html.contains("<img"), "{html}");
+        assert!(html.contains(r#"src="https://cdn.example.net/x.jpeg""#), "{html}");
+        assert!(!html.contains("figcaption"), "no figcaption closer without a figure: {html}");
+        assert!(!html.contains("</figure>"), "{html}");
+        assert_eq!(
+            html.matches("Preview of headphones").count(),
+            1,
+            "alt text must appear exactly once (the attribute): {html}"
+        );
+        assert!(!paragraph_nests_block(&html));
+    }
+
+    #[test]
+    fn external_image_between_text_keeps_one_paragraph() {
+        let html = render(
+            "see [the shop](https://example.com) and ![pic](https://cdn.example.net/y.png) here",
+        );
+        assert!(html.contains("<a href=\"https://example.com\">the shop</a>"), "{html}");
+        assert!(html.contains("<img"), "{html}");
+        assert_eq!(html.matches("<p>").count(), 1, "{html}");
+        assert_eq!(html.matches("</p>").count(), 1, "{html}");
+    }
+
+    #[test]
+    fn external_image_escapes_ampersands_in_attributes() {
+        // Real shape from 2020-08-05-webassembly-briefing: query params with
+        // raw `&` must be escaped in the attribute (feed validator NotHtml).
+        let html = render("![Blazor](https://cdn.example.net/iu/?u=x%2Fy&f=1&nofb=1)");
+        assert!(
+            html.contains(r#"src="https://cdn.example.net/iu/?u=x%2Fy&amp;f=1&amp;nofb=1""#),
+            "{html}"
+        );
+        assert!(!html.contains("&f=1"), "no raw ampersand may survive: {html}");
+    }
+
+    #[test]
+    fn plain_paragraphs_and_inline_markup_are_untouched() {
+        let html = render("just text\n\nmore **bold** and [a link](/x) here");
+        assert!(html.contains("<p>just text</p>"), "{html}");
+        assert!(html.contains("<strong>bold</strong>"), "{html}");
+        assert!(html.contains("<a href=\"/x\">a link</a>"), "{html}");
+    }
+
+    #[test]
+    fn paragraph_nests_block_detects_the_invalid_shape() {
+        assert!(paragraph_nests_block("<p>text <figure><img src=\"x\"></figure></p>"));
+        assert!(paragraph_nests_block(
+            "<p><div class=\"code-card\">x</div></p>"
+        ));
+        assert!(!paragraph_nests_block("<p>ok</p><figure><img src=\"x\"></figure>"));
+        assert!(!paragraph_nests_block("<p>a</p><p><em>b</em></p>"));
+    }
 }

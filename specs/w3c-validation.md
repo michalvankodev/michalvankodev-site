@@ -1,8 +1,8 @@
 # W3C validation: findings inventory and fix specification
 
-Status: **Partially implemented 2026-09-14 — S1–S7 plus F11/F12 fixed
-(`w3c-html-fixes` PR); S8 (`<p><figure>` restructure), S9 (iframe policy),
-S10 (hex escapes) still open.**
+Status: **Implemented 2026-09-14 — all findings fixed. S1–S7 + F11/F12 in
+PR #24 (`w3c-html-fixes`); S8/S9/S10 + F13/F14 + strict-by-default ratchet
+in the stacked `w3c-feed-p-figure` PR.**
 Companion to PR #21 (`feed/absolute-urls`), which added the validation
 tooling. Each finding below was reproduced with `just validate-feed` /
 `just validate-html` and traced to its source line.
@@ -56,6 +56,8 @@ which emits no XML prolog at all (the sed strip stays as a guard).
 | F10 | feeds | `CharacterData` — encode `&`/`<` in plain text using hex references | 1 | a post title contains `&`; rss crate escapes as `&amp;`, validator prefers `&#x26;` style | [S10](#s10-hex-escapes-in-titles-validator-style) |
 | F11 | blog post pages | `Element "header" must not appear as a descendant of element "footer"` | 3/page | `blog_post.html` used a `<footer>` as the page-bottom **layout grid wrapper**; the further-reading section inside it renders `<header>` (macro + preview cards) | **Fixed** (2026-09-14): wrapper is now a plain `<div>` |
 | F12 | /blog | `Bad value "/blog/dev-2019-08-09-ide-to copy" … Space is not allowed` | 1 | `_posts/blog/dev-2019-08-09-ide-to copy.md` — intentionally published dev/test article (see 05fd17d) whose filename (→ slug) contains a space | **Fixed** (2026-09-14): file renamed to `dev-2019-08-09-ide-to-copy.md`; URL loses the `%20` |
+| F13 | article HTML + feeds | mismatched image markup for **external** URLs: `<img …>` opener but unconditional `</figcaption></figure>` closer, alt text leaked as visible text | 6 posts | `markdown.rs` Start(Image) has a bare-`<img>` path for non-`/` URLs, but End(Image) always closed a figure | **Fixed** (2026-09-14, with S8): `in_bare_img` state suppresses the alt text and closer for the bare-`<img>` path |
+| F14 | feeds | raw `&` in hand-built attributes: external image `src` (`?u=x&f=1`) and the S9 link-card `href` (`?video=1&parent=x`) — `htmlParseEntityRef` → validator NotHtml | 6 items | `formatdoc!`/`format!` interpolated URLs verbatim; lol_html `get_attribute` returns serialized values (entities intact), `before()` inserts raw HTML | **Fixed** (2026-09-14): `escape_attr` in markdown.rs; entity-aware `escape_raw_ampersands` in feed.rs (never double-escapes `&amp;`) |
 
 Not findings (tooling handles): CSS-checker errors (`view-transition-name`
 etc. as *CSS* — Nu's CSS snapshot lags Tailwind v4; hidden by default), and
@@ -202,6 +204,18 @@ implicitly when the block element starts, so the trailing `</p>` is stray
    absolutizer already links it) to hoist `<figure>`/`.code-card` out of
    `<p>` — but a parser-level fix keeps one code path for site and feeds.
 
+**Implemented (direction 1, 2026-09-14):** `BlockFigureParagraphGate` in
+`src/filters/markdown.rs` — a streaming event filter that defers `<p>`
+emission until inline content arrives (image-only paragraphs emit a bare
+`<figure>`), closes the paragraph before a figure that starts mid-text,
+and reopens a fresh `<p>` for trailing inline content. Whitespace directly
+after a figure is dropped so no empty `<p>` materializes. Fenced code
+blocks needed no gating — pulldown-cmark never nests `CodeBlock` inside
+`Paragraph` events (fences may interrupt paragraphs); only images were
+affected. Note: image-in-figure caption text passes through untouched (the
+gate tracks figure spans). Unit tests cover the shapes; the feed corpus
+audit asserts no `<p>`-nested blocks across all rendered posts.
+
 **Tests:** snapshot-style assertions that rendered article HTML contains no
 `<p>` immediately followed by `<figure>`/`<div class="code-card">`; existing
 feed audits stay green. **Verification:** `just validate-feed` `NotHtml`
@@ -223,6 +237,13 @@ embed. If replaced: preserve the original URL (it is already absolute, e.g.
 explicitly accepted and allowlisted in `scripts/validate_feed.py` with a
 comment.
 
+**Implemented (link card, 2026-09-14):** `absolutize_html` now replaces
+every `<iframe>` with `<p><a href="…">▶ watch on Twitch</a></p>`-style link
+cards — host-derived labels (Twitch/YouTube/Spotify/Vimeo, fallback "open
+the embedded content"), src absolutized, srcless shells dropped. The site
+keeps the live embeds. Covers the podcast/YouTube embeds too, not just
+Twitch.
+
 ### S10: hex escapes in titles (validator style)
 
 One post title contains `&`; the rss crate serializes `&amp;`, the
@@ -232,6 +253,10 @@ functional impact. **Fix (optional):** post-process title strings before
 accept and allowlist `CharacterData` in `scripts/validate_feed.py`.
 Recommend the allowlist unless the warning bothers you: the escape form is
 a style preference, both are well-formed XML.
+
+**Resolved (allowlisted, 2026-09-14):** `CharacterData` joins
+`SelfDoesntMatchLocation` in `DEFAULT_ALLOW` with a comment explaining the
+style-preference rationale.
 
 ## Suggested batching (each independently shippable)
 
@@ -253,3 +278,9 @@ After 1–5: `just validate-html` exits 0 on the default page set; after 6 +
 S8: `just validate-feed` reports zero warnings → flip the default to strict
 (`STRICT=1` semantics, or make strict the default with an escape hatch) and
 add both to the pre-deploy routine (`just validate` before `just deploy`).
+
+**Done (2026-09-14):** `validate-feed` is strict by default (`LAX=1`
+drops back to errors-only when investigating a new warning); the
+pre-deploy routine is `just validate` (feed + HTML pages). End state
+reached: 0 HTML errors on the default page set, 0 feed errors, 0
+non-allowlisted feed warnings.
