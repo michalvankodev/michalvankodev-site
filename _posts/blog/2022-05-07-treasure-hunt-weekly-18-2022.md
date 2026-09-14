@@ -34,7 +34,7 @@ Maybe I should build my own company. It is something I've been thinking of for a
 
 ## DevBreak episode #2
 
-So on the exact day that I've left Sudolabs, I have been able to save the _DevBreak talk_. Not me exactly. It has been saved by my awesome friends [Daniela](https://www.linkedin.com/in/daniela-chovancova-boostello/), [Samuel](https://www.linkedin.com/in/samuelfarkas/), and [Filip](https://www.linkedin.com/in/filipjenik/). They've attended [HackKosice hackathon]() and were generous to talk about **their experience and impressions** on the _DevBreak talk_. [Go check out the episode](https://www.twitch.tv/videos/1468441353). They've brought a very good vibe and I had a great time talking with them.
+So on the exact day that I've left Sudolabs, I have been able to save the _DevBreak talk_. Not me exactly. It has been saved by my awesome friends [Daniela](https://www.linkedin.com/in/daniela-chovancova-boostello/), [Samuel](https://www.linkedin.com/in/samuelfarkas/), and [Filip](https://www.linkedin.com/in/filipjenik/). They've attended [HackKosice hackathon](https://hackkosice.com/) and were generous to talk about **their experience and impressions** on the _DevBreak talk_. [Go check out the episode](https://www.twitch.tv/videos/1468441353). They've brought a very good vibe and I had a great time talking with them.
 
 I've already contacted my next guest for episode #3 and I am very excited for this one. As I have a wedding to plan and attend I don't know when we will air the episode. But it will be a great one! Can't wait.
 
@@ -42,7 +42,7 @@ I've already contacted my next guest for episode #3 and I am very excited for th
 
 We have set up a [Discord server](https://discord.gg/uVYaDa25Jf) where you can chat with our community whenever. **We share dev tips and memes**, but I'd also like to **receive feedback** on the stream content.
 
-The last 3 streams have been devoted to game development with [Bevy game engine](). I've started to fulfill my childhood dreams and started a journey full of learning stuff that I haven't been used to. I've made some games before. But I would say that this one is going to be of a larger scale.
+The last 3 streams have been devoted to game development with [Bevy game engine](https://bevyengine.org/). I've started to fulfill my childhood dreams and started a journey full of learning stuff that I haven't been used to. I've made some games before. But I would say that this one is going to be of a larger scale.
 
 I want to build a card-based strategy game. Something similar to [Hearthstone](https://playhearthstone.com/en-us) and [Heroes of Might and Magic](https://www.ubisoft.com/en-us/game/heroes-of-might-and-magic-3-hd). There is a lot to learn about the engine itself so the mechanics of the game will be developed in later stages.
 
