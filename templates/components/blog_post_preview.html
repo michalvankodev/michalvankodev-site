@@ -20,7 +20,7 @@
 	<header class="max-w-read">
 		<div class="flex flex-wrap items-baseline gap-x-4">
 			<p class="font-mono text-xs md:text-sm mr-auto">
-				<time datetime="{{post.metadata.date}}" class="text-slate-500" style="view-transition-name: post_date_{{post.slug}}">{{post.metadata.date|pretty_date}}</time>
+				<time datetime="{{post.metadata.date|machine_date}}" class="text-slate-500" style="view-transition-name: post_date_{{post.slug}}">{{post.metadata.date|pretty_date}}</time>
 			</p>
 			<p class="flex flex-wrap gap-x-3 font-mono text-xs md:text-sm text-pink-950" style="view-transition-name: post_tags_{{post.slug}}">
 				{% for tag in post.metadata.tags %}

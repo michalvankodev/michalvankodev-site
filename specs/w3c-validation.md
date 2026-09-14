@@ -1,6 +1,8 @@
 # W3C validation: findings inventory and fix specification
 
-Status: **Proposed — findings verified 2026-09-14, fixes not implemented.**
+Status: **Partially implemented 2026-09-14 — S1–S7 plus F11/F12 fixed
+(`w3c-html-fixes` PR); S8 (`<p><figure>` restructure), S9 (iframe policy),
+S10 (hex escapes) still open.**
 Companion to PR #21 (`feed/absolute-urls`), which added the validation
 tooling. Each finding below was reproduced with `just validate-feed` /
 `just validate-html` and traced to its source line.
@@ -26,11 +28,16 @@ Last updated: 2026-09-14
 
 | Check | Verdict | Notes |
 |---|---|---|
-| `feed.xml` (feed validator) | **VALID** | 0 errors; 3 warning types = F8, F9, F10 below |
-| `/` (Nu) | INVALID | 16 real errors (8 × F6 time, sprite F2/F3, vtn F4, cc F5) |
-| `/showcase` (Nu) | INVALID | 8 errors (sprite, vtn, cc, heading skip F7) |
-| `/portfolio` (Nu) | INVALID | 20 errors (m-logo-animated F3, style-in-aside F3b, sprite, vtn, cc) |
-| `/blog`, blog post pages (Nu) | INVALID | same recurring classes + F8's stray `</p>` inside article bodies |
+| `feed.xml` (feed validator) | **VALID** | 0 errors; warnings: F8 ×21, F9 ×3, F10 ×1 (all deferred) |
+| `/`, `/blog`, `/showcase`, `/portfolio` (Nu) | **VALID** | 0 errors each (2026-09-14, after `w3c-html-fixes`) |
+| blog post pages (Nu) | 1 error | F8 stray `</p>` inside article bodies — the only remaining HTML error |
+
+Post-fix notes (2026-09-14): F7 turned out to hit `/` and `/portfolio` too,
+not just `/showcase` — fixed per-page (index got an `h2` "what I do" above the
+talent cards; portfolio's h3 tagline became a styled `p`; showcase got `h2`
+"featured work"/"more work"). Also: `npx svgstore` no longer runs — svgstore@3
+dropped its bin; the recipe now uses `npx --yes svgstore-cli` (same flags),
+which emits no XML prolog at all (the sed strip stays as a guard).
 
 ## Findings inventory
 
@@ -47,6 +54,8 @@ Last updated: 2026-09-14
 | F8 | feeds (+ article HTML on site) | feed validator `NotHtml` — `Invalid HTML: unexpected end tag (p)` | 20 items | `parse_markdown` emits `<figure>` (images) and `.code-card` divs (code) *inside* `<p>`; HTML5 parsers implicitly close the paragraph at the block element, making pulldown's later `</p>` stray | [S8](#s8-stop-nesting-figurecode-card-inside-p) |
 | F9 | feeds | `SecurityRisk` — `content:encoded should not contain iframe tag` | 3 items | Twitch embeds in broadcasts posts | [S9](#s9-iframe-policy-for-feed-content) |
 | F10 | feeds | `CharacterData` — encode `&`/`<` in plain text using hex references | 1 | a post title contains `&`; rss crate escapes as `&amp;`, validator prefers `&#x26;` style | [S10](#s10-hex-escapes-in-titles-validator-style) |
+| F11 | blog post pages | `Element "header" must not appear as a descendant of element "footer"` | 3/page | `blog_post.html` used a `<footer>` as the page-bottom **layout grid wrapper**; the further-reading section inside it renders `<header>` (macro + preview cards) | **Fixed** (2026-09-14): wrapper is now a plain `<div>` |
+| F12 | /blog | `Bad value "/blog/dev-2019-08-09-ide-to copy" … Space is not allowed` | 1 | `_posts/blog/dev-2019-08-09-ide-to copy.md` — intentionally published dev/test article (see 05fd17d) whose filename (→ slug) contains a space | **Fixed** (2026-09-14): file renamed to `dev-2019-08-09-ide-to-copy.md`; URL loses the `%20` |
 
 Not findings (tooling handles): CSS-checker errors (`view-transition-name`
 etc. as *CSS* — Nu's CSS snapshot lags Tailwind v4; hidden by default), and
@@ -155,12 +164,13 @@ showcase listing (generic `post_list.html`, `<h1>` at line 15) provides an
 page's outline: index uses an `<h1>` hero and `<h2>` section headings, so
 posts-at-h3 may be fine there).
 
-**Fix (needs a small design call):** either demote card titles to `<h2>`
-where the page outline is h1 → cards, or introduce an `<h2>` section
-heading ("Selected work") above the card grid on `/showcase`. Prefer the
-outline-correct option per page rather than a blanket component change,
-since the components are shared. Verification: no "skipping 1 heading
-level" on `/`, `/blog`, `/showcase`.
+**Fix (implemented 2026-09-14):** `/showcase` got `h2` section headings
+("featured work", "more work" — the latter was a styled `p`); `/` got an
+`h2` "what I do" above the talent-card grid (talent cards are `h3`);
+`/portfolio`'s tagline `h3` became a styled `p` (not a real section
+heading). Shared preview components unchanged — `/blog`'s outline was
+already h1 → h2 (year) → h3. Verification: no "skipping 1 heading level"
+errors on `/`, `/blog`, `/showcase`, `/portfolio`.
 
 ### S8: stop nesting `<figure>`/code-card inside `<p>`
 

@@ -14,7 +14,7 @@
   <div>
     <p class="kicker">~/portfolio</p>
     <h1 class="mt-2 mb-3 text-display-1">Michal Vanko</h1>
-    <h3 class="text-xl md:text-2xl italic text-slate-700">Software Architect by passion</h3>
+    <p class="text-xl md:text-2xl italic text-slate-700">Software Architect by passion</p>
     <section id="contact" class="mt-6">
       <ul class="max-w-sm">
         {% for link in contact_links %}
@@ -36,12 +36,8 @@
     </section>
   </div>
   <aside id="logo-container" class="hidden md:block h-64 w-64 md:h-80 md:w-80 shrink-0" aria-label="Animated Michal Vanko logo">
-    <style>
-      #logo-container svg {
-        height: 100%;
-        width: 100%;
-      }
-    </style>
+    {# Sizing CSS lives in styles/input.css (#logo-container svg) — <style> is
+       invalid inside <body> (W3C F3b). #}
     {% include "icons/m-logo-animated.svg" %}
     <script src="/resources/anime.min.js"></script>
     <script>

@@ -33,7 +33,7 @@
     <div class="max-w-read mx-auto 2xl:col-start-2 2xl:mx-0 2xl:max-w-none">
     <div class="flex flex-wrap items-baseline gap-x-4">
       <p class="font-mono text-xs md:text-sm mr-auto">
-        <time datetime="{{date}}" class="text-slate-500" style="view-transition-name: post_date_{{slug}}">{{date|pretty_date}}</time> · {{reading_time}} min read
+        <time datetime="{{date|machine_date}}" class="text-slate-500" style="view-transition-name: post_date_{{slug}}">{{date|pretty_date}}</time> · {{reading_time}} min read
       </p>
       {% include "post_tag_list.html" %}
     </div>
@@ -75,7 +75,10 @@
   </div>
 </article>
 
-<footer class="max-w-[90rem] mx-auto page-gutter pb-4 2xl:grid 2xl:grid-cols-[minmax(0,1fr)_minmax(0,42rem)_minmax(0,24rem)]">
+<!-- Layout wrapper, not a semantic footer: it contains the further-reading
+     section whose headings/cards use <header>, and a <header> must not be a
+     descendant of <footer> (W3C). -->
+<div class="max-w-[90rem] mx-auto page-gutter pb-4 2xl:grid 2xl:grid-cols-[minmax(0,1fr)_minmax(0,42rem)_minmax(0,24rem)]">
 
 {% if recommended_posts.len() > 0 %}
 <!-- Heading + previews share one content-width wrapper: the heading spans
@@ -101,7 +104,7 @@
       <a href="/{{segment}}">← ./{{segment}}</a>
     </p>
   </div>
-</footer>
+</div>
 
 <script>
   (function () {

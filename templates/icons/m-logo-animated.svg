@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    id="m-logo"
    width="512"
@@ -6,39 +5,14 @@
    viewBox="0 0 512 512"
    fill="none"
    version="1.1"
-   sodipodi:docname="m-logo-animated.svg"
-   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
-   visibility="hidden"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs1" />
+   visibility="hidden">
   <defs id="custom-defs">
     <radialGradient id="bg-gradient" r="91%">
       <stop id="bg-stop" offset="100%" stop-color="rgba(216, 246, 255, 0)" />
       <stop offset="100%" stop-color="#32a8eb" />
     </radialGradient>
   </defs>
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="1.6089441"
-     inkscape:cx="28.590179"
-     inkscape:cy="341.52833"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
-     inkscape:window-x="26"
-     inkscape:window-y="23"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="m-logo" />
   <path
      id="border"
      d="m 256,477 c -56.348,0 -98.269,-0.006 -129.636,-3.491 C 94.967,470.02 75.025,463.118 61.953,450.047 48.882,436.975 41.98,417.033 38.491,385.636 35.006,354.269 35,312.348 35,256 35,199.652 35.006,157.731 38.491,126.364 41.98,94.9671 48.882,75.0246 61.953,61.9534 75.025,48.8822 94.967,41.9797 126.364,38.4912 157.731,35.0059 199.652,35 256,35 c 56.348,0 98.269,0.006 129.636,3.4912 31.3969,3.4885 51.3394,10.391 64.4106,23.4622 13.0712,13.0712 19.9737,33.0137 23.4622,64.4106 C 476.9941,157.731 477,199.652 477,256 c 0,56.348 -0.006,98.269 -3.4912,129.636 -3.4885,31.397 -10.391,51.339 -23.4622,64.411 -13.0712,13.071 -33.0137,19.973 -64.4106,23.462 C 354.269,476.994 312.348,477 256,477 Z"
@@ -58,13 +32,11 @@
      stroke="#32a8eb"
      stroke-width="8"
      stroke-linejoin="round"
-     visibility="hidden"
-     sodipodi:nodetypes="csc" />
+     visibility="hidden" />
   <path
      d="M 507.76664,507.59022 C 453.73997,452.69049 121.4145,522.45057 289.19959,354.47858 c 10.11721,-10.12848 19.63171,-17.88383 30.25282,-22.95349 6.77433,-3.23351 15.74106,-4.08485 28.19639,-5.03375"
      id="m-letter-start"
      stroke="#32a8eb"
      stroke-width="2"
-     visibility="hidden"
-     sodipodi:nodetypes="cssc" />
+     visibility="hidden" />
 </svg>

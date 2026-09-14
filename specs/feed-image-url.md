@@ -138,7 +138,7 @@ landed surfaced a second wave — all addressed in `src/feed.rs` on this branch:
   `static/`-relative path; when the file can't be stat'ed (external URL,
   missing file) the enclosure is dropped with a `warn!` — there is no honest
   positive integer to emit. First catch of the new log line:
-  `_posts/blog/dev-2019-08-09-ide-to copy.md` — a **development/test
+  `_posts/blog/dev-2019-08-09-ide-to-copy.md` — a **development/test
   article that is intentionally published** (kept!) — referenced a 404-ing
   thumbnail (`/images/uploads/screenshot.gif`); its `thumbnail:` line is
   commented out (mirroring `dev-2019-08-09-ide-to.md`), so the article stays

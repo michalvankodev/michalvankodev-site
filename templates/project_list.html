@@ -19,7 +19,8 @@
     </header>
 
     {% if featured_projects.len() > 0 %}
-    <ul class="mt-6 divide-y divide-slate-200">
+    <h2 class="mt-6 font-mono text-sm lowercase text-slate-500">featured work</h2>
+    <ul class="mt-1 divide-y divide-slate-200">
       {% for project in featured_projects %}
       <li class="py-6 first:pt-2">
         {% include "components/project_preview_card.html" %}
@@ -29,7 +30,7 @@
     {% endif %}
 
     {% if project_list.len() > 0 %}
-    <p class="mt-8 font-mono text-sm lowercase text-slate-500">more work</p>
+    <h2 class="mt-8 font-mono text-sm lowercase text-slate-500">more work</h2>
     <ul class="mt-1">
       {% for project in project_list %}
       {% include "components/project_row.html" %}

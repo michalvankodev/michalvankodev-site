@@ -237,6 +237,14 @@
   @apply text-blue-500;
 }
 
+/* Sizes the inlined animated logo SVG in the portfolio aside. Used to be a
+ * literal <style> in the body (invalid outside <head>, W3C F3b) — it only
+ * styles this one include, so a plain id rule beats utility classes. */
+#logo-container svg {
+  height: 100%;
+  width: 100%;
+}
+
 /* Print: articles read like a book on paper — white page surface; the
  * chrome (header/footer/TOC/further-reading/progress/year headers/
  * back-to-top) already carries print:hidden on its elements */

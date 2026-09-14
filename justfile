@@ -18,7 +18,11 @@ tailwind_build:
 
 # svg sprite creation
 svgstore:
-	npx svgstore -o templates/icons/sprite.svg static/svg/input/*.svg
+	# svgstore@3 dropped its bin — the CLI lives in svgstore-cli (same flags).
+	npx --yes svgstore-cli -o templates/icons/sprite.svg static/svg/input/*.svg
+	# Strip the XML prolog/DOCTYPE — the sprite is inlined raw into base.html
+	# where PIs and doctypes are invalid HTML (W3C F1).
+	sed -Ei '1s/^<\?xml[^>]*\?>//; 1s/^<!DOCTYPE[^>]*>//' templates/icons/sprite.svg
 
 server_dev: 
 	cargo watch -x run
